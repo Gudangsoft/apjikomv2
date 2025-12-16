@@ -48,7 +48,7 @@ class MemberCardGenerator
         
         // Hitung jumlah baris alamat untuk menentukan tinggi total data
         $address = $member->address ?: '-';
-        $addressLines = $this->wrapText($address, 35, 3); // Max 35 karakter per baris, 3 baris
+        $addressLines = $this->wrapText($address, 50, 3); // Max 50 karakter per baris, 3 baris (diperpanjang dari 35)
         $addressLinesCount = count($addressLines);
         
         // Hitung total tinggi data
