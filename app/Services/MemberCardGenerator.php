@@ -210,9 +210,66 @@ class MemberCardGenerator
     }
 
     /**
-     * Wrap text into multiple lines
+     * Wrap text into multiple lines with support for manual line breaks
      */
     private function wrapText($text, $maxCharsPerLine, $maxLines = 3)
+    {
+        // Check if text contains manual line breaks (enter)
+        $hasLineBreaks = (strpos($text, "\n") !== false || strpos($text, "\r\n") !== false);
+        
+        if ($hasLineBreaks) {
+            // User sudah membuat line break manual, gunakan itu
+            // Normalize line breaks
+            $text = str_replace("\r\n", "\n", $text);
+            $text = str_replace("\r", "\n", $text);
+            
+            // Split by line breaks
+            $manualLines = explode("\n", $text);
+            $lines = [];
+            
+            foreach ($manualLines as $line) {
+                $line = trim($line);
+                if (empty($line)) continue;
+                
+                // Jika baris masih terlalu panjang, wrap otomatis
+                if (strlen($line) > $maxCharsPerLine) {
+                    $wrappedLines = $this->wrapLongLine($line, $maxCharsPerLine);
+                    foreach ($wrappedLines as $wrappedLine) {
+                        if (count($lines) < $maxLines) {
+                            $lines[] = $wrappedLine;
+                        }
+                    }
+                } else {
+                    if (count($lines) < $maxLines) {
+                        $lines[] = $line;
+                    }
+                }
+                
+                // Stop if we reached max lines
+                if (count($lines) >= $maxLines) {
+                    break;
+                }
+            }
+            
+            // Add ... if there are more lines
+            if (count($manualLines) > count($lines)) {
+                $lastIndex = count($lines) - 1;
+                if ($lastIndex >= 0) {
+                    $lines[$lastIndex] = rtrim($lines[$lastIndex], '.') . '...';
+                }
+            }
+            
+            return $lines;
+        }
+        
+        // Tidak ada line break manual, gunakan word wrap otomatis
+        return $this->wrapLongLine($text, $maxCharsPerLine, $maxLines);
+    }
+    
+    /**
+     * Wrap a long line into multiple lines by word boundaries
+     */
+    private function wrapLongLine($text, $maxCharsPerLine, $maxLines = 3)
     {
         // Split text by spaces
         $words = explode(' ', $text);
