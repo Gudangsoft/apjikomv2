@@ -736,8 +736,12 @@
 
                 <!-- Alamat (Full Width) -->
                 <div class='md:col-span-2'>
-                    <label for='address' class='block text-sm font-semibold text-gray-700 mb-2'>Alamat</label>
-                    <textarea id='address' name='address' rows='3' placeholder='Alamat lengkap Anda' class='w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition'>{{ old('address', $member->address) }}</textarea>
+                    <label for='address' class='block text-sm font-semibold text-gray-700 mb-2'>
+                        Alamat
+                        <span class='text-xs text-gray-500 font-normal ml-2'>(Gunakan Enter untuk membuat baris baru)</span>
+                    </label>
+                    <textarea id='address' name='address' rows='3' placeholder='Contoh:&#10;Jl. Majapahit No. 605 Semarang&#10;RT 03 RW 05 Kelurahan Semarang Tengah&#10;Jawa Tengah 50192' class='w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition'>{{ old('address', $member->address) }}</textarea>
+                    <p class='text-xs text-gray-500 mt-1'>💡 Tips: Tekan Enter untuk membuat baris baru agar alamat tampil rapi di kartu anggota (maksimal 3 baris)</p>
                 </div>
             </div>
 

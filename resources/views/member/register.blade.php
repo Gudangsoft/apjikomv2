@@ -181,9 +181,13 @@
 
                         <!-- Address (Individu only) -->
                         <div id="field-address" style="display: none;">
-                            <label class="block text-gray-700 font-medium mb-2">Alamat <span class="text-red-500">*</span></label>
-                            <textarea name="address" rows="3"
+                            <label class="block text-gray-700 font-medium mb-2">
+                                Alamat <span class="text-red-500">*</span>
+                                <span class="text-xs text-gray-500 font-normal ml-2">(Gunakan Enter untuk membuat baris baru)</span>
+                            </label>
+                            <textarea name="address" rows="3" placeholder="Contoh:&#10;Jl. Majapahit No. 605 Semarang&#10;RT 03 RW 05 Kelurahan Semarang Tengah&#10;Jawa Tengah 50192"
                                       class="w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 @error('address') border-red-500 @enderror">{{ old('address') }}</textarea>
+                            <p class="text-xs text-gray-500 mt-1">💡 Tips: Tekan Enter untuk membuat baris baru agar alamat tampil rapi di kartu anggota (maksimal 3 baris)</p>
                             @error('address')
                                 <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
                             @enderror
