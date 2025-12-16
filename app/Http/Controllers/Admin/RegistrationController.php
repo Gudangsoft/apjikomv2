@@ -183,10 +183,9 @@ class RegistrationController extends Controller
         $member = Member::create([
             'user_id' => $user->id,
             'member_number' => $memberNumber,
-            'full_name' => $registration->full_name,
             'phone' => $registration->phone,
-            'institution' => $registration->institution,
-            'membership_type' => $registration->type === 'prodi' ? 'institutional' : 'individual',
+            'institution_name' => $registration->institution,
+            'member_type' => $registration->type === 'prodi' ? 'institution' : 'individual',
             'join_date' => $joinDate,
             'expiry_date' => $joinDate->copy()->addYear(),
             'status' => 'active',
