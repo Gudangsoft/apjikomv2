@@ -41,8 +41,7 @@ class Member extends Model
         'verification_document',
         'verification_notes',
         'verified_by',
-        'full_name',
-        'membership_type',
+        'member_number',
     ];
 
     protected $casts = [
