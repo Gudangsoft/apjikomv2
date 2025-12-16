@@ -6,8 +6,7 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>Login Member - APJIKOM</title>
     
-    <!-- Styles -->
-    <link href="{{ asset('build/assets/app.css') }}" rel="stylesheet">
+    <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     
     <style>
