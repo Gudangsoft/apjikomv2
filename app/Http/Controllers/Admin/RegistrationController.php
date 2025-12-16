@@ -86,7 +86,17 @@ class RegistrationController extends Controller
     public function show($id)
     {
         $registration = Registration::findOrFail($id);
-        return view('admin.registrations.show', compact('registration'));
+        
+        // Get existing member if registration is approved
+        $existingMember = null;
+        if ($registration->status === 'approved') {
+            $user = User::where('email', $registration->email)->first();
+            if ($user) {
+                $existingMember = Member::where('user_id', $user->id)->first();
+            }
+        }
+        
+        return view('admin.registrations.show', compact('registration', 'existingMember'));
     }
 
     public function updateStatus(Request $request, $id)

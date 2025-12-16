@@ -35,16 +35,6 @@
     </div>
     @endif
 
-    @php
-        $existingMember = null;
-        if ($registration->status === 'approved') {
-            $user = \App\Models\User::where('email', $registration->email)->first();
-            if ($user) {
-                $existingMember = \App\Models\Member::where('user_id', $user->id)->first();
-            }
-        }
-    @endphp
-
     @if($registration->status === 'approved' && $existingMember)
     <div class="bg-green-50 border border-green-200 px-4 py-3 rounded-lg mb-6">
         <div class="flex items-start">
