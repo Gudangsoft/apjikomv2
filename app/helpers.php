@@ -46,3 +46,15 @@ if (!function_exists('site_logo')) {
         return $logo ? asset('storage/' . $logo) : null;
     }
 }
+
+if (!function_exists('site_tagline')) {
+    /**
+     * Get site tagline
+     *
+     * @return string
+     */
+    function site_tagline()
+    {
+        return setting('site_tagline', 'Asosiasi Pendidikan Jurnalistik dan Komunikasi');
+    }
+}

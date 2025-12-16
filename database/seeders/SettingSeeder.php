@@ -15,8 +15,8 @@ class SettingSeeder extends Seeder
         $settings = [
             // General Settings
             ['key' => 'site_name', 'value' => 'APJIKOM', 'type' => 'text', 'group' => 'general'],
-            ['key' => 'site_tagline', 'value' => 'Asosiasi Pengelola Jurnal Ilmu Komunikasi', 'type' => 'text', 'group' => 'general'],
-            ['key' => 'site_description', 'value' => 'APJIKOM adalah asosiasi yang menghimpun pengelola jurnal ilmu komunikasi di Indonesia untuk meningkatkan kualitas publikasi ilmiah.', 'type' => 'textarea', 'group' => 'general'],
+            ['key' => 'site_tagline', 'value' => 'Asosiasi Pendidikan Jurnalistik dan Komunikasi', 'type' => 'text', 'group' => 'general'],
+            ['key' => 'site_description', 'value' => 'APJIKOM adalah Asosiasi Pendidikan Jurnalistik dan Komunikasi yang menghimpun institusi pendidikan tinggi jurnalistik dan komunikasi di Indonesia untuk meningkatkan kualitas pendidikan dan publikasi ilmiah.', 'type' => 'textarea', 'group' => 'general'],
             
             // Contact Settings
             ['key' => 'contact_email', 'value' => 'info@apjikom.or.id', 'type' => 'text', 'group' => 'contact'],

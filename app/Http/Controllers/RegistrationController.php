@@ -93,6 +93,6 @@ class RegistrationController extends Controller
         \App\Services\NotificationService::newMemberRegistration($registration);
 
         return redirect()->route('registration.create')
-            ->with('success', 'Pendaftaran berhasil! Kami akan mengirimkan informasi melalui email yang telah didaftarkan maksimal 5 hari setelah pendaftaran.');
+            ->with('success', 'Pendaftaran berhasil! Silahkan hubungi admin untuk proses approve akun.');
     }
 }

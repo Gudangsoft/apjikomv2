@@ -64,6 +64,28 @@ class MemberDashboardController extends Controller
         $credentials = $request->only('email', 'password');
         $remember = $request->boolean('remember');
 
+        // Check if email exists in users table
+        $user = \App\Models\User::where('email', $request->email)->first();
+        
+        if (!$user) {
+            // Check if email exists in pending registrations
+            $registration = \App\Models\Registration::where('email', $request->email)
+                ->where('status', 'pending')
+                ->first();
+            
+            if ($registration) {
+                throw ValidationException::withMessages([
+                    'email' => 'Akun Anda sudah terdaftar tetapi belum divalidasi oleh admin. Silakan tunggu proses validasi.',
+                ]);
+            }
+            
+            // Email not found anywhere
+            throw ValidationException::withMessages([
+                'email' => 'Akun belum terdaftar. Silakan lakukan pendaftaran terlebih dahulu. Silahkan hubungi Admin untuk informasi lebih lanjut.',
+            ]);
+        }
+
+        // Try to login
         if (Auth::attempt($credentials, $remember)) {
             $request->session()->regenerate();
             
@@ -84,8 +106,9 @@ class MemberDashboardController extends Controller
             return redirect()->intended(route('member.dashboard'));
         }
 
+        // Email exists but password is wrong
         throw ValidationException::withMessages([
-            'email' => 'Email atau password yang Anda masukkan salah.',
+            'password' => 'Password yang digunakan salah. Silakan coba lagi.',
         ]);
     }
 
@@ -268,6 +291,10 @@ class MemberDashboardController extends Controller
                 'facebook' => 'nullable|url|max:255',
                 'twitter' => 'nullable|string|max:255',
                 'instagram' => 'nullable|string|max:255',
+                'google_scholar_link' => 'nullable|url|max:255',
+                'sinta_link' => 'nullable|url|max:255',
+                'orcid_link' => 'nullable|url|max:255',
+                'scopus_link' => 'nullable|url|max:255',
             ], [
                 'name.required' => 'Nama lengkap harus diisi',
                 'email.required' => 'Email harus diisi',
@@ -602,5 +629,30 @@ class MemberDashboardController extends Controller
         }
         
         return back()->with('success', 'Permintaan reset password berhasil dikirim. Admin akan segera memprosesnya.');
+    }
+    
+    /**
+     * Show update requests page for member
+     */
+    public function updateRequests()
+    {
+        $updateRequests = \App\Models\UpdateRequest::where('user_id', Auth::id())
+            ->orderBy('created_at', 'desc')
+            ->paginate(10);
+        
+        return view('member.update-requests.index', compact('updateRequests'));
+    }
+    
+    /**
+     * Show single update request
+     */
+    public function showUpdateRequest(\App\Models\UpdateRequest $updateRequest)
+    {
+        // Ensure user can only view their own requests
+        if ($updateRequest->user_id !== Auth::id()) {
+            abort(403, 'Unauthorized action.');
+        }
+        
+        return view('member.update-requests.show', compact('updateRequest'));
     }
 }

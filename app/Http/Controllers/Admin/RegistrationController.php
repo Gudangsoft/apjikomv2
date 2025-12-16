@@ -147,10 +147,11 @@ class RegistrationController extends Controller
         
         if (!$user) {
             // Buat user baru
+            // Password dari registration sudah dalam bentuk hash, jadi langsung pakai
             $user = User::create([
                 'name' => $registration->full_name,
                 'email' => $registration->email,
-                'password' => Hash::make($registration->password ?? 'password123'), // Use password from registration or default
+                'password' => $registration->password ?? Hash::make('password123'), // Password sudah di-hash saat registrasi
                 'email_verified_at' => now(),
             ]);
         }
@@ -185,6 +186,10 @@ class RegistrationController extends Controller
             'address' => $registration->address ?? null,
             'show_in_directory' => $showInDirectory,
         ]);
+
+        // Link registration to member
+        $registration->member_id = $member->id;
+        $registration->save();
 
         // Auto-generate kartu anggota untuk member baru
         try {

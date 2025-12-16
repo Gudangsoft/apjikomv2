@@ -416,6 +416,56 @@
                                 <input type='text' name='instagram' value='{{ old("instagram", $member->instagram) }}' placeholder='@username atau URL lengkap' class='flex-1 px-4 py-2 border-2 border-gray-200 rounded-lg focus:border-pink-500 focus:ring-2 focus:ring-pink-200 transition-all text-sm'>
                             </div>
                         </div>
+
+                        <!-- Link Akademik -->
+                        <div class='space-y-4'>
+                            <label class='block text-lg font-bold text-gray-800 mb-4 flex items-center gap-2'>
+                                <svg class='w-5 h-5 text-purple-600' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
+                                    <path stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253'></path>
+                                </svg>
+                                Link Profil Akademik
+                            </label>
+                            
+                            <!-- Google Scholar -->
+                            <div class='flex items-center gap-3'>
+                                <div class='flex items-center justify-center w-10 h-10 bg-blue-100 rounded-lg flex-shrink-0'>
+                                    <svg class='w-5 h-5 text-blue-600' fill='currentColor' viewBox='0 0 24 24'>
+                                        <path d='M12 24a7 7 0 1 1 0-14 7 7 0 0 1 0 14zm0-24L0 9.5l4.838 3.94A8 8 0 0 1 12 9a8 8 0 0 1 7.162 4.44L24 9.5z'/>
+                                    </svg>
+                                </div>
+                                <input type='url' name='google_scholar_link' value='{{ old("google_scholar_link", $member->google_scholar_link) }}' placeholder='https://scholar.google.com/...' class='flex-1 px-4 py-2 border-2 border-gray-200 rounded-lg focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all text-sm'>
+                            </div>
+                            
+                            <!-- Sinta -->
+                            <div class='flex items-center gap-3'>
+                                <div class='flex items-center justify-center w-10 h-10 bg-red-100 rounded-lg flex-shrink-0'>
+                                    <svg class='w-5 h-5 text-red-600' fill='currentColor' viewBox='0 0 24 24'>
+                                        <path d='M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5'/>
+                                    </svg>
+                                </div>
+                                <input type='url' name='sinta_link' value='{{ old("sinta_link", $member->sinta_link) }}' placeholder='https://sinta.kemdikbud.go.id/...' class='flex-1 px-4 py-2 border-2 border-gray-200 rounded-lg focus:border-red-500 focus:ring-2 focus:ring-red-200 transition-all text-sm'>
+                            </div>
+                            
+                            <!-- ORCID -->
+                            <div class='flex items-center gap-3'>
+                                <div class='flex items-center justify-center w-10 h-10 bg-green-100 rounded-lg flex-shrink-0'>
+                                    <svg class='w-5 h-5 text-green-600' fill='currentColor' viewBox='0 0 24 24'>
+                                        <path d='M12 0C5.372 0 0 5.372 0 12s5.372 12 12 12 12-5.372 12-12S18.628 0 12 0zM7.369 4.378c.525 0 .947.431.947.947s-.422.947-.947.947a.95.95 0 0 1-.947-.947c0-.525.422-.947.947-.947zm-.722 3.038h1.444v10.041H6.647V7.416zm3.562 0h3.9c3.712 0 5.344 2.653 5.344 5.025 0 2.578-2.016 5.016-5.325 5.016h-3.919V7.416zm1.444 1.303v7.444h2.297c2.359 0 4.078-1.622 4.078-3.722 0-2.1-1.719-3.722-4.078-3.722h-2.297z'/>
+                                    </svg>
+                                </div>
+                                <input type='url' name='orcid_link' value='{{ old("orcid_link", $member->orcid_link) }}' placeholder='https://orcid.org/...' class='flex-1 px-4 py-2 border-2 border-gray-200 rounded-lg focus:border-green-500 focus:ring-2 focus:ring-green-200 transition-all text-sm'>
+                            </div>
+                            
+                            <!-- Scopus -->
+                            <div class='flex items-center gap-3'>
+                                <div class='flex items-center justify-center w-10 h-10 bg-orange-100 rounded-lg flex-shrink-0'>
+                                    <svg class='w-5 h-5 text-orange-600' fill='currentColor' viewBox='0 0 24 24'>
+                                        <path d='M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm-1.5 17.5L5 12l1.5-1.5 4 4 8-8 1.5 1.5-9.5 9.5z'/>
+                                    </svg>
+                                </div>
+                                <input type='url' name='scopus_link' value='{{ old("scopus_link", $member->scopus_link) }}' placeholder='https://www.scopus.com/...' class='flex-1 px-4 py-2 border-2 border-gray-200 rounded-lg focus:border-orange-500 focus:ring-2 focus:ring-orange-200 transition-all text-sm'>
+                            </div>
+                        </div>
                         <div class="flex justify-end mt-8">
                             <button type="submit" class="px-8 py-3 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-xl shadow transition-all duration-200 text-lg">
                                 Simpan Profil

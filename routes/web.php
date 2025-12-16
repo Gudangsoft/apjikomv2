@@ -24,6 +24,8 @@ use App\Http\Controllers\Admin\SettingController as AdminSettingController;
 use App\Http\Controllers\Admin\AboutSettingController as AdminAboutSettingController;
 use App\Http\Controllers\Admin\PaymentSettingController as AdminPaymentSettingController;
 use App\Http\Controllers\Admin\FooterSettingController as AdminFooterSettingController;
+use App\Http\Controllers\Admin\EmailSettingController as AdminEmailSettingController;
+use App\Http\Controllers\Admin\AssignmentController as AdminAssignmentController;
 use App\Http\Controllers\Admin\RegistrationController as AdminRegistrationController;
 use App\Http\Controllers\Admin\SliderController as AdminSliderController;
 use App\Http\Controllers\Admin\MigrationController as AdminMigrationController;
@@ -32,6 +34,7 @@ use App\Http\Controllers\Admin\MenuController as AdminMenuController;
 use App\Http\Controllers\Admin\PartnerController as AdminPartnerController;
 use App\Http\Controllers\Admin\SectionLabelController as AdminSectionLabelController;
 use App\Http\Controllers\Admin\MemberCardTemplateController as AdminMemberCardTemplateController;
+use App\Http\Controllers\Admin\ChangelogController as AdminChangelogController;
 
 // Public Routes
 Route::get('/', [HomeController::class, 'index'])->name('home');
@@ -114,6 +117,17 @@ Route::prefix('member')->name('member.')->middleware('auth')->group(function () 
     
     // Member Testimonials
     Route::resource('testimonials', MemberTestimonialController::class)->except(['show']);
+    
+    // Member Update Requests
+    Route::get('/update-requests', [MemberDashboardController::class, 'updateRequests'])->name('update-requests.index');
+    Route::post('/update-requests', [AdminChangelogController::class, 'storeRequest'])->name('update-requests.store');
+    Route::get('/update-requests/{updateRequest}', [MemberDashboardController::class, 'showUpdateRequest'])->name('update-requests.show');
+    
+    // Member Assignments (Penugasan Editor)
+    Route::get('/assignments', [App\Http\Controllers\Member\AssignmentController::class, 'index'])->name('assignments.index');
+    Route::get('/assignments/{assignment}', [App\Http\Controllers\Member\AssignmentController::class, 'show'])->name('assignments.show');
+    Route::get('/assignments/{assignment}/download', [App\Http\Controllers\Member\AssignmentController::class, 'download'])->name('assignments.download');
+    Route::patch('/assignments/{assignment}/status', [App\Http\Controllers\Member\AssignmentController::class, 'updateStatus'])->name('assignments.update-status');
 });
 
 // Public FAQs
@@ -201,6 +215,11 @@ Route::prefix('admin')->name('admin.')->middleware(['auth'])->group(function () 
     Route::get('footer-settings', [AdminFooterSettingController::class, 'index'])->name('footer-settings.index');
     Route::put('footer-settings', [AdminFooterSettingController::class, 'update'])->name('footer-settings.update');
     
+    // Email Settings Management
+    Route::get('email-settings', [AdminEmailSettingController::class, 'index'])->name('email-settings.index');
+    Route::put('email-settings', [AdminEmailSettingController::class, 'update'])->name('email-settings.update');
+    Route::post('email-settings/test', [AdminEmailSettingController::class, 'testConnection'])->name('email-settings.test');
+    
     // Users Management
     Route::resource('users', App\Http\Controllers\Admin\UserController::class);
     Route::post('users/{user}/reset-password', [App\Http\Controllers\Admin\UserController::class, 'resetPassword'])->name('users.reset-password');
@@ -239,6 +258,9 @@ Route::prefix('admin')->name('admin.')->middleware(['auth'])->group(function () 
     Route::post('password-reset-requests/{request}/approve', [App\Http\Controllers\Admin\PasswordResetRequestController::class, 'approve'])->name('password-reset-requests.approve');
     Route::post('password-reset-requests/{request}/reject', [App\Http\Controllers\Admin\PasswordResetRequestController::class, 'reject'])->name('password-reset-requests.reject');
     
+    // Admin Assignments (Penugasan Editor)
+    Route::resource('assignments', AdminAssignmentController::class);
+    
     // Institutions Management
     Route::resource('institutions', App\Http\Controllers\Admin\InstitutionController::class);
     
@@ -267,6 +289,13 @@ Route::prefix('admin')->name('admin.')->middleware(['auth'])->group(function () 
     
     // Services Management
     Route::resource('services', App\Http\Controllers\Admin\ServiceManagementController::class);
+    
+    // Changelog Management
+    Route::get('changelog/latest', [AdminChangelogController::class, 'getLatest'])->name('changelog.latest');
+    Route::resource('changelog', AdminChangelogController::class);
+    Route::post('update-requests', [AdminChangelogController::class, 'storeRequest'])->name('update-requests.store');
+    Route::put('update-requests/{updateRequest}/status', [AdminChangelogController::class, 'updateRequestStatus'])->name('update-requests.status');
+    Route::delete('update-requests/{updateRequest}', [AdminChangelogController::class, 'destroyRequest'])->name('update-requests.destroy');
     
     // Migration Helper (Development Only)
     Route::get('run-migration', [AdminMigrationController::class, 'showMigrationForm'])->name('run-migration');

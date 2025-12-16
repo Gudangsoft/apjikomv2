@@ -6,7 +6,9 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>Login Member - APJIKOM</title>
     
-    @vite(['resources/css/app.css', 'resources/js/app.js'])
+    <!-- Styles -->
+    <link href="{{ asset('build/assets/app.css') }}" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
     
     <style>
         body {
@@ -113,7 +115,6 @@
 </head>
 <body>
     <div class="login-container">
-    <div class="login-container">
         <div class="login-card">
             <!-- Header with Logo -->
             <div class="login-header">
@@ -124,11 +125,11 @@
                         <img src="{{ asset('images/logo.png') }}" alt="APJIKOM" class="h-12 mr-3">
                     @endif
                     <div class="text-left">
-                        <h1 class="text-2xl font-bold">APJIKOM</h1>
+                        <h1 class="text-2xl font-bold">{{ site_name() }}</h1>
                         <p class="text-white/90 text-xs">Member Dashboard</p>
                     </div>
                 </div>
-                <p class="text-white/80 text-sm mt-2">Asosiasi Pendidikan Jurnalistik dan Komunikasi</p>
+                <p class="text-white/80 text-sm mt-2">{{ site_tagline() }}</p>
             </div>
 
             <!-- Login Form -->

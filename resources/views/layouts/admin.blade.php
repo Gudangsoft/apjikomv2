@@ -202,13 +202,21 @@
                             <span>Template Kartu</span>
                         </a>
                         
-                        <a href="{{ route('admin.registrations.index') }}" class="flex items-center space-x-3 px-3 py-2 rounded-lg text-sm transition-all {{ request()->routeIs('admin.registrations.*') ? 'bg-white/10 shadow-lg' : 'hover:bg-white/5' }}">
-                            <div class="w-4 h-4 flex items-center justify-center">
-                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"></path>
-                                </svg>
+                        <a href="{{ route('admin.registrations.index') }}" class="flex items-center justify-between px-3 py-2 rounded-lg text-sm transition-all {{ request()->routeIs('admin.registrations.*') ? 'bg-white/10 shadow-lg' : 'hover:bg-white/5' }}">
+                            <div class="flex items-center space-x-3">
+                                <div class="w-4 h-4 flex items-center justify-center">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"></path>
+                                    </svg>
+                                </div>
+                                <span>Pendaftaran</span>
                             </div>
-                            <span>Pendaftaran</span>
+                            @php
+                                $pendingRegistrations = \App\Models\Registration::where('status', 'pending')->count();
+                            @endphp
+                            @if($pendingRegistrations > 0)
+                                <span class="bg-red-500 text-white text-xs font-bold px-2 py-0.5 rounded-full">{{ $pendingRegistrations }}</span>
+                            @endif
                         </a>
                     </div>
                 </div>
@@ -331,8 +339,39 @@
                             </div>
                             <span>Menu Footer</span>
                         </a>
+                        
+                        <a href="{{ route('admin.email-settings.index') }}" class="flex items-center space-x-3 px-3 py-2 rounded-lg text-sm transition-all {{ request()->routeIs('admin.email-settings.*') ? 'bg-white/10 shadow-lg' : 'hover:bg-white/5' }}">
+                            <div class="w-4 h-4 flex items-center justify-center">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
+                                </svg>
+                            </div>
+                            <span>Email & Notifikasi</span>
+                        </a>
                     </div>
                 </div>
+                
+                <hr class="my-3 border-white/10">
+                
+                <!-- Changelog Menu -->
+                <a href="{{ route('admin.changelog.index') }}" class="flex items-center justify-between px-3 py-2.5 rounded-lg text-sm transition-all {{ request()->routeIs('admin.changelog.*') || request()->routeIs('admin.update-requests.*') ? 'bg-white/10 shadow-lg' : 'hover:bg-white/5' }}">
+                    <div class="flex items-center space-x-3">
+                        <div class="w-5 h-5 flex items-center justify-center {{ request()->routeIs('admin.changelog.*') || request()->routeIs('admin.update-requests.*') ? 'text-yellow-300' : 'text-white/60' }}">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                            </svg>
+                        </div>
+                        <span class="font-medium">Changelog & Updates</span>
+                    </div>
+                    @php
+                        $pendingRequests = \App\Models\UpdateRequest::where('status', 'pending')->count();
+                    @endphp
+                    @if($pendingRequests > 0)
+                        <span class="bg-red-500 text-white text-xs font-bold px-2 py-0.5 rounded-full animate-pulse">
+                            {{ $pendingRequests }}
+                        </span>
+                    @endif
+                </a>
                 
                 <hr class="my-3 border-white/10">
                 
@@ -358,6 +397,13 @@
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path>
                             </svg>
                             <span>Kelola User</span>
+                        </a>
+                        
+                        <a href="{{ route('admin.assignments.index') }}" class="flex items-center space-x-3 px-3 py-2 rounded-lg text-sm transition-all {{ request()->routeIs('admin.assignments.*') ? 'bg-white/10 shadow-lg' : 'hover:bg-white/5' }}">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                            </svg>
+                            <span>Penugasan Editor</span>
                         </a>
                         
                         <a href="{{ route('admin.password-reset-requests.index') }}" class="flex items-center justify-between px-3 py-2 rounded-lg text-sm transition-all {{ request()->routeIs('admin.password-reset-requests.*') ? 'bg-white/10 shadow-lg' : 'hover:bg-white/5' }}">
@@ -439,6 +485,26 @@
                     <h2 class="text-xl font-semibold text-gray-800">@yield('page-title', 'Dashboard')</h2>
                     
                     <div class="flex items-center space-x-4">
+                        <!-- Update Request Badge -->
+                        @php
+                            $pendingUpdateRequests = \App\Models\UpdateRequest::where('status', 'pending')->count();
+                        @endphp
+                        @if($pendingUpdateRequests > 0)
+                        <a href="{{ route('admin.changelog.index') }}#requests" 
+                           class="relative p-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition-colors group"
+                           title="Update Requests Pending">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"></path>
+                            </svg>
+                            <span class="absolute top-0 right-0 inline-flex items-center justify-center px-2 py-1 text-xs font-bold leading-none text-white transform translate-x-1/2 -translate-y-1/2 bg-orange-500 rounded-full animate-pulse">
+                                {{ $pendingUpdateRequests }}
+                            </span>
+                            <span class="absolute bottom-full mb-2 right-0 hidden group-hover:block px-3 py-2 text-xs text-white bg-gray-900 rounded-lg whitespace-nowrap">
+                                {{ $pendingUpdateRequests }} Update Request{{ $pendingUpdateRequests > 1 ? 's' : '' }} Pending
+                            </span>
+                        </a>
+                        @endif
+                        
                         <!-- Notification Bell -->
                         <div class="relative" x-data="{ 
                             open: false, 

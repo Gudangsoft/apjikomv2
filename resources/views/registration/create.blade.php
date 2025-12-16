@@ -7,6 +7,7 @@
 <section class="bg-purple-600 text-white py-12">
     <div class="container mx-auto px-4">
         <h1 class="text-3xl font-bold mb-2">Pendaftaran Anggota APJIKOM</h1>
+        <p class="text-xl text-purple-100 mb-1">Asosiasi Pengelola Jurnal Informatika dan Komputer</p>
         <p class="text-lg text-purple-100">Bergabunglah bersama kami untuk memajukan publikasi ilmiah Indonesia</p>
     </div>
 </section>
@@ -18,49 +19,114 @@
             
             @if(session('success'))
             <div class="bg-green-50 border border-green-200 text-green-800 px-6 py-4 rounded-lg mb-6">
-                <div class="flex items-start">
-                    <svg class="w-6 h-6 mr-3 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                    </svg>
-                    <div>
-                        <h3 class="font-semibold mb-1">Pendaftaran Berhasil!</h3>
-                        <p class="text-sm">{{ session('success') }}</p>
+                <div class="flex items-start justify-between">
+                    <div class="flex items-start flex-1">
+                        <svg class="w-6 h-6 mr-3 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                        </svg>
+                        <div>
+                            <h3 class="font-semibold mb-1">Pendaftaran Berhasil!</h3>
+                            <p class="text-sm">{{ session('success') }}</p>
+                        </div>
                     </div>
+                    <a href="{{ route('member.login') }}" class="ml-4 bg-green-600 hover:bg-green-700 text-white px-6 py-2 rounded-lg text-sm font-medium transition-colors whitespace-nowrap">
+                        Login Member
+                    </a>
                 </div>
             </div>
             @endif
 
             <!-- Membership Type Selection -->
-            <div class="bg-white rounded-lg shadow-sm border p-8 mb-6">
-                <h2 class="text-2xl font-bold mb-6 text-gray-900">Pilih Tipe Keanggotaan</h2>
+            <div class="bg-white rounded-xl shadow-lg border-2 border-gray-100 p-8 mb-8">
+                <div class="text-center mb-8">
+                    <h2 class="text-3xl font-bold text-gray-900 mb-3">Daftar Sebagai Member APJIKOM</h2>
+                    <p class="text-gray-600">Wujudkan komitmen Anda dalam memajukan ekosistem publikasi ilmiah Indonesia</p>
+                </div>
                 
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+                <div class="max-w-2xl mx-auto mb-8">
                     <!-- Individu Card -->
-                    <div class="border-2 border-gray-200 rounded-lg p-6 cursor-pointer hover:border-purple-500 transition" id="card-individu" onclick="selectType('individu')">
-                        <div class="flex items-start mb-4">
-                            <input type="radio" name="membership_type" value="individu" id="type-individu" class="mt-1 mr-3 h-5 w-5 text-purple-600">
-                            <div>
-                                <label for="type-individu" class="text-xl font-bold text-gray-900 cursor-pointer">Individu</label>
-                                <p class="text-gray-600 text-sm mt-2">Untuk anggota perorangan yang ingin bergabung secara individu</p>
-                            </div>
+                    <div class="relative border-3 border-purple-300 rounded-2xl p-8 cursor-pointer hover:border-purple-500 hover:shadow-2xl transition-all duration-300 bg-gradient-to-br from-purple-50 to-white" id="card-individu" onclick="selectType('individu')">
+                        <!-- Featured Badge -->
+                        <div class="absolute -top-4 left-1/2 transform -translate-x-1/2">
+                            <span class="bg-gradient-to-r from-purple-600 to-indigo-600 text-white px-6 py-2 rounded-full text-sm font-bold shadow-lg">
+                                ⭐ Bergabung Sekarang
+                            </span>
                         </div>
+                        
+                        <div class="text-center mb-6 mt-4">
+                            <div class="flex justify-center mb-4">
+                                <input type="radio" name="membership_type" value="individu" id="type-individu" class="hidden" checked>
+                                <div class="w-20 h-20 bg-gradient-to-br from-purple-500 to-indigo-600 rounded-full flex items-center justify-center shadow-xl">
+                                    <svg class="w-10 h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
+                                    </svg>
+                                </div>
+                            </div>
+                            <label for="type-individu" class="text-2xl font-bold text-gray-900 cursor-pointer">Member APJIKOM</label>
+                            <p class="text-gray-600 mt-3 text-base leading-relaxed">Jadilah bagian dari komunitas pengelola jurnal informatika dan komputer terdepan di Indonesia</p>
+                        </div>
+
+                        <!-- Benefits -->
+                        <div class="bg-white rounded-xl p-6 mb-6 shadow-sm">
+                            <h4 class="font-bold text-gray-900 mb-4 flex items-center">
+                                <svg class="w-5 h-5 text-purple-600 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                </svg>
+                                Manfaat Keanggotaan:
+                            </h4>
+                            <ul class="space-y-3 text-sm text-gray-700">
+                                <li class="flex items-start">
+                                    <svg class="w-5 h-5 text-green-500 mr-2 flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
+                                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+                                    </svg>
+                                    <span>Akses ke jaringan profesional dan komunitas editor jurnal</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <svg class="w-5 h-5 text-green-500 mr-2 flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
+                                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+                                    </svg>
+                                    <span>Kesempatan mengikuti pelatihan dan workshop</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <svg class="w-5 h-5 text-green-500 mr-2 flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
+                                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+                                    </svg>
+                                    <span>Update informasi terkini seputar pengelolaan jurnal</span>
+                                </li>
+                            </ul>
+                        </div>
+
                         @if($paymentSettings['registration_mode'] === 'paid')
-                        <div class="bg-purple-50 rounded p-4 mt-4">
-                            <p class="text-sm font-semibold text-purple-900 mb-2">Biaya Donasi:</p>
-                            <p class="text-2xl font-bold text-purple-600">Rp {{ number_format($paymentSettings['biaya_individu'], 0, ',', '.') }}</p>
-                            <p class="text-xs text-gray-600 mt-1">Masa keanggotaan 1 tahun</p>
+                        <div class="bg-gradient-to-r from-purple-100 to-indigo-100 rounded-xl p-6 text-center border-2 border-purple-200">
+                            <p class="text-sm font-semibold text-purple-900 mb-2">Biaya Donasi Tahunan:</p>
+                            <p class="text-4xl font-bold text-purple-600 mb-1">Rp {{ number_format($paymentSettings['biaya_individu'], 0, ',', '.') }}</p>
+                            <p class="text-sm text-gray-600 flex items-center justify-center mt-2">
+                                <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                                </svg>
+                                Masa keanggotaan 1 tahun
+                            </p>
                         </div>
                         @else
-                        <div class="bg-green-50 rounded p-4 mt-4">
-                            <p class="text-sm font-semibold text-green-900 mb-2">Pendaftaran:</p>
-                            <p class="text-2xl font-bold text-green-600">🆓 GRATIS</p>
-                            <p class="text-xs text-gray-600 mt-1">Masa keanggotaan 1 tahun</p>
+                        <div class="bg-gradient-to-r from-green-50 to-emerald-50 rounded-xl p-8 text-center border-2 border-green-200 shadow-sm">
+                            <div class="inline-block mb-4">
+                                <div class="bg-green-500 text-white px-4 py-2 rounded-full text-sm font-bold uppercase tracking-wide">
+                                    Pendaftaran
+                                </div>
+                            </div>
+                            <p class="text-5xl font-bold text-green-600 mb-2">🎉 GRATIS</p>
+                            <p class="text-base text-gray-700 font-medium flex items-center justify-center mt-3">
+                                <svg class="w-5 h-5 mr-2 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                                </svg>
+                                Masa keanggotaan 1 tahun
+                            </p>
                         </div>
                         @endif
                     </div>
 
-                    <!-- Prodi Card -->
-                    <div class="border-2 border-gray-200 rounded-lg p-6 cursor-pointer hover:border-purple-500 transition" id="card-prodi" onclick="selectType('prodi')">
+                    <!-- Prodi Card (Hidden) -->
+                    <div class="border-2 border-gray-200 rounded-lg p-6 cursor-pointer hover:border-purple-500 transition hidden" id="card-prodi" onclick="selectType('prodi')">
                         <div class="flex items-start mb-4">
                             <input type="radio" name="membership_type" value="prodi" id="type-prodi" class="mt-1 mr-3 h-5 w-5 text-purple-600">
                             <div>
@@ -86,28 +152,41 @@
 
                 <!-- Payment Info -->
                 @if($paymentSettings['registration_mode'] === 'paid')
-                <div class="bg-blue-50 border border-blue-200 rounded-lg p-6 mb-6">
-                    <h3 class="font-bold text-blue-900 mb-3 flex items-center">
-                        <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                        </svg>
-                        Informasi Transfer
+                <div class="max-w-2xl mx-auto bg-gradient-to-r from-blue-50 to-cyan-50 border-2 border-blue-200 rounded-xl p-6 shadow-md">
+                    <h3 class="font-bold text-blue-900 mb-4 flex items-center text-lg">
+                        <div class="w-10 h-10 bg-blue-500 rounded-full flex items-center justify-center mr-3">
+                            <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                            </svg>
+                        </div>
+                        Informasi Transfer Donasi
                     </h3>
-                    <div class="space-y-2 text-sm text-gray-700">
-                        <p><span class="font-semibold">Bank:</span> {{ $paymentSettings['bank_name'] }}</p>
-                        <p><span class="font-semibold">Nomor Rekening:</span> {{ $paymentSettings['account_number'] }}</p>
-                        <p><span class="font-semibold">Atas Nama:</span> {{ $paymentSettings['account_name'] }}</p>
+                    <div class="bg-white rounded-lg p-4 space-y-3 text-sm text-gray-700">
+                        <div class="flex justify-between items-center pb-2 border-b">
+                            <span class="font-semibold text-gray-600">Bank:</span>
+                            <span class="font-bold text-gray-900">{{ $paymentSettings['bank_name'] }}</span>
+                        </div>
+                        <div class="flex justify-between items-center pb-2 border-b">
+                            <span class="font-semibold text-gray-600">Nomor Rekening:</span>
+                            <span class="font-bold text-gray-900 text-lg">{{ $paymentSettings['account_number'] }}</span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <span class="font-semibold text-gray-600">Atas Nama:</span>
+                            <span class="font-bold text-gray-900">{{ $paymentSettings['account_name'] }}</span>
+                        </div>
                     </div>
                 </div>
                 @else
-                <div class="bg-green-50 border border-green-200 rounded-lg p-6 mb-6">
-                    <h3 class="font-bold text-green-900 mb-3 flex items-center">
-                        <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                        </svg>
-                        Pendaftaran Gratis
+                <div class="max-w-2xl mx-auto bg-gradient-to-r from-green-50 to-emerald-50 border-2 border-green-300 rounded-xl p-6 shadow-md">
+                    <h3 class="font-bold text-green-900 mb-3 flex items-center justify-center text-lg">
+                        <div class="w-10 h-10 bg-green-500 rounded-full flex items-center justify-center mr-3">
+                            <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                            </svg>
+                        </div>
+                        Pendaftaran Gratis - Tanpa Biaya!
                     </h3>
-                    <p class="text-sm text-gray-700">Pendaftaran saat ini tidak dikenakan biaya. Silakan lengkapi formulir pendaftaran di bawah ini.</p>
+                    <p class="text-center text-gray-700 leading-relaxed">Pendaftaran saat ini tidak dikenakan biaya. Silakan lengkapi formulir pendaftaran di bawah ini untuk bergabung dengan komunitas kami.</p>
                 </div>
                 @endif
             </div>
