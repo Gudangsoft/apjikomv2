@@ -96,18 +96,7 @@
                             </ul>
                         </div>
 
-                        @if($paymentSettings['registration_mode'] === 'paid')
-                        <div class="bg-gradient-to-r from-purple-100 to-indigo-100 rounded-xl p-6 text-center border-2 border-purple-200">
-                            <p class="text-sm font-semibold text-purple-900 mb-2">Biaya Donasi Tahunan:</p>
-                            <p class="text-4xl font-bold text-purple-600 mb-1">Rp {{ number_format($paymentSettings['biaya_individu'], 0, ',', '.') }}</p>
-                            <p class="text-sm text-gray-600 flex items-center justify-center mt-2">
-                                <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
-                                </svg>
-                                Masa keanggotaan 1 tahun
-                            </p>
-                        </div>
-                        @else
+                        <!-- Free Registration -->
                         <div class="bg-gradient-to-r from-green-50 to-emerald-50 rounded-xl p-8 text-center border-2 border-green-200 shadow-sm">
                             <div class="inline-block mb-4">
                                 <div class="bg-green-500 text-white px-4 py-2 rounded-full text-sm font-bold uppercase tracking-wide">
@@ -122,7 +111,6 @@
                                 Masa keanggotaan 1 tahun
                             </p>
                         </div>
-                        @endif
                     </div>
 
                     <!-- Prodi Card (Hidden) -->
@@ -134,49 +122,15 @@
                                 <p class="text-gray-600 text-sm mt-2">Untuk perguruan tinggi yang memiliki program studi informatika dan komputer</p>
                             </div>
                         </div>
-                        @if($paymentSettings['registration_mode'] === 'paid')
-                        <div class="bg-purple-50 rounded p-4 mt-4">
-                            <p class="text-sm font-semibold text-purple-900 mb-2">Biaya Donasi:</p>
-                            <p class="text-2xl font-bold text-purple-600">Rp {{ number_format($paymentSettings['biaya_prodi'], 0, ',', '.') }}</p>
-                            <p class="text-xs text-gray-600 mt-1">Masa keanggotaan 1 tahun</p>
-                        </div>
-                        @else
                         <div class="bg-green-50 rounded p-4 mt-4">
                             <p class="text-sm font-semibold text-green-900 mb-2">Pendaftaran:</p>
                             <p class="text-2xl font-bold text-green-600">🆓 GRATIS</p>
                             <p class="text-xs text-gray-600 mt-1">Masa keanggotaan 1 tahun</p>
                         </div>
-                        @endif
                     </div>
                 </div>
 
-                <!-- Payment Info -->
-                @if($paymentSettings['registration_mode'] === 'paid')
-                <div class="max-w-2xl mx-auto bg-gradient-to-r from-blue-50 to-cyan-50 border-2 border-blue-200 rounded-xl p-6 shadow-md">
-                    <h3 class="font-bold text-blue-900 mb-4 flex items-center text-lg">
-                        <div class="w-10 h-10 bg-blue-500 rounded-full flex items-center justify-center mr-3">
-                            <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                            </svg>
-                        </div>
-                        Informasi Transfer Donasi
-                    </h3>
-                    <div class="bg-white rounded-lg p-4 space-y-3 text-sm text-gray-700">
-                        <div class="flex justify-between items-center pb-2 border-b">
-                            <span class="font-semibold text-gray-600">Bank:</span>
-                            <span class="font-bold text-gray-900">{{ $paymentSettings['bank_name'] }}</span>
-                        </div>
-                        <div class="flex justify-between items-center pb-2 border-b">
-                            <span class="font-semibold text-gray-600">Nomor Rekening:</span>
-                            <span class="font-bold text-gray-900 text-lg">{{ $paymentSettings['account_number'] }}</span>
-                        </div>
-                        <div class="flex justify-between items-center">
-                            <span class="font-semibold text-gray-600">Atas Nama:</span>
-                            <span class="font-bold text-gray-900">{{ $paymentSettings['account_name'] }}</span>
-                        </div>
-                    </div>
-                </div>
-                @else
+                <!-- Free Registration Info -->
                 <div class="max-w-2xl mx-auto bg-gradient-to-r from-green-50 to-emerald-50 border-2 border-green-300 rounded-xl p-6 shadow-md">
                     <h3 class="font-bold text-green-900 mb-3 flex items-center justify-center text-lg">
                         <div class="w-10 h-10 bg-green-500 rounded-full flex items-center justify-center mr-3">
@@ -188,7 +142,6 @@
                     </h3>
                     <p class="text-center text-gray-700 leading-relaxed">Pendaftaran saat ini tidak dikenakan biaya. Silakan lengkapi formulir pendaftaran di bawah ini untuk bergabung dengan komunitas kami.</p>
                 </div>
-                @endif
             </div>
 
             <!-- Registration Form -->
@@ -435,35 +388,6 @@
                                 <p class="text-xs text-gray-500 mt-1">Format: jpg, bmp, png, jpeg, pdf, doc, docx | Maksimal 5MB</p>
                             </div>
                         </div>
-
-                        <!-- Payment Proof -->
-                        @if($paymentSettings['registration_mode'] === 'paid' && $paymentSettings['require_payment_proof'] == '1')
-                        <div>
-                            <label class="block text-gray-700 font-medium mb-2">
-                                Upload Bukti Pembayaran <span class="text-red-500">*</span>
-                            </label>
-                            <input type="file" name="payment_proof" accept=".jpg,.jpeg,.png,.bmp,.pdf" required
-                                   class="w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500 @error('payment_proof') border-red-500 @enderror"
-                                   onchange="previewFile(this)">
-                            @error('payment_proof')
-                                <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
-                            @enderror
-                            <p class="text-xs text-gray-500 mt-1">Format: jpg, bmp, png, jpeg, pdf | Maksimal 5MB</p>
-                            <div id="file-preview" class="mt-3"></div>
-                        </div>
-                        @elseif($paymentSettings['registration_mode'] === 'paid' && $paymentSettings['require_payment_proof'] == '0')
-                        <div class="bg-yellow-50 border-l-4 border-yellow-500 p-4 rounded">
-                            <p class="text-sm text-yellow-700">
-                                <span class="font-semibold">Catatan:</span> Bukti pembayaran tidak wajib diupload saat ini. Silakan hubungi admin untuk konfirmasi pembayaran.
-                            </p>
-                        </div>
-                        @elseif($paymentSettings['registration_mode'] === 'free')
-                        <div class="bg-green-50 border-l-4 border-green-500 p-4 rounded">
-                            <p class="text-sm text-green-700">
-                                <span class="font-semibold">Pendaftaran Gratis!</span> Tidak ada biaya yang perlu dibayarkan.
-                            </p>
-                        </div>
-                        @endif
                     </div>
 
                     <!-- Submit Button -->
