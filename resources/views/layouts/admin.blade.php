@@ -33,6 +33,11 @@
         
         .admin-sidebar {
             width: 16rem;
+            height: 100vh;
+            position: fixed;
+            left: 0;
+            top: 0;
+            overflow-y: auto;
             flex-shrink: 0;
         }
         
@@ -40,6 +45,7 @@
             flex: 1;
             min-width: 0;
             background-color: #f9fafb;
+            margin-left: 16rem;
         }
     </style>
 </head>
@@ -65,7 +71,7 @@
                 </div>
             </div>
             
-            <nav class="p-3 space-y-0.5 overflow-y-auto" style="max-height: calc(100vh - 100px);" x-data="{ 
+            <nav class="p-3 pb-8 space-y-0.5 overflow-y-auto" style="max-height: calc(100vh - 100px);" x-data="{ 
                 openMenu: '{{ request()->routeIs("admin.dashboard") ? "" : (request()->routeIs("admin.news.*") || request()->routeIs("admin.events.*") || request()->routeIs("admin.categories.*") || request()->routeIs("admin.about-page.*") || request()->routeIs("admin.organizational-structure.*") || request()->routeIs("admin.services.*") ? "konten" : (request()->routeIs("admin.journals.*") ? "publikasi" : (request()->routeIs("admin.members.*") || request()->routeIs("admin.card-templates.*") || request()->routeIs("admin.registrations.*") ? "keanggotaan" : (request()->routeIs("admin.sliders.*") || request()->routeIs("admin.pages.*") || request()->routeIs("admin.menus.*") || request()->routeIs("admin.partners.*") || request()->routeIs("admin.section-labels.*") ? "tampilan" : (request()->routeIs("admin.settings.*") || request()->routeIs("admin.about-settings.*") || request()->routeIs("admin.footer-settings.*") ? "pengaturan" : ""))))) }}' 
             }"">
                 <!-- Dashboard -->
