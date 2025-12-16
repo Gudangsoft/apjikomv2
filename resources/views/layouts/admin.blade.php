@@ -66,7 +66,7 @@
             </div>
             
             <nav class="p-3 space-y-0.5 overflow-y-auto" style="max-height: calc(100vh - 100px);" x-data="{ 
-                openMenu: '{{ request()->routeIs("admin.dashboard") ? "" : (request()->routeIs("admin.news.*") || request()->routeIs("admin.events.*") || request()->routeIs("admin.categories.*") || request()->routeIs("admin.about-page.*") || request()->routeIs("admin.organizational-structure.*") || request()->routeIs("admin.services.*") ? "konten" : (request()->routeIs("admin.journals.*") ? "publikasi" : (request()->routeIs("admin.members.*") || request()->routeIs("admin.card-templates.*") || request()->routeIs("admin.registrations.*") ? "keanggotaan" : (request()->routeIs("admin.sliders.*") || request()->routeIs("admin.pages.*") || request()->routeIs("admin.menus.*") || request()->routeIs("admin.partners.*") || request()->routeIs("admin.section-labels.*") ? "tampilan" : (request()->routeIs("admin.settings.*") || request()->routeIs("admin.about-settings.*") || request()->routeIs("admin.payment-settings.*") || request()->routeIs("admin.footer-settings.*") ? "pengaturan" : ""))))) }}' 
+                openMenu: '{{ request()->routeIs("admin.dashboard") ? "" : (request()->routeIs("admin.news.*") || request()->routeIs("admin.events.*") || request()->routeIs("admin.categories.*") || request()->routeIs("admin.about-page.*") || request()->routeIs("admin.organizational-structure.*") || request()->routeIs("admin.services.*") ? "konten" : (request()->routeIs("admin.journals.*") ? "publikasi" : (request()->routeIs("admin.members.*") || request()->routeIs("admin.card-templates.*") || request()->routeIs("admin.registrations.*") ? "keanggotaan" : (request()->routeIs("admin.sliders.*") || request()->routeIs("admin.pages.*") || request()->routeIs("admin.menus.*") || request()->routeIs("admin.partners.*") || request()->routeIs("admin.section-labels.*") ? "tampilan" : (request()->routeIs("admin.settings.*") || request()->routeIs("admin.about-settings.*") || request()->routeIs("admin.footer-settings.*") ? "pengaturan" : ""))))) }}' 
             }"">
                 <!-- Dashboard -->
                 <a href="{{ route('admin.dashboard') }}" class="flex items-center space-x-3 px-3 py-2.5 rounded-lg text-sm transition-all {{ request()->routeIs('admin.dashboard') ? 'bg-white/10 shadow-lg' : 'hover:bg-white/5' }}">
@@ -320,15 +320,6 @@
                                 </svg>
                             </div>
                             <span>Section Tentang</span>
-                        </a>
-                        
-                        <a href="{{ route('admin.payment-settings.index') }}" class="flex items-center space-x-3 px-3 py-2 rounded-lg text-sm transition-all {{ request()->routeIs('admin.payment-settings.*') ? 'bg-white/10 shadow-lg' : 'hover:bg-white/5' }}">
-                            <div class="w-4 h-4 flex items-center justify-center">
-                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"></path>
-                                </svg>
-                            </div>
-                            <span>Pembayaran & Keanggotaan</span>
                         </a>
                         
                         <a href="{{ route('admin.footer-settings.index') }}" class="flex items-center space-x-3 px-3 py-2 rounded-lg text-sm transition-all {{ request()->routeIs('admin.footer-settings.*') ? 'bg-white/10 shadow-lg' : 'hover:bg-white/5' }}">
