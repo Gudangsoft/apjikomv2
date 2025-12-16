@@ -113,24 +113,21 @@ class RegistrationController extends Controller
         $registration->notes = $request->notes;
         $registration->save();
 
-        // Jika status berubah menjadi approved, buat member baru
+        // Jika status adalah approved, cek dan buat member jika belum ada
         $isNewMember = false;
-        if ($request->status === 'approved' && $oldStatus !== 'approved') {
-            // Cek apakah akan membuat member baru atau sudah ada
+        if ($request->status === 'approved') {
+            // Cek apakah member sudah ada
             $user = User::where('email', $registration->email)->first();
             $existingMember = $user ? Member::where('user_id', $user->id)->first() : null;
             
-            $this->createMemberFromRegistration($registration, $request->has('show_in_directory'));
-            $isNewMember = !$existingMember;
-        } elseif ($request->status === 'approved') {
-            // Update show_in_directory untuk member yang sudah ada
-            $user = User::where('email', $registration->email)->first();
-            if ($user) {
-                $member = Member::where('user_id', $user->id)->first();
-                if ($member) {
-                    $member->show_in_directory = $request->has('show_in_directory');
-                    $member->save();
-                }
+            if (!$existingMember) {
+                // Member belum ada, buat baru
+                $this->createMemberFromRegistration($registration, $request->has('show_in_directory'));
+                $isNewMember = true;
+            } else {
+                // Member sudah ada, update show_in_directory saja
+                $existingMember->show_in_directory = $request->has('show_in_directory');
+                $existingMember->save();
             }
         }
 
@@ -195,6 +192,10 @@ class RegistrationController extends Controller
             'status' => 'active',
             'address' => $registration->address ?? null,
             'show_in_directory' => $showInDirectory,
+            'google_scholar_link' => null,
+            'sinta_link' => null,
+            'orcid_link' => null,
+            'scopus_link' => null,
         ]);
 
         // Link registration to member
