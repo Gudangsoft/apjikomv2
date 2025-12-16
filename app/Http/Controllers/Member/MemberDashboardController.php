@@ -341,6 +341,10 @@ class MemberDashboardController extends Controller
                 'facebook' => $request->facebook,
                 'twitter' => $request->twitter,
                 'instagram' => $request->instagram,
+                'google_scholar_link' => $request->google_scholar_link,
+                'sinta_link' => $request->sinta_link,
+                'orcid_link' => $request->orcid_link,
+                'scopus_link' => $request->scopus_link,
             ]);
             \Log::info('Member updated successfully');
         } catch (\Exception $e) {
