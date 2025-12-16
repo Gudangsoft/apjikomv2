@@ -364,7 +364,11 @@
                         <span class="font-medium">Changelog & Updates</span>
                     </div>
                     @php
-                        $pendingRequests = \App\Models\UpdateRequest::where('status', 'pending')->count();
+                        try {
+                            $pendingRequests = \App\Models\UpdateRequest::where('status', 'pending')->count();
+                        } catch (\Exception $e) {
+                            $pendingRequests = 0;
+                        }
                     @endphp
                     @if($pendingRequests > 0)
                         <span class="bg-red-500 text-white text-xs font-bold px-2 py-0.5 rounded-full animate-pulse">
