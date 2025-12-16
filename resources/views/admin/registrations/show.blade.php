@@ -94,11 +94,11 @@
                             <p class="text-gray-900 mt-1">
                                 @if($registration->type == 'individu')
                                     <span class="px-2 py-1 text-sm font-medium rounded-full bg-blue-100 text-blue-800">
-                                        Individu (Rp 250.000)
+                                        Individu
                                     </span>
                                 @else
                                     <span class="px-2 py-1 text-sm font-medium rounded-full bg-purple-100 text-purple-800">
-                                        Program Studi (Rp 750.000)
+                                        Program Studi
                                     </span>
                                 @endif
                             </p>
