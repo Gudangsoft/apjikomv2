@@ -125,10 +125,11 @@ class MemberCardGenerator
         $this->addLabelValueClean($img, 'Kontak', $member->phone ?: '-', $dataStartX, $currentY);
         $currentY += $lineSpacing;
 
-        // Alamat (panjang max diperbesar dari 30 ke 50 karakter)
-        $address = $this->truncateText($member->address ?: '-', 50);
-        $this->addLabelValueClean($img, 'Alamat', $address, $dataStartX, $currentY);
-        $currentY += $lineSpacing;
+        // Alamat (multi-line, max 3 baris)
+        $address = $member->address ?: '-';
+        $addressLines = $this->wrapText($address, 35, 3); // Max 35 karakter per baris, 3 baris
+        $this->addLabelValueMultiline($img, 'Alamat', $addressLines, $dataStartX, $currentY);
+        $currentY += $lineSpacing * count($addressLines); // Sesuaikan spacing dengan jumlah baris
 
         // Berlaku
         // Selalu tampilkan "Seumur Hidup" untuk masa berlaku
@@ -188,6 +189,131 @@ class MemberCardGenerator
             return substr($text, 0, $length) . '...';
         }
         return $text;
+    }
+
+    /**
+     * Wrap text into multiple lines
+     */
+    private function wrapText($text, $maxCharsPerLine, $maxLines = 3)
+    {
+        // Split text by spaces
+        $words = explode(' ', $text);
+        $lines = [];
+        $currentLine = '';
+        
+        foreach ($words as $word) {
+            // Check if adding this word exceeds max chars
+            $testLine = $currentLine . ($currentLine ? ' ' : '') . $word;
+            
+            if (strlen($testLine) <= $maxCharsPerLine) {
+                $currentLine = $testLine;
+            } else {
+                // Save current line and start new line
+                if ($currentLine) {
+                    $lines[] = $currentLine;
+                    $currentLine = $word;
+                } else {
+                    // Word itself is too long, truncate it
+                    $lines[] = substr($word, 0, $maxCharsPerLine - 3) . '...';
+                    $currentLine = '';
+                }
+                
+                // Stop if we reached max lines
+                if (count($lines) >= $maxLines) {
+                    break;
+                }
+            }
+        }
+        
+        // Add remaining text
+        if ($currentLine && count($lines) < $maxLines) {
+            $lines[] = $currentLine;
+        }
+        
+        // If we have more text but reached max lines, add ... to last line
+        if (count($words) > 0 && count($lines) >= $maxLines) {
+            $lastLine = $lines[$maxLines - 1];
+            if (strlen($lastLine) > $maxCharsPerLine - 3) {
+                $lines[$maxLines - 1] = substr($lastLine, 0, $maxCharsPerLine - 3) . '...';
+            } else {
+                $lines[$maxLines - 1] = $lastLine . '...';
+            }
+        }
+        
+        return $lines;
+    }
+
+    /**
+     * Add label with multiline value
+     */
+    private function addLabelValueMultiline($img, $label, $lines, $x, $y)
+    {
+        $labelWidth = 95;
+        $fontSize = 15;
+        $labelColor = '#000000';
+        $valueColor = '#000000';
+        $lineHeight = 22; // Tinggi per baris
+        
+        // Check if Arial fonts exist
+        $fontPath = storage_path('fonts/arialbd.ttf'); // Arial Bold
+        $fontPathRegular = storage_path('fonts/arial.ttf'); // Arial Regular
+        
+        // If custom font exists, use it
+        if (file_exists($fontPath)) {
+            // Draw label with Arial Bold (only on first line)
+            $img->text($label, $x, $y, function($font) use ($fontSize, $labelColor, $fontPath) {
+                $font->file($fontPath);
+                $font->size($fontSize);
+                $font->color($labelColor);
+                $font->align('left');
+            });
+            
+            // Draw colon
+            $img->text(':', $x + $labelWidth, $y, function($font) use ($fontSize, $labelColor, $fontPath) {
+                $font->file($fontPath);
+                $font->size($fontSize);
+                $font->color($labelColor);
+                $font->align('left');
+            });
+            
+            // Draw each line of value
+            $currentY = $y;
+            foreach ($lines as $line) {
+                $img->text($line, $x + $labelWidth + 15, $currentY, function($font) use ($fontSize, $valueColor, $fontPathRegular, $fontPath) {
+                    $font->file(file_exists($fontPathRegular) ? $fontPathRegular : $fontPath);
+                    $font->size($fontSize);
+                    $font->color($valueColor);
+                    $font->align('left');
+                });
+                $currentY += $lineHeight;
+            }
+        } else {
+            // Fallback: use default font
+            // Draw label
+            $img->text($label, $x, $y, function($font) use ($fontSize, $labelColor) {
+                $font->size($fontSize);
+                $font->color($labelColor);
+                $font->align('left');
+            });
+            
+            // Draw colon
+            $img->text(':', $x + $labelWidth, $y, function($font) use ($fontSize, $labelColor) {
+                $font->size($fontSize);
+                $font->color($labelColor);
+                $font->align('left');
+            });
+            
+            // Draw each line of value
+            $currentY = $y;
+            foreach ($lines as $line) {
+                $img->text($line, $x + $labelWidth + 15, $currentY, function($font) use ($fontSize, $valueColor) {
+                    $font->size($fontSize);
+                    $font->color($valueColor);
+                    $font->align('left');
+                });
+                $currentY += $lineHeight;
+            }
+        }
     }
 
     /**
