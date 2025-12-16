@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Setup Table Sliders</title>
+    <style>
+        body { font-family: Arial; padding: 20px; max-width: 800px; margin: 0 auto; }
+        .box { border: 2px solid #7C3AED; padding: 20px; margin: 10px 0; border-radius: 8px; }
+        .success { background: #d1fae5; border-color: #10b981; }
+        .error { background: #fee2e2; border-color: #ef4444; }
+        .info { background: #dbeafe; border-color: #3b82f6; }
+        button { background: #7C3AED; color: white; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer; font-size: 16px; }
+        button:hover { background: #5B21B6; }
+        pre { background: #f3f4f6; padding: 10px; border-radius: 5px; overflow-x: auto; }
+        .step { background: white; padding: 15px; margin: 10px 0; border-left: 4px solid #7C3AED; }
+    </style>
+</head>
+<body>
+    <h1>🔧 Setup Table Sliders - APJIKOM</h1>
+    
+    <div class="box info">
+        <h3>📋 Status Saat Ini</h3>
+        <p>File ini akan membantu Anda membuat table <code>sliders</code> di database.</p>
+    </div>
+
+    <div class="step">
+        <h3>📝 Langkah 1: Buka phpMyAdmin</h3>
+        <ol>
+            <li>Buka <a href="http://localhost/phpmyadmin" target="_blank">http://localhost/phpmyadmin</a></li>
+            <li>Pilih database <strong>apjikom</strong></li>
+            <li>Klik tab <strong>SQL</strong></li>
+        </ol>
+    </div>
+
+    <div class="step">
+        <h3>💾 Langkah 2: Jalankan SQL Ini</h3>
+        <p>Copy SQL di bawah ini dan paste di tab SQL phpMyAdmin, lalu klik <strong>Go</strong>:</p>
+        <pre id="sqlCode">CREATE TABLE IF NOT EXISTS `sliders` (
+  `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT,
+  `title` varchar(255) NOT NULL,
+  `description` text DEFAULT NULL,
+  `image` varchar(255) NOT NULL,
+  `button_text` varchar(255) DEFAULT NULL,
+  `button_link` varchar(255) DEFAULT NULL,
+  `order` int(11) NOT NULL DEFAULT 0,
+  `is_active` tinyint(1) NOT NULL DEFAULT 1,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+INSERT INTO `migrations` (`migration`, `batch`) 
+VALUES ('2025_11_12_161831_create_sliders_table', 
+        (SELECT COALESCE(MAX(batch), 0) + 1 FROM (SELECT batch FROM migrations) as temp))
+ON DUPLICATE KEY UPDATE migration = migration;</pre>
+        <button onclick="copySql()">📋 Copy SQL</button>
+    </div>
+
+    <div class="step">
+        <h3>✅ Langkah 3: Verifikasi</h3>
+        <p>Setelah SQL berhasil dijalankan, refresh halaman ini dan klik tombol di bawah:</p>
+        <button onclick="window.location.href='/admin/sliders'">🎨 Buka Menu Slider</button>
+    </div>
+
+    <div class="box info">
+        <h3>🚀 Setelah Table Dibuat</h3>
+        <ul>
+            <li>✅ Menu Slider di admin akan berfungsi</li>
+            <li>✅ Anda bisa upload gambar slider</li>
+            <li>✅ Slider akan tampil di homepage</li>
+        </ul>
+    </div>
+
+    <div class="step">
+        <h3>🆘 Troubleshooting</h3>
+        <p><strong>Jika masih error:</strong></p>
+        <ol>
+            <li>Pastikan database <code>apjikom</code> sudah ada</li>
+            <li>Pastikan koneksi database di <code>.env</code> benar</li>
+            <li>Cek apakah table <code>migrations</code> ada</li>
+            <li>Coba refresh browser (Ctrl+F5)</li>
+        </ol>
+    </div>
+
+    <script>
+    function copySql() {
+        const sql = document.getElementById('sqlCode').textContent;
+        navigator.clipboard.writeText(sql).then(() => {
+            alert('✅ SQL berhasil di-copy! Sekarang paste di phpMyAdmin tab SQL.');
+        });
+    }
+    </script>
+</body>
+</html>

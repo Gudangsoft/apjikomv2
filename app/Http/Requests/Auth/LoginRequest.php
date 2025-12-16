@@ -1,0 +1,120 @@
+<?php
+
+namespace App\Http\Requests\Auth;
+
+use Illuminate\Auth\Events\Lockout;
+use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\RateLimiter;
+use Illuminate\Support\Str;
+use Illuminate\Validation\ValidationException;
+
+class LoginRequest extends FormRequest
+{
+    /**
+     * Determine if the user is authorized to make this request.
+     */
+    public function authorize(): bool
+    {
+        return true;
+    }
+
+    /**
+     * Get the validation rules that apply to the request.
+     *
+     * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
+     */
+    public function rules(): array
+    {
+        return [
+            'email' => ['required', 'string', 'email'],
+            'password' => ['required', 'string'],
+            'captcha_answer' => ['required', 'numeric'],
+        ];
+    }
+    
+    /**
+     * Get custom validation messages.
+     */
+    public function messages(): array
+    {
+        return [
+            'captcha_answer.required' => 'Jawaban CAPTCHA harus diisi.',
+            'captcha_answer.numeric' => 'Jawaban CAPTCHA harus berupa angka.',
+        ];
+    }
+
+    /**
+     * Attempt to authenticate the request's credentials.
+     *
+     * @throws \Illuminate\Validation\ValidationException
+     */
+    public function authenticate(): void
+    {
+        // Validate CAPTCHA first
+        $this->validateCaptcha();
+        
+        $this->ensureIsNotRateLimited();
+
+        if (! Auth::attempt($this->only('email', 'password'), $this->boolean('remember'))) {
+            RateLimiter::hit($this->throttleKey());
+
+            throw ValidationException::withMessages([
+                'email' => trans('auth.failed'),
+            ]);
+        }
+
+        RateLimiter::clear($this->throttleKey());
+    }
+
+    /**
+     * Ensure the login request is not rate limited.
+     *
+     * @throws \Illuminate\Validation\ValidationException
+     */
+    public function ensureIsNotRateLimited(): void
+    {
+        if (! RateLimiter::tooManyAttempts($this->throttleKey(), 5)) {
+            return;
+        }
+
+        event(new Lockout($this));
+
+        $seconds = RateLimiter::availableIn($this->throttleKey());
+
+        throw ValidationException::withMessages([
+            'email' => trans('auth.throttle', [
+                'seconds' => $seconds,
+                'minutes' => ceil($seconds / 60),
+            ]),
+        ]);
+    }
+
+    /**
+     * Get the rate limiting throttle key for the request.
+     */
+    public function throttleKey(): string
+    {
+        return Str::transliterate(Str::lower($this->string('email')).'|'.$this->ip());
+    }
+    
+    /**
+     * Validate CAPTCHA answer.
+     *
+     * @throws \Illuminate\Validation\ValidationException
+     */
+    protected function validateCaptcha(): void
+    {
+        $expectedAnswer = session('captcha_answer');
+        $userAnswer = $this->input('captcha_answer');
+        
+        if (!$expectedAnswer || $userAnswer != $expectedAnswer) {
+            throw ValidationException::withMessages([
+                'captcha_answer' => 'Jawaban CAPTCHA salah. Silakan coba lagi.',
+            ]);
+        }
+        
+        // Clear CAPTCHA from session after validation
+        session()->forget(['captcha_num1', 'captcha_num2', 'captcha_answer']);
+    }
+}

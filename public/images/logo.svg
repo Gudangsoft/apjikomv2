@@ -1,0 +1,12 @@
+<svg width="200" height="200" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background Circle -->
+  <circle cx="100" cy="100" r="90" fill="#764ba2"/>
+  <circle cx="100" cy="100" r="85" fill="#667eea"/>
+  
+  <!-- Stylized "A" for APJIKOM -->
+  <path d="M 100 50 L 140 140 L 120 140 L 112 118 L 88 118 L 80 140 L 60 140 Z" fill="white"/>
+  <path d="M 95 105 L 105 105 L 100 85 Z" fill="#764ba2"/>
+  
+  <!-- Bottom Text -->
+  <text x="100" y="175" font-family="Arial, sans-serif" font-size="20" font-weight="bold" text-anchor="middle" fill="white">APJIKOM</text>
+</svg>
