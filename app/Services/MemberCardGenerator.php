@@ -43,12 +43,39 @@ class MemberCardGenerator
         $cardWidth = $img->width();
         $cardHeight = $img->height();
 
-        // === PHOTO SECTION (Left side) ===
-        // Photo position and size - CENTER VERTICAL
+        // === PREPARE DATA UNTUK HITUNG TINGGI TOTAL ===
+        $lineSpacing = 32;  // Spacing konsisten
+        
+        // Hitung jumlah baris alamat untuk menentukan tinggi total data
+        $address = $member->address ?: '-';
+        $addressLines = $this->wrapText($address, 35, 3); // Max 35 karakter per baris, 3 baris
+        $addressLinesCount = count($addressLines);
+        
+        // Hitung total tinggi data
+        // 6 field: No.Anggota, Nama, Institusi, Kontak, Alamat (multi-line), Berlaku
+        $totalDataLines = 5 + $addressLinesCount; // 5 field single line + alamat multi-line
+        $totalDataHeight = $totalDataLines * $lineSpacing;
+        
+        // === TEXT SECTION ===
+        $centerX = $cardWidth / 2;
+        $dataStartX = 380;  // Data di kanan foto
+        $dataStartY = 310;  // Start position untuk data
+        
+        // === PHOTO SECTION (Left side) - DYNAMIC CENTER ===
         $photoX = 140;
-        $photoY = 240;  // Dinaikkan dari 280 ke 240 agar lebih center
         $photoWidth = 200;
         $photoHeight = 240;
+        
+        // Hitung posisi Y foto agar center dengan data
+        // Center foto di tengah-tengah area data
+        $dataEndY = $dataStartY + $totalDataHeight;
+        $dataCenterY = $dataStartY + ($totalDataHeight / 2);
+        $photoY = $dataCenterY - ($photoHeight / 2);
+        
+        // Pastikan foto tidak terlalu atas atau bawah (min/max boundaries)
+        $minPhotoY = 220;
+        $maxPhotoY = 280;
+        $photoY = max($minPhotoY, min($maxPhotoY, $photoY));
 
         if ($member->photo && Storage::disk('public')->exists($member->photo)) {
             $photoPath = storage_path('app/public/' . $member->photo);
@@ -74,13 +101,6 @@ class MemberCardGenerator
                 $font->valign('middle');
             });
         }
-
-        // === TEXT SECTION ===
-        // Posisi lebih rapi sesuai screenshot
-        $centerX = $cardWidth / 2;
-        $dataStartX = 380;  // Data di kanan foto
-        $dataStartY = 310;  // Mulai lebih bawah
-        $lineSpacing = 32;  // Spacing konsisten
         
         // === HEADER: "KARTU TANDA ANGGOTA" (BESAR DI TENGAH) ===
         $headerY = 265;  // Turun dari 250 ke 265 (lebih bawah, tidak mepet)
@@ -125,11 +145,9 @@ class MemberCardGenerator
         $this->addLabelValueClean($img, 'Kontak', $member->phone ?: '-', $dataStartX, $currentY);
         $currentY += $lineSpacing;
 
-        // Alamat (multi-line, max 3 baris)
-        $address = $member->address ?: '-';
-        $addressLines = $this->wrapText($address, 35, 3); // Max 35 karakter per baris, 3 baris
+        // Alamat (multi-line, max 3 baris) - addressLines sudah dihitung di atas
         $this->addLabelValueMultiline($img, 'Alamat', $addressLines, $dataStartX, $currentY);
-        $currentY += $lineSpacing * count($addressLines); // Sesuaikan spacing dengan jumlah baris
+        $currentY += $lineSpacing * $addressLinesCount; // Sesuaikan spacing dengan jumlah baris
 
         // Berlaku
         // Selalu tampilkan "Seumur Hidup" untuk masa berlaku
