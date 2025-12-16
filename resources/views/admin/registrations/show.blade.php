@@ -164,43 +164,12 @@
             @endif
 
             <!-- Files -->
+            @if($registration->type == 'prodi' && $registration->authorization_letter)
             <div class="bg-white rounded-lg shadow border">
                 <div class="px-6 py-4 border-b">
                     <h2 class="text-lg font-semibold text-gray-900">Dokumen</h2>
                 </div>
                 <div class="px-6 py-4 space-y-4">
-                    <!-- Payment Proof -->
-                    <div>
-                        <label class="text-sm font-medium text-gray-500 mb-2 block">Bukti Pembayaran</label>
-                        @if($registration->payment_proof)
-                            @php
-                                $extension = pathinfo($registration->payment_proof, PATHINFO_EXTENSION);
-                            @endphp
-                            @if(in_array($extension, ['jpg', 'jpeg', 'png', 'bmp']))
-                                <img src="{{ asset('storage/' . $registration->payment_proof) }}" 
-                                     alt="Bukti Pembayaran" 
-                                     class="max-w-md rounded border">
-                            @else
-                                <div class="flex items-center p-3 bg-gray-50 rounded border max-w-md">
-                                    <svg class="w-8 h-8 text-red-600 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"></path>
-                                    </svg>
-                                    <div class="flex-1">
-                                        <p class="text-sm font-medium text-gray-900">File PDF</p>
-                                        <p class="text-xs text-gray-500">{{ basename($registration->payment_proof) }}</p>
-                                    </div>
-                                </div>
-                            @endif
-                            <a href="{{ asset('storage/' . $registration->payment_proof) }}" 
-                               target="_blank"
-                               class="inline-block mt-2 text-purple-600 hover:text-purple-700 text-sm font-medium">
-                                Lihat/Download File →
-                            </a>
-                        @else
-                            <p class="text-gray-400 text-sm">Tidak ada file</p>
-                        @endif
-                    </div>
-
                     <!-- Authorization Letter (Prodi only) -->
                     @if($registration->type == 'prodi' && $registration->authorization_letter)
                     <div>
@@ -232,6 +201,7 @@
                     @endif
                 </div>
             </div>
+            @endif
         </div>
 
         <!-- Sidebar Actions -->
