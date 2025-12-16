@@ -262,9 +262,36 @@ document.addEventListener('DOMContentLoaded', () => {
                     />
                 </div>
                 
-                <p class="text-gray-600 text-base leading-relaxed mb-8">
-                    {{ $aboutDescription ?? 'Asosiasi yang mewadahi perguruan tinggi di indonesia yang memiliki rumpun ilmu komputer. APTIKOM mempunyai tujuan untuk meningkatkan kualitas pendidikan, penelitian dan pengabdian kepada masyarakat di bidang teknologi informasi dan komputer.' }}
-                </p>
+                @php
+                    $aboutText = $aboutDescription ?? 'Asosiasi yang mewadahi perguruan tinggi di indonesia yang memiliki rumpun ilmu komputer. APTIKOM mempunyai tujuan untuk meningkatkan kualitas pendidikan, penelitian dan pengabdian kepada masyarakat di bidang teknologi informasi dan komputer.';
+                    $textLength = mb_strlen($aboutText);
+                    $showReadMore = $textLength > 200;
+                @endphp
+                
+                <div class="text-gray-600 text-base leading-relaxed mb-8">
+                    @if($showReadMore)
+                        <div id="about-description-short" class="about-text">
+                            {{ mb_substr($aboutText, 0, 200) }}...
+                            <button onclick="toggleReadMore()" class="text-cyan-600 hover:text-cyan-700 font-semibold ml-1 inline-flex items-center gap-1">
+                                Baca Selengkapnya
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                                </svg>
+                            </button>
+                        </div>
+                        <div id="about-description-full" class="about-text hidden">
+                            {{ $aboutText }}
+                            <button onclick="toggleReadMore()" class="text-cyan-600 hover:text-cyan-700 font-semibold ml-1 inline-flex items-center gap-1">
+                                Tutup
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7"></path>
+                                </svg>
+                            </button>
+                        </div>
+                    @else
+                        <p>{{ $aboutText }}</p>
+                    @endif
+                </div>
 
                 <!-- Features List -->
                 <div class="space-y-4 mb-8">
@@ -1006,4 +1033,19 @@ function toggleFaq(index) {
         <a href="{{ route('registration.create') }}" class="apjikom-purple text-white px-8 py-3 rounded font-semibold hover:bg-purple-700 transition inline-block">Bergabung Sekarang</a>
     </div>
 </section>
+
+<script>
+function toggleReadMore() {
+    const shortText = document.getElementById('about-description-short');
+    const fullText = document.getElementById('about-description-full');
+    
+    if (shortText.classList.contains('hidden')) {
+        shortText.classList.remove('hidden');
+        fullText.classList.add('hidden');
+    } else {
+        shortText.classList.add('hidden');
+        fullText.classList.remove('hidden');
+    }
+}
+</script>
 @endsection
