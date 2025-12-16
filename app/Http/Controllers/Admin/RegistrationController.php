@@ -133,7 +133,7 @@ class RegistrationController extends Controller
             }
         }
 
-        return redirect()->route('admin.registrations.show', $id)
+        return redirect()->route('admin.registrations.index')
             ->with('success', $successMessage);
     }
 
