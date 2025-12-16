@@ -44,9 +44,9 @@ class MemberCardGenerator
         $cardHeight = $img->height();
 
         // === PHOTO SECTION (Left side) ===
-        // Photo position and size - TURUN LEBIH BAWAH
+        // Photo position and size - CENTER VERTICAL
         $photoX = 140;
-        $photoY = 280;
+        $photoY = 240;  // Dinaikkan dari 280 ke 240 agar lebih center
         $photoWidth = 200;
         $photoHeight = 240;
 
