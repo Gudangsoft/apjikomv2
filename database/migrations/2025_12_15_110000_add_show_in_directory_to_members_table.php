@@ -12,7 +12,9 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('members', function (Blueprint $table) {
-            $table->boolean('show_in_directory')->default(false)->after('status');
+            if (!Schema::hasColumn('members', 'show_in_directory')) {
+                $table->boolean('show_in_directory')->default(false)->after('status');
+            }
         });
     }
 
