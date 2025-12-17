@@ -295,7 +295,7 @@ class MemberDashboardController extends Controller
                 'sinta_link' => 'nullable|url|max:255',
                 'orcid_link' => 'nullable|url|max:255',
                 'scopus_link' => 'nullable|url|max:255',
-                'cv_file' => 'nullable|file|mimes:pdf,doc,docx|max:5120', // 5MB
+                'cv_file' => 'sometimes|nullable|file|mimes:pdf,doc,docx|max:5120', // 5MB
                 'delete_cv' => 'nullable|in:0,1',
             ], [
                 'name.required' => 'Nama lengkap harus diisi',
