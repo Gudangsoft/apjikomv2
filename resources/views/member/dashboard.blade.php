@@ -205,9 +205,18 @@
                     <span class="font-medium text-gray-800">{{ $member->phone ?? '-' }}</span>
                 </div>
             </div>
-            <div class="mt-4">
+            <div class="mt-4 space-y-2">
+                @if($member->cv_file)
+                <a href="{{ asset('storage/' . $member->cv_file) }}" target="_blank"
+                   class="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-semibold rounded-lg hover:from-blue-700 hover:to-indigo-700 transition-all duration-200 shadow-md hover:shadow-lg">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"/>
+                    </svg>
+                    Lihat CV Saya
+                </a>
+                @endif
                 <a href="{{ route('member.profile') }}" 
-                   class="text-purple-600 hover:text-purple-800 font-medium">
+                   class="block text-purple-600 hover:text-purple-800 font-medium">
                     Lihat Detail Profil →
                 </a>
             </div>
