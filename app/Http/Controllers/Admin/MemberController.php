@@ -167,8 +167,8 @@ class MemberController extends Controller
         // Log activity
         \App\Helpers\ActivityLogger::log(
             'bulk_verify_members',
+            'verified',
             'Member',
-            null,
             "Bulk verified {$unverifiedCount} members"
         );
         

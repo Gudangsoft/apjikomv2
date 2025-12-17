@@ -12,20 +12,35 @@ class ActivityLogger
      *
      * @param string $type Type of activity (registration, post, login, etc)
      * @param string $action Action performed (created, updated, deleted, etc)
+     * @param mixed $model Related model instance or model class name string
      * @param string $description Description of the activity
-     * @param mixed $model Related model instance
      * @param array $properties Additional properties
      * @return ActivityLog
      */
-    public static function log($type, $action, $description, $model = null, $properties = [])
+    public static function log($type, $action, $model = null, $description = null, $properties = [])
     {
+        // Handle if model is a string (class name) or object
+        $modelType = null;
+        $modelId = null;
+        
+        if ($model) {
+            if (is_string($model)) {
+                // If model is a string, use it as model_type
+                $modelType = $model;
+            } elseif (is_object($model)) {
+                // If model is an object, get its class and id
+                $modelType = get_class($model);
+                $modelId = $model->id ?? null;
+            }
+        }
+        
         return ActivityLog::create([
             'type' => $type,
             'action' => $action,
             'description' => $description,
             'user_id' => Auth::id(),
-            'model_type' => $model ? get_class($model) : null,
-            'model_id' => $model ? $model->id : null,
+            'model_type' => $modelType,
+            'model_id' => $modelId,
             'properties' => $properties,
         ]);
     }
@@ -38,8 +53,8 @@ class ActivityLogger
         return self::log(
             'registration',
             'created',
-            "Member baru mendaftar: {$member->user->name}",
-            $member
+            $member,
+            "Member baru mendaftar: {$member->user->name}"
         );
     }
 
@@ -51,8 +66,8 @@ class ActivityLogger
         return self::log(
             'post',
             'created',
-            ucfirst($type) . " baru dibuat: {$post->title}",
-            $post
+            $post,
+            ucfirst($type) . " baru dibuat: {$post->title}"
         );
     }
 
@@ -64,8 +79,8 @@ class ActivityLogger
         return self::log(
             'auth',
             'login',
-            "{$user->name} login ke sistem",
-            $user
+            $user,
+            "{$user->name} login ke sistem"
         );
     }
 
