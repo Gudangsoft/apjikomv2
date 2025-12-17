@@ -18,13 +18,19 @@ class RegistrationController extends Controller
     {
         $query = Registration::query();
 
+        // Debug: Log the search parameter
+        if ($request->filled('search')) {
+            \Log::info('Registration Search:', ['search' => $request->search]);
+        }
+
         // Search
         if ($request->filled('search')) {
-            $query->where(function($q) use ($request) {
-                $q->where('full_name', 'like', '%' . $request->search . '%')
-                  ->orWhere('email', 'like', '%' . $request->search . '%')
-                  ->orWhere('phone', 'like', '%' . $request->search . '%')
-                  ->orWhere('institution', 'like', '%' . $request->search . '%');
+            $search = $request->search;
+            $query->where(function($q) use ($search) {
+                $q->where('full_name', 'like', '%' . $search . '%')
+                  ->orWhere('email', 'like', '%' . $search . '%')
+                  ->orWhere('phone', 'like', '%' . $search . '%')
+                  ->orWhere('institution', 'like', '%' . $search . '%');
             });
         }
 
