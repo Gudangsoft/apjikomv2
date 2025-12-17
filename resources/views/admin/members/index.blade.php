@@ -141,20 +141,20 @@
 
 <!-- Advanced Search & Filter -->
 <div class="mb-6 bg-white rounded-lg shadow p-6">
-    <form method="GET" action="{{ route('admin.members.index') }}" id="filterForm">
+    <form id="filterForm">
         <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
             <!-- Search -->
             <div>
                 <label class="block text-sm font-medium text-gray-700 mb-2">Search</label>
-                <input type="text" name="search" value="{{ request('search') }}" 
+                <input type="text" id="search" name="search" value="{{ request('search') }}" 
                        placeholder="Nama, email, institusi..."
-                       class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500">
+                       class="filter-input w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500">
             </div>
 
             <!-- Status Filter -->
             <div>
                 <label class="block text-sm font-medium text-gray-700 mb-2">Status</label>
-                <select name="status" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500">
+                <select id="status" name="status" class="filter-input w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500">
                     <option value="">Semua Status</option>
                     <option value="pending" {{ request('status') == 'pending' ? 'selected' : '' }}>Pending</option>
                     <option value="active" {{ request('status') == 'active' ? 'selected' : '' }}>Aktif</option>
@@ -166,7 +166,7 @@
             <!-- Verification Filter -->
             <div>
                 <label class="block text-sm font-medium text-gray-700 mb-2">Verifikasi</label>
-                <select name="verified" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500">
+                <select id="verified" name="verified" class="filter-input w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500">
                     <option value="">Semua</option>
                     <option value="1" {{ request('verified') == '1' ? 'selected' : '' }}>Verified</option>
                     <option value="0" {{ request('verified') == '0' ? 'selected' : '' }}>Unverified</option>
@@ -176,7 +176,7 @@
             <!-- Card Status Filter -->
             <div>
                 <label class="block text-sm font-medium text-gray-700 mb-2">Status Kartu</label>
-                <select name="has_card" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500">
+                <select id="has_card" name="has_card" class="filter-input w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500">
                     <option value="">Semua</option>
                     <option value="1" {{ request('has_card') == '1' ? 'selected' : '' }}>Sudah Ada Kartu</option>
                     <option value="0" {{ request('has_card') == '0' ? 'selected' : '' }}>Belum Ada Kartu</option>
@@ -186,20 +186,20 @@
             <!-- Date Range -->
             <div>
                 <label class="block text-sm font-medium text-gray-700 mb-2">Dari Tanggal</label>
-                <input type="date" name="date_from" value="{{ request('date_from') }}"
-                       class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500">
+                <input type="date" id="date_from" name="date_from" value="{{ request('date_from') }}"
+                       class="filter-input w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500">
             </div>
 
             <div>
                 <label class="block text-sm font-medium text-gray-700 mb-2">Sampai Tanggal</label>
-                <input type="date" name="date_to" value="{{ request('date_to') }}"
-                       class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500">
+                <input type="date" id="date_to" name="date_to" value="{{ request('date_to') }}"
+                       class="filter-input w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500">
             </div>
 
             <!-- Sort -->
             <div>
                 <label class="block text-sm font-medium text-gray-700 mb-2">Urutkan</label>
-                <select name="sort" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500">
+                <select id="sort" name="sort" class="filter-input w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500">
                     <option value="latest" {{ request('sort', 'latest') == 'latest' ? 'selected' : '' }}>Terbaru</option>
                     <option value="oldest" {{ request('sort') == 'oldest' ? 'selected' : '' }}>Terlama</option>
                     <option value="name" {{ request('sort') == 'name' ? 'selected' : '' }}>Nama A-Z</option>
@@ -209,16 +209,13 @@
         </div>
 
         <div class="flex items-center justify-between mt-4">
-            <div class="text-sm text-gray-600">
+            <div class="text-sm text-gray-600" id="recordInfo">
                 Menampilkan {{ $members->firstItem() ?? 0 }} - {{ $members->lastItem() ?? 0 }} dari {{ $members->total() }} member
             </div>
             <div class="flex space-x-3">
-                @if(request()->hasAny(['search', 'status', 'verified', 'has_card', 'date_from', 'date_to', 'sort']))
-                <a href="{{ route('admin.members.index') }}" 
-                   class="px-4 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition">
+                <button type="button" id="resetBtn" class="px-4 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition">
                     Reset Filter
-                </a>
-                @endif
+                </button>
                 <button type="submit" 
                         class="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition">
                     <svg class="w-5 h-5 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -231,7 +228,7 @@
     </form>
 </div>
 
-<div class="bg-white rounded-lg shadow overflow-hidden">
+<div class="bg-white rounded-lg shadow overflow-hidden" id="tableContainer">
     <table class="min-w-full divide-y divide-gray-200">
         <thead class="bg-gray-50">
             <tr>
@@ -244,7 +241,7 @@
                 <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase">Aksi</th>
             </tr>
         </thead>
-        <tbody class="bg-white divide-y divide-gray-200">
+        <tbody class="bg-white divide-y divide-gray-200" id="tableBody">
             @forelse($members as $member)
             <tr>
                 <td class="px-6 py-4 whitespace-nowrap">
@@ -336,7 +333,101 @@
     </table>
 </div>
 
-<div class="mt-6">
+<div class="mt-6" id="paginationContainer">
     {{ $members->links() }}
 </div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+$(document).ready(function() {
+    let searchTimeout;
+    
+    // Load initial data
+    loadMembers();
+    
+    // Auto-search on input (with debounce)
+    $('#search').on('keyup', function() {
+        clearTimeout(searchTimeout);
+        searchTimeout = setTimeout(function() {
+            loadMembers();
+        }, 500);
+    });
+    
+    // Auto-filter on change
+    $('.filter-input').not('#search').on('change', function() {
+        loadMembers();
+    });
+    
+    // Form submit
+    $('#filterForm').on('submit', function(e) {
+        e.preventDefault();
+        loadMembers();
+    });
+    
+    // Reset button
+    $('#resetBtn').on('click', function() {
+        $('#filterForm')[0].reset();
+        loadMembers();
+    });
+    
+    // Function to load members
+    function loadMembers(page = 1) {
+        const formData = {
+            search: $('#search').val(),
+            status: $('#status').val(),
+            verified: $('#verified').val(),
+            has_card: $('#has_card').val(),
+            date_from: $('#date_from').val(),
+            date_to: $('#date_to').val(),
+            sort: $('#sort').val(),
+            page: page
+        };
+        
+        // Show loading
+        $('#tableBody').html('<tr><td colspan="7" class="px-6 py-8 text-center"><div class="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div><div class="mt-2 text-gray-600">Memuat data...</div></td></tr>');
+        
+        $.ajax({
+            url: '{{ route("admin.members.index") }}',
+            type: 'GET',
+            data: formData,
+            dataType: 'html',
+            success: function(response) {
+                const $response = $(response);
+                const tableBody = $response.find('#tableBody').html();
+                const pagination = $response.find('#paginationContainer').html();
+                const recordInfo = $response.find('#recordInfo').html();
+                
+                $('#tableBody').html(tableBody);
+                $('#paginationContainer').html(pagination);
+                $('#recordInfo').html(recordInfo);
+                
+                // Update pagination links to use AJAX
+                bindPaginationLinks();
+            },
+            error: function(xhr, status, error) {
+                console.error('Error:', error);
+                $('#tableBody').html('<tr><td colspan="7" class="px-6 py-8 text-center text-red-600">Terjadi kesalahan saat memuat data. Silakan coba lagi.</td></tr>');
+            }
+        });
+    }
+    
+    // Bind pagination links
+    function bindPaginationLinks() {
+        $('#paginationContainer a').on('click', function(e) {
+            e.preventDefault();
+            const url = $(this).attr('href');
+            if (url) {
+                const urlParams = new URLSearchParams(url.split('?')[1]);
+                const page = urlParams.get('page') || 1;
+                loadMembers(page);
+                
+                // Scroll to top of table
+                $('html, body').animate({
+                    scrollTop: $('#tableContainer').offset().top - 100
+                }, 300);
+            }
+        });
+    }
+});
+</script>
 @endsection
