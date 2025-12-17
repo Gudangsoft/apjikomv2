@@ -351,8 +351,39 @@
                                 </svg>
                                 Biografi Singkat
                             </label>
-                            <textarea name='bio' rows='4' maxlength='500' placeholder='Ceritakan sedikit tentang diri Anda atau institusi Anda...' class='w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-purple-500 focus:ring-2 focus:ring-purple-200 transition-all resize-none'>{{ old('bio', $member->bio) }}</textarea>
-                            <p class='text-xs text-gray-500 mt-1'>Maksimal 500 karakter</p>
+                            <textarea name='bio' rows='5' id='bioTextarea' placeholder='Ceritakan sedikit tentang diri Anda atau institusi Anda...' class='w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-purple-500 focus:ring-2 focus:ring-purple-200 transition-all resize-none'>{{ old('bio', $member->bio) }}</textarea>
+                            <p class='text-xs text-gray-500 mt-1'>Maksimal 300 kata. <span id='wordCount' class='font-semibold text-purple-600'>0</span> kata</p>
+                        </div>
+                        
+                        <!-- CV Upload -->
+                        <div class='mb-4'>
+                            <label class='block text-sm font-bold text-gray-700 mb-2'>
+                                <svg class='w-4 h-4 inline mr-1 text-indigo-600' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
+                                    <path stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z'/>
+                                </svg>
+                                Curriculum Vitae (CV)
+                            </label>
+                            @if($member->cv_file)
+                            <div class='mb-3 p-3 bg-green-50 border-2 border-green-200 rounded-xl'>
+                                <div class='flex items-center justify-between'>
+                                    <div class='flex items-center space-x-2'>
+                                        <svg class='w-5 h-5 text-green-600' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
+                                            <path stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z'/>
+                                        </svg>
+                                        <span class='text-sm text-green-800 font-medium'>CV sudah diupload</span>
+                                    </div>
+                                    <div class='flex items-center space-x-2'>
+                                        <a href='{{ asset("storage/" . $member->cv_file) }}' target='_blank' class='text-xs text-blue-600 hover:text-blue-700 underline'>Lihat CV</a>
+                                        <button type='button' onclick='document.getElementById("deleteCV").value="1"; this.closest(".bg-green-50").classList.add("hidden"); document.getElementById("cvUploadSection").classList.remove("hidden");' class='text-xs text-red-600 hover:text-red-700'>Hapus</button>
+                                    </div>
+                                </div>
+                            </div>
+                            <input type='hidden' name='delete_cv' id='deleteCV' value='0'>
+                            @endif
+                            <div id='cvUploadSection' class='{{ $member->cv_file ? "hidden" : "" }}'>
+                                <input type='file' name='cv_file' accept='.pdf,.doc,.docx' class='w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 transition-all file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100'>
+                                <p class='text-xs text-gray-500 mt-1'>Upload file PDF, DOC, atau DOCX. Maksimal 5MB</p>
+                            </div>
                         </div>
                         
                         <!-- Expertise -->
@@ -1165,6 +1196,38 @@ function previewAndSubmitPhoto(event) {
         document.getElementById('photoUploadForm').submit();
     }
 }
+
+// Word counter for bio textarea
+document.addEventListener('DOMContentLoaded', function() {
+    const bioTextarea = document.getElementById('bioTextarea');
+    const wordCountSpan = document.getElementById('wordCount');
+    
+    if (bioTextarea && wordCountSpan) {
+        function updateWordCount() {
+            const text = bioTextarea.value.trim();
+            const wordCount = text === '' ? 0 : text.split(/\s+/).length;
+            wordCountSpan.textContent = wordCount;
+            
+            // Change color based on word count
+            if (wordCount > 300) {
+                wordCountSpan.classList.remove('text-purple-600');
+                wordCountSpan.classList.add('text-red-600');
+            } else if (wordCount > 250) {
+                wordCountSpan.classList.remove('text-purple-600', 'text-red-600');
+                wordCountSpan.classList.add('text-orange-600');
+            } else {
+                wordCountSpan.classList.remove('text-red-600', 'text-orange-600');
+                wordCountSpan.classList.add('text-purple-600');
+            }
+        }
+        
+        // Update on load
+        updateWordCount();
+        
+        // Update on input
+        bioTextarea.addEventListener('input', updateWordCount);
+    }
+});
 </script>
 
 <!-- Password Strength Meter Script -->

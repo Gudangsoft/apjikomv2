@@ -28,6 +28,7 @@ class Member extends Model
         'show_in_directory',
         'expertise',
         'bio',
+        'cv_file',
         'linkedin',
         'facebook',
         'twitter',
