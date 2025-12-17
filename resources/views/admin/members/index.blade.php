@@ -144,16 +144,6 @@
                 </select>
             </div>
 
-            <!-- Member Type Filter -->
-            <div>
-                <label class="block text-sm font-medium text-gray-700 mb-2">Tipe Member</label>
-                <select name="type" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500">
-                    <option value="">Semua Tipe</option>
-                    <option value="individual" {{ request('type') == 'individual' ? 'selected' : '' }}>Individual</option>
-                    <option value="institution" {{ request('type') == 'institution' ? 'selected' : '' }}>Institution</option>
-                </select>
-            </div>
-
             <!-- Verification Filter -->
             <div>
                 <label class="block text-sm font-medium text-gray-700 mb-2">Verifikasi</label>
@@ -204,7 +194,7 @@
                 Menampilkan {{ $members->firstItem() ?? 0 }} - {{ $members->lastItem() ?? 0 }} dari {{ $members->total() }} member
             </div>
             <div class="flex space-x-3">
-                @if(request()->hasAny(['search', 'status', 'type', 'verified', 'has_card', 'date_from', 'date_to', 'sort']))
+                @if(request()->hasAny(['search', 'status', 'verified', 'has_card', 'date_from', 'date_to', 'sort']))
                 <a href="{{ route('admin.members.index') }}" 
                    class="px-4 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition">
                     Reset Filter
@@ -228,7 +218,6 @@
             <tr>
                 <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Nama</th>
                 <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Email</th>
-                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Tipe</th>
                 <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Status</th>
                 <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Verified</th>
                 <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Kartu</th>
@@ -247,11 +236,6 @@
                 </td>
                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                     {{ $member->user->email }}
-                </td>
-                <td class="px-6 py-4 whitespace-nowrap">
-                    <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-blue-100 text-blue-800">
-                        {{ ucfirst($member->member_type) }}
-                    </span>
                 </td>
                 <td class="px-6 py-4 whitespace-nowrap">
                     @if($member->status == 'pending')
@@ -326,7 +310,7 @@
             </tr>
             @empty
             <tr>
-                <td colspan="6" class="px-6 py-4 text-center text-gray-500">Belum ada member</td>
+                <td colspan="7" class="px-6 py-4 text-center text-gray-500">Belum ada member</td>
             </tr>
             @endforelse
         </tbody>

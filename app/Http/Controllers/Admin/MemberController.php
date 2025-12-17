@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Member;
 use App\Services\MemberCardGenerator;
 use App\Services\NotificationService;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
@@ -18,14 +19,17 @@ class MemberController extends Controller
         // Search
         if ($request->filled('search')) {
             $search = $request->search;
-            $query->where(function($q) use ($search) {
+            
+            // Get user IDs that match the search
+            $userIds = User::where('name', 'like', "%{$search}%")
+                          ->orWhere('email', 'like', "%{$search}%")
+                          ->pluck('id');
+            
+            $query->where(function($q) use ($search, $userIds) {
                 $q->where('institution_name', 'like', "%{$search}%")
                   ->orWhere('position', 'like', "%{$search}%")
                   ->orWhere('member_number', 'like', "%{$search}%")
-                  ->orWhereHas('user', function($q) use ($search) {
-                      $q->where('name', 'like', "%{$search}%")
-                        ->orWhere('email', 'like', "%{$search}%");
-                  });
+                  ->orWhereIn('user_id', $userIds);
             });
         }
         
@@ -73,22 +77,21 @@ class MemberController extends Controller
         }
         
         // Sorting
-        switch ($request->input('sort', 'latest')) {
-            case 'oldest':
-                $query->oldest();
-                break;
-            case 'name':
-                $query->join('users', 'members.user_id', '=', 'users.id')
-                      ->orderBy('users.name', 'asc')
-                      ->select('members.*');
-                break;
-            case 'name_desc':
-                $query->join('users', 'members.user_id', '=', 'users.id')
-                      ->orderBy('users.name', 'desc')
-                      ->select('members.*');
-                break;
-            default:
-                $query->latest();
+        $sortBy = $request->input('sort', 'latest');
+        
+        if (in_array($sortBy, ['name', 'name_desc'])) {
+            // For name sorting, we need to join with users table
+            $query->select('members.*')
+                  ->join('users', 'members.user_id', '=', 'users.id')
+                  ->orderBy('users.name', $sortBy === 'name' ? 'asc' : 'desc');
+        } else {
+            switch ($sortBy) {
+                case 'oldest':
+                    $query->oldest();
+                    break;
+                default:
+                    $query->latest();
+            }
         }
         
         $members = $query->paginate(15)->withQueryString();

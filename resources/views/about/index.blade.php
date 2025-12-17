@@ -7,8 +7,8 @@
 <div class="bg-gradient-to-r from-purple-600 to-indigo-700 text-white py-20">
     <div class="container mx-auto px-4">
         <div class="text-center max-w-4xl mx-auto">
-            <h1 class="text-5xl md:text-6xl font-bold mb-6">Tentang APJIKOM</h1>
-            <p class="text-xl text-purple-100">Asosiasi Pengelola Jurnal Ilmu Komunikasi Indonesia</p>
+            <h1 class="text-5xl md:text-6xl font-bold mb-6">{{ setting('about_page_title', 'Tentang APJIKOM') }}</h1>
+            <p class="text-xl text-purple-100 border border-purple-300/50 inline-block px-6 py-2 rounded">{{ setting('about_page_subtitle', 'Asosiasi Pengelola Jurnal Ilmu Komunikasi Indonesia') }}</p>
         </div>
     </div>
 </div>
@@ -44,30 +44,20 @@
                     <h2 class="text-3xl font-bold text-gray-800">Misi</h2>
                 </div>
                 <ul class="space-y-3 text-gray-700">
-                    <li class="flex items-start">
-                        <svg class="w-6 h-6 text-indigo-600 mr-3 mt-1 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
-                        </svg>
-                        <span>Meningkatkan kapasitas pengelola jurnal melalui pelatihan dan pendampingan</span>
-                    </li>
-                    <li class="flex items-start">
-                        <svg class="w-6 h-6 text-indigo-600 mr-3 mt-1 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
-                        </svg>
-                        <span>Memfasilitasi kolaborasi antar pengelola jurnal komunikasi</span>
-                    </li>
-                    <li class="flex items-start">
-                        <svg class="w-6 h-6 text-indigo-600 mr-3 mt-1 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
-                        </svg>
-                        <span>Mendukung akreditasi dan peningkatan kualitas jurnal</span>
-                    </li>
-                    <li class="flex items-start">
-                        <svg class="w-6 h-6 text-indigo-600 mr-3 mt-1 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
-                        </svg>
-                        <span>Membangun jejaring dengan organisasi profesi sejenis</span>
-                    </li>
+                    @php
+                        $missionText = setting('about_mission', "• Meningkatkan kapasitas pengelola jurnal melalui pelatihan dan pendampingan\n• Memfasilitasi kolaborasi antar pengelola jurnal komunikasi\n• Mendukung akreditasi dan peningkatan kualitas jurnal\n• Membangun jejaring dengan organisasi profesi sejenis");
+                        $missions = array_filter(array_map('trim', explode("\n", $missionText)));
+                    @endphp
+                    @foreach($missions as $mission)
+                        @if($mission)
+                        <li class="flex items-start">
+                            <svg class="w-6 h-6 text-indigo-600 mr-3 mt-1 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+                            </svg>
+                            <span>{{ ltrim($mission, '•-* ') }}</span>
+                        </li>
+                        @endif
+                    @endforeach
                 </ul>
             </div>
         </div>
