@@ -297,6 +297,24 @@
                             <p class='text-sm font-semibold text-gray-600 sm:w-40 flex-shrink-0'>Alamat</p>
                             <p class='text-gray-800'>{{ $member->address ?? '-' }}</p>
                         </div>
+                        
+                        <!-- CV File Section -->
+                        <div class='flex flex-col sm:flex-row sm:gap-6 pb-3'>
+                            <p class='text-sm font-semibold text-gray-600 sm:w-40 flex-shrink-0'>Curriculum Vitae</p>
+                            <div>
+                                @if($member->cv_file)
+                                <a href="{{ asset('storage/' . $member->cv_file) }}" target="_blank" 
+                                   class='inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-semibold rounded-lg hover:from-blue-700 hover:to-indigo-700 transition-all duration-200 shadow-md hover:shadow-lg'>
+                                    <svg class='w-5 h-5' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
+                                        <path stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z'/>
+                                    </svg>
+                                    Lihat CV
+                                </a>
+                                @else
+                                <p class='text-gray-400 italic'>Belum diupload</p>
+                                @endif
+                            </div>
+                        </div>
                     </div>
 
                     @if($member->join_date || $member->expiry_date)
