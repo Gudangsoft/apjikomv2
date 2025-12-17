@@ -113,6 +113,7 @@ Route::prefix('member')->name('member.')->middleware('auth')->group(function () 
     // Event RSVP
     Route::post('/events/{event}/register', [EventRegistrationController::class, 'register'])->name('events.register');
     Route::post('/events/{event}/cancel', [EventRegistrationController::class, 'cancel'])->name('events.cancel');
+    Route::post('/events/{event}/upload-payment', [EventRegistrationController::class, 'uploadPayment'])->name('events.upload-payment');
     Route::get('/my-events', [EventRegistrationController::class, 'myEvents'])->name('events.my');
     
     // Member Testimonials
@@ -163,6 +164,9 @@ Route::prefix('admin')->name('admin.')->middleware(['auth'])->group(function () 
     
     // Events Management
     Route::resource('events', AdminEventController::class);
+    Route::get('events/{event}/participants', [AdminEventController::class, 'participants'])->name('events.participants');
+    Route::post('events/{event}/participants/{registration}/verify-payment', [AdminEventController::class, 'verifyPayment'])->name('events.verify-payment');
+    Route::post('events/{event}/participants/{registration}/update-status', [AdminEventController::class, 'updateRegistrationStatus'])->name('events.update-registration-status');
     
     // Members Management
     Route::get('members', [AdminMemberController::class, 'index'])->name('members.index');

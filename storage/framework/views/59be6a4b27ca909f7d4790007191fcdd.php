@@ -1,8 +1,8 @@
-@extends('layouts.main')
 
-@section('title', $event->title)
 
-@section('content')
+<?php $__env->startSection('title', $event->title); ?>
+
+<?php $__env->startSection('content'); ?>
 <!-- Event Hero Section -->
 <section class="relative bg-gradient-to-br from-purple-600 via-purple-700 to-purple-900 text-white overflow-hidden">
     <!-- Background Pattern -->
@@ -16,11 +16,11 @@
             <!-- Breadcrumb -->
             <nav class="mb-6">
                 <ol class="flex items-center space-x-2 text-sm text-purple-200">
-                    <li><a href="{{ route('home') }}" class="hover:text-white">Home</a></li>
+                    <li><a href="<?php echo e(route('home')); ?>" class="hover:text-white">Home</a></li>
                     <li>/</li>
-                    <li><a href="{{ route('events.index') }}" class="hover:text-white">Agenda</a></li>
+                    <li><a href="<?php echo e(route('events.index')); ?>" class="hover:text-white">Agenda</a></li>
                     <li>/</li>
-                    <li class="text-white">{{ Str::limit($event->title, 50) }}</li>
+                    <li class="text-white"><?php echo e(Str::limit($event->title, 50)); ?></li>
                 </ol>
             </nav>
             
@@ -29,37 +29,40 @@
                 <div class="md:col-span-1">
                     <div class="bg-white rounded-2xl shadow-2xl p-6 text-center sticky top-24">
                         <div class="text-6xl font-bold text-purple-600 mb-2">
-                            {{ $event->event_date->format('d') }}
+                            <?php echo e($event->event_date->format('d')); ?>
+
                         </div>
                         <div class="text-lg font-semibold text-gray-700 uppercase mb-1">
-                            {{ $event->event_date->format('F') }}
+                            <?php echo e($event->event_date->format('F')); ?>
+
                         </div>
                         <div class="text-sm text-gray-500 mb-4">
-                            {{ $event->event_date->format('Y') }}
+                            <?php echo e($event->event_date->format('Y')); ?>
+
                         </div>
                         
-                        @if($event->event_time)
+                        <?php if($event->event_time): ?>
                         <div class="border-t pt-4 mb-4">
                             <div class="flex items-center justify-center text-purple-600 mb-2">
                                 <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                                 </svg>
-                                <span class="font-semibold">{{ date('H:i', strtotime($event->event_time)) }} WIB</span>
+                                <span class="font-semibold"><?php echo e(date('H:i', strtotime($event->event_time))); ?> WIB</span>
                             </div>
                         </div>
-                        @endif
+                        <?php endif; ?>
                         
                         <div class="flex items-start text-gray-600 text-sm">
                             <svg class="w-5 h-5 mr-2 flex-shrink-0 text-purple-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
                             </svg>
-                            <span class="text-left">{{ $event->location }}</span>
+                            <span class="text-left"><?php echo e($event->location); ?></span>
                         </div>
                         
-                        @if($event->registration_link)
+                        <?php if($event->registration_link): ?>
                         <div class="mt-6">
-                            <a href="{{ $event->registration_link }}" target="_blank" 
+                            <a href="<?php echo e($event->registration_link); ?>" target="_blank" 
                                class="block w-full bg-green-500 hover:bg-green-600 text-white px-6 py-3 rounded-xl font-bold transition-all hover:shadow-lg transform hover:scale-105">
                                 <div class="flex items-center justify-center">
                                     <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -69,9 +72,9 @@
                                 </div>
                             </a>
                         </div>
-                        @else
+                        <?php else: ?>
                         <!-- Payment Info -->
-                        @if($event->is_paid)
+                        <?php if($event->is_paid): ?>
                         <div class="mt-4 p-4 bg-blue-50 border border-blue-200 rounded-xl">
                             <div class="flex items-center gap-2 text-blue-800 font-semibold mb-2">
                                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -80,33 +83,34 @@
                                 Biaya Pendaftaran
                             </div>
                             <div class="text-2xl font-bold text-blue-900 mb-2">
-                                Rp {{ number_format($event->registration_fee, 0, ',', '.') }}
+                                Rp <?php echo e(number_format($event->registration_fee, 0, ',', '.')); ?>
+
                             </div>
                             <div class="text-xs text-blue-700 space-y-1">
-                                <p><strong>Bank:</strong> {{ $event->bank_name }}</p>
-                                <p><strong>No. Rek:</strong> {{ $event->bank_account }}</p>
-                                <p><strong>A/N:</strong> {{ $event->bank_account_name }}</p>
-                                @if($event->payment_contact)
-                                <p><strong>Konfirmasi:</strong> {{ $event->payment_contact }}</p>
-                                @endif
+                                <p><strong>Bank:</strong> <?php echo e($event->bank_name); ?></p>
+                                <p><strong>No. Rek:</strong> <?php echo e($event->bank_account); ?></p>
+                                <p><strong>A/N:</strong> <?php echo e($event->bank_account_name); ?></p>
+                                <?php if($event->payment_contact): ?>
+                                <p><strong>Konfirmasi:</strong> <?php echo e($event->payment_contact); ?></p>
+                                <?php endif; ?>
                             </div>
                         </div>
-                        @else
+                        <?php else: ?>
                         <div class="mt-4 p-3 bg-green-50 border border-green-200 rounded-xl">
                             <div class="flex items-center gap-2 text-green-700 font-semibold">
                                 <span class="text-xl">🆓</span>
                                 <span>Event ini GRATIS</span>
                             </div>
                         </div>
-                        @endif
+                        <?php endif; ?>
                         
                         <!-- Event RSVP Buttons -->
-                        @auth
-                            @php
+                        <?php if(auth()->guard()->check()): ?>
+                            <?php
                                 $registration = $event->registrations()->where('user_id', Auth::id())->first();
-                            @endphp
+                            ?>
                             
-                            @if($registration && $registration->status !== 'cancelled')
+                            <?php if($registration && $registration->status !== 'cancelled'): ?>
                                 <div class="mt-6 space-y-3">
                                     <div class="bg-green-50 border-2 border-green-500 text-green-700 px-4 py-3 rounded-xl font-semibold text-center">
                                         <svg class="w-5 h-5 inline mr-2" fill="currentColor" viewBox="0 0 20 20">
@@ -116,21 +120,21 @@
                                     </div>
                                     
                                     <!-- Payment Upload for Paid Events -->
-                                    @if($event->is_paid)
-                                        @if($registration->payment_status === 'verified')
+                                    <?php if($event->is_paid): ?>
+                                        <?php if($registration->payment_status === 'verified'): ?>
                                             <div class="bg-emerald-50 border border-emerald-300 p-3 rounded-xl text-center">
                                                 <span class="text-emerald-700 font-semibold">✓ Pembayaran Terverifikasi</span>
                                             </div>
-                                        @elseif($registration->payment_status === 'rejected')
+                                        <?php elseif($registration->payment_status === 'rejected'): ?>
                                             <div class="bg-red-50 border border-red-300 p-3 rounded-xl text-center">
                                                 <span class="text-red-700 font-semibold">✗ Pembayaran Ditolak</span>
-                                                @if($registration->payment_notes)
-                                                <p class="text-xs text-red-600 mt-1">{{ $registration->payment_notes }}</p>
-                                                @endif
+                                                <?php if($registration->payment_notes): ?>
+                                                <p class="text-xs text-red-600 mt-1"><?php echo e($registration->payment_notes); ?></p>
+                                                <?php endif; ?>
                                             </div>
                                             <!-- Allow re-upload -->
-                                            <form action="{{ route('member.events.upload-payment', $event) }}" method="POST" enctype="multipart/form-data">
-                                                @csrf
+                                            <form action="<?php echo e(route('member.events.upload-payment', $event)); ?>" method="POST" enctype="multipart/form-data">
+                                                <?php echo csrf_field(); ?>
                                                 <label class="block text-xs text-gray-600 mb-2">Upload ulang bukti pembayaran:</label>
                                                 <input type="file" name="payment_proof" accept="image/*,.pdf" required
                                                        class="w-full text-xs border rounded-lg p-2 mb-2">
@@ -138,15 +142,15 @@
                                                     Upload Bukti Bayar
                                                 </button>
                                             </form>
-                                        @elseif($registration->payment_proof)
+                                        <?php elseif($registration->payment_proof): ?>
                                             <div class="bg-yellow-50 border border-yellow-300 p-3 rounded-xl text-center">
                                                 <span class="text-yellow-700 font-semibold">⏳ Menunggu Verifikasi</span>
-                                                <a href="{{ asset('storage/' . $registration->payment_proof) }}" target="_blank" 
+                                                <a href="<?php echo e(asset('storage/' . $registration->payment_proof)); ?>" target="_blank" 
                                                    class="block text-xs text-blue-600 hover:underline mt-1">Lihat Bukti</a>
                                             </div>
-                                        @else
-                                            <form action="{{ route('member.events.upload-payment', $event) }}" method="POST" enctype="multipart/form-data" class="space-y-2">
-                                                @csrf
+                                        <?php else: ?>
+                                            <form action="<?php echo e(route('member.events.upload-payment', $event)); ?>" method="POST" enctype="multipart/form-data" class="space-y-2">
+                                                <?php echo csrf_field(); ?>
                                                 <label class="block text-xs text-gray-600 font-semibold">Upload Bukti Pembayaran:</label>
                                                 <input type="file" name="payment_proof" accept="image/*,.pdf" required
                                                        class="w-full text-xs border rounded-lg p-2">
@@ -154,30 +158,30 @@
                                                     Upload Bukti Bayar
                                                 </button>
                                             </form>
-                                        @endif
-                                    @endif
+                                        <?php endif; ?>
+                                    <?php endif; ?>
                                     
-                                    <form action="{{ route('member.events.cancel', $event) }}" method="POST">
-                                        @csrf
+                                    <form action="<?php echo e(route('member.events.cancel', $event)); ?>" method="POST">
+                                        <?php echo csrf_field(); ?>
                                         <button type="submit" onclick="return confirm('Batalkan pendaftaran event ini?')"
                                                 class="block w-full bg-red-100 hover:bg-red-200 text-red-700 px-6 py-3 rounded-xl font-semibold transition">
                                             Batalkan Pendaftaran
                                         </button>
                                     </form>
                                 </div>
-                            @else
+                            <?php else: ?>
                                 <div class="mt-6">
-                                    <form action="{{ route('member.events.register', $event) }}" method="POST" enctype="multipart/form-data">
-                                        @csrf
+                                    <form action="<?php echo e(route('member.events.register', $event)); ?>" method="POST" enctype="multipart/form-data">
+                                        <?php echo csrf_field(); ?>
                                         
-                                        @if($event->is_paid)
+                                        <?php if($event->is_paid): ?>
                                         <div class="mb-3">
                                             <label class="block text-xs text-gray-600 font-semibold mb-1">Upload Bukti Pembayaran:</label>
                                             <input type="file" name="payment_proof" accept="image/*,.pdf"
                                                    class="w-full text-xs border rounded-lg p-2">
                                             <p class="text-xs text-gray-500 mt-1">Format: JPG, PNG, PDF (max 2MB)</p>
                                         </div>
-                                        @endif
+                                        <?php endif; ?>
                                         
                                         <button type="submit"
                                                 class="block w-full bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white px-6 py-3 rounded-xl font-bold transition-all hover:shadow-lg transform hover:scale-105">
@@ -193,43 +197,44 @@
                                         <svg class="w-4 h-4 inline" fill="currentColor" viewBox="0 0 20 20">
                                             <path d="M9 6a3 3 0 11-6 0 3 3 0 016 0zM17 6a3 3 0 11-6 0 3 3 0 016 0zM12.93 17c.046-.327.07-.66.07-1a6.97 6.97 0 00-1.5-4.33A5 5 0 0119 16v1h-6.07zM6 11a5 5 0 015 5v1H1v-1a5 5 0 015-5z"/>
                                         </svg>
-                                        {{ $event->registered_count ?? 0 }} orang sudah terdaftar
+                                        <?php echo e($event->registered_count ?? 0); ?> orang sudah terdaftar
                                     </p>
                                 </div>
-                            @endif
-                        @else
+                            <?php endif; ?>
+                        <?php else: ?>
                             <div class="mt-6">
-                                <a href="{{ route('login') }}" 
+                                <a href="<?php echo e(route('login')); ?>" 
                                    class="block w-full bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white px-6 py-3 rounded-xl font-bold transition-all hover:shadow-lg transform hover:scale-105 text-center">
                                     Login untuk Daftar
                                 </a>
                             </div>
-                        @endauth
-                        @endif
+                        <?php endif; ?>
+                        <?php endif; ?>
                     </div>
                 </div>
                 
                 <!-- Event Info -->
                 <div class="md:col-span-2">
-                    @if($event->category)
+                    <?php if($event->category): ?>
                     <div class="mb-4">
                         <span class="inline-flex items-center bg-white/20 backdrop-blur-sm text-white px-4 py-2 rounded-full text-sm font-semibold">
                             <svg class="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20">
                                 <path d="M7 3a1 1 0 000 2h6a1 1 0 100-2H7zM4 7a1 1 0 011-1h10a1 1 0 110 2H5a1 1 0 01-1-1zM2 11a2 2 0 012-2h12a2 2 0 012 2v4a2 2 0 01-2 2H4a2 2 0 01-2-2v-4z"></path>
                             </svg>
-                            {{ $event->category->name }}
+                            <?php echo e($event->category->name); ?>
+
                         </span>
                     </div>
-                    @endif
+                    <?php endif; ?>
                     
-                    <h1 class="text-4xl md:text-5xl font-bold mb-6 leading-tight">{{ $event->title }}</h1>
+                    <h1 class="text-4xl md:text-5xl font-bold mb-6 leading-tight"><?php echo e($event->title); ?></h1>
                     
-                    @if($event->image)
+                    <?php if($event->image): ?>
                     <div class="rounded-2xl overflow-hidden shadow-2xl mb-6">
-                        <img src="{{ asset('storage/' . $event->image) }}" alt="{{ $event->title }}" 
+                        <img src="<?php echo e(asset('storage/' . $event->image)); ?>" alt="<?php echo e($event->title); ?>" 
                              class="w-full h-auto">
                     </div>
-                    @endif
+                    <?php endif; ?>
                 </div>
             </div>
         </div>
@@ -247,43 +252,47 @@
                     Tentang Kegiatan
                 </h2>
                 <div class="prose prose-lg max-w-none">
-                    <p class="text-gray-700 leading-relaxed text-lg whitespace-pre-line">{{ $event->description }}</p>
+                    <p class="text-gray-700 leading-relaxed text-lg whitespace-pre-line"><?php echo e($event->description); ?></p>
                 </div>
             </div>
             
             <!-- Related Events -->
-            @if($relatedEvents->count() > 0)
+            <?php if($relatedEvents->count() > 0): ?>
             <div class="mt-16">
                 <h2 class="text-3xl font-bold mb-8 text-gray-900">Kegiatan Mendatang Lainnya</h2>
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                    @foreach($relatedEvents as $related)
-                    <a href="{{ route('events.show', $related->slug) }}" class="group">
+                    <?php $__currentLoopData = $relatedEvents; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $related): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                    <a href="<?php echo e(route('events.show', $related->slug)); ?>" class="group">
                         <div class="bg-white rounded-xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 hover:-translate-y-2 border border-gray-100">
-                            @if($related->image)
+                            <?php if($related->image): ?>
                             <div class="h-40 overflow-hidden">
-                                <img src="{{ asset('storage/' . $related->image) }}" alt="{{ $related->title }}" 
+                                <img src="<?php echo e(asset('storage/' . $related->image)); ?>" alt="<?php echo e($related->title); ?>" 
                                      class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
                             </div>
-                            @else
+                            <?php else: ?>
                             <div class="h-40 bg-gradient-to-br from-purple-500 to-purple-700"></div>
-                            @endif
+                            <?php endif; ?>
                             
                             <div class="p-5">
-                                @if($related->category)
+                                <?php if($related->category): ?>
                                 <span class="inline-flex items-center bg-purple-100 text-purple-700 px-2 py-1 rounded-full text-xs font-semibold mb-2">
-                                    {{ $related->category->name }}
+                                    <?php echo e($related->category->name); ?>
+
                                 </span>
-                                @endif
+                                <?php endif; ?>
                                 
                                 <div class="text-sm text-purple-600 font-semibold mb-2">
-                                    {{ $related->event_date->format('d M Y') }}
-                                    @if($related->event_time)
-                                        • {{ date('H:i', strtotime($related->event_time)) }}
-                                    @endif
+                                    <?php echo e($related->event_date->format('d M Y')); ?>
+
+                                    <?php if($related->event_time): ?>
+                                        • <?php echo e(date('H:i', strtotime($related->event_time))); ?>
+
+                                    <?php endif; ?>
                                 </div>
                                 
                                 <h3 class="font-bold text-gray-900 mb-2 line-clamp-2 group-hover:text-purple-600 transition">
-                                    {{ $related->title }}
+                                    <?php echo e($related->title); ?>
+
                                 </h3>
                                 
                                 <p class="text-sm text-gray-500 flex items-center">
@@ -291,16 +300,17 @@
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
                                     </svg>
-                                    {{ Str::limit($related->location, 30) }}
+                                    <?php echo e(Str::limit($related->location, 30)); ?>
+
                                 </p>
                             </div>
                         </div>
                     </a>
-                    @endforeach
+                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                 </div>
                 
                 <div class="text-center mt-8">
-                    <a href="{{ route('events.index') }}" 
+                    <a href="<?php echo e(route('events.index')); ?>" 
                        class="inline-flex items-center bg-purple-600 hover:bg-purple-700 text-white px-8 py-3 rounded-xl font-semibold transition-all hover:shadow-lg">
                         Lihat Semua Kegiatan
                         <svg class="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -309,8 +319,10 @@
                     </a>
                 </div>
             </div>
-            @endif
+            <?php endif; ?>
         </div>
     </div>
 </section>
-@endsection
+<?php $__env->stopSection(); ?>
+
+<?php echo $__env->make('layouts.main', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?><?php /**PATH D:\LPKD-APJI\APJIKOM\resources\views/events/show.blade.php ENDPATH**/ ?>

@@ -14,6 +14,11 @@ class EventRegistration extends Model
         'user_id',
         'status',
         'notes',
+        'payment_proof',
+        'payment_status',
+        'payment_verified_at',
+        'verified_by',
+        'payment_notes',
         'registered_at',
         'attended_at',
     ];
@@ -21,7 +26,23 @@ class EventRegistration extends Model
     protected $casts = [
         'registered_at' => 'datetime',
         'attended_at' => 'datetime',
+        'payment_verified_at' => 'datetime',
     ];
+
+    public function verifier()
+    {
+        return $this->belongsTo(User::class, 'verified_by');
+    }
+
+    public function isPaid()
+    {
+        return in_array($this->payment_status, ['paid', 'verified']);
+    }
+
+    public function isVerified()
+    {
+        return $this->payment_status === 'verified';
+    }
 
     public function event()
     {

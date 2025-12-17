@@ -98,7 +98,12 @@ class EventController extends Controller
             'has_certificate' => 'boolean',
             'registration_requirements' => 'nullable|string',
             'participant_quota' => 'nullable|integer|min:1',
+            'is_paid' => 'boolean',
             'registration_fee' => 'nullable|numeric|min:0',
+            'bank_name' => 'nullable|string|max:100',
+            'bank_account' => 'nullable|string|max:50',
+            'bank_account_name' => 'nullable|string|max:100',
+            'payment_contact' => 'nullable|string|max:100',
             'registration_link' => 'nullable|url|max:500',
             'is_published' => 'boolean',
             'is_featured' => 'boolean',
@@ -139,7 +144,12 @@ class EventController extends Controller
             'has_certificate' => 'boolean',
             'registration_requirements' => 'nullable|string',
             'participant_quota' => 'nullable|integer|min:1',
+            'is_paid' => 'boolean',
             'registration_fee' => 'nullable|numeric|min:0',
+            'bank_name' => 'nullable|string|max:100',
+            'bank_account' => 'nullable|string|max:50',
+            'bank_account_name' => 'nullable|string|max:100',
+            'payment_contact' => 'nullable|string|max:100',
             'registration_link' => 'nullable|url|max:500',
             'is_published' => 'boolean',
             'is_featured' => 'boolean',
@@ -173,5 +183,57 @@ class EventController extends Controller
 
         return redirect()->route('admin.events.index')
             ->with('success', 'Kegiatan berhasil dihapus');
+    }
+
+    /**
+     * Show event participants
+     */
+    public function participants(Event $event)
+    {
+        $registrations = $event->registrations()
+            ->with('user.member')
+            ->orderBy('created_at', 'desc')
+            ->paginate(20);
+        
+        return view('admin.events.participants', compact('event', 'registrations'));
+    }
+
+    /**
+     * Verify payment for registration
+     */
+    public function verifyPayment(Request $request, Event $event, \App\Models\EventRegistration $registration)
+    {
+        $validated = $request->validate([
+            'payment_status' => 'required|in:verified,rejected',
+            'payment_notes' => 'nullable|string|max:500',
+        ]);
+
+        $registration->update([
+            'payment_status' => $validated['payment_status'],
+            'payment_notes' => $validated['payment_notes'] ?? null,
+            'payment_verified_at' => now(),
+            'verified_by' => auth()->id(),
+        ]);
+
+        $statusText = $validated['payment_status'] === 'verified' ? 'diverifikasi' : 'ditolak';
+        
+        return back()->with('success', "Pembayaran berhasil {$statusText}");
+    }
+
+    /**
+     * Update registration status (attended/cancelled)
+     */
+    public function updateRegistrationStatus(Request $request, Event $event, \App\Models\EventRegistration $registration)
+    {
+        $validated = $request->validate([
+            'status' => 'required|in:registered,attended,cancelled',
+        ]);
+
+        $registration->update([
+            'status' => $validated['status'],
+            'attended_at' => $validated['status'] === 'attended' ? now() : null,
+        ]);
+
+        return back()->with('success', 'Status peserta berhasil diperbarui');
     }
 }
