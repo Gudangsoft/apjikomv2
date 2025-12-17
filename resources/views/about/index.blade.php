@@ -103,7 +103,7 @@
 <section class="py-20 bg-white">
     <div class="container mx-auto px-4">
         <div class="text-center mb-12">
-            <h2 class="text-4xl font-bold text-gray-800 mb-4">Struktur Organisasi</h2>
+            <h2 class="text-4xl font-bold text-gray-800 mb-4">{{ setting('about_structure_title', 'Struktur Organisasi') }}</h2>
             <div class="w-24 h-1 bg-gradient-to-r from-purple-600 to-indigo-600 mx-auto rounded"></div>
         </div>
 
@@ -191,22 +191,22 @@
 <!-- CTA Section -->
 <section class="py-20 bg-gradient-to-r from-purple-600 to-indigo-700 text-white">
     <div class="container mx-auto px-4 text-center">
-        <h2 class="text-4xl font-bold mb-6">Bergabung Bersama Kami</h2>
+        <h2 class="text-4xl font-bold mb-6">{{ setting('about_cta_title', 'Bergabung Bersama Kami') }}</h2>
         <p class="text-xl text-purple-100 mb-8 max-w-2xl mx-auto">
-            Jadilah bagian dari komunitas pengelola jurnal komunikasi terbesar di Indonesia
+            {{ setting('about_cta_subtitle', 'Jadilah bagian dari komunitas pengelola jurnal komunikasi terbesar di Indonesia') }}
         </p>
         <div class="flex flex-col sm:flex-row gap-4 justify-center">
             <a href="{{ route('registration.create') }}" class="px-8 py-4 bg-white text-purple-600 rounded-lg font-semibold hover:bg-gray-100 transition shadow-lg inline-flex items-center justify-center">
                 <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z"></path>
                 </svg>
-                Daftar Sekarang
+                {{ setting('about_cta_button1_text', 'Daftar Sekarang') }}
             </a>
             <a href="{{ route('services.index') }}" class="px-8 py-4 bg-transparent border-2 border-white text-white rounded-lg font-semibold hover:bg-white hover:text-purple-600 transition inline-flex items-center justify-center">
                 <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                 </svg>
-                Lihat Layanan
+                {{ setting('about_cta_button2_text', 'Lihat Layanan') }}
             </a>
         </div>
     </div>

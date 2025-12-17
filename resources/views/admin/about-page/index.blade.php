@@ -297,6 +297,116 @@
                 </div>
             </div>
 
+            <!-- Struktur Organisasi Section -->
+            <div class="mb-6 p-4 bg-gradient-to-r from-green-50 to-emerald-50 rounded-lg border border-green-200">
+                <h3 class="text-lg font-semibold text-green-800 mb-4 flex items-center">
+                    <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                    </svg>
+                    Section Struktur Organisasi
+                </h3>
+
+                <div class="mb-4">
+                    <label for="about_structure_title" class="block text-sm font-medium text-gray-700 mb-2">
+                        Judul Section <span class="text-red-500">*</span>
+                    </label>
+                    <input 
+                        type="text" 
+                        id="about_structure_title" 
+                        name="about_structure_title" 
+                        value="{{ old('about_structure_title', setting('about_structure_title', 'Struktur Organisasi')) }}"
+                        class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                        required
+                    >
+                </div>
+
+                <div class="bg-white p-4 rounded-lg border">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-sm text-gray-600">Data struktur organisasi dikelola di menu terpisah</p>
+                            <p class="text-xs text-gray-400 mt-1">Klik tombol di samping untuk mengelola pengurus dan divisi</p>
+                        </div>
+                        <a href="{{ route('admin.organizational-structure.index') }}" class="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 text-sm flex items-center">
+                            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path>
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                            </svg>
+                            Kelola Struktur
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- CTA Section -->
+            <div class="mb-6 p-4 bg-gradient-to-r from-purple-600 to-indigo-600 rounded-lg">
+                <h3 class="text-lg font-semibold text-white mb-4 flex items-center">
+                    <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5.882V19.24a1.76 1.76 0 01-3.417.592l-2.147-6.15M18 13a3 3 0 100-6M5.436 13.683A4.001 4.001 0 017 6h1.832c4.1 0 7.625-1.234 9.168-3v14c-1.543-1.766-5.067-3-9.168-3H7a3.988 3.988 0 01-1.564-.317z"></path>
+                    </svg>
+                    Section CTA (Call to Action)
+                </h3>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <!-- Judul CTA -->
+                    <div>
+                        <label for="about_cta_title" class="block text-sm font-medium text-purple-100 mb-2">
+                            Judul CTA <span class="text-red-300">*</span>
+                        </label>
+                        <input 
+                            type="text" 
+                            id="about_cta_title" 
+                            name="about_cta_title" 
+                            value="{{ old('about_cta_title', setting('about_cta_title', 'Bergabung Bersama Kami')) }}"
+                            class="w-full px-3 py-2 border border-purple-300 rounded-lg focus:ring-2 focus:ring-white bg-white/90"
+                            required
+                        >
+                    </div>
+
+                    <!-- Subtitle CTA -->
+                    <div>
+                        <label for="about_cta_subtitle" class="block text-sm font-medium text-purple-100 mb-2">
+                            Subtitle CTA <span class="text-red-300">*</span>
+                        </label>
+                        <input 
+                            type="text" 
+                            id="about_cta_subtitle" 
+                            name="about_cta_subtitle" 
+                            value="{{ old('about_cta_subtitle', setting('about_cta_subtitle', 'Jadilah bagian dari komunitas pengelola jurnal komunikasi terbesar di Indonesia')) }}"
+                            class="w-full px-3 py-2 border border-purple-300 rounded-lg focus:ring-2 focus:ring-white bg-white/90"
+                            required
+                        >
+                    </div>
+
+                    <!-- Tombol Utama -->
+                    <div>
+                        <label for="about_cta_button1_text" class="block text-sm font-medium text-purple-100 mb-2">
+                            Teks Tombol Utama
+                        </label>
+                        <input 
+                            type="text" 
+                            id="about_cta_button1_text" 
+                            name="about_cta_button1_text" 
+                            value="{{ old('about_cta_button1_text', setting('about_cta_button1_text', 'Daftar Sekarang')) }}"
+                            class="w-full px-3 py-2 border border-purple-300 rounded-lg focus:ring-2 focus:ring-white bg-white/90"
+                        >
+                    </div>
+
+                    <!-- Tombol Sekunder -->
+                    <div>
+                        <label for="about_cta_button2_text" class="block text-sm font-medium text-purple-100 mb-2">
+                            Teks Tombol Sekunder
+                        </label>
+                        <input 
+                            type="text" 
+                            id="about_cta_button2_text" 
+                            name="about_cta_button2_text" 
+                            value="{{ old('about_cta_button2_text', setting('about_cta_button2_text', 'Lihat Layanan')) }}"
+                            class="w-full px-3 py-2 border border-purple-300 rounded-lg focus:ring-2 focus:ring-white bg-white/90"
+                        >
+                    </div>
+                </div>
+            </div>
+
             <!-- Submit Button -->
             <div class="flex justify-end gap-3">
                 <a href="{{ route('about.index') }}" target="_blank" class="px-6 py-2 border border-purple-300 text-purple-600 rounded-lg hover:bg-purple-50 flex items-center">
