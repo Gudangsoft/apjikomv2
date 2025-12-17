@@ -16,6 +16,8 @@ class AboutPageController extends Controller
     public function update(Request $request)
     {
         $validated = $request->validate([
+            'about_page_title' => 'required|string|max:255',
+            'about_page_subtitle' => 'required|string|max:255',
             'about_vision' => 'required|string',
             'about_mission' => 'required|string',
             'about_history' => 'required|string',

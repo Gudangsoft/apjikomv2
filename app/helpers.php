@@ -12,13 +12,7 @@ if (!function_exists('setting')) {
      */
     function setting($key, $default = null)
     {
-        static $settings = null;
-        
-        if ($settings === null) {
-            $settings = Setting::all()->pluck('value', 'key');
-        }
-        
-        return $settings->get($key, $default);
+        return Setting::get($key, $default);
     }
 }
 

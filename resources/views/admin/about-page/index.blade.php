@@ -16,15 +16,120 @@
         </div>
     @endif
 
+    <!-- Preview Section -->
+    <div class="mb-6">
+        <div class="bg-gradient-to-r from-purple-600 to-indigo-700 rounded-t-lg p-8 text-center">
+            <h2 class="text-3xl font-bold text-white mb-2" id="preview_title">{{ setting('about_page_title', 'Tentang APJIKOM') }}</h2>
+            <p class="text-purple-100 border border-purple-300 inline-block px-6 py-2 rounded" id="preview_subtitle">{{ setting('about_page_subtitle', 'Asosiasi Pengelola Jurnal Ilmu Komunikasi Indonesia') }}</p>
+        </div>
+        <div class="bg-white rounded-b-lg shadow-md p-6">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <!-- Preview Visi -->
+                <div class="bg-gradient-to-br from-purple-50 to-indigo-50 rounded-xl p-6">
+                    <div class="flex items-center mb-4">
+                        <div class="w-12 h-12 bg-gradient-to-r from-purple-600 to-indigo-600 rounded-full flex items-center justify-center mr-3">
+                            <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
+                            </svg>
+                        </div>
+                        <h3 class="text-xl font-bold text-gray-800">Visi</h3>
+                    </div>
+                    <p class="text-gray-700 text-sm" id="preview_vision">{{ setting('about_vision', 'Menjadi organisasi profesional yang terpercaya dalam meningkatkan kualitas dan kredibilitas jurnal ilmu komunikasi di Indonesia.') }}</p>
+                </div>
+
+                <!-- Preview Misi -->
+                <div class="bg-gradient-to-br from-indigo-50 to-blue-50 rounded-xl p-6">
+                    <div class="flex items-center mb-4">
+                        <div class="w-12 h-12 bg-gradient-to-r from-indigo-600 to-blue-600 rounded-full flex items-center justify-center mr-3">
+                            <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                            </svg>
+                        </div>
+                        <h3 class="text-xl font-bold text-gray-800">Misi</h3>
+                    </div>
+                    <ul class="space-y-2 text-sm" id="preview_mission">
+                        @php
+                            $missions = explode("\n", setting('about_mission', "• Meningkatkan kapasitas pengelola jurnal melalui pelatihan dan pendampingan\n• Memfasilitasi kolaborasi antar pengelola jurnal komunikasi\n• Mendukung akreditasi dan peningkatan kualitas jurnal\n• Membangun jejaring dengan organisasi profesi sejenis"));
+                        @endphp
+                        @foreach($missions as $mission)
+                            @if(trim($mission))
+                            <li class="flex items-start">
+                                <svg class="w-5 h-5 text-indigo-600 mr-2 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+                                </svg>
+                                <span class="text-gray-700">{{ ltrim($mission, '•-* ') }}</span>
+                            </li>
+                            @endif
+                        @endforeach
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <div class="bg-white rounded-lg shadow-md p-6">
         <form action="{{ route('admin.about-page.update') }}" method="POST">
             @csrf
             @method('PUT')
 
+            <!-- Header Section -->
+            <div class="mb-6 p-4 bg-gradient-to-r from-purple-50 to-indigo-50 rounded-lg border border-purple-200">
+                <h3 class="text-lg font-semibold text-purple-800 mb-4 flex items-center">
+                    <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 5a1 1 0 011-1h14a1 1 0 011 1v2a1 1 0 01-1 1H5a1 1 0 01-1-1V5zM4 13a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H5a1 1 0 01-1-1v-6z"></path>
+                    </svg>
+                    Header Halaman
+                </h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <!-- Judul Halaman -->
+                    <div>
+                        <label for="about_page_title" class="block text-sm font-medium text-gray-700 mb-2">
+                            Judul Halaman <span class="text-red-500">*</span>
+                        </label>
+                        <input 
+                            type="text" 
+                            id="about_page_title" 
+                            name="about_page_title" 
+                            value="{{ old('about_page_title', setting('about_page_title', 'Tentang APJIKOM')) }}"
+                            class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent @error('about_page_title') border-red-500 @enderror"
+                            required
+                        >
+                        @error('about_page_title')
+                            <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                        @enderror
+                    </div>
+
+                    <!-- Subtitle -->
+                    <div>
+                        <label for="about_page_subtitle" class="block text-sm font-medium text-gray-700 mb-2">
+                            Subtitle <span class="text-red-500">*</span>
+                        </label>
+                        <input 
+                            type="text" 
+                            id="about_page_subtitle" 
+                            name="about_page_subtitle" 
+                            value="{{ old('about_page_subtitle', setting('about_page_subtitle', 'Asosiasi Pengelola Jurnal Ilmu Komunikasi Indonesia')) }}"
+                            class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent @error('about_page_subtitle') border-red-500 @enderror"
+                            required
+                        >
+                        @error('about_page_subtitle')
+                            <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                        @enderror
+                    </div>
+                </div>
+            </div>
+
             <!-- Visi -->
             <div class="mb-6">
                 <label for="about_vision" class="block text-sm font-medium text-gray-700 mb-2">
-                    Visi <span class="text-red-500">*</span>
+                    <span class="flex items-center">
+                        <svg class="w-5 h-5 text-purple-600 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
+                        </svg>
+                        Visi <span class="text-red-500">*</span>
+                    </span>
                 </label>
                 <textarea 
                     id="about_vision" 
@@ -32,7 +137,7 @@
                     rows="4"
                     class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent @error('about_vision') border-red-500 @enderror"
                     required
-                >{{ old('about_vision', setting('about_vision', 'Menjadi wadah profesional utama bagi pengelola jurnal ilmiah di Indonesia untuk meningkatkan kualitas dan kredibilitas publikasi ilmiah nasional.')) }}</textarea>
+                >{{ old('about_vision', setting('about_vision', 'Menjadi organisasi profesional yang terpercaya dalam meningkatkan kualitas dan kredibilitas jurnal ilmu komunikasi di Indonesia.')) }}</textarea>
                 @error('about_vision')
                     <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
                 @enderror
@@ -41,7 +146,12 @@
             <!-- Misi -->
             <div class="mb-6">
                 <label for="about_mission" class="block text-sm font-medium text-gray-700 mb-2">
-                    Misi <span class="text-red-500">*</span>
+                    <span class="flex items-center">
+                        <svg class="w-5 h-5 text-indigo-600 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                        </svg>
+                        Misi <span class="text-red-500">*</span>
+                    </span>
                 </label>
                 <textarea 
                     id="about_mission" 
@@ -49,17 +159,22 @@
                     rows="6"
                     class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent @error('about_mission') border-red-500 @enderror"
                     required
-                >{{ old('about_mission', setting('about_mission', "• Memfasilitasi pengembangan kompetensi pengelola jurnal ilmiah\n• Meningkatkan kualitas manajemen jurnal ilmiah di Indonesia\n• Membangun jaringan kolaborasi antar pengelola jurnal\n• Memberikan advokasi untuk kemajuan publikasi ilmiah nasional")) }}</textarea>
+                >{{ old('about_mission', setting('about_mission', "• Meningkatkan kapasitas pengelola jurnal melalui pelatihan dan pendampingan\n• Memfasilitasi kolaborasi antar pengelola jurnal komunikasi\n• Mendukung akreditasi dan peningkatan kualitas jurnal\n• Membangun jejaring dengan organisasi profesi sejenis")) }}</textarea>
                 @error('about_mission')
                     <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
                 @enderror
-                <p class="text-sm text-gray-500 mt-1">Gunakan bullet point (•) atau nomor untuk list</p>
+                <p class="text-sm text-gray-500 mt-1">Gunakan bullet point (•) atau tanda (-) di awal setiap baris untuk membuat daftar misi. Satu misi per baris.</p>
             </div>
 
             <!-- Sejarah -->
             <div class="mb-6">
                 <label for="about_history" class="block text-sm font-medium text-gray-700 mb-2">
-                    Sejarah <span class="text-red-500">*</span>
+                    <span class="flex items-center">
+                        <svg class="w-5 h-5 text-blue-600 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                        </svg>
+                        Sejarah <span class="text-red-500">*</span>
+                    </span>
                 </label>
                 <textarea 
                     id="about_history" 
@@ -76,7 +191,12 @@
             <!-- Tahun Berdiri -->
             <div class="mb-6">
                 <label for="about_founded_year" class="block text-sm font-medium text-gray-700 mb-2">
-                    Tahun Berdiri <span class="text-red-500">*</span>
+                    <span class="flex items-center">
+                        <svg class="w-5 h-5 text-green-600 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                        </svg>
+                        Tahun Berdiri <span class="text-red-500">*</span>
+                    </span>
                 </label>
                 <input 
                     type="text" 
@@ -94,10 +214,20 @@
 
             <!-- Submit Button -->
             <div class="flex justify-end gap-3">
+                <a href="{{ route('about.index') }}" target="_blank" class="px-6 py-2 border border-purple-300 text-purple-600 rounded-lg hover:bg-purple-50 flex items-center">
+                    <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
+                    </svg>
+                    Lihat Halaman
+                </a>
                 <a href="{{ route('admin.dashboard') }}" class="px-6 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50">
                     Batal
                 </a>
-                <button type="submit" class="px-6 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700">
+                <button type="submit" class="px-6 py-2 bg-gradient-to-r from-purple-600 to-indigo-600 text-white rounded-lg hover:from-purple-700 hover:to-indigo-700 flex items-center">
+                    <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                    </svg>
                     Simpan Perubahan
                 </button>
             </div>
