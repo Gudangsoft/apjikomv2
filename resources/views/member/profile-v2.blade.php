@@ -178,6 +178,146 @@
                 </div>
             </div>
 
+            <!-- Public Profile Link Card -->
+            @if($member->show_in_directory)
+            <div class='mb-6 bg-gradient-to-br from-purple-50 via-blue-50 to-purple-50 border-2 border-purple-200 rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all duration-300'>
+                <div class='flex items-start gap-4'>
+                    <div class='flex-shrink-0 w-14 h-14 bg-gradient-to-br from-purple-600 to-blue-600 rounded-xl flex items-center justify-center shadow-lg'>
+                        <svg class='w-8 h-8 text-white' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
+                            <path stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9'/>
+                        </svg>
+                    </div>
+                    <div class='flex-1'>
+                        <h3 class='text-lg font-bold text-gray-800 mb-1 flex items-center gap-2'>
+                            🌐 Profil Publik Anda
+                            <span class='px-2 py-0.5 bg-green-500 text-white text-xs rounded-full font-semibold'>AKTIF</span>
+                        </h3>
+                        <p class='text-gray-600 text-sm mb-3'>Profil Anda ditampilkan di Direktori Anggota APJIKOM</p>
+                        
+                        <!-- Links Section -->
+                        <div class='space-y-3 mb-4'>
+                            <!-- Social Media Links -->
+                            @if($member->linkedin || $member->facebook || $member->twitter || $member->instagram)
+                            <div class='bg-white/70 rounded-lg p-3 border border-purple-100'>
+                                <p class='text-xs font-semibold text-gray-600 mb-2 flex items-center gap-1'>
+                                    <svg class='w-3 h-3' fill='currentColor' viewBox='0 0 20 20'>
+                                        <path d='M2 5a2 2 0 012-2h7a2 2 0 012 2v4a2 2 0 01-2 2H9l-3 3v-3H4a2 2 0 01-2-2V5z'/>
+                                        <path d='M15 7v2a4 4 0 01-4 4H9.828l-1.766 1.767c.28.149.599.233.938.233h2l3 3v-3h2a2 2 0 002-2V9a2 2 0 00-2-2h-1z'/>
+                                    </svg>
+                                    Media Sosial
+                                </p>
+                                <div class='flex flex-wrap gap-2'>
+                                    @if($member->linkedin)
+                                    <a href="{{ $member->linkedin }}" target='_blank' class='inline-flex items-center gap-1 px-2 py-1 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors text-xs font-medium'>
+                                        <svg class='w-3 h-3' fill='currentColor' viewBox='0 0 20 20'><path d='M6.29 18.251c7.547 0 11.675-6.253 11.675-11.675 0-.178 0-.355-.012-.53A8.348 8.348 0 0020 3.92a8.19 8.19 0 01-2.357.646 4.118 4.118 0 001.804-2.27 8.224 8.224 0 01-2.605.996 4.107 4.107 0 00-6.993 3.743 11.65 11.65 0 01-8.457-4.287 4.106 4.106 0 001.27 5.477A4.073 4.073 0 01.8 7.713v.052a4.105 4.105 0 003.292 4.022 4.095 4.095 0 01-1.853.07 4.108 4.108 0 003.834 2.85A8.233 8.233 0 010 16.407a11.616 11.616 0 006.29 1.84'/></svg>
+                                        LinkedIn
+                                    </a>
+                                    @endif
+                                    @if($member->facebook)
+                                    <a href="{{ $member->facebook }}" target='_blank' class='inline-flex items-center gap-1 px-2 py-1 bg-blue-800 text-white rounded-md hover:bg-blue-900 transition-colors text-xs font-medium'>
+                                        <svg class='w-3 h-3' fill='currentColor' viewBox='0 0 20 20'><path fill-rule='evenodd' d='M20 10c0-5.523-4.477-10-10-10S0 4.477 0 10c0 4.991 3.657 9.128 8.438 9.878v-6.987h-2.54V10h2.54V7.797c0-2.506 1.492-3.89 3.777-3.89 1.094 0 2.238.195 2.238.195v2.46h-1.26c-1.243 0-1.63.771-1.63 1.562V10h2.773l-.443 2.89h-2.33v6.988C16.343 19.128 20 14.991 20 10z' clip-rule='evenodd'/></svg>
+                                        Facebook
+                                    </a>
+                                    @endif
+                                    @if($member->twitter)
+                                    <a href="https://twitter.com/{{ ltrim($member->twitter, '@') }}" target='_blank' class='inline-flex items-center gap-1 px-2 py-1 bg-sky-500 text-white rounded-md hover:bg-sky-600 transition-colors text-xs font-medium'>
+                                        <svg class='w-3 h-3' fill='currentColor' viewBox='0 0 20 20'><path d='M6.29 18.251c7.547 0 11.675-6.253 11.675-11.675 0-.178 0-.355-.012-.53A8.348 8.348 0 0020 3.92a8.19 8.19 0 01-2.357.646 4.118 4.118 0 001.804-2.27 8.224 8.224 0 01-2.605.996 4.107 4.107 0 00-6.993 3.743 11.65 11.65 0 01-8.457-4.287 4.106 4.106 0 001.27 5.477A4.073 4.073 0 01.8 7.713v.052a4.105 4.105 0 003.292 4.022 4.095 4.095 0 01-1.853.07 4.108 4.108 0 003.834 2.85A8.233 8.233 0 010 16.407a11.616 11.616 0 006.29 1.84'/></svg>
+                                        Twitter
+                                    </a>
+                                    @endif
+                                    @if($member->instagram)
+                                    <a href="https://instagram.com/{{ ltrim($member->instagram, '@') }}" target='_blank' class='inline-flex items-center gap-1 px-2 py-1 bg-pink-600 text-white rounded-md hover:bg-pink-700 transition-colors text-xs font-medium'>
+                                        <svg class='w-3 h-3' fill='currentColor' viewBox='0 0 20 20'><path fill-rule='evenodd' d='M10 0C7.284 0 6.944.012 5.877.06 4.813.109 4.086.277 3.45.525a4.902 4.902 0 00-1.772 1.153A4.902 4.902 0 00.525 3.45C.277 4.086.109 4.813.06 5.877.012 6.944 0 7.284 0 10s.012 3.056.06 4.123c.049 1.064.217 1.791.465 2.427a4.902 4.902 0 001.153 1.772 4.902 4.902 0 001.772 1.153c.636.248 1.363.416 2.427.465C6.944 19.988 7.284 20 10 20s3.056-.012 4.123-.06c1.064-.049 1.791-.217 2.427-.465a4.902 4.902 0 001.772-1.153 4.902 4.902 0 001.153-1.772c.248-.636.416-1.363.465-2.427C19.988 13.056 20 12.716 20 10s-.012-3.056-.06-4.123c-.049-1.064-.217-1.791-.465-2.427a4.902 4.902 0 00-1.153-1.772A4.902 4.902 0 0016.55.525C15.914.277 15.187.109 14.123.06 13.056.012 12.716 0 10 0zm0 1.802c2.67 0 2.986.01 4.04.058.976.045 1.505.207 1.858.344.466.181.8.398 1.15.748.35.35.567.684.748 1.15.137.353.299.882.344 1.858.048 1.054.058 1.37.058 4.04 0 2.67-.01 2.986-.058 4.04-.045.976-.207 1.505-.344 1.858a3.1 3.1 0 01-.748 1.15c-.35.35-.684.567-1.15.748-.353.137-.882.299-1.858.344-1.054.048-1.37.058-4.04.058-2.67 0-2.986-.01-4.04-.058-.976-.045-1.505-.207-1.858-.344a3.1 3.1 0 01-1.15-.748 3.1 3.1 0 01-.748-1.15c-.137-.353-.299-.882-.344-1.858-.048-1.054-.058-1.37-.058-4.04 0-2.67.01-2.986.058-4.04.045-.976.207-1.505.344-1.858.181-.466.398-.8.748-1.15.35-.35.684-.567 1.15-.748.353-.137.882-.299 1.858-.344 1.054-.048 1.37-.058 4.04-.058z' clip-rule='evenodd'/><path fill-rule='evenodd' d='M10 13.333A3.333 3.333 0 1110 6.667a3.333 3.333 0 010 6.666zm0-8.468a5.135 5.135 0 100 10.27 5.135 5.135 0 000-10.27zM16.538 4.662a1.2 1.2 0 11-2.4 0 1.2 1.2 0 012.4 0z' clip-rule='evenodd'/></svg>
+                                        Instagram
+                                    </a>
+                                    @endif
+                                </div>
+                            </div>
+                            @endif
+                            
+                            <!-- Academic Links -->
+                            @if($member->google_scholar_link || $member->sinta_link || $member->orcid_link || $member->scopus_link)
+                            <div class='bg-white/70 rounded-lg p-3 border border-indigo-100'>
+                                <p class='text-xs font-semibold text-gray-600 mb-2 flex items-center gap-1'>
+                                    <svg class='w-3 h-3' fill='currentColor' viewBox='0 0 20 20'>
+                                        <path d='M10.394 2.08a1 1 0 00-.788 0l-7 3a1 1 0 000 1.84L5.25 8.051a.999.999 0 01.356-.257l4-1.714a1 1 0 11.788 1.838L7.667 9.088l1.94.831a1 1 0 00.787 0l7-3a1 1 0 000-1.838l-7-3zM3.31 9.397L5 10.12v4.102a8.969 8.969 0 00-1.05-.174 1 1 0 01-.89-.89 11.115 11.115 0 01.25-3.762zM9.3 16.573A9.026 9.026 0 007 14.935v-3.957l1.818.78a3 3 0 002.364 0l5.508-2.361a11.026 11.026 0 01.25 3.762 1 1 0 01-.89.89 8.968 8.968 0 00-5.35 2.524 1 1 0 01-1.4 0zM6 18a1 1 0 001-1v-2.065a8.935 8.935 0 00-2-.712V17a1 1 0 001 1z'/>
+                                    </svg>
+                                    Profil Akademik
+                                </p>
+                                <div class='flex flex-wrap gap-2'>
+                                    @if($member->google_scholar_link)
+                                    <a href="{{ $member->google_scholar_link }}" target='_blank' class='inline-flex items-center gap-1 px-2 py-1 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition-colors text-xs font-medium'>
+                                        <svg class='w-3 h-3' fill='currentColor' viewBox='0 0 20 20'><path d='M10.394 2.08a1 1 0 00-.788 0l-7 3a1 1 0 000 1.84L5.25 8.051a.999.999 0 01.356-.257l4-1.714a1 1 0 11.788 1.838L7.667 9.088l1.94.831a1 1 0 00.787 0l7-3a1 1 0 000-1.838l-7-3z'/></svg>
+                                        Scholar
+                                    </a>
+                                    @endif
+                                    @if($member->sinta_link)
+                                    <a href="{{ $member->sinta_link }}" target='_blank' class='inline-flex items-center gap-1 px-2 py-1 bg-red-600 text-white rounded-md hover:bg-red-700 transition-colors text-xs font-medium'>
+                                        <svg class='w-3 h-3' fill='currentColor' viewBox='0 0 20 20'><path fill-rule='evenodd' d='M12.316 3.051a1 1 0 01.633 1.265l-4 12a1 1 0 11-1.898-.632l4-12a1 1 0 011.265-.633zM5.707 6.293a1 1 0 010 1.414L3.414 10l2.293 2.293a1 1 0 11-1.414 1.414l-3-3a1 1 0 010-1.414l3-3a1 1 0 011.414 0zm8.586 0a1 1 0 011.414 0l3 3a1 1 0 010 1.414l-3 3a1 1 0 11-1.414-1.414L16.586 10l-2.293-2.293a1 1 0 010-1.414z' clip-rule='evenodd'/></svg>
+                                        SINTA
+                                    </a>
+                                    @endif
+                                    @if($member->orcid_link)
+                                    <a href="{{ $member->orcid_link }}" target='_blank' class='inline-flex items-center gap-1 px-2 py-1 bg-green-600 text-white rounded-md hover:bg-green-700 transition-colors text-xs font-medium'>
+                                        <svg class='w-3 h-3' fill='currentColor' viewBox='0 0 20 20'><path fill-rule='evenodd' d='M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z' clip-rule='evenodd'/></svg>
+                                        ORCID
+                                    </a>
+                                    @endif
+                                    @if($member->scopus_link)
+                                    <a href="{{ $member->scopus_link }}" target='_blank' class='inline-flex items-center gap-1 px-2 py-1 bg-orange-600 text-white rounded-md hover:bg-orange-700 transition-colors text-xs font-medium'>
+                                        <svg class='w-3 h-3' fill='currentColor' viewBox='0 0 20 20'><path fill-rule='evenodd' d='M11.49 3.17c-.38-1.56-2.6-1.56-2.98 0a1.532 1.532 0 01-2.286.948c-1.372-.836-2.942.734-2.106 2.106.54.886.061 2.042-.947 2.287-1.561.379-1.561 2.6 0 2.978a1.532 1.532 0 01.947 2.287c-.836 1.372.734 2.942 2.106 2.106a1.532 1.532 0 012.287.947c.379 1.561 2.6 1.561 2.978 0a1.533 1.533 0 012.287-.947c1.372.836 2.942-.734 2.106-2.106a1.533 1.533 0 01.947-2.287c1.561-.379 1.561-2.6 0-2.978a1.532 1.532 0 01-.947-2.287c.836-1.372-.734-2.942-2.106-2.106a1.532 1.532 0 01-2.287-.947zM10 13a3 3 0 100-6 3 3 0 000 6z' clip-rule='evenodd'/></svg>
+                                        Scopus
+                                    </a>
+                                    @endif
+                                </div>
+                            </div>
+                            @endif
+                        </div>
+                        
+                        <a href="{{ route('directory.index') }}" target="_blank" 
+                           class='inline-flex items-center gap-2 bg-gradient-to-r from-purple-600 to-blue-600 text-white px-5 py-2.5 rounded-lg hover:from-purple-700 hover:to-blue-700 transition-all duration-300 font-semibold shadow-md hover:shadow-lg group'>
+                            <svg class='w-5 h-5 group-hover:scale-110 transition-transform' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
+                                <path stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M15 12a3 3 0 11-6 0 3 3 0 016 0z'/>
+                                <path stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z'/>
+                            </svg>
+                            <span>Lihat Direktori Anggota</span>
+                            <svg class='w-4 h-4 group-hover:translate-x-1 transition-transform' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
+                                <path stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14'/>
+                            </svg>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            @else
+            <div class='mb-6 bg-gradient-to-br from-gray-50 to-gray-100 border-2 border-gray-300 rounded-2xl p-6 shadow-md'>
+                <div class='flex items-start gap-4'>
+                    <div class='flex-shrink-0 w-14 h-14 bg-gray-400 rounded-xl flex items-center justify-center'>
+                        <svg class='w-8 h-8 text-white' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
+                            <path stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.543 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21'/>
+                        </svg>
+                    </div>
+                    <div class='flex-1'>
+                        <h3 class='text-lg font-bold text-gray-700 mb-1 flex items-center gap-2'>
+                            🔒 Profil Publik Tidak Aktif
+                            <span class='px-2 py-0.5 bg-gray-400 text-white text-xs rounded-full font-semibold'>NONAKTIF</span>
+                        </h3>
+                        <p class='text-gray-600 text-sm mb-3'>Aktifkan untuk menampilkan profil Anda di Direktori Anggota APJIKOM</p>
+                        <a href="{{ route('directory.index') }}" target="_blank" 
+                           class='inline-flex items-center gap-2 bg-gray-500 text-white px-5 py-2.5 rounded-lg hover:bg-gray-600 transition-all duration-300 font-semibold shadow-md'>
+                            <svg class='w-5 h-5' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
+                                <path stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M15 12a3 3 0 11-6 0 3 3 0 016 0z'/>
+                                <path stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z'/>
+                            </svg>
+                            <span>Lihat Direktori Anggota</span>
+                            <svg class='w-4 h-4' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
+                                <path stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14'/>
+                            </svg>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            @endif
+
             <!-- Detail Information with Photo -->
             <div class='grid grid-cols-1 lg:grid-cols-3 gap-8'>
                 <!-- Left & Center - Detail Info (2 columns) -->

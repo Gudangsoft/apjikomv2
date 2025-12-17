@@ -286,7 +286,7 @@ class MemberDashboardController extends Controller
                 'address' => 'nullable|string',
                 'show_in_directory' => 'nullable|boolean',
                 'expertise' => 'nullable|string|max:300',
-                'bio' => 'nullable|string|max:500',
+                'bio' => 'nullable|string',
                 'linkedin' => 'nullable|url|max:255',
                 'facebook' => 'nullable|url|max:255',
                 'twitter' => 'nullable|string|max:255',
