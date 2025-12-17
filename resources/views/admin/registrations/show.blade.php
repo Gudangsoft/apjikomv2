@@ -254,7 +254,7 @@
                                         </span>
                                         <p class="text-xs text-gray-600 mt-1">
                                             Centang untuk menampilkan profil Anda di 
-                                            <a href="{{ route('member-directory.index') }}" target="_blank" class="text-blue-600 hover:underline">halaman direktori anggota</a>. 
+                                            <a href="{{ route('directory.index') }}" target="_blank" class="text-blue-600 hover:underline">halaman direktori anggota</a>. 
                                             Jika tidak dicentang, profil Anda tidak akan tampil dan data tidak dapat dilihat oleh anggota lain.
                                         </p>
                                         @if(isset($existingMember) && $existingMember && $existingMember->show_in_directory)
