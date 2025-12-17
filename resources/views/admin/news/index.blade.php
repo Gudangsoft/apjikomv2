@@ -31,20 +31,20 @@
 
 <!-- Advanced Search & Filter -->
 <div class="mb-6 bg-white rounded-lg shadow p-6">
-    <form method="GET" action="{{ route('admin.news.index') }}">
+    <form id="filterForm">
         <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
             <!-- Search -->
             <div>
                 <label class="block text-sm font-medium text-gray-700 mb-2">Search</label>
-                <input type="text" name="search" value="{{ request('search') }}" 
+                <input type="text" id="search" name="search" value="{{ request('search') }}" 
                        placeholder="Judul berita..."
-                       class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500">
+                       class="filter-input w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500">
             </div>
 
             <!-- Category Filter -->
             <div>
                 <label class="block text-sm font-medium text-gray-700 mb-2">Kategori</label>
-                <select name="category" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500">
+                <select id="category" name="category" class="filter-input w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500">
                     <option value="">Semua Kategori</option>
                     @foreach(\App\Models\Category::all() as $cat)
                     <option value="{{ $cat->id }}" {{ request('category') == $cat->id ? 'selected' : '' }}>{{ $cat->name }}</option>
@@ -55,7 +55,7 @@
             <!-- Status Filter -->
             <div>
                 <label class="block text-sm font-medium text-gray-700 mb-2">Status</label>
-                <select name="status" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500">
+                <select id="status" name="status" class="filter-input w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500">
                     <option value="">Semua Status</option>
                     <option value="published" {{ request('status') == 'published' ? 'selected' : '' }}>Published</option>
                     <option value="draft" {{ request('status') == 'draft' ? 'selected' : '' }}>Draft</option>
@@ -65,7 +65,7 @@
             <!-- Featured Filter -->
             <div>
                 <label class="block text-sm font-medium text-gray-700 mb-2">Featured</label>
-                <select name="featured" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500">
+                <select id="featured" name="featured" class="filter-input w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500">
                     <option value="">Semua</option>
                     <option value="1" {{ request('featured') == '1' ? 'selected' : '' }}>Ya</option>
                     <option value="0" {{ request('featured') == '0' ? 'selected' : '' }}>Tidak</option>
@@ -75,21 +75,21 @@
             <!-- Date From -->
             <div>
                 <label class="block text-sm font-medium text-gray-700 mb-2">Dari Tanggal</label>
-                <input type="date" name="date_from" value="{{ request('date_from') }}"
-                       class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500">
+                <input type="date" id="date_from" name="date_from" value="{{ request('date_from') }}"
+                       class="filter-input w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500">
             </div>
 
             <!-- Date To -->
             <div>
                 <label class="block text-sm font-medium text-gray-700 mb-2">Sampai Tanggal</label>
-                <input type="date" name="date_to" value="{{ request('date_to') }}"
-                       class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500">
+                <input type="date" id="date_to" name="date_to" value="{{ request('date_to') }}"
+                       class="filter-input w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500">
             </div>
 
             <!-- Sort -->
             <div>
                 <label class="block text-sm font-medium text-gray-700 mb-2">Urutkan</label>
-                <select name="sort" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500">
+                <select id="sort" name="sort" class="filter-input w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500">
                     <option value="latest" {{ request('sort', 'latest') == 'latest' ? 'selected' : '' }}>Terbaru</option>
                     <option value="oldest" {{ request('sort') == 'oldest' ? 'selected' : '' }}>Terlama</option>
                     <option value="title" {{ request('sort') == 'title' ? 'selected' : '' }}>Judul A-Z</option>
@@ -100,7 +100,7 @@
             <!-- Results per page -->
             <div>
                 <label class="block text-sm font-medium text-gray-700 mb-2">Per Halaman</label>
-                <select name="per_page" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500">
+                <select id="per_page" name="per_page" class="filter-input w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500">
                     <option value="15" {{ request('per_page', 15) == 15 ? 'selected' : '' }}>15</option>
                     <option value="25" {{ request('per_page') == 25 ? 'selected' : '' }}>25</option>
                     <option value="50" {{ request('per_page') == 50 ? 'selected' : '' }}>50</option>
@@ -110,16 +110,13 @@
         </div>
 
         <div class="flex items-center justify-between mt-4">
-            <div class="text-sm text-gray-600">
+            <div class="text-sm text-gray-600" id="recordInfo">
                 Menampilkan {{ $news->firstItem() ?? 0 }} - {{ $news->lastItem() ?? 0 }} dari {{ $news->total() }} berita
             </div>
             <div class="flex space-x-3">
-                @if(request()->hasAny(['search', 'category', 'status', 'featured', 'date_from', 'date_to', 'sort', 'per_page']))
-                <a href="{{ route('admin.news.index') }}" 
-                   class="px-4 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition">
+                <button type="button" id="resetBtn" class="px-4 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition">
                     Reset Filter
-                </a>
-                @endif
+                </button>
                 <button type="submit" 
                         class="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition">
                     <svg class="w-5 h-5 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -132,7 +129,7 @@
     </form>
 </div>
 
-<div class="bg-white rounded-lg shadow overflow-hidden">
+<div class="bg-white rounded-lg shadow overflow-hidden" id="tableContainer">
     <table class="min-w-full divide-y divide-gray-200">
         <thead class="bg-gray-50">
             <tr>
@@ -145,7 +142,7 @@
                 <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Aksi</th>
             </tr>
         </thead>
-        <tbody class="bg-white divide-y divide-gray-200">
+        <tbody class="bg-white divide-y divide-gray-200" id="tableBody">
             @forelse($news as $item)
             <tr>
                 <td class="px-6 py-4">
@@ -217,7 +214,102 @@
     </table>
 </div>
 
-<div class="mt-6">
+<div class="mt-6" id="paginationContainer">
     {{ $news->links() }}
 </div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+$(document).ready(function() {
+    let searchTimeout;
+    
+    // Load initial data
+    loadNews();
+    
+    // Auto-search on input (with debounce)
+    $('#search').on('keyup', function() {
+        clearTimeout(searchTimeout);
+        searchTimeout = setTimeout(function() {
+            loadNews();
+        }, 500);
+    });
+    
+    // Auto-filter on change
+    $('.filter-input').not('#search').on('change', function() {
+        loadNews();
+    });
+    
+    // Form submit
+    $('#filterForm').on('submit', function(e) {
+        e.preventDefault();
+        loadNews();
+    });
+    
+    // Reset button
+    $('#resetBtn').on('click', function() {
+        $('#filterForm')[0].reset();
+        loadNews();
+    });
+    
+    // Function to load news
+    function loadNews(page = 1) {
+        const formData = {
+            search: $('#search').val(),
+            category: $('#category').val(),
+            status: $('#status').val(),
+            featured: $('#featured').val(),
+            date_from: $('#date_from').val(),
+            date_to: $('#date_to').val(),
+            sort: $('#sort').val(),
+            per_page: $('#per_page').val(),
+            page: page
+        };
+        
+        // Show loading
+        $('#tableBody').html('<tr><td colspan="7" class="px-6 py-8 text-center"><div class="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div><div class="mt-2 text-gray-600">Memuat data...</div></td></tr>');
+        
+        $.ajax({
+            url: '{{ route("admin.news.index") }}',
+            type: 'GET',
+            data: formData,
+            dataType: 'html',
+            success: function(response) {
+                const $response = $(response);
+                const tableBody = $response.find('#tableBody').html();
+                const pagination = $response.find('#paginationContainer').html();
+                const recordInfo = $response.find('#recordInfo').html();
+                
+                $('#tableBody').html(tableBody);
+                $('#paginationContainer').html(pagination);
+                $('#recordInfo').html(recordInfo);
+                
+                // Update pagination links to use AJAX
+                bindPaginationLinks();
+            },
+            error: function(xhr, status, error) {
+                console.error('Error:', error);
+                $('#tableBody').html('<tr><td colspan="7" class="px-6 py-8 text-center text-red-600">Terjadi kesalahan saat memuat data. Silakan coba lagi.</td></tr>');
+            }
+        });
+    }
+    
+    // Bind pagination links
+    function bindPaginationLinks() {
+        $('#paginationContainer a').on('click', function(e) {
+            e.preventDefault();
+            const url = $(this).attr('href');
+            if (url) {
+                const urlParams = new URLSearchParams(url.split('?')[1]);
+                const page = urlParams.get('page') || 1;
+                loadNews(page);
+                
+                // Scroll to top of table
+                $('html, body').animate({
+                    scrollTop: $('#tableContainer').offset().top - 100
+                }, 300);
+            }
+        });
+    }
+});
+</script>
 @endsection
