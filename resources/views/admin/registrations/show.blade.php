@@ -35,7 +35,7 @@
     </div>
     @endif
 
-    @if($registration->status === 'approved' && $existingMember)
+    @if($registration->status === 'approved' && isset($existingMember) && $existingMember)
     <div class="bg-green-50 border border-green-200 px-4 py-3 rounded-lg mb-6">
         <div class="flex items-start">
             <svg class="w-5 h-5 text-green-600 mr-3 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -53,7 +53,7 @@
             </div>
         </div>
     </div>
-    @elseif($registration->status === 'approved' && !$existingMember)
+    @elseif($registration->status === 'approved' && (!isset($existingMember) || !$existingMember))
     <div class="bg-yellow-50 border border-yellow-200 px-4 py-3 rounded-lg mb-6">
         <div class="flex items-start">
             <svg class="w-5 h-5 text-yellow-600 mr-3 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -237,12 +237,12 @@
                         </div>
 
                         <!-- Show in Directory Option (only when approved AND verified) -->
-                        @if($registration->status == 'approved' && $existingMember && $existingMember->is_verified)
+                        @if($registration->status == 'approved' && isset($existingMember) && $existingMember && $existingMember->is_verified)
                         <div id="directory-option">
                             <div class="bg-blue-50 border-2 border-blue-200 rounded-lg p-4">
                                 <label class="flex items-start cursor-pointer">
                                     <input type="checkbox" name="show_in_directory" value="1" 
-                                           {{ ($existingMember && $existingMember->show_in_directory) ? 'checked' : '' }}
+                                           {{ (isset($existingMember) && $existingMember && $existingMember->show_in_directory) ? 'checked' : '' }}
                                            class="mt-1 h-5 w-5 text-purple-600 border-gray-300 rounded focus:ring-purple-500">
                                     <div class="ml-3">
                                         <span class="flex items-center text-sm font-semibold text-gray-900">
@@ -257,7 +257,7 @@
                                             <a href="{{ route('member-directory.index') }}" target="_blank" class="text-blue-600 hover:underline">halaman direktori anggota</a>. 
                                             Jika tidak dicentang, profil Anda tidak akan tampil dan data tidak dapat dilihat oleh anggota lain.
                                         </p>
-                                        @if($existingMember->show_in_directory)
+                                        @if(isset($existingMember) && $existingMember && $existingMember->show_in_directory)
                                         <div class="mt-2 flex items-center text-xs text-green-700 bg-green-50 px-2 py-1 rounded">
                                             <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
@@ -269,7 +269,7 @@
                                 </label>
                             </div>
                         </div>
-                        @elseif($registration->status == 'approved' && $existingMember && !$existingMember->is_verified)
+                        @elseif($registration->status == 'approved' && isset($existingMember) && $existingMember && !$existingMember->is_verified)
                         <div class="bg-yellow-50 border-2 border-yellow-200 rounded-lg p-4">
                             <div class="flex items-start">
                                 <svg class="w-5 h-5 text-yellow-600 mr-2 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
