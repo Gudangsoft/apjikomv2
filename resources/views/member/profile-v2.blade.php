@@ -178,6 +178,65 @@
                 </div>
             </div>
 
+            <!-- Public Profile Link Card -->
+            @if($member->show_in_directory)
+            <div class='mb-6 bg-gradient-to-br from-purple-50 via-blue-50 to-purple-50 border-2 border-purple-200 rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all duration-300'>
+                <div class='flex items-start gap-4'>
+                    <div class='flex-shrink-0 w-14 h-14 bg-gradient-to-br from-purple-600 to-blue-600 rounded-xl flex items-center justify-center shadow-lg'>
+                        <svg class='w-8 h-8 text-white' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
+                            <path stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9'/>
+                        </svg>
+                    </div>
+                    <div class='flex-1'>
+                        <h3 class='text-lg font-bold text-gray-800 mb-1 flex items-center gap-2'>
+                            🌐 Profil Publik Anda
+                            <span class='px-2 py-0.5 bg-green-500 text-white text-xs rounded-full font-semibold'>AKTIF</span>
+                        </h3>
+                        <p class='text-gray-600 text-sm mb-3'>Profil Anda ditampilkan di Direktori Anggota APJIKOM</p>
+                        <a href="{{ route('directory.index') }}" target="_blank" 
+                           class='inline-flex items-center gap-2 bg-gradient-to-r from-purple-600 to-blue-600 text-white px-5 py-2.5 rounded-lg hover:from-purple-700 hover:to-blue-700 transition-all duration-300 font-semibold shadow-md hover:shadow-lg group'>
+                            <svg class='w-5 h-5 group-hover:scale-110 transition-transform' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
+                                <path stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M15 12a3 3 0 11-6 0 3 3 0 016 0z'/>
+                                <path stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z'/>
+                            </svg>
+                            <span>Lihat Direktori Anggota</span>
+                            <svg class='w-4 h-4 group-hover:translate-x-1 transition-transform' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
+                                <path stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14'/>
+                            </svg>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            @else
+            <div class='mb-6 bg-gradient-to-br from-gray-50 to-gray-100 border-2 border-gray-300 rounded-2xl p-6 shadow-md'>
+                <div class='flex items-start gap-4'>
+                    <div class='flex-shrink-0 w-14 h-14 bg-gray-400 rounded-xl flex items-center justify-center'>
+                        <svg class='w-8 h-8 text-white' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
+                            <path stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.543 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21'/>
+                        </svg>
+                    </div>
+                    <div class='flex-1'>
+                        <h3 class='text-lg font-bold text-gray-700 mb-1 flex items-center gap-2'>
+                            🔒 Profil Publik Tidak Aktif
+                            <span class='px-2 py-0.5 bg-gray-400 text-white text-xs rounded-full font-semibold'>NONAKTIF</span>
+                        </h3>
+                        <p class='text-gray-600 text-sm mb-3'>Aktifkan untuk menampilkan profil Anda di Direktori Anggota APJIKOM</p>
+                        <a href="{{ route('directory.index') }}" target="_blank" 
+                           class='inline-flex items-center gap-2 bg-gray-500 text-white px-5 py-2.5 rounded-lg hover:bg-gray-600 transition-all duration-300 font-semibold shadow-md'>
+                            <svg class='w-5 h-5' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
+                                <path stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M15 12a3 3 0 11-6 0 3 3 0 016 0z'/>
+                                <path stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z'/>
+                            </svg>
+                            <span>Lihat Direktori Anggota</span>
+                            <svg class='w-4 h-4' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
+                                <path stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14'/>
+                            </svg>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            @endif
+
             <!-- Detail Information with Photo -->
             <div class='grid grid-cols-1 lg:grid-cols-3 gap-8'>
                 <!-- Left & Center - Detail Info (2 columns) -->
