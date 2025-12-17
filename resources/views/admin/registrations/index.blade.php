@@ -72,20 +72,20 @@
             </svg>
         </div>
         <div class="p-4" id="searchFilterContent">
-            <form method="GET" action="{{ route('admin.registrations.index') }}">
+            <form id="filterForm">
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
                     <!-- Search -->
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-1">Cari</label>
-                        <input type="text" name="search" value="{{ request('search') }}" 
+                        <input type="text" id="search" name="search" value="{{ request('search') }}" 
                                placeholder="Nama, email, phone, institusi..."
-                               class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#00629B]">
+                               class="filter-input w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#00629B]">
                     </div>
 
                     <!-- Status Filter -->
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-1">Status</label>
-                        <select name="status" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#00629B]">
+                        <select id="status" name="status" class="filter-input w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#00629B]">
                             <option value="">Semua Status</option>
                             <option value="pending" {{ request('status') == 'pending' ? 'selected' : '' }}>Pending</option>
                             <option value="approved" {{ request('status') == 'approved' ? 'selected' : '' }}>Approved</option>
@@ -96,7 +96,7 @@
                     <!-- Member Status -->
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-1">Status Member</label>
-                        <select name="has_member" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#00629B]">
+                        <select id="has_member" name="has_member" class="filter-input w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#00629B]">
                             <option value="">Semua</option>
                             <option value="yes" {{ request('has_member') == 'yes' ? 'selected' : '' }}>Sudah Jadi Member</option>
                             <option value="no" {{ request('has_member') == 'no' ? 'selected' : '' }}>Belum Jadi Member</option>
@@ -106,21 +106,21 @@
                     <!-- Date From -->
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-1">Tanggal Dari</label>
-                        <input type="date" name="date_from" value="{{ request('date_from') }}" 
-                            class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#00629B]">
+                        <input type="date" id="date_from" name="date_from" value="{{ request('date_from') }}" 
+                            class="filter-input w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#00629B]">
                     </div>
 
                     <!-- Date To -->
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-1">Tanggal Sampai</label>
-                        <input type="date" name="date_to" value="{{ request('date_to') }}" 
-                            class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#00629B]">
+                        <input type="date" id="date_to" name="date_to" value="{{ request('date_to') }}" 
+                            class="filter-input w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#00629B]">
                     </div>
 
                     <!-- Sort -->
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-1">Urutkan</label>
-                        <select name="sort" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#00629B]">
+                        <select id="sort" name="sort" class="filter-input w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#00629B]">
                             <option value="latest" {{ request('sort', 'latest') == 'latest' ? 'selected' : '' }}>Terbaru</option>
                             <option value="oldest" {{ request('sort') == 'oldest' ? 'selected' : '' }}>Terlama</option>
                             <option value="name" {{ request('sort') == 'name' ? 'selected' : '' }}>Nama (A-Z)</option>
@@ -130,7 +130,7 @@
                     <!-- Per Page -->
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-1">Tampilkan</label>
-                        <select name="per_page" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#00629B]">
+                        <select id="per_page" name="per_page" class="filter-input w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#00629B]">
                             <option value="15" {{ request('per_page', 15) == 15 ? 'selected' : '' }}>15</option>
                             <option value="25" {{ request('per_page') == 25 ? 'selected' : '' }}>25</option>
                             <option value="50" {{ request('per_page') == 50 ? 'selected' : '' }}>50</option>
@@ -140,15 +140,13 @@
                 </div>
 
                 <div class="mt-4 flex items-center justify-between">
-                    <div class="text-sm text-gray-600">
+                    <div class="text-sm text-gray-600" id="recordInfo">
                         Menampilkan {{ $registrations->firstItem() ?? 0 }} - {{ $registrations->lastItem() ?? 0 }} dari {{ $registrations->total() }} pendaftaran
                     </div>
                     <div class="flex space-x-2">
-                        @if(request()->hasAny(['search', 'status', 'has_member', 'date_from', 'date_to', 'sort']))
-                            <a href="{{ route('admin.registrations.index') }}" class="px-4 py-2 bg-gray-100 text-gray-700 rounded-md hover:bg-gray-200">
-                                Reset
-                            </a>
-                        @endif
+                        <button type="button" id="resetBtn" class="px-4 py-2 bg-gray-100 text-gray-700 rounded-md hover:bg-gray-200">
+                            Reset
+                        </button>
                         <button type="submit" class="px-4 py-2 bg-[#00629B] text-white rounded-md hover:bg-[#003A5D] flex items-center space-x-2">
                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
@@ -162,7 +160,7 @@
     </div>
 
     <!-- Registrations Table -->
-    <div class="bg-white rounded-lg shadow border overflow-hidden">
+    <div class="bg-white rounded-lg shadow border overflow-hidden" id="tableContainer">
         <div class="overflow-x-auto">
             <table class="min-w-full divide-y divide-gray-200">
                 <thead class="bg-gray-50">
@@ -178,7 +176,7 @@
                         <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Aksi</th>
                     </tr>
                 </thead>
-                <tbody class="bg-white divide-y divide-gray-200">
+                <tbody class="bg-white divide-y divide-gray-200" id="tableBody">
                     @forelse($registrations as $registration)
                     <tr class="hover:bg-gray-50">
                         <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-900">
@@ -273,14 +271,15 @@
         </div>
 
         <!-- Pagination -->
-        @if($registrations->hasPages())
-        <div class="px-4 py-3 border-t">
-            {{ $registrations->links() }}
+        <div class="px-4 py-3 border-t" id="paginationContainer">
+            @if($registrations->hasPages())
+                {{ $registrations->links() }}
+            @endif
         </div>
-        @endif
     </div>
 </div>
 
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
 // Toggle Search Filter
 function toggleSearchFilter() {
@@ -296,18 +295,95 @@ function toggleSearchFilter() {
     }
 }
 
-// Keep filter open if there are active filters
-document.addEventListener('DOMContentLoaded', function() {
-    const urlParams = new URLSearchParams(window.location.search);
-    const hasFilters = urlParams.has('search') || urlParams.has('status') || 
-                      urlParams.has('has_member') || urlParams.has('date_from') || urlParams.has('date_to');
+// jQuery AJAX Filter
+$(document).ready(function() {
+    let searchTimeout;
     
-    if (!hasFilters) {
-        // Collapse filter by default if no active filters
-        const content = document.getElementById('searchFilterContent');
-        const icon = document.getElementById('filterToggleIcon');
-        content.style.display = 'none';
-        icon.style.transform = 'rotate(-90deg)';
+    // Load initial data
+    loadRegistrations();
+    
+    // Auto-search on input (with debounce)
+    $('#search').on('keyup', function() {
+        clearTimeout(searchTimeout);
+        searchTimeout = setTimeout(function() {
+            loadRegistrations();
+        }, 500);
+    });
+    
+    // Auto-filter on change
+    $('.filter-input').not('#search').on('change', function() {
+        loadRegistrations();
+    });
+    
+    // Form submit
+    $('#filterForm').on('submit', function(e) {
+        e.preventDefault();
+        loadRegistrations();
+    });
+    
+    // Reset button
+    $('#resetBtn').on('click', function() {
+        $('#filterForm')[0].reset();
+        loadRegistrations();
+    });
+    
+    // Function to load registrations
+    function loadRegistrations(page = 1) {
+        const formData = {
+            search: $('#search').val(),
+            status: $('#status').val(),
+            has_member: $('#has_member').val(),
+            date_from: $('#date_from').val(),
+            date_to: $('#date_to').val(),
+            sort: $('#sort').val(),
+            per_page: $('#per_page').val(),
+            page: page
+        };
+        
+        // Show loading
+        $('#tableBody').html('<tr><td colspan="9" class="px-4 py-8 text-center"><div class="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-[#00629B]"></div><div class="mt-2 text-gray-600">Memuat data...</div></td></tr>');
+        
+        $.ajax({
+            url: '{{ route("admin.registrations.index") }}',
+            type: 'GET',
+            data: formData,
+            dataType: 'html',
+            success: function(response) {
+                const $response = $(response);
+                const tableBody = $response.find('#tableBody').html();
+                const pagination = $response.find('#paginationContainer').html();
+                const recordInfo = $response.find('#recordInfo').html();
+                
+                $('#tableBody').html(tableBody);
+                $('#paginationContainer').html(pagination);
+                $('#recordInfo').html(recordInfo);
+                
+                // Update pagination links to use AJAX
+                bindPaginationLinks();
+            },
+            error: function(xhr, status, error) {
+                console.error('Error:', error);
+                $('#tableBody').html('<tr><td colspan="9" class="px-4 py-8 text-center text-red-600">Terjadi kesalahan saat memuat data. Silakan coba lagi.</td></tr>');
+            }
+        });
+    }
+    
+    // Bind pagination links
+    function bindPaginationLinks() {
+        $('#paginationContainer a').on('click', function(e) {
+            e.preventDefault();
+            const url = $(this).attr('href');
+            if (url) {
+                const urlParams = new URLSearchParams(url.split('?')[1]);
+                const page = urlParams.get('page') || 1;
+                loadRegistrations(page);
+                
+                // Scroll to top of table
+                $('html, body').animate({
+                    scrollTop: $('#tableContainer').offset().top - 100
+                }, 300);
+            }
+        });
     }
 });
 </script>
