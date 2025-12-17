@@ -20,12 +20,18 @@ class AboutPageController extends Controller
             'about_page_subtitle' => 'required|string|max:255',
             'about_vision' => 'required|string',
             'about_mission' => 'required|string',
+            'about_history_title' => 'required|string|max:255',
             'about_history' => 'required|string',
             'about_founded_year' => 'required|string|max:4',
+            'about_stat1_label' => 'nullable|string|max:100',
+            'about_stat2_label' => 'nullable|string|max:100',
+            'about_stat3_label' => 'nullable|string|max:100',
         ]);
 
         foreach ($validated as $key => $value) {
-            Setting::set($key, $value, 'textarea', 'about');
+            if ($value !== null) {
+                Setting::set($key, $value, 'text', 'about');
+            }
         }
 
         return redirect()->route('admin.about-page.index')
