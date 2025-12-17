@@ -29,25 +29,27 @@
     </div>
 </div>
 
-<!-- Advanced Search & Filter -->
-<div class="mb-6 bg-white rounded-lg shadow p-6">
-    <form id="filterForm">
+<!-- Advanced Search & Filter with Alpine.js -->
+<div class="mb-6 bg-white rounded-lg shadow p-6" x-data="newsFilter()">
+    <form @submit.prevent="applyFilters">
         <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
             <!-- Search -->
             <div>
                 <label class="block text-sm font-medium text-gray-700 mb-2">Search</label>
-                <input type="text" id="search" name="search" value="{{ request('search') }}" 
+                <input type="text" 
+                       x-model.debounce.500ms="filters.search"
+                       @input="applyFilters"
                        placeholder="Judul berita..."
-                       class="filter-input w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500">
+                       class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500">
             </div>
 
             <!-- Category Filter -->
             <div>
                 <label class="block text-sm font-medium text-gray-700 mb-2">Kategori</label>
-                <select id="category" name="category" class="filter-input w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500">
+                <select x-model="filters.category" @change="applyFilters" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500">
                     <option value="">Semua Kategori</option>
                     @foreach(\App\Models\Category::all() as $cat)
-                    <option value="{{ $cat->id }}" {{ request('category') == $cat->id ? 'selected' : '' }}>{{ $cat->name }}</option>
+                    <option value="{{ $cat->id }}">{{ $cat->name }}</option>
                     @endforeach
                 </select>
             </div>
@@ -55,66 +57,70 @@
             <!-- Status Filter -->
             <div>
                 <label class="block text-sm font-medium text-gray-700 mb-2">Status</label>
-                <select id="status" name="status" class="filter-input w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500">
+                <select x-model="filters.status" @change="applyFilters" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500">
                     <option value="">Semua Status</option>
-                    <option value="published" {{ request('status') == 'published' ? 'selected' : '' }}>Published</option>
-                    <option value="draft" {{ request('status') == 'draft' ? 'selected' : '' }}>Draft</option>
+                    <option value="published">Published</option>
+                    <option value="draft">Draft</option>
                 </select>
             </div>
 
             <!-- Featured Filter -->
             <div>
                 <label class="block text-sm font-medium text-gray-700 mb-2">Featured</label>
-                <select id="featured" name="featured" class="filter-input w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500">
+                <select x-model="filters.featured" @change="applyFilters" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500">
                     <option value="">Semua</option>
-                    <option value="1" {{ request('featured') == '1' ? 'selected' : '' }}>Ya</option>
-                    <option value="0" {{ request('featured') == '0' ? 'selected' : '' }}>Tidak</option>
+                    <option value="1">Ya</option>
+                    <option value="0">Tidak</option>
                 </select>
             </div>
 
             <!-- Date From -->
             <div>
                 <label class="block text-sm font-medium text-gray-700 mb-2">Dari Tanggal</label>
-                <input type="date" id="date_from" name="date_from" value="{{ request('date_from') }}"
-                       class="filter-input w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500">
+                <input type="date" 
+                       x-model="filters.date_from"
+                       @change="applyFilters"
+                       class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500">
             </div>
 
             <!-- Date To -->
             <div>
                 <label class="block text-sm font-medium text-gray-700 mb-2">Sampai Tanggal</label>
-                <input type="date" id="date_to" name="date_to" value="{{ request('date_to') }}"
-                       class="filter-input w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500">
+                <input type="date" 
+                       x-model="filters.date_to"
+                       @change="applyFilters"
+                       class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500">
             </div>
 
             <!-- Sort -->
             <div>
                 <label class="block text-sm font-medium text-gray-700 mb-2">Urutkan</label>
-                <select id="sort" name="sort" class="filter-input w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500">
-                    <option value="latest" {{ request('sort', 'latest') == 'latest' ? 'selected' : '' }}>Terbaru</option>
-                    <option value="oldest" {{ request('sort') == 'oldest' ? 'selected' : '' }}>Terlama</option>
-                    <option value="title" {{ request('sort') == 'title' ? 'selected' : '' }}>Judul A-Z</option>
-                    <option value="views" {{ request('sort') == 'views' ? 'selected' : '' }}>Views Tertinggi</option>
+                <select x-model="filters.sort" @change="applyFilters" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500">
+                    <option value="latest">Terbaru</option>
+                    <option value="oldest">Terlama</option>
+                    <option value="title">Judul A-Z</option>
+                    <option value="views">Views Tertinggi</option>
                 </select>
             </div>
 
             <!-- Results per page -->
             <div>
                 <label class="block text-sm font-medium text-gray-700 mb-2">Per Halaman</label>
-                <select id="per_page" name="per_page" class="filter-input w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500">
-                    <option value="15" {{ request('per_page', 15) == 15 ? 'selected' : '' }}>15</option>
-                    <option value="25" {{ request('per_page') == 25 ? 'selected' : '' }}>25</option>
-                    <option value="50" {{ request('per_page') == 50 ? 'selected' : '' }}>50</option>
-                    <option value="100" {{ request('per_page') == 100 ? 'selected' : '' }}>100</option>
+                <select x-model="filters.per_page" @change="applyFilters" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500">
+                    <option value="15">15</option>
+                    <option value="25">25</option>
+                    <option value="50">50</option>
+                    <option value="100">100</option>
                 </select>
             </div>
         </div>
 
         <div class="flex items-center justify-between mt-4">
-            <div class="text-sm text-gray-600" id="recordInfo">
+            <div class="text-sm text-gray-600" x-html="recordInfo">
                 Menampilkan {{ $news->firstItem() ?? 0 }} - {{ $news->lastItem() ?? 0 }} dari {{ $news->total() }} berita
             </div>
             <div class="flex space-x-3">
-                <button type="button" id="resetBtn" class="px-4 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition">
+                <button type="button" @click="resetFilters" class="px-4 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition">
                     Reset Filter
                 </button>
                 <button type="submit" 
@@ -220,98 +226,118 @@
 @endsection
 
 @push('scripts')
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
-$(document).ready(function() {
-    let searchTimeout;
-    
-    // Bind pagination links on initial load
-    bindPaginationLinks();
-    
-    // Auto-search on input (with debounce)
-    $('#search').on('keyup', function() {
-        clearTimeout(searchTimeout);
-        searchTimeout = setTimeout(function() {
-            loadNews();
-        }, 500);
-    });
-    
-    // Auto-filter on change
-    $('.filter-input').not('#search').on('change', function() {
-        loadNews();
-    });
-    
-    // Form submit
-    $('#filterForm').on('submit', function(e) {
-        e.preventDefault();
-        loadNews();
-    });
-    
-    // Reset button
-    $('#resetBtn').on('click', function() {
-        $('#filterForm')[0].reset();
-        loadNews();
-    });
-    
-    // Function to load news
-    function loadNews(page = 1) {
-        const formData = {
-            search: $('#search').val(),
-            category: $('#category').val(),
-            status: $('#status').val(),
-            featured: $('#featured').val(),
-            date_from: $('#date_from').val(),
-            date_to: $('#date_to').val(),
-            sort: $('#sort').val(),
-            per_page: $('#per_page').val(),
-            page: page
-        };
+function newsFilter() {
+    return {
+        loading: false,
+        filters: {
+            search: '{{ request("search") }}',
+            category: '{{ request("category") }}',
+            status: '{{ request("status") }}',
+            featured: '{{ request("featured") }}',
+            date_from: '{{ request("date_from") }}',
+            date_to: '{{ request("date_to") }}',
+            sort: '{{ request("sort", "latest") }}',
+            per_page: '{{ request("per_page", 15) }}'
+        },
+        currentPage: 1,
+        recordInfo: 'Menampilkan {{ $news->firstItem() ?? 0 }} - {{ $news->lastItem() ?? 0 }} dari {{ $news->total() }} berita',
         
-        // Show loading
-        $('#tableBody').html('<tr><td colspan="7" class="px-6 py-8 text-center"><div class="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div><div class="mt-2 text-gray-600">Memuat data...</div></td></tr>');
+        init() {
+            this.$nextTick(() => {
+                this.bindPaginationLinks();
+            });
+        },
         
-        $.ajax({
-            url: '{{ route("admin.news.index") }}',
-            type: 'GET',
-            data: formData,
-            dataType: 'html',
-            success: function(response) {
-                const $response = $(response);
-                const tableBody = $response.find('#tableBody').html();
-                const pagination = $response.find('#paginationContainer').html();
-                const recordInfo = $response.find('#recordInfo').html();
+        applyFilters() {
+            this.currentPage = 1;
+            this.loadData();
+        },
+        
+        resetFilters() {
+            this.filters = {
+                search: '',
+                category: '',
+                status: '',
+                featured: '',
+                date_from: '',
+                date_to: '',
+                sort: 'latest',
+                per_page: 15
+            };
+            this.currentPage = 1;
+            this.loadData();
+        },
+        
+        loadData(page = null) {
+            if (page) this.currentPage = page;
+            
+            const params = new URLSearchParams({
+                ...this.filters,
+                page: this.currentPage
+            });
+            
+            for (let [key, value] of [...params.entries()]) {
+                if (!value) params.delete(key);
+            }
+            
+            this.loading = true;
+            const tableBody = document.getElementById('tableBody');
+            tableBody.innerHTML = '<tr><td colspan="7" class="px-6 py-8 text-center"><div class="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div><div class="mt-2 text-gray-600">Memuat data...</div></td></tr>';
+            
+            fetch(`{{ route("admin.news.index") }}?${params.toString()}`, {
+                headers: {'X-Requested-With': 'XMLHttpRequest'}
+            })
+            .then(response => response.text())
+            .then(html => {
+                const parser = new DOMParser();
+                const doc = parser.parseFromString(html, 'text/html');
                 
-                $('#tableBody').html(tableBody);
-                $('#paginationContainer').html(pagination);
-                $('#recordInfo').html(recordInfo);
+                const newTableBody = doc.querySelector('#tableBody');
+                if (newTableBody) {
+                    tableBody.innerHTML = newTableBody.innerHTML;
+                }
                 
-                // Update pagination links to use AJAX
-                bindPaginationLinks();
-            },
-            error: function(xhr, status, error) {
+                const newPagination = doc.querySelector('#paginationContainer');
+                const paginationContainer = document.getElementById('paginationContainer');
+                if (newPagination && paginationContainer) {
+                    paginationContainer.innerHTML = newPagination.innerHTML;
+                    this.bindPaginationLinks();
+                }
+                
+                const newRecordInfo = doc.querySelector('#recordInfo');
+                if (newRecordInfo) {
+                    this.recordInfo = newRecordInfo.innerHTML;
+                }
+                
+                this.loading = false;
+            })
+            .catch(error => {
                 console.error('Error:', error);
-                $('#tableBody').html('<tr><td colspan="7" class="px-6 py-8 text-center text-red-600">Terjadi kesalahan saat memuat data. Silakan coba lagi.</td></tr>');
-            }
-        });
+                tableBody.innerHTML = '<tr><td colspan="7" class="px-6 py-8 text-center text-red-600">Terjadi kesalahan saat memuat data. Silakan coba lagi.</td></tr>';
+                this.loading = false;
+            });
+        },
+        
+        bindPaginationLinks() {
+            document.querySelectorAll('#paginationContainer a').forEach(link => {
+                link.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    const url = link.getAttribute('href');
+                    if (url) {
+                        const urlParams = new URLSearchParams(url.split('?')[1]);
+                        const page = urlParams.get('page') || 1;
+                        this.loadData(page);
+                        
+                        document.getElementById('tableContainer').scrollIntoView({ 
+                            behavior: 'smooth', 
+                            block: 'start' 
+                        });
+                    }
+                });
+            });
+        }
     }
-    
-    // Bind pagination links
-    function bindPaginationLinks() {
-        $('#paginationContainer a').on('click', function(e) {
-            e.preventDefault();
-            const url = $(this).attr('href');
-            if (url) {
-                const urlParams = new URLSearchParams(url.split('?')[1]);
-                const page = urlParams.get('page') || 1;
-                loadNews(page);
-                
-                // Scroll to top of table
-                $('html, body').animate({
-                    scrollTop: $('#tableContainer').offset().top - 100
-                }, 300);
-            }
-        });
-    }
-});
+}
 </script>
 @endpush
