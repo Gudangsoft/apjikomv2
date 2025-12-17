@@ -40,6 +40,7 @@ class DatabaseSeeder extends Seeder
             CategorySeeder::class,
             NewsSeeder::class,
             EventSeeder::class,
+            MemberSeeder::class,
         ]);
     }
 }
