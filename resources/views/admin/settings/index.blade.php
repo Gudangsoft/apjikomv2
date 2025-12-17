@@ -4,6 +4,22 @@
 
 @section('content')
 <div class="max-w-5xl">
+    <!-- Tutorial Note -->
+    <div class="mb-6 bg-blue-50 border-l-4 border-blue-500 p-4 rounded-lg">
+        <div class="flex items-start">
+            <svg class="w-6 h-6 text-blue-500 mr-3 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+            </svg>
+            <div class="flex-1">
+                <h3 class="text-sm font-semibold text-blue-800 mb-1">⚙️ Pengaturan Website</h3>
+                <p class="text-sm text-blue-700 mb-2">
+                    Halaman ini untuk mengatur <strong>informasi dasar website</strong> seperti nama, logo, kontak, dan social media. 
+                    Perubahan akan langsung tampil di seluruh halaman website setelah disimpan.
+                </p>
+            </div>
+        </div>
+    </div>
+
     <div class="bg-white rounded-lg shadow-sm">
         <div class="p-6 border-b">
             <h2 class="text-2xl font-bold text-gray-900">Pengaturan Umum Website</h2>

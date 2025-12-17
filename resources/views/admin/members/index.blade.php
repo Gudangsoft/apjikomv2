@@ -7,6 +7,25 @@
     <h3 class="text-2xl font-bold text-gray-900">Daftar Members</h3>
 </div>
 
+<!-- Tutorial Note -->
+<div class="mb-6 bg-blue-50 border-l-4 border-blue-500 p-4 rounded-lg">
+    <div class="flex items-start">
+        <svg class="w-6 h-6 text-blue-500 mr-3 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+        </svg>
+        <div class="flex-1">
+            <h3 class="text-sm font-semibold text-blue-800 mb-1">📚 Tutorial Penggunaan</h3>
+            <p class="text-sm text-blue-700 mb-2">
+                Halaman ini untuk <strong>mengelola member aktif</strong> yang sudah di-approve. 
+                Gunakan <strong>✏️ Edit</strong> untuk update data member atau ubah status ACTIVE/INACTIVE.
+            </p>
+            <a href="{{ asset('TUTORIAL_ADMIN_MEMBER_REGISTRATION.md') }}" target="_blank" class="text-sm text-blue-600 hover:text-blue-800 font-medium underline">
+                📖 Baca Tutorial Lengkap →
+            </a>
+        </div>
+    </div>
+</div>
+
 <!-- New Members Alert -->
 @php
     $newMembers = \App\Models\Member::where(function($query) {

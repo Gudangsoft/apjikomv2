@@ -19,6 +19,22 @@
         </a>
     </div>
 
+    <!-- Tutorial Note -->
+    <div class="mb-6 bg-blue-50 border-l-4 border-blue-500 p-4 rounded-lg">
+        <div class="flex items-start">
+            <svg class="w-6 h-6 text-blue-500 mr-3 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+            </svg>
+            <div class="flex-1">
+                <h3 class="text-sm font-semibold text-blue-800 mb-1">🤝 Partner & Mitra</h3>
+                <p class="text-sm text-blue-700 mb-2">
+                    Kelola <strong>partner dan mitra kerja</strong> APJIKOM. 
+                    Upload logo partner dan tambahkan link website mereka. Logo akan tampil di halaman publik.
+                </p>
+            </div>
+        </div>
+    </div>
+
     <!-- Success Message -->
     @if(session('success'))
         <div class="mb-6 p-4 bg-green-50 border border-green-200 text-green-800 rounded-lg">
