@@ -299,8 +299,8 @@ function toggleSearchFilter() {
 $(document).ready(function() {
     let searchTimeout;
     
-    // Load initial data
-    loadRegistrations();
+    // Bind pagination links on initial load
+    bindPaginationLinks();
     
     // Auto-search on input (with debounce)
     $('#search').on('keyup', function() {

@@ -342,8 +342,8 @@
 $(document).ready(function() {
     let searchTimeout;
     
-    // Load initial data
-    loadMembers();
+    // Bind pagination links on initial load
+    bindPaginationLinks();
     
     // Auto-search on input (with debounce)
     $('#search').on('keyup', function() {
