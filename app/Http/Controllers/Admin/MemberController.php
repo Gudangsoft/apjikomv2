@@ -147,6 +147,36 @@ class MemberController extends Controller
     }
 
     /**
+     * Bulk verify all unverified members
+     */
+    public function bulkVerify(Request $request)
+    {
+        $unverifiedCount = Member::where('is_verified', false)->count();
+        
+        if ($unverifiedCount === 0) {
+            return redirect()->route('admin.members.index')
+                ->with('info', 'Tidak ada member yang perlu diverifikasi.');
+        }
+        
+        // Update all unverified members
+        Member::where('is_verified', false)->update([
+            'is_verified' => true,
+            'verified_at' => now()
+        ]);
+        
+        // Log activity
+        \App\Helpers\ActivityLogger::log(
+            'bulk_verify_members',
+            'Member',
+            null,
+            "Bulk verified {$unverifiedCount} members"
+        );
+        
+        return redirect()->route('admin.members.index')
+            ->with('success', "Berhasil memverifikasi {$unverifiedCount} member!");
+    }
+
+    /**
      * Show form to upload member card
      */
     public function showUploadCard(Member $member)
