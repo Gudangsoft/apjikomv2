@@ -63,88 +63,94 @@
         </div>
     </div>
 
-    <!-- Advanced Search & Filters -->
-    <div class="bg-white rounded-lg shadow mb-6 border" id="searchFilterCard">
-        <div class="p-4 border-b bg-gray-50 flex items-center justify-between cursor-pointer" onclick="toggleSearchFilter()">
+    <!-- Advanced Search & Filters with Alpine.js -->
+    <div class="bg-white rounded-lg shadow mb-6 border" x-data="registrationFilter()">
+        <div class="p-4 border-b bg-gray-50 flex items-center justify-between cursor-pointer" @click="filterOpen = !filterOpen">
             <h4 class="text-lg font-semibold text-gray-900">🔍 Pencarian & Filter</h4>
-            <svg id="filterToggleIcon" class="w-5 h-5 text-gray-600 transform transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg class="w-5 h-5 text-gray-600 transform transition-transform duration-200" :class="{'rotate-180': filterOpen}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
             </svg>
         </div>
-        <div class="p-4" id="searchFilterContent">
-            <form id="filterForm">
+        <div class="p-4" x-show="filterOpen" x-transition>
+            <form @submit.prevent="applyFilters">
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
                     <!-- Search -->
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-1">Cari</label>
-                        <input type="text" id="search" name="search" value="{{ request('search') }}" 
+                        <input type="text" 
+                               x-model.debounce.500ms="filters.search"
+                               @input="applyFilters"
                                placeholder="Nama, email, phone, institusi..."
-                               class="filter-input w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#00629B]">
+                               class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#00629B]">
                     </div>
 
                     <!-- Status Filter -->
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-1">Status</label>
-                        <select id="status" name="status" class="filter-input w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#00629B]">
+                        <select x-model="filters.status" @change="applyFilters" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#00629B]">
                             <option value="">Semua Status</option>
-                            <option value="pending" {{ request('status') == 'pending' ? 'selected' : '' }}>Pending</option>
-                            <option value="approved" {{ request('status') == 'approved' ? 'selected' : '' }}>Approved</option>
-                            <option value="rejected" {{ request('status') == 'rejected' ? 'selected' : '' }}>Rejected</option>
+                            <option value="pending">Pending</option>
+                            <option value="approved">Approved</option>
+                            <option value="rejected">Rejected</option>
                         </select>
                     </div>
 
                     <!-- Member Status -->
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-1">Status Member</label>
-                        <select id="has_member" name="has_member" class="filter-input w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#00629B]">
+                        <select x-model="filters.has_member" @change="applyFilters" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#00629B]">
                             <option value="">Semua</option>
-                            <option value="yes" {{ request('has_member') == 'yes' ? 'selected' : '' }}>Sudah Jadi Member</option>
-                            <option value="no" {{ request('has_member') == 'no' ? 'selected' : '' }}>Belum Jadi Member</option>
+                            <option value="yes">Sudah Jadi Member</option>
+                            <option value="no">Belum Jadi Member</option>
                         </select>
                     </div>
 
                     <!-- Date From -->
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-1">Tanggal Dari</label>
-                        <input type="date" id="date_from" name="date_from" value="{{ request('date_from') }}" 
-                            class="filter-input w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#00629B]">
+                        <input type="date" 
+                               x-model="filters.date_from"
+                               @change="applyFilters"
+                               class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#00629B]">
                     </div>
 
                     <!-- Date To -->
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-1">Tanggal Sampai</label>
-                        <input type="date" id="date_to" name="date_to" value="{{ request('date_to') }}" 
-                            class="filter-input w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#00629B]">
+                        <input type="date" 
+                               x-model="filters.date_to"
+                               @change="applyFilters"
+                               class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#00629B]">
                     </div>
 
                     <!-- Sort -->
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-1">Urutkan</label>
-                        <select id="sort" name="sort" class="filter-input w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#00629B]">
-                            <option value="latest" {{ request('sort', 'latest') == 'latest' ? 'selected' : '' }}>Terbaru</option>
-                            <option value="oldest" {{ request('sort') == 'oldest' ? 'selected' : '' }}>Terlama</option>
-                            <option value="name" {{ request('sort') == 'name' ? 'selected' : '' }}>Nama (A-Z)</option>
+                        <select x-model="filters.sort" @change="applyFilters" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#00629B]">
+                            <option value="latest">Terbaru</option>
+                            <option value="oldest">Terlama</option>
+                            <option value="name">Nama (A-Z)</option>
                         </select>
                     </div>
 
                     <!-- Per Page -->
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-1">Tampilkan</label>
-                        <select id="per_page" name="per_page" class="filter-input w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#00629B]">
-                            <option value="15" {{ request('per_page', 15) == 15 ? 'selected' : '' }}>15</option>
-                            <option value="25" {{ request('per_page') == 25 ? 'selected' : '' }}>25</option>
-                            <option value="50" {{ request('per_page') == 50 ? 'selected' : '' }}>50</option>
-                            <option value="100" {{ request('per_page') == 100 ? 'selected' : '' }}>100</option>
+                        <select x-model="filters.per_page" @change="applyFilters" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#00629B]">
+                            <option value="15">15</option>
+                            <option value="25">25</option>
+                            <option value="50">50</option>
+                            <option value="100">100</option>
                         </select>
                     </div>
                 </div>
 
                 <div class="mt-4 flex items-center justify-between">
-                    <div class="text-sm text-gray-600" id="recordInfo">
+                    <div class="text-sm text-gray-600" x-html="recordInfo">
                         Menampilkan {{ $registrations->firstItem() ?? 0 }} - {{ $registrations->lastItem() ?? 0 }} dari {{ $registrations->total() }} pendaftaran
                     </div>
                     <div class="flex space-x-2">
-                        <button type="button" id="resetBtn" class="px-4 py-2 bg-gray-100 text-gray-700 rounded-md hover:bg-gray-200">
+                        <button type="button" @click="resetFilters" class="px-4 py-2 bg-gray-100 text-gray-700 rounded-md hover:bg-gray-200">
                             Reset
                         </button>
                         <button type="submit" class="px-4 py-2 bg-[#00629B] text-white rounded-md hover:bg-[#003A5D] flex items-center space-x-2">
@@ -281,112 +287,126 @@
 @endsection
 
 @push('scripts')
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
-// Toggle Search Filter
-function toggleSearchFilter() {
-    const content = document.getElementById('searchFilterContent');
-    const icon = document.getElementById('filterToggleIcon');
-    
-    if (content.style.display === 'none') {
-        content.style.display = 'block';
-        icon.style.transform = 'rotate(0deg)';
-    } else {
-        content.style.display = 'none';
-        icon.style.transform = 'rotate(-90deg)';
+// Alpine.js Filter Component
+function registrationFilter() {
+    return {
+        filterOpen: true,
+        loading: false,
+        filters: {
+            search: '{{ request("search") }}',
+            status: '{{ request("status") }}',
+            has_member: '{{ request("has_member") }}',
+            date_from: '{{ request("date_from") }}',
+            date_to: '{{ request("date_to") }}',
+            sort: '{{ request("sort", "latest") }}',
+            per_page: '{{ request("per_page", 15) }}'
+        },
+        currentPage: 1,
+        recordInfo: 'Menampilkan {{ $registrations->firstItem() ?? 0 }} - {{ $registrations->lastItem() ?? 0 }} dari {{ $registrations->total() }} pendaftaran',
+        
+        init() {
+            // Bind pagination clicks on init
+            this.$nextTick(() => {
+                this.bindPaginationLinks();
+            });
+        },
+        
+        applyFilters() {
+            this.currentPage = 1;
+            this.loadData();
+        },
+        
+        resetFilters() {
+            this.filters = {
+                search: '',
+                status: '',
+                has_member: '',
+                date_from: '',
+                date_to: '',
+                sort: 'latest',
+                per_page: 15
+            };
+            this.currentPage = 1;
+            this.loadData();
+        },
+        
+        loadData(page = null) {
+            if (page) this.currentPage = page;
+            
+            const params = new URLSearchParams({
+                ...this.filters,
+                page: this.currentPage
+            });
+            
+            // Remove empty values
+            for (let [key, value] of [...params.entries()]) {
+                if (!value) params.delete(key);
+            }
+            
+            this.loading = true;
+            const tableBody = document.getElementById('tableBody');
+            tableBody.innerHTML = '<tr><td colspan="9" class="px-4 py-8 text-center"><div class="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-[#00629B]"></div><div class="mt-2 text-gray-600">Memuat data...</div></td></tr>';
+            
+            fetch(`{{ route("admin.registrations.index") }}?${params.toString()}`, {
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest'
+                }
+            })
+            .then(response => response.text())
+            .then(html => {
+                const parser = new DOMParser();
+                const doc = parser.parseFromString(html, 'text/html');
+                
+                // Update table body
+                const newTableBody = doc.querySelector('#tableBody');
+                if (newTableBody) {
+                    tableBody.innerHTML = newTableBody.innerHTML;
+                }
+                
+                // Update pagination
+                const newPagination = doc.querySelector('#paginationContainer');
+                const paginationContainer = document.getElementById('paginationContainer');
+                if (newPagination && paginationContainer) {
+                    paginationContainer.innerHTML = newPagination.innerHTML;
+                    this.bindPaginationLinks();
+                }
+                
+                // Update record info
+                const newRecordInfo = doc.querySelector('#recordInfo');
+                if (newRecordInfo) {
+                    this.recordInfo = newRecordInfo.innerHTML;
+                }
+                
+                this.loading = false;
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                tableBody.innerHTML = '<tr><td colspan="9" class="px-4 py-8 text-center text-red-600">Terjadi kesalahan saat memuat data. Silakan coba lagi.</td></tr>';
+                this.loading = false;
+            });
+        },
+        
+        bindPaginationLinks() {
+            document.querySelectorAll('#paginationContainer a').forEach(link => {
+                link.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    const url = link.getAttribute('href');
+                    if (url) {
+                        const urlParams = new URLSearchParams(url.split('?')[1]);
+                        const page = urlParams.get('page') || 1;
+                        this.loadData(page);
+                        
+                        // Scroll to top of table
+                        document.getElementById('tableContainer').scrollIntoView({ 
+                            behavior: 'smooth', 
+                            block: 'start' 
+                        });
+                    }
+                });
+            });
+        }
     }
 }
-
-// jQuery AJAX Filter
-$(document).ready(function() {
-    let searchTimeout;
-    
-    // Bind pagination links on initial load
-    bindPaginationLinks();
-    
-    // Auto-search on input (with debounce)
-    $('#search').on('keyup', function() {
-        clearTimeout(searchTimeout);
-        searchTimeout = setTimeout(function() {
-            loadRegistrations();
-        }, 500);
-    });
-    
-    // Auto-filter on change
-    $('.filter-input').not('#search').on('change', function() {
-        loadRegistrations();
-    });
-    
-    // Form submit
-    $('#filterForm').on('submit', function(e) {
-        e.preventDefault();
-        loadRegistrations();
-    });
-    
-    // Reset button
-    $('#resetBtn').on('click', function() {
-        $('#filterForm')[0].reset();
-        loadRegistrations();
-    });
-    
-    // Function to load registrations
-    function loadRegistrations(page = 1) {
-        const formData = {
-            search: $('#search').val(),
-            status: $('#status').val(),
-            has_member: $('#has_member').val(),
-            date_from: $('#date_from').val(),
-            date_to: $('#date_to').val(),
-            sort: $('#sort').val(),
-            per_page: $('#per_page').val(),
-            page: page
-        };
-        
-        // Show loading
-        $('#tableBody').html('<tr><td colspan="9" class="px-4 py-8 text-center"><div class="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-[#00629B]"></div><div class="mt-2 text-gray-600">Memuat data...</div></td></tr>');
-        
-        $.ajax({
-            url: '{{ route("admin.registrations.index") }}',
-            type: 'GET',
-            data: formData,
-            dataType: 'html',
-            success: function(response) {
-                const $response = $(response);
-                const tableBody = $response.find('#tableBody').html();
-                const pagination = $response.find('#paginationContainer').html();
-                const recordInfo = $response.find('#recordInfo').html();
-                
-                $('#tableBody').html(tableBody);
-                $('#paginationContainer').html(pagination);
-                $('#recordInfo').html(recordInfo);
-                
-                // Update pagination links to use AJAX
-                bindPaginationLinks();
-            },
-            error: function(xhr, status, error) {
-                console.error('Error:', error);
-                $('#tableBody').html('<tr><td colspan="9" class="px-4 py-8 text-center text-red-600">Terjadi kesalahan saat memuat data. Silakan coba lagi.</td></tr>');
-            }
-        });
-    }
-    
-    // Bind pagination links
-    function bindPaginationLinks() {
-        $('#paginationContainer a').on('click', function(e) {
-            e.preventDefault();
-            const url = $(this).attr('href');
-            if (url) {
-                const urlParams = new URLSearchParams(url.split('?')[1]);
-                const page = urlParams.get('page') || 1;
-                loadRegistrations(page);
-                
-                // Scroll to top of table
-                $('html, body').animate({
-                    scrollTop: $('#tableContainer').offset().top - 100
-                }, 300);
-            }
-        });
-    }
-});
 </script>
 @endpush

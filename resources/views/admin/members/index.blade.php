@@ -139,81 +139,87 @@
 </div>
 @endif
 
-<!-- Advanced Search & Filter -->
-<div class="mb-6 bg-white rounded-lg shadow p-6">
-    <form id="filterForm">
+<!-- Advanced Search & Filter with Alpine.js -->
+<div class="mb-6 bg-white rounded-lg shadow p-6" x-data="memberFilter()">
+    <form @submit.prevent="applyFilters">
         <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
             <!-- Search -->
             <div>
                 <label class="block text-sm font-medium text-gray-700 mb-2">Search</label>
-                <input type="text" id="search" name="search" value="{{ request('search') }}" 
+                <input type="text" 
+                       x-model.debounce.500ms="filters.search"
+                       @input="applyFilters"
                        placeholder="Nama, email, institusi..."
-                       class="filter-input w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500">
+                       class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500">
             </div>
 
             <!-- Status Filter -->
             <div>
                 <label class="block text-sm font-medium text-gray-700 mb-2">Status</label>
-                <select id="status" name="status" class="filter-input w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500">
+                <select x-model="filters.status" @change="applyFilters" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500">
                     <option value="">Semua Status</option>
-                    <option value="pending" {{ request('status') == 'pending' ? 'selected' : '' }}>Pending</option>
-                    <option value="active" {{ request('status') == 'active' ? 'selected' : '' }}>Aktif</option>
-                    <option value="rejected" {{ request('status') == 'rejected' ? 'selected' : '' }}>Ditolak</option>
-                    <option value="inactive" {{ request('status') == 'inactive' ? 'selected' : '' }}>Inactive</option>
+                    <option value="pending">Pending</option>
+                    <option value="active">Aktif</option>
+                    <option value="rejected">Ditolak</option>
+                    <option value="inactive">Inactive</option>
                 </select>
             </div>
 
             <!-- Verification Filter -->
             <div>
                 <label class="block text-sm font-medium text-gray-700 mb-2">Verifikasi</label>
-                <select id="verified" name="verified" class="filter-input w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500">
+                <select x-model="filters.verified" @change="applyFilters" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500">
                     <option value="">Semua</option>
-                    <option value="1" {{ request('verified') == '1' ? 'selected' : '' }}>Verified</option>
-                    <option value="0" {{ request('verified') == '0' ? 'selected' : '' }}>Unverified</option>
+                    <option value="1">Verified</option>
+                    <option value="0">Unverified</option>
                 </select>
             </div>
 
             <!-- Card Status Filter -->
             <div>
                 <label class="block text-sm font-medium text-gray-700 mb-2">Status Kartu</label>
-                <select id="has_card" name="has_card" class="filter-input w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500">
+                <select x-model="filters.has_card" @change="applyFilters" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500">
                     <option value="">Semua</option>
-                    <option value="1" {{ request('has_card') == '1' ? 'selected' : '' }}>Sudah Ada Kartu</option>
-                    <option value="0" {{ request('has_card') == '0' ? 'selected' : '' }}>Belum Ada Kartu</option>
+                    <option value="1">Sudah Ada Kartu</option>
+                    <option value="0">Belum Ada Kartu</option>
                 </select>
             </div>
 
             <!-- Date Range -->
             <div>
                 <label class="block text-sm font-medium text-gray-700 mb-2">Dari Tanggal</label>
-                <input type="date" id="date_from" name="date_from" value="{{ request('date_from') }}"
-                       class="filter-input w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500">
+                <input type="date" 
+                       x-model="filters.date_from"
+                       @change="applyFilters"
+                       class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500">
             </div>
 
             <div>
                 <label class="block text-sm font-medium text-gray-700 mb-2">Sampai Tanggal</label>
-                <input type="date" id="date_to" name="date_to" value="{{ request('date_to') }}"
-                       class="filter-input w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500">
+                <input type="date" 
+                       x-model="filters.date_to"
+                       @change="applyFilters"
+                       class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500">
             </div>
 
             <!-- Sort -->
             <div>
                 <label class="block text-sm font-medium text-gray-700 mb-2">Urutkan</label>
-                <select id="sort" name="sort" class="filter-input w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500">
-                    <option value="latest" {{ request('sort', 'latest') == 'latest' ? 'selected' : '' }}>Terbaru</option>
-                    <option value="oldest" {{ request('sort') == 'oldest' ? 'selected' : '' }}>Terlama</option>
-                    <option value="name" {{ request('sort') == 'name' ? 'selected' : '' }}>Nama A-Z</option>
-                    <option value="name_desc" {{ request('sort') == 'name_desc' ? 'selected' : '' }}>Nama Z-A</option>
+                <select x-model="filters.sort" @change="applyFilters" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500">
+                    <option value="latest">Terbaru</option>
+                    <option value="oldest">Terlama</option>
+                    <option value="name">Nama A-Z</option>
+                    <option value="name_desc">Nama Z-A</option>
                 </select>
             </div>
         </div>
 
         <div class="flex items-center justify-between mt-4">
-            <div class="text-sm text-gray-600" id="recordInfo">
+            <div class="text-sm text-gray-600" x-html="recordInfo">
                 Menampilkan {{ $members->firstItem() ?? 0 }} - {{ $members->lastItem() ?? 0 }} dari {{ $members->total() }} member
             </div>
             <div class="flex space-x-3">
-                <button type="button" id="resetBtn" class="px-4 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition">
+                <button type="button" @click="resetFilters" class="px-4 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition">
                     Reset Filter
                 </button>
                 <button type="submit" 
@@ -339,97 +345,116 @@
 @endsection
 
 @push('scripts')
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
-$(document).ready(function() {
-    let searchTimeout;
-    
-    // Bind pagination links on initial load
-    bindPaginationLinks();
-    
-    // Auto-search on input (with debounce)
-    $('#search').on('keyup', function() {
-        clearTimeout(searchTimeout);
-        searchTimeout = setTimeout(function() {
-            loadMembers();
-        }, 500);
-    });
-    
-    // Auto-filter on change
-    $('.filter-input').not('#search').on('change', function() {
-        loadMembers();
-    });
-    
-    // Form submit
-    $('#filterForm').on('submit', function(e) {
-        e.preventDefault();
-        loadMembers();
-    });
-    
-    // Reset button
-    $('#resetBtn').on('click', function() {
-        $('#filterForm')[0].reset();
-        loadMembers();
-    });
-    
-    // Function to load members
-    function loadMembers(page = 1) {
-        const formData = {
-            search: $('#search').val(),
-            status: $('#status').val(),
-            verified: $('#verified').val(),
-            has_card: $('#has_card').val(),
-            date_from: $('#date_from').val(),
-            date_to: $('#date_to').val(),
-            sort: $('#sort').val(),
-            page: page
-        };
+function memberFilter() {
+    return {
+        loading: false,
+        filters: {
+            search: '{{ request("search") }}',
+            status: '{{ request("status") }}',
+            verified: '{{ request("verified") }}',
+            has_card: '{{ request("has_card") }}',
+            date_from: '{{ request("date_from") }}',
+            date_to: '{{ request("date_to") }}',
+            sort: '{{ request("sort", "latest") }}'
+        },
+        currentPage: 1,
+        recordInfo: 'Menampilkan {{ $members->firstItem() ?? 0 }} - {{ $members->lastItem() ?? 0 }} dari {{ $members->total() }} member',
         
-        // Show loading
-        $('#tableBody').html('<tr><td colspan="7" class="px-6 py-8 text-center"><div class="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div><div class="mt-2 text-gray-600">Memuat data...</div></td></tr>');
+        init() {
+            this.$nextTick(() => {
+                this.bindPaginationLinks();
+            });
+        },
         
-        $.ajax({
-            url: '{{ route("admin.members.index") }}',
-            type: 'GET',
-            data: formData,
-            dataType: 'html',
-            success: function(response) {
-                const $response = $(response);
-                const tableBody = $response.find('#tableBody').html();
-                const pagination = $response.find('#paginationContainer').html();
-                const recordInfo = $response.find('#recordInfo').html();
+        applyFilters() {
+            this.currentPage = 1;
+            this.loadData();
+        },
+        
+        resetFilters() {
+            this.filters = {
+                search: '',
+                status: '',
+                verified: '',
+                has_card: '',
+                date_from: '',
+                date_to: '',
+                sort: 'latest'
+            };
+            this.currentPage = 1;
+            this.loadData();
+        },
+        
+        loadData(page = null) {
+            if (page) this.currentPage = page;
+            
+            const params = new URLSearchParams({
+                ...this.filters,
+                page: this.currentPage
+            });
+            
+            for (let [key, value] of [...params.entries()]) {
+                if (!value) params.delete(key);
+            }
+            
+            this.loading = true;
+            const tableBody = document.getElementById('tableBody');
+            tableBody.innerHTML = '<tr><td colspan="7" class="px-6 py-8 text-center"><div class="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div><div class="mt-2 text-gray-600">Memuat data...</div></td></tr>';
+            
+            fetch(`{{ route("admin.members.index") }}?${params.toString()}`, {
+                headers: {'X-Requested-With': 'XMLHttpRequest'}
+            })
+            .then(response => response.text())
+            .then(html => {
+                const parser = new DOMParser();
+                const doc = parser.parseFromString(html, 'text/html');
                 
-                $('#tableBody').html(tableBody);
-                $('#paginationContainer').html(pagination);
-                $('#recordInfo').html(recordInfo);
+                const newTableBody = doc.querySelector('#tableBody');
+                if (newTableBody) {
+                    tableBody.innerHTML = newTableBody.innerHTML;
+                }
                 
-                // Update pagination links to use AJAX
-                bindPaginationLinks();
-            },
-            error: function(xhr, status, error) {
+                const newPagination = doc.querySelector('#paginationContainer');
+                const paginationContainer = document.getElementById('paginationContainer');
+                if (newPagination && paginationContainer) {
+                    paginationContainer.innerHTML = newPagination.innerHTML;
+                    this.bindPaginationLinks();
+                }
+                
+                const newRecordInfo = doc.querySelector('#recordInfo');
+                if (newRecordInfo) {
+                    this.recordInfo = newRecordInfo.innerHTML;
+                }
+                
+                this.loading = false;
+            })
+            .catch(error => {
                 console.error('Error:', error);
-                $('#tableBody').html('<tr><td colspan="7" class="px-6 py-8 text-center text-red-600">Terjadi kesalahan saat memuat data. Silakan coba lagi.</td></tr>');
-            }
-        });
+                tableBody.innerHTML = '<tr><td colspan="7" class="px-6 py-8 text-center text-red-600">Terjadi kesalahan saat memuat data. Silakan coba lagi.</td></tr>';
+                this.loading = false;
+            });
+        },
+        
+        bindPaginationLinks() {
+            document.querySelectorAll('#paginationContainer a').forEach(link => {
+                link.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    const url = link.getAttribute('href');
+                    if (url) {
+                        const urlParams = new URLSearchParams(url.split('?')[1]);
+                        const page = urlParams.get('page') || 1;
+                        this.loadData(page);
+                        
+                        document.getElementById('tableContainer').scrollIntoView({ 
+                            behavior: 'smooth', 
+                            block: 'start' 
+                        });
+                    }
+                });
+            });
+        }
     }
-    
-    // Bind pagination links
-    function bindPaginationLinks() {
-        $('#paginationContainer a').on('click', function(e) {
-            e.preventDefault();
-            const url = $(this).attr('href');
-            if (url) {
-                const urlParams = new URLSearchParams(url.split('?')[1]);
-                const page = urlParams.get('page') || 1;
-                loadMembers(page);
-                
-                // Scroll to top of table
-                $('html, body').animate({
-                    scrollTop: $('#tableContainer').offset().top - 100
-                }, 300);
-            }
-        });
-    }
-});
+}
 </script>
 @endpush
