@@ -68,7 +68,7 @@
 <section class="py-20 bg-gradient-to-br from-gray-50 to-gray-100">
     <div class="container mx-auto px-4">
         <div class="text-center mb-12">
-            <h2 class="text-4xl font-bold text-gray-800 mb-4">Sejarah APJIKOM</h2>
+            <h2 class="text-4xl font-bold text-gray-800 mb-4">{{ setting('about_history_title', 'Sejarah APJIKOM') }}</h2>
             <div class="w-24 h-1 bg-gradient-to-r from-purple-600 to-indigo-600 mx-auto rounded"></div>
         </div>
 
@@ -82,15 +82,15 @@
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-8">
                         <div class="text-center p-6 bg-purple-50 rounded-xl">
                             <div class="text-4xl font-bold text-purple-600 mb-2">{{ setting('about_founded_year', '2020') }}</div>
-                            <div class="text-gray-600">Tahun Berdiri</div>
+                            <div class="text-gray-600">{{ setting('about_stat1_label', 'Tahun Berdiri') }}</div>
                         </div>
                         <div class="text-center p-6 bg-indigo-50 rounded-xl">
                             <div class="text-4xl font-bold text-indigo-600 mb-2">{{ App\Models\Member::where('status', 'active')->count() }}+</div>
-                            <div class="text-gray-600">Anggota Aktif</div>
+                            <div class="text-gray-600">{{ setting('about_stat2_label', 'Anggota Aktif') }}</div>
                         </div>
                         <div class="text-center p-6 bg-blue-50 rounded-xl">
                             <div class="text-4xl font-bold text-blue-600 mb-2">{{ App\Models\Event::count() }}+</div>
-                            <div class="text-gray-600">Kegiatan</div>
+                            <div class="text-gray-600">{{ setting('about_stat3_label', 'Kegiatan') }}</div>
                         </div>
                     </div>
                 </div>

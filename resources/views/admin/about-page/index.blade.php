@@ -166,50 +166,135 @@
                 <p class="text-sm text-gray-500 mt-1">Gunakan bullet point (•) atau tanda (-) di awal setiap baris untuk membuat daftar misi. Satu misi per baris.</p>
             </div>
 
-            <!-- Sejarah -->
-            <div class="mb-6">
-                <label for="about_history" class="block text-sm font-medium text-gray-700 mb-2">
-                    <span class="flex items-center">
-                        <svg class="w-5 h-5 text-blue-600 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                        </svg>
-                        Sejarah <span class="text-red-500">*</span>
-                    </span>
-                </label>
-                <textarea 
-                    id="about_history" 
-                    name="about_history" 
-                    rows="6"
-                    class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent @error('about_history') border-red-500 @enderror"
-                    required
-                >{{ old('about_history', setting('about_history', 'Asosiasi Pengelola Jurnal Ilmu Komunikasi (APJIKOM) didirikan sebagai wadah profesional bagi para pengelola jurnal ilmiah di bidang Ilmu Komunikasi. Organisasi ini lahir dari kebutuhan untuk meningkatkan kualitas pengelolaan jurnal ilmiah dan membangun standar profesional dalam publikasi ilmiah di Indonesia.')) }}</textarea>
-                @error('about_history')
-                    <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
-                @enderror
-            </div>
+            <!-- Sejarah Section -->
+            <div class="mb-6 p-4 bg-gradient-to-r from-blue-50 to-cyan-50 rounded-lg border border-blue-200">
+                <h3 class="text-lg font-semibold text-blue-800 mb-4 flex items-center">
+                    <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                    </svg>
+                    Section Sejarah
+                </h3>
 
-            <!-- Tahun Berdiri -->
-            <div class="mb-6">
-                <label for="about_founded_year" class="block text-sm font-medium text-gray-700 mb-2">
-                    <span class="flex items-center">
-                        <svg class="w-5 h-5 text-green-600 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
-                        </svg>
-                        Tahun Berdiri <span class="text-red-500">*</span>
-                    </span>
-                </label>
-                <input 
-                    type="text" 
-                    id="about_founded_year" 
-                    name="about_founded_year" 
-                    maxlength="4"
-                    value="{{ old('about_founded_year', setting('about_founded_year', '2020')) }}"
-                    class="w-32 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent @error('about_founded_year') border-red-500 @enderror"
-                    required
-                >
-                @error('about_founded_year')
-                    <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
-                @enderror
+                <!-- Judul Section Sejarah -->
+                <div class="mb-4">
+                    <label for="about_history_title" class="block text-sm font-medium text-gray-700 mb-2">
+                        Judul Section Sejarah <span class="text-red-500">*</span>
+                    </label>
+                    <input 
+                        type="text" 
+                        id="about_history_title" 
+                        name="about_history_title" 
+                        value="{{ old('about_history_title', setting('about_history_title', 'Sejarah APJIKOM')) }}"
+                        class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent @error('about_history_title') border-red-500 @enderror"
+                        required
+                    >
+                    @error('about_history_title')
+                        <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                    @enderror
+                </div>
+
+                <!-- Deskripsi Sejarah -->
+                <div class="mb-4">
+                    <label for="about_history" class="block text-sm font-medium text-gray-700 mb-2">
+                        Deskripsi Sejarah <span class="text-red-500">*</span>
+                    </label>
+                    <textarea 
+                        id="about_history" 
+                        name="about_history" 
+                        rows="4"
+                        class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent @error('about_history') border-red-500 @enderror"
+                        required
+                    >{{ old('about_history', setting('about_history', 'Asosiasi Pengelola Jurnal Ilmu Komunikasi (APJIKOM) didirikan sebagai wadah profesional bagi para pengelola jurnal ilmiah di bidang Ilmu Komunikasi. Organisasi ini lahir dari kebutuhan untuk meningkatkan kualitas pengelolaan jurnal ilmiah dan membangun standar profesional dalam publikasi ilmiah di Indonesia.')) }}</textarea>
+                    @error('about_history')
+                        <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                    @enderror
+                </div>
+
+                <!-- Statistik -->
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <!-- Tahun Berdiri -->
+                    <div class="bg-white p-4 rounded-lg border">
+                        <label for="about_founded_year" class="block text-sm font-medium text-gray-700 mb-2">
+                            <span class="flex items-center">
+                                <div class="w-8 h-8 bg-purple-100 rounded-full flex items-center justify-center mr-2">
+                                    <svg class="w-4 h-4 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                                    </svg>
+                                </div>
+                                Tahun Berdiri
+                            </span>
+                        </label>
+                        <input 
+                            type="text" 
+                            id="about_founded_year" 
+                            name="about_founded_year" 
+                            maxlength="4"
+                            value="{{ old('about_founded_year', setting('about_founded_year', '2020')) }}"
+                            class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 text-center text-xl font-bold text-purple-600"
+                            required
+                        >
+                        <input 
+                            type="text" 
+                            id="about_stat1_label" 
+                            name="about_stat1_label" 
+                            value="{{ old('about_stat1_label', setting('about_stat1_label', 'Tahun Berdiri')) }}"
+                            class="w-full mt-2 px-3 py-1 border border-gray-200 rounded text-sm text-center text-gray-600"
+                            placeholder="Label statistik"
+                        >
+                    </div>
+
+                    <!-- Anggota Aktif -->
+                    <div class="bg-white p-4 rounded-lg border">
+                        <label class="block text-sm font-medium text-gray-700 mb-2">
+                            <span class="flex items-center">
+                                <div class="w-8 h-8 bg-indigo-100 rounded-full flex items-center justify-center mr-2">
+                                    <svg class="w-4 h-4 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                                    </svg>
+                                </div>
+                                Anggota Aktif
+                            </span>
+                        </label>
+                        <div class="text-center text-xl font-bold text-indigo-600 py-2 bg-indigo-50 rounded-lg">
+                            {{ App\Models\Member::where('status', 'active')->count() }}+
+                        </div>
+                        <input 
+                            type="text" 
+                            id="about_stat2_label" 
+                            name="about_stat2_label" 
+                            value="{{ old('about_stat2_label', setting('about_stat2_label', 'Anggota Aktif')) }}"
+                            class="w-full mt-2 px-3 py-1 border border-gray-200 rounded text-sm text-center text-gray-600"
+                            placeholder="Label statistik"
+                        >
+                        <p class="text-xs text-gray-400 mt-1 text-center">Otomatis dari database</p>
+                    </div>
+
+                    <!-- Kegiatan -->
+                    <div class="bg-white p-4 rounded-lg border">
+                        <label class="block text-sm font-medium text-gray-700 mb-2">
+                            <span class="flex items-center">
+                                <div class="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center mr-2">
+                                    <svg class="w-4 h-4 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                                    </svg>
+                                </div>
+                                Kegiatan
+                            </span>
+                        </label>
+                        <div class="text-center text-xl font-bold text-blue-600 py-2 bg-blue-50 rounded-lg">
+                            {{ App\Models\Event::count() }}+
+                        </div>
+                        <input 
+                            type="text" 
+                            id="about_stat3_label" 
+                            name="about_stat3_label" 
+                            value="{{ old('about_stat3_label', setting('about_stat3_label', 'Kegiatan')) }}"
+                            class="w-full mt-2 px-3 py-1 border border-gray-200 rounded text-sm text-center text-gray-600"
+                            placeholder="Label statistik"
+                        >
+                        <p class="text-xs text-gray-400 mt-1 text-center">Otomatis dari database</p>
+                    </div>
+                </div>
             </div>
 
             <!-- Submit Button -->
