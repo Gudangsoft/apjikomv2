@@ -193,7 +193,7 @@
                                 </span>
                             @endif
                         </td>
-                        <td class="px-4 py-3">
+                        <td class="px-4 py-3" style="min-width: 250px; max-width: 350px;">
                             @if($registration->type == 'prodi' && $registration->institution)
                                 <div class="text-sm font-medium text-gray-900">{{ $registration->institution }}</div>
                                 <div class="text-xs text-gray-500">PIC: {{ $registration->full_name }}</div>
