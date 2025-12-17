@@ -150,6 +150,67 @@
                     @endif
                 </div>
                 @endif
+                
+                <!-- Academic Profile Links -->
+                @if($member->google_scholar_link || $member->sinta_link || $member->orcid_link || $member->scopus_link)
+                <div class="mt-8 max-w-4xl mx-auto">
+                    <div class="bg-white/95 backdrop-blur-sm rounded-2xl shadow-xl p-6 border border-white/20">
+                        <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                            @if($member->google_scholar_link)
+                            <a href="{{ $member->google_scholar_link }}" target="_blank" rel="noopener noreferrer"
+                               class="flex flex-col items-center justify-center p-4 bg-gradient-to-br from-blue-50 to-blue-100 hover:from-blue-100 hover:to-blue-200 rounded-xl transition-all duration-200 border border-blue-200 hover:shadow-lg group">
+                                <div class="w-12 h-12 bg-blue-500 rounded-xl flex items-center justify-center mb-3 group-hover:scale-110 transition-transform shadow-md">
+                                    <svg class="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 20 20">
+                                        <path d="M10.394 2.08a1 1 0 00-.788 0l-7 3a1 1 0 000 1.84L5.25 8.051a.999.999 0 01.356-.257l4-1.714a1 1 0 11.788 1.838L7.667 9.088l1.94.831a1 1 0 00.787 0l7-3a1 1 0 000-1.838l-7-3z"/>
+                                    </svg>
+                                </div>
+                                <p class="text-sm font-bold text-gray-900 text-center">Google Scholar</p>
+                                <p class="text-xs text-gray-600 text-center mt-1">Profil publikasi</p>
+                            </a>
+                            @endif
+                            
+                            @if($member->sinta_link)
+                            <a href="{{ $member->sinta_link }}" target="_blank" rel="noopener noreferrer"
+                               class="flex flex-col items-center justify-center p-4 bg-gradient-to-br from-red-50 to-red-100 hover:from-red-100 hover:to-red-200 rounded-xl transition-all duration-200 border border-red-200 hover:shadow-lg group">
+                                <div class="w-12 h-12 bg-red-500 rounded-xl flex items-center justify-center mb-3 group-hover:scale-110 transition-transform shadow-md">
+                                    <svg class="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 20 20">
+                                        <path fill-rule="evenodd" d="M12.316 3.051a1 1 0 01.633 1.265l-4 12a1 1 0 11-1.898-.632l4-12a1 1 0 011.265-.633zM5.707 6.293a1 1 0 010 1.414L3.414 10l2.293 2.293a1 1 0 11-1.414 1.414l-3-3a1 1 0 010-1.414l3-3a1 1 0 011.414 0zm8.586 0a1 1 0 011.414 0l3 3a1 1 0 010 1.414l-3 3a1 1 0 11-1.414-1.414L16.586 10l-2.293-2.293a1 1 0 010-1.414z" clip-rule="evenodd"/>
+                                    </svg>
+                                </div>
+                                <p class="text-sm font-bold text-gray-900 text-center">SINTA</p>
+                                <p class="text-xs text-gray-600 text-center mt-1">Riset Nasional</p>
+                            </a>
+                            @endif
+                            
+                            @if($member->orcid_link)
+                            <a href="{{ $member->orcid_link }}" target="_blank" rel="noopener noreferrer"
+                               class="flex flex-col items-center justify-center p-4 bg-gradient-to-br from-green-50 to-green-100 hover:from-green-100 hover:to-green-200 rounded-xl transition-all duration-200 border border-green-200 hover:shadow-lg group">
+                                <div class="w-12 h-12 bg-green-500 rounded-xl flex items-center justify-center mb-3 group-hover:scale-110 transition-transform shadow-md">
+                                    <svg class="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 20 20">
+                                        <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"/>
+                                    </svg>
+                                </div>
+                                <p class="text-sm font-bold text-gray-900 text-center">ORCID</p>
+                                <p class="text-xs text-gray-600 text-center mt-1">ID Peneliti</p>
+                            </a>
+                            @endif
+                            
+                            @if($member->scopus_link)
+                            <a href="{{ $member->scopus_link }}" target="_blank" rel="noopener noreferrer"
+                               class="flex flex-col items-center justify-center p-4 bg-gradient-to-br from-orange-50 to-orange-100 hover:from-orange-100 hover:to-orange-200 rounded-xl transition-all duration-200 border border-orange-200 hover:shadow-lg group">
+                                <div class="w-12 h-12 bg-orange-500 rounded-xl flex items-center justify-center mb-3 group-hover:scale-110 transition-transform shadow-md">
+                                    <svg class="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 20 20">
+                                        <path fill-rule="evenodd" d="M11.49 3.17c-.38-1.56-2.6-1.56-2.98 0a1.532 1.532 0 01-2.286.948c-1.372-.836-2.942.734-2.106 2.106.54.886.061 2.042-.947 2.287-1.561.379-1.561 2.6 0 2.978a1.532 1.532 0 01.947 2.287c-.836 1.372.734 2.942 2.106 2.106a1.532 1.532 0 012.287.947c.379 1.561 2.6 1.561 2.978 0a1.533 1.533 0 012.287-.947c1.372.836 2.942-.734 2.106-2.106a1.533 1.533 0 01.947-2.287c1.561-.379 1.561-2.6 0-2.978a1.532 1.532 0 01-.947-2.287c.836-1.372-.734-2.942-2.106-2.106a1.532 1.532 0 01-2.287-.947zM10 13a3 3 0 100-6 3 3 0 000 6z" clip-rule="evenodd"/>
+                                    </svg>
+                                </div>
+                                <p class="text-sm font-bold text-gray-900 text-center">Scopus</p>
+                                <p class="text-xs text-gray-600 text-center mt-1">Database Elsevier</p>
+                            </a>
+                            @endif
+                        </div>
+                    </div>
+                </div>
+                @endif
             </div>
         </div>
     </div>
