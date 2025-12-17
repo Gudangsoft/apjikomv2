@@ -26,6 +26,11 @@ class AboutPageController extends Controller
             'about_stat1_label' => 'nullable|string|max:100',
             'about_stat2_label' => 'nullable|string|max:100',
             'about_stat3_label' => 'nullable|string|max:100',
+            'about_structure_title' => 'required|string|max:255',
+            'about_cta_title' => 'required|string|max:255',
+            'about_cta_subtitle' => 'required|string|max:500',
+            'about_cta_button1_text' => 'nullable|string|max:100',
+            'about_cta_button2_text' => 'nullable|string|max:100',
         ]);
 
         foreach ($validated as $key => $value) {
