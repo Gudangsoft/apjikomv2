@@ -295,6 +295,8 @@ class MemberDashboardController extends Controller
                 'sinta_link' => 'nullable|url|max:255',
                 'orcid_link' => 'nullable|url|max:255',
                 'scopus_link' => 'nullable|url|max:255',
+                'cv_file' => 'nullable|file|mimes:pdf,doc,docx|max:5120', // 5MB
+                'delete_cv' => 'nullable|in:0,1',
             ], [
                 'name.required' => 'Nama lengkap harus diisi',
                 'email.required' => 'Email harus diisi',
@@ -304,8 +306,19 @@ class MemberDashboardController extends Controller
                 'linkedin.url' => 'Format URL LinkedIn tidak valid',
                 'facebook.url' => 'Format URL Facebook tidak valid',
                 'expertise.max' => 'Keahlian maksimal 300 karakter',
-                'bio.max' => 'Biografi maksimal 500 karakter',
+                'cv_file.mimes' => 'CV harus berformat PDF, DOC, atau DOCX',
+                'cv_file.max' => 'Ukuran CV maksimal 5MB',
             ]);
+            
+            // Validate bio word count (300 words max)
+            if ($request->filled('bio')) {
+                $wordCount = str_word_count($request->bio);
+                if ($wordCount > 300) {
+                    throw \Illuminate\Validation\ValidationException::withMessages([
+                        'bio' => "Biografi maksimal 300 kata. Saat ini: {$wordCount} kata."
+                    ]);
+                }
+            }
             
             \Log::info('Validation passed');
         } catch (\Illuminate\Validation\ValidationException $e) {
@@ -324,6 +337,26 @@ class MemberDashboardController extends Controller
             \Log::error('Failed to update user:', ['error' => $e->getMessage()]);
             return redirect()->back()
                 ->with('error', 'Gagal update user: ' . $e->getMessage());
+        }
+
+        // Handle CV file upload
+        if ($request->hasFile('cv_file')) {
+            // Delete old CV if exists
+            if ($member->cv_file && Storage::disk('public')->exists($member->cv_file)) {
+                Storage::disk('public')->delete($member->cv_file);
+            }
+            
+            // Upload new CV
+            $cvPath = $request->file('cv_file')->store('cv', 'public');
+            $member->cv_file = $cvPath;
+        }
+        
+        // Handle CV deletion
+        if ($request->delete_cv == '1' && $member->cv_file) {
+            if (Storage::disk('public')->exists($member->cv_file)) {
+                Storage::disk('public')->delete($member->cv_file);
+            }
+            $member->cv_file = null;
         }
 
         // Update member data
@@ -345,6 +378,7 @@ class MemberDashboardController extends Controller
                 'sinta_link' => $request->sinta_link,
                 'orcid_link' => $request->orcid_link,
                 'scopus_link' => $request->scopus_link,
+                'cv_file' => $member->cv_file,
             ]);
             \Log::info('Member updated successfully');
         } catch (\Exception $e) {
