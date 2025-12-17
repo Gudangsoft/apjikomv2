@@ -136,8 +136,8 @@ class MemberCardGenerator
         $this->addLabelValueClean($img, 'Nama', $name, $dataStartX, $currentY);
         $currentY += $lineSpacing;
 
-        // Institusi
-        $institution = $this->truncateText($member->institution_name ?: '-', 28);
+        // Institusi (diperpanjang dari 28 ke 45 karakter untuk nama institusi yang lebih panjang)
+        $institution = $this->truncateText($member->institution_name ?: '-', 45);
         $this->addLabelValueClean($img, 'Institusi', $institution, $dataStartX, $currentY);
         $currentY += $lineSpacing;
 
