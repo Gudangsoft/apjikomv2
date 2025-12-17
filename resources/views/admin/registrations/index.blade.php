@@ -45,9 +45,14 @@
     </div>
 
     <!-- Advanced Search & Filters -->
-    <div class="bg-white rounded-lg shadow mb-6 border">
-        <div class="p-4">
-            <h4 class="text-lg font-semibold text-gray-900 mb-4">🔍 Pencarian & Filter</h4>
+    <div class="bg-white rounded-lg shadow mb-6 border" id="searchFilterCard">
+        <div class="p-4 border-b bg-gray-50 flex items-center justify-between cursor-pointer" onclick="toggleSearchFilter()">
+            <h4 class="text-lg font-semibold text-gray-900">🔍 Pencarian & Filter</h4>
+            <svg id="filterToggleIcon" class="w-5 h-5 text-gray-600 transform transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+            </svg>
+        </div>
+        <div class="p-4" id="searchFilterContent">
             <form method="GET" action="{{ route('admin.registrations.index') }}">
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
                     <!-- Search -->
@@ -56,16 +61,6 @@
                         <input type="text" name="search" value="{{ request('search') }}" 
                                placeholder="Nama, email, phone, institusi..."
                                class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#00629B]">
-                    </div>
-
-                    <!-- Type Filter -->
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1">Tipe Anggota</label>
-                        <select name="type" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#00629B]">
-                            <option value="">Semua Tipe</option>
-                            <option value="individu" {{ request('type') == 'individu' ? 'selected' : '' }}>Individu</option>
-                            <option value="prodi" {{ request('type') == 'prodi' ? 'selected' : '' }}>Prodi</option>
-                        </select>
                     </div>
 
                     <!-- Status Filter -->
@@ -130,7 +125,7 @@
                         Menampilkan {{ $registrations->firstItem() ?? 0 }} - {{ $registrations->lastItem() ?? 0 }} dari {{ $registrations->total() }} pendaftaran
                     </div>
                     <div class="flex space-x-2">
-                        @if(request()->hasAny(['search', 'type', 'status', 'has_member', 'date_from', 'date_to', 'sort']))
+                        @if(request()->hasAny(['search', 'status', 'has_member', 'date_from', 'date_to', 'sort']))
                             <a href="{{ route('admin.registrations.index') }}" class="px-4 py-2 bg-gray-100 text-gray-700 rounded-md hover:bg-gray-200">
                                 Reset
                             </a>
@@ -266,4 +261,35 @@
         @endif
     </div>
 </div>
+
+<script>
+// Toggle Search Filter
+function toggleSearchFilter() {
+    const content = document.getElementById('searchFilterContent');
+    const icon = document.getElementById('filterToggleIcon');
+    
+    if (content.style.display === 'none') {
+        content.style.display = 'block';
+        icon.style.transform = 'rotate(0deg)';
+    } else {
+        content.style.display = 'none';
+        icon.style.transform = 'rotate(-90deg)';
+    }
+}
+
+// Keep filter open if there are active filters
+document.addEventListener('DOMContentLoaded', function() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const hasFilters = urlParams.has('search') || urlParams.has('status') || 
+                      urlParams.has('has_member') || urlParams.has('date_from') || urlParams.has('date_to');
+    
+    if (!hasFilters) {
+        // Collapse filter by default if no active filters
+        const content = document.getElementById('searchFilterContent');
+        const icon = document.getElementById('filterToggleIcon');
+        content.style.display = 'none';
+        icon.style.transform = 'rotate(-90deg)';
+    }
+});
+</script>
 @endsection
