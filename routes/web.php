@@ -185,6 +185,7 @@ Route::prefix('admin')->name('admin.')->middleware(['auth'])->group(function () 
     Route::post('members/{member}/verify', [AdminMemberController::class, 'verify'])->name('members.verify');
     Route::post('members/{member}/unverify', [AdminMemberController::class, 'unverify'])->name('members.unverify');
     Route::post('members/{member}/upload-verification-document', [AdminMemberController::class, 'uploadVerificationDocument'])->name('members.upload-verification-document');
+    Route::post('members/bulk-verify', [AdminMemberController::class, 'bulkVerify'])->name('members.bulk-verify');
     
     // Member Card Templates
     Route::resource('card-templates', AdminMemberCardTemplateController::class);

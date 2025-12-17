@@ -7,6 +7,32 @@
     <h3 class="text-2xl font-bold text-gray-900">Daftar Members</h3>
 </div>
 
+@if(session('success'))
+<div class="mb-6 bg-green-50 border-l-4 border-green-500 p-4 rounded-lg">
+    <div class="flex items-start">
+        <svg class="w-6 h-6 text-green-500 mr-3 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+        </svg>
+        <div class="flex-1">
+            <p class="text-sm font-medium text-green-800">{{ session('success') }}</p>
+        </div>
+    </div>
+</div>
+@endif
+
+@if(session('info'))
+<div class="mb-6 bg-blue-50 border-l-4 border-blue-500 p-4 rounded-lg">
+    <div class="flex items-start">
+        <svg class="w-6 h-6 text-blue-500 mr-3 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+        </svg>
+        <div class="flex-1">
+            <p class="text-sm font-medium text-blue-800">{{ session('info') }}</p>
+        </div>
+    </div>
+</div>
+@endif
+
 <!-- Tutorial Note -->
 <div class="mb-6 bg-blue-50 border-l-4 border-blue-500 p-4 rounded-lg">
     <div class="flex items-start">
@@ -233,6 +259,82 @@
         </div>
     </form>
 </div>
+
+<!-- Bulk Actions -->
+@php
+    $unverifiedCount = \App\Models\Member::where('is_verified', false)->count();
+@endphp
+
+@if($unverifiedCount > 0)
+<div class="mb-6 bg-white rounded-lg shadow p-4 border-l-4 border-green-500" x-data="{ showConfirm: false }">
+    <div class="flex items-center justify-between">
+        <div class="flex items-center space-x-4">
+            <div>
+                <h4 class="text-sm font-semibold text-gray-900 flex items-center space-x-2">
+                    <svg class="w-5 h-5 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                    </svg>
+                    <span>Verifikasi Member Massal</span>
+                </h4>
+                <p class="text-xs text-gray-600 mt-1">
+                    Ada <strong class="text-green-600">{{ $unverifiedCount }} member</strong> yang belum diverifikasi
+                </p>
+            </div>
+        </div>
+        
+        <button type="button" 
+                @click="showConfirm = true"
+                class="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition flex items-center space-x-2 shadow-sm">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+            </svg>
+            <span>Verifikasi {{ $unverifiedCount }} Member</span>
+        </button>
+    </div>
+    
+    <!-- Confirmation Modal -->
+    <div x-show="showConfirm" 
+         x-cloak
+         @click.away="showConfirm = false"
+         class="fixed inset-0 z-50 overflow-y-auto" 
+         style="display: none;">
+        <div class="flex items-center justify-center min-h-screen px-4">
+            <div class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity"></div>
+            
+            <div class="relative bg-white rounded-lg max-w-md w-full p-6 shadow-xl">
+                <div class="flex items-center justify-center w-12 h-12 mx-auto bg-green-100 rounded-full mb-4">
+                    <svg class="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                    </svg>
+                </div>
+                
+                <h3 class="text-lg font-semibold text-gray-900 text-center mb-2">
+                    Verifikasi Semua Member?
+                </h3>
+                <p class="text-sm text-gray-600 text-center mb-6">
+                    Anda akan memverifikasi <strong class="text-green-600">{{ $unverifiedCount }} member</strong> yang belum diverifikasi. 
+                    Member yang sudah diverifikasi tidak akan terpengaruh.
+                </p>
+                
+                <form action="{{ route('admin.members.bulk-verify') }}" method="POST">
+                    @csrf
+                    <div class="flex space-x-3">
+                        <button type="button" 
+                                @click="showConfirm = false"
+                                class="flex-1 px-4 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition">
+                            Batal
+                        </button>
+                        <button type="submit" 
+                                class="flex-1 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition">
+                            Ya, Verifikasi Semua
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+@endif
 
 <div class="bg-white rounded-lg shadow overflow-hidden" id="tableContainer">
     <table class="min-w-full divide-y divide-gray-200">
