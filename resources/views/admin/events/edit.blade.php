@@ -173,10 +173,69 @@
                     </div>
                     
                     <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-2">Biaya Pendaftaran (Rp)</label>
-                        <input type="number" name="registration_fee" value="{{ old('registration_fee', $event->registration_fee) }}" min="0" step="0.01"
-                               placeholder="0 untuk gratis"
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Jenis Biaya</label>
+                        <div class="flex gap-4">
+                            <label class="flex items-center p-3 border rounded cursor-pointer hover:bg-gray-50 {{ !old('is_paid', $event->is_paid) ? 'border-green-500 bg-green-50' : '' }}">
+                                <input type="radio" name="is_paid" value="0" {{ !old('is_paid', $event->is_paid) ? 'checked' : '' }} 
+                                       class="text-green-600" onchange="togglePaymentFields()">
+                                <span class="ml-2 font-medium text-green-700">🆓 Gratis</span>
+                            </label>
+                            <label class="flex items-center p-3 border rounded cursor-pointer hover:bg-gray-50 {{ old('is_paid', $event->is_paid) ? 'border-blue-500 bg-blue-50' : '' }}">
+                                <input type="radio" name="is_paid" value="1" {{ old('is_paid', $event->is_paid) ? 'checked' : '' }} 
+                                       class="text-blue-600" onchange="togglePaymentFields()">
+                                <span class="ml-2 font-medium text-blue-700">💰 Berbayar</span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Payment Details (show when paid) -->
+                <div id="paymentDetails" class="bg-blue-50 border border-blue-200 rounded-lg p-4 space-y-4 mb-4 {{ old('is_paid', $event->is_paid) ? '' : 'hidden' }}">
+                    <h4 class="font-semibold text-blue-800 flex items-center gap-2">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"></path>
+                        </svg>
+                        Informasi Pembayaran
+                    </h4>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Nominal Biaya (Rp) *</label>
+                            <input type="number" name="registration_fee" value="{{ old('registration_fee', $event->registration_fee) }}" min="0" step="1000"
+                                   placeholder="Contoh: 50000"
+                                   class="w-full px-4 py-2 border rounded focus:ring-2 focus:ring-[#00629B]">
+                        </div>
+                        
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Nama Bank *</label>
+                            <input type="text" name="bank_name" value="{{ old('bank_name', $event->bank_name) }}"
+                                   placeholder="Contoh: BCA, Mandiri, BNI"
+                                   class="w-full px-4 py-2 border rounded focus:ring-2 focus:ring-[#00629B]">
+                        </div>
+                    </div>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Nomor Rekening *</label>
+                            <input type="text" name="bank_account" value="{{ old('bank_account', $event->bank_account) }}"
+                                   placeholder="Contoh: 1234567890"
+                                   class="w-full px-4 py-2 border rounded focus:ring-2 focus:ring-[#00629B]">
+                        </div>
+                        
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Nama Pemilik Rekening *</label>
+                            <input type="text" name="bank_account_name" value="{{ old('bank_account_name', $event->bank_account_name) }}"
+                                   placeholder="Contoh: APJIKOM Indonesia"
+                                   class="w-full px-4 py-2 border rounded focus:ring-2 focus:ring-[#00629B]">
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Kontak Konfirmasi Pembayaran *</label>
+                        <input type="text" name="payment_contact" value="{{ old('payment_contact', $event->payment_contact) }}"
+                               placeholder="Contoh: 08123456789 (WhatsApp)"
                                class="w-full px-4 py-2 border rounded focus:ring-2 focus:ring-[#00629B]">
+                        <p class="text-xs text-gray-500 mt-1">Nomor WhatsApp/telepon untuk konfirmasi pembayaran</p>
                     </div>
                 </div>
                 
@@ -353,8 +412,21 @@ function toggleRegistrationFields() {
     }
 }
 
+// Toggle payment fields
+function togglePaymentFields() {
+    const isPaid = document.querySelector('input[name="is_paid"]:checked')?.value === '1';
+    const paymentDetails = document.getElementById('paymentDetails');
+    
+    if (isPaid) {
+        paymentDetails.classList.remove('hidden');
+    } else {
+        paymentDetails.classList.add('hidden');
+    }
+}
+
 // Initialize on page load
 toggleEventFields();
 toggleRegistrationFields();
+togglePaymentFields();
 </script>
 @endsection

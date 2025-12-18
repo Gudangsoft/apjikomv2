@@ -22,6 +22,11 @@ class Event extends Model
         'registration_requirements',
         'participant_quota',
         'registration_fee',
+        'is_paid',
+        'bank_name',
+        'bank_account',
+        'bank_account_name',
+        'payment_contact',
         'registration_link',
         'is_published',
         'is_featured', // untuk ditampilkan di homepage
@@ -33,6 +38,7 @@ class Event extends Model
         'is_featured' => 'boolean',
         'has_registration' => 'boolean',
         'has_certificate' => 'boolean',
+        'is_paid' => 'boolean',
         'registration_fee' => 'decimal:2',
     ];
 

@@ -1,14 +1,14 @@
-@extends('layouts.admin')
 
-@section('page-title', 'Tambah Kegiatan')
 
-@push('scripts')
+<?php $__env->startSection('page-title', 'Tambah Kegiatan'); ?>
+
+<?php $__env->startPush('scripts'); ?>
 <script src="https://cdn.jsdelivr.net/npm/tinymce@6/tinymce.min.js" referrerpolicy="origin"></script>
-@endpush
+<?php $__env->stopPush(); ?>
 
-@section('content')
+<?php $__env->startSection('content'); ?>
 <div class="mb-6">
-    <a href="{{ route('admin.events.index') }}" class="text-[#00629B] hover:text-[#003A5D] flex items-center space-x-2">
+    <a href="<?php echo e(route('admin.events.index')); ?>" class="text-[#00629B] hover:text-[#003A5D] flex items-center space-x-2">
         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
         </svg>
@@ -19,43 +19,86 @@
 <div class="bg-white rounded-lg shadow p-6">
     <h3 class="text-2xl font-bold text-gray-900 mb-6">Tambah Kegiatan Baru</h3>
     
-    <form method="POST" action="{{ route('admin.events.store') }}" enctype="multipart/form-data">
-        @csrf
+    <form method="POST" action="<?php echo e(route('admin.events.store')); ?>" enctype="multipart/form-data">
+        <?php echo csrf_field(); ?>
         
         <div class="mb-6">
             <label class="block text-sm font-medium text-gray-700 mb-2">Judul Kegiatan *</label>
-            <input type="text" name="title" value="{{ old('title') }}" required
-                   class="w-full px-4 py-2 border rounded focus:ring-2 focus:ring-[#00629B] @error('title') border-red-500 @enderror">
-            @error('title')
-                <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
-            @enderror
+            <input type="text" name="title" value="<?php echo e(old('title')); ?>" required
+                   class="w-full px-4 py-2 border rounded focus:ring-2 focus:ring-[#00629B] <?php $__errorArgs = ['title'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?> border-red-500 <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>">
+            <?php $__errorArgs = ['title'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                <p class="text-red-500 text-sm mt-1"><?php echo e($message); ?></p>
+            <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
         </div>
         
         <div class="mb-6">
             <label class="block text-sm font-medium text-gray-700 mb-2">Kategori</label>
-            <select name="category_id" class="w-full px-4 py-2 border rounded focus:ring-2 focus:ring-[#00629B] @error('category_id') border-red-500 @enderror">
+            <select name="category_id" class="w-full px-4 py-2 border rounded focus:ring-2 focus:ring-[#00629B] <?php $__errorArgs = ['category_id'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?> border-red-500 <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>">
                 <option value="">-- Pilih Kategori --</option>
-                @foreach($categories as $category)
-                    <option value="{{ $category->id }}" {{ old('category_id') == $category->id ? 'selected' : '' }}>
-                        {{ $category->name }}
+                <?php $__currentLoopData = $categories; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $category): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                    <option value="<?php echo e($category->id); ?>" <?php echo e(old('category_id') == $category->id ? 'selected' : ''); ?>>
+                        <?php echo e($category->name); ?>
+
                     </option>
-                @endforeach
+                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
             </select>
             <p class="text-xs text-gray-500 mt-1">Kategori untuk mengelompokkan jenis kegiatan (opsional)</p>
-            @error('category_id')
-                <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
-            @enderror
+            <?php $__errorArgs = ['category_id'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                <p class="text-red-500 text-sm mt-1"><?php echo e($message); ?></p>
+            <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
         </div>
         
         <div class="mb-6">
             <label class="block text-sm font-medium text-gray-700 mb-2">Gambar Event *</label>
             <input type="file" name="image" accept="image/*" required
-                   class="w-full px-4 py-2 border rounded focus:ring-2 focus:ring-[#00629B] @error('image') border-red-500 @enderror"
+                   class="w-full px-4 py-2 border rounded focus:ring-2 focus:ring-[#00629B] <?php $__errorArgs = ['image'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?> border-red-500 <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>"
                    onchange="previewImage(event)">
             <p class="text-xs text-gray-500 mt-1">Format: JPG, PNG, GIF, WEBP. Maksimal 2MB. Rekomendasi ukuran: 800x600px</p>
-            @error('image')
-                <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
-            @enderror
+            <?php $__errorArgs = ['image'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                <p class="text-red-500 text-sm mt-1"><?php echo e($message); ?></p>
+            <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
             
             <!-- Preview Image -->
             <div id="imagePreview" class="mt-3 hidden">
@@ -66,25 +109,53 @@
         <div class="mb-6">
             <label class="block text-sm font-medium text-gray-700 mb-2">Deskripsi *</label>
             <textarea id="description" name="description" rows="6" required
-                      class="w-full px-4 py-2 border rounded focus:ring-2 focus:ring-[#00629B] @error('description') border-red-500 @enderror">{{ old('description') }}</textarea>
-            @error('description')
-                <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
-            @enderror
+                      class="w-full px-4 py-2 border rounded focus:ring-2 focus:ring-[#00629B] <?php $__errorArgs = ['description'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?> border-red-500 <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>"><?php echo e(old('description')); ?></textarea>
+            <?php $__errorArgs = ['description'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                <p class="text-red-500 text-sm mt-1"><?php echo e($message); ?></p>
+            <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
         </div>
         
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
             <div>
                 <label class="block text-sm font-medium text-gray-700 mb-2">Tanggal *</label>
-                <input type="date" name="event_date" value="{{ old('event_date') }}" required
-                       class="w-full px-4 py-2 border rounded focus:ring-2 focus:ring-[#00629B] @error('event_date') border-red-500 @enderror">
-                @error('event_date')
-                    <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
-                @enderror
+                <input type="date" name="event_date" value="<?php echo e(old('event_date')); ?>" required
+                       class="w-full px-4 py-2 border rounded focus:ring-2 focus:ring-[#00629B] <?php $__errorArgs = ['event_date'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?> border-red-500 <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>">
+                <?php $__errorArgs = ['event_date'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                    <p class="text-red-500 text-sm mt-1"><?php echo e($message); ?></p>
+                <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
             </div>
             
             <div>
                 <label class="block text-sm font-medium text-gray-700 mb-2">Waktu</label>
-                <input type="time" name="event_time" value="{{ old('event_time') }}"
+                <input type="time" name="event_time" value="<?php echo e(old('event_time')); ?>"
                        class="w-full px-4 py-2 border rounded focus:ring-2 focus:ring-[#00629B]">
             </div>
         </div>
@@ -93,18 +164,18 @@
         <div class="mb-6">
             <label class="block text-sm font-medium text-gray-700 mb-2">Jenis Pelaksanaan *</label>
             <div class="grid grid-cols-3 gap-4">
-                <label class="flex items-center p-4 border rounded cursor-pointer hover:bg-gray-50 {{ old('event_type') == 'offline' || !old('event_type') ? 'border-purple-500 bg-purple-50' : '' }}">
-                    <input type="radio" name="event_type" value="offline" {{ old('event_type', 'offline') == 'offline' ? 'checked' : '' }} 
+                <label class="flex items-center p-4 border rounded cursor-pointer hover:bg-gray-50 <?php echo e(old('event_type') == 'offline' || !old('event_type') ? 'border-purple-500 bg-purple-50' : ''); ?>">
+                    <input type="radio" name="event_type" value="offline" <?php echo e(old('event_type', 'offline') == 'offline' ? 'checked' : ''); ?> 
                            class="text-purple-600" onchange="toggleEventFields()">
                     <span class="ml-2 font-medium">Offline</span>
                 </label>
-                <label class="flex items-center p-4 border rounded cursor-pointer hover:bg-gray-50 {{ old('event_type') == 'online' ? 'border-purple-500 bg-purple-50' : '' }}">
-                    <input type="radio" name="event_type" value="online" {{ old('event_type') == 'online' ? 'checked' : '' }} 
+                <label class="flex items-center p-4 border rounded cursor-pointer hover:bg-gray-50 <?php echo e(old('event_type') == 'online' ? 'border-purple-500 bg-purple-50' : ''); ?>">
+                    <input type="radio" name="event_type" value="online" <?php echo e(old('event_type') == 'online' ? 'checked' : ''); ?> 
                            class="text-purple-600" onchange="toggleEventFields()">
                     <span class="ml-2 font-medium">Online</span>
                 </label>
-                <label class="flex items-center p-4 border rounded cursor-pointer hover:bg-gray-50 {{ old('event_type') == 'hybrid' ? 'border-purple-500 bg-purple-50' : '' }}">
-                    <input type="radio" name="event_type" value="hybrid" {{ old('event_type') == 'hybrid' ? 'checked' : '' }} 
+                <label class="flex items-center p-4 border rounded cursor-pointer hover:bg-gray-50 <?php echo e(old('event_type') == 'hybrid' ? 'border-purple-500 bg-purple-50' : ''); ?>">
+                    <input type="radio" name="event_type" value="hybrid" <?php echo e(old('event_type') == 'hybrid' ? 'checked' : ''); ?> 
                            class="text-purple-600" onchange="toggleEventFields()">
                     <span class="ml-2 font-medium">Hybrid</span>
                 </label>
@@ -114,17 +185,31 @@
         <!-- Location (for offline/hybrid) -->
         <div class="mb-6" id="locationField">
             <label class="block text-sm font-medium text-gray-700 mb-2">Lokasi <span class="text-red-500">*</span></label>
-            <input type="text" name="location" value="{{ old('location') }}"
-                   class="w-full px-4 py-2 border rounded focus:ring-2 focus:ring-[#00629B] @error('location') border-red-500 @enderror">
-            @error('location')
-                <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
-            @enderror
+            <input type="text" name="location" value="<?php echo e(old('location')); ?>"
+                   class="w-full px-4 py-2 border rounded focus:ring-2 focus:ring-[#00629B] <?php $__errorArgs = ['location'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?> border-red-500 <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>">
+            <?php $__errorArgs = ['location'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                <p class="text-red-500 text-sm mt-1"><?php echo e($message); ?></p>
+            <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
         </div>
         
         <!-- Online Platform (for online/hybrid) -->
         <div class="mb-6 hidden" id="platformField">
             <label class="block text-sm font-medium text-gray-700 mb-2">Platform Online <span class="text-red-500">*</span></label>
-            <input type="text" name="online_platform" value="{{ old('online_platform') }}"
+            <input type="text" name="online_platform" value="<?php echo e(old('online_platform')); ?>"
                    placeholder="Contoh: Zoom, Google Meet, Microsoft Teams"
                    class="w-full px-4 py-2 border rounded focus:ring-2 focus:ring-[#00629B]">
             <p class="text-xs text-gray-500 mt-1">Platform yang digunakan untuk event online</p>
@@ -137,7 +222,8 @@
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-4">
                 <div>
                     <label class="flex items-center space-x-2 cursor-pointer">
-                        <input type="checkbox" name="has_registration" value="1" {{ old('has_registration') ? 'checked' : '' }}
+                        <input type="checkbox" name="has_registration" value="1" <?php echo e(old('has_registration') ? 'checked' : ''); ?>
+
                                class="w-4 h-4 text-purple-600 border-gray-300 rounded" onchange="toggleRegistrationFields()">
                         <span class="text-sm font-medium text-gray-700">Memerlukan Pendaftaran</span>
                     </label>
@@ -145,18 +231,19 @@
                 
                 <div>
                     <label class="flex items-center space-x-2 cursor-pointer">
-                        <input type="checkbox" name="has_certificate" value="1" {{ old('has_certificate') ? 'checked' : '' }}
+                        <input type="checkbox" name="has_certificate" value="1" <?php echo e(old('has_certificate') ? 'checked' : ''); ?>
+
                                class="w-4 h-4 text-purple-600 border-gray-300 rounded">
                         <span class="text-sm font-medium text-gray-700">Menyediakan Sertifikat</span>
                     </label>
                 </div>
             </div>
             
-            <div id="registrationDetails" class="space-y-4 {{ old('has_registration') ? '' : 'hidden' }}">
+            <div id="registrationDetails" class="space-y-4 <?php echo e(old('has_registration') ? '' : 'hidden'); ?>">
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-2">Kuota Peserta</label>
-                        <input type="number" name="participant_quota" value="{{ old('participant_quota') }}" min="1"
+                        <input type="number" name="participant_quota" value="<?php echo e(old('participant_quota')); ?>" min="1"
                                placeholder="Contoh: 100"
                                class="w-full px-4 py-2 border rounded focus:ring-2 focus:ring-[#00629B]">
                         <p class="text-xs text-gray-500 mt-1">Kosongkan jika tidak terbatas</p>
@@ -165,13 +252,13 @@
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-2">Jenis Biaya</label>
                         <div class="flex gap-4">
-                            <label class="flex items-center p-3 border rounded cursor-pointer hover:bg-gray-50 {{ !old('is_paid') ? 'border-green-500 bg-green-50' : '' }}">
-                                <input type="radio" name="is_paid" value="0" {{ !old('is_paid') ? 'checked' : '' }} 
+                            <label class="flex items-center p-3 border rounded cursor-pointer hover:bg-gray-50 <?php echo e(!old('is_paid') ? 'border-green-500 bg-green-50' : ''); ?>">
+                                <input type="radio" name="is_paid" value="0" <?php echo e(!old('is_paid') ? 'checked' : ''); ?> 
                                        class="text-green-600" onchange="togglePaymentFields()">
                                 <span class="ml-2 font-medium text-green-700">🆓 Gratis</span>
                             </label>
-                            <label class="flex items-center p-3 border rounded cursor-pointer hover:bg-gray-50 {{ old('is_paid') ? 'border-blue-500 bg-blue-50' : '' }}">
-                                <input type="radio" name="is_paid" value="1" {{ old('is_paid') ? 'checked' : '' }} 
+                            <label class="flex items-center p-3 border rounded cursor-pointer hover:bg-gray-50 <?php echo e(old('is_paid') ? 'border-blue-500 bg-blue-50' : ''); ?>">
+                                <input type="radio" name="is_paid" value="1" <?php echo e(old('is_paid') ? 'checked' : ''); ?> 
                                        class="text-blue-600" onchange="togglePaymentFields()">
                                 <span class="ml-2 font-medium text-blue-700">💰 Berbayar</span>
                             </label>
@@ -180,7 +267,7 @@
                 </div>
                 
                 <!-- Payment Details (show when paid) -->
-                <div id="paymentDetails" class="bg-blue-50 border border-blue-200 rounded-lg p-4 space-y-4 {{ old('is_paid') ? '' : 'hidden' }}">
+                <div id="paymentDetails" class="bg-blue-50 border border-blue-200 rounded-lg p-4 space-y-4 <?php echo e(old('is_paid') ? '' : 'hidden'); ?>">
                     <h4 class="font-semibold text-blue-800 flex items-center gap-2">
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"></path>
@@ -191,14 +278,14 @@
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-2">Nominal Biaya (Rp) *</label>
-                            <input type="number" name="registration_fee" value="{{ old('registration_fee') }}" min="0" step="1000"
+                            <input type="number" name="registration_fee" value="<?php echo e(old('registration_fee')); ?>" min="0" step="1000"
                                    placeholder="Contoh: 50000"
                                    class="w-full px-4 py-2 border rounded focus:ring-2 focus:ring-[#00629B]">
                         </div>
                         
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-2">Nama Bank *</label>
-                            <input type="text" name="bank_name" value="{{ old('bank_name') }}"
+                            <input type="text" name="bank_name" value="<?php echo e(old('bank_name')); ?>"
                                    placeholder="Contoh: BCA, Mandiri, BNI"
                                    class="w-full px-4 py-2 border rounded focus:ring-2 focus:ring-[#00629B]">
                         </div>
@@ -207,14 +294,14 @@
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-2">Nomor Rekening *</label>
-                            <input type="text" name="bank_account" value="{{ old('bank_account') }}"
+                            <input type="text" name="bank_account" value="<?php echo e(old('bank_account')); ?>"
                                    placeholder="Contoh: 1234567890"
                                    class="w-full px-4 py-2 border rounded focus:ring-2 focus:ring-[#00629B]">
                         </div>
                         
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-2">Nama Pemilik Rekening *</label>
-                            <input type="text" name="bank_account_name" value="{{ old('bank_account_name') }}"
+                            <input type="text" name="bank_account_name" value="<?php echo e(old('bank_account_name')); ?>"
                                    placeholder="Contoh: APJIKOM Indonesia"
                                    class="w-full px-4 py-2 border rounded focus:ring-2 focus:ring-[#00629B]">
                         </div>
@@ -222,7 +309,7 @@
                     
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-2">Kontak Konfirmasi Pembayaran *</label>
-                        <input type="text" name="payment_contact" value="{{ old('payment_contact') }}"
+                        <input type="text" name="payment_contact" value="<?php echo e(old('payment_contact')); ?>"
                                placeholder="Contoh: 08123456789 (WhatsApp)"
                                class="w-full px-4 py-2 border rounded focus:ring-2 focus:ring-[#00629B]">
                         <p class="text-xs text-gray-500 mt-1">Nomor WhatsApp/telepon untuk konfirmasi pembayaran</p>
@@ -233,26 +320,41 @@
                     <label class="block text-sm font-medium text-gray-700 mb-2">Persyaratan Pendaftaran</label>
                     <textarea name="registration_requirements" rows="3"
                               class="w-full px-4 py-2 border rounded focus:ring-2 focus:ring-[#00629B]"
-                              placeholder="Contoh: KTP, CV, Surat Rekomendasi">{{ old('registration_requirements') }}</textarea>
+                              placeholder="Contoh: KTP, CV, Surat Rekomendasi"><?php echo e(old('registration_requirements')); ?></textarea>
                 </div>
             </div>
         </div>
         
         <div class="mb-6">
             <label class="block text-sm font-medium text-gray-700 mb-2">Link Pendaftaran</label>
-            <input type="url" name="registration_link" value="{{ old('registration_link') }}"
-                   class="w-full px-4 py-2 border rounded focus:ring-2 focus:ring-[#00629B] @error('registration_link') border-red-500 @enderror"
+            <input type="url" name="registration_link" value="<?php echo e(old('registration_link')); ?>"
+                   class="w-full px-4 py-2 border rounded focus:ring-2 focus:ring-[#00629B] <?php $__errorArgs = ['registration_link'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?> border-red-500 <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>"
                    placeholder="https://example.com/register">
             <p class="text-xs text-gray-500 mt-1">URL lengkap untuk pendaftaran kegiatan (opsional)</p>
-            @error('registration_link')
-                <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
-            @enderror
+            <?php $__errorArgs = ['registration_link'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                <p class="text-red-500 text-sm mt-1"><?php echo e($message); ?></p>
+            <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
         </div>
         
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
             <div>
                 <label class="flex items-center space-x-2 cursor-pointer">
-                    <input type="checkbox" name="is_published" value="1" {{ old('is_published') ? 'checked' : '' }}
+                    <input type="checkbox" name="is_published" value="1" <?php echo e(old('is_published') ? 'checked' : ''); ?>
+
                            class="w-4 h-4 text-purple-600 border-gray-300 rounded focus:ring-purple-500">
                     <span class="text-sm font-medium text-gray-700">Publikasikan</span>
                 </label>
@@ -261,7 +363,8 @@
             
             <div>
                 <label class="flex items-center space-x-2 cursor-pointer">
-                    <input type="checkbox" name="is_featured" value="1" {{ old('is_featured') ? 'checked' : '' }}
+                    <input type="checkbox" name="is_featured" value="1" <?php echo e(old('is_featured') ? 'checked' : ''); ?>
+
                            class="w-4 h-4 text-purple-600 border-gray-300 rounded focus:ring-purple-500">
                     <span class="text-sm font-medium text-gray-700">Tampilkan di Homepage</span>
                 </label>
@@ -270,7 +373,7 @@
         </div>
         
         <div class="flex justify-end space-x-3">
-            <a href="{{ route('admin.events.index') }}" class="px-6 py-2 border rounded text-gray-700 hover:bg-gray-50">
+            <a href="<?php echo e(route('admin.events.index')); ?>" class="px-6 py-2 border rounded text-gray-700 hover:bg-gray-50">
                 Batal
             </a>
             <button type="submit" class="px-6 py-2 bg-[#00629B] text-white rounded hover:bg-[#003A5D]">
@@ -346,7 +449,7 @@ tinymce.init({
         
         formData = new FormData();
         formData.append('file', blobInfo.blob(), blobInfo.filename());
-        formData.append('_token', '{{ csrf_token() }}');
+        formData.append('_token', '<?php echo e(csrf_token()); ?>');
         
         xhr.send(formData);
     },
@@ -419,4 +522,5 @@ toggleEventFields();
 toggleRegistrationFields();
 togglePaymentFields();
 </script>
-@endsection
+<?php $__env->stopSection(); ?>
+<?php echo $__env->make('layouts.admin', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?><?php /**PATH D:\LPKD-APJI\APJIKOM\resources\views/admin/events/create.blade.php ENDPATH**/ ?>
