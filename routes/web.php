@@ -87,7 +87,7 @@ Route::get('/member/login', [MemberDashboardController::class, 'showLogin'])->na
 Route::post('/member/login', [MemberDashboardController::class, 'login'])->name('member.login.post');
 
 // Member Dashboard (Protected)
-Route::prefix('member')->name('member.')->middleware('auth')->group(function () {
+Route::prefix('member')->name('member.')->middleware(['auth', 'member'])->group(function () {
     Route::get('/dashboard', [MemberDashboardController::class, 'index'])->name('dashboard');
     Route::get('/profile', [MemberDashboardController::class, 'profile'])->name('profile');
     Route::put('/profile', [MemberDashboardController::class, 'updateProfile'])->name('profile.update');
@@ -114,6 +114,7 @@ Route::prefix('member')->name('member.')->middleware('auth')->group(function () 
     Route::post('/events/{event}/register', [EventRegistrationController::class, 'register'])->name('events.register');
     Route::post('/events/{event}/cancel', [EventRegistrationController::class, 'cancel'])->name('events.cancel');
     Route::post('/events/{event}/upload-payment', [EventRegistrationController::class, 'uploadPayment'])->name('events.upload-payment');
+    Route::get('/events/{event}/certificate', [EventRegistrationController::class, 'downloadCertificate'])->name('events.certificate');
     Route::get('/my-events', [EventRegistrationController::class, 'myEvents'])->name('events.my');
     
     // Member Testimonials
@@ -153,7 +154,7 @@ Route::middleware('auth')->group(function () {
 });
 
 // Admin Routes
-Route::prefix('admin')->name('admin.')->middleware(['auth'])->group(function () {
+Route::prefix('admin')->name('admin.')->middleware(['auth', 'admin'])->group(function () {
     Route::get('/dashboard', [AdminController::class, 'dashboard'])->name('dashboard');
     
     // Image Upload for TinyMCE

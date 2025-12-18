@@ -108,6 +108,7 @@
                         <?php if(auth()->guard()->check()): ?>
                             <?php
                                 $registration = $event->registrations()->where('user_id', Auth::id())->first();
+                                $isPast = $event->event_date < now();
                             ?>
                             
                             <?php if($registration && $registration->status !== 'cancelled'): ?>
@@ -118,6 +119,27 @@
                                         </svg>
                                         Anda Sudah Terdaftar
                                     </div>
+                                    
+                                    <!-- Download Certificate Button -->
+                                    <?php if($registration->canDownloadCertificate()): ?>
+                                        <a href="<?php echo e(route('member.events.certificate', $event)); ?>" 
+                                           class="block w-full bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white px-4 py-3 rounded-xl font-semibold transition-all text-center">
+                                            <svg class="w-5 h-5 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                                            </svg>
+                                            Download Sertifikat
+                                        </a>
+                                    <?php elseif($event->has_certificate && $isPast): ?>
+                                        <?php if($event->is_paid && $registration->payment_status !== 'verified'): ?>
+                                            <div class="bg-yellow-50 border border-yellow-300 p-3 rounded-xl text-center">
+                                                <span class="text-yellow-700 text-sm">⚠️ Sertifikat tersedia setelah pembayaran diverifikasi</span>
+                                            </div>
+                                        <?php endif; ?>
+                                    <?php elseif($event->has_certificate && !$isPast): ?>
+                                        <div class="bg-blue-50 border border-blue-300 p-3 rounded-xl text-center">
+                                            <span class="text-blue-700 text-sm">🎓 Sertifikat tersedia setelah event selesai</span>
+                                        </div>
+                                    <?php endif; ?>
                                     
                                     <!-- Payment Upload for Paid Events -->
                                     <?php if($event->is_paid): ?>
@@ -199,14 +221,28 @@
                                         </svg>
                                         <?php echo e($event->registered_count ?? 0); ?> orang sudah terdaftar
                                     </p>
+                                    <?php if($event->has_certificate): ?>
+                                    <div class="mt-3 bg-purple-50 border border-purple-200 p-2 rounded-lg text-center">
+                                        <span class="text-purple-700 text-xs font-semibold">
+                                            🎓 Event ini menyediakan sertifikat
+                                        </span>
+                                    </div>
+                                    <?php endif; ?>
                                 </div>
                             <?php endif; ?>
                         <?php else: ?>
                             <div class="mt-6">
-                                <a href="<?php echo e(route('login')); ?>" 
+                                <a href="<?php echo e(route('member.login')); ?>" 
                                    class="block w-full bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white px-6 py-3 rounded-xl font-bold transition-all hover:shadow-lg transform hover:scale-105 text-center">
                                     Login untuk Daftar
                                 </a>
+                                <?php if($event->has_certificate): ?>
+                                <div class="mt-3 bg-purple-50 border border-purple-200 p-2 rounded-lg text-center">
+                                    <span class="text-purple-700 text-xs font-semibold">
+                                        🎓 Event ini menyediakan sertifikat
+                                    </span>
+                                </div>
+                                <?php endif; ?>
                             </div>
                         <?php endif; ?>
                         <?php endif; ?>
