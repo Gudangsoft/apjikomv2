@@ -9,12 +9,18 @@ use App\Services\NotificationService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class EventRegistrationController extends Controller
 {
     public function register(Request $request, Event $event)
     {
+        \Log::info('=== EVENT REGISTRATION CALLED ===');
+        \Log::info('Event ID: ' . $event->id);
+        \Log::info('Event Title: ' . $event->title);
+        
         $user = Auth::user();
+        \Log::info('User ID: ' . $user->id);
 
         // Check if already registered
         if ($event->isUserRegistered($user->id)) {
@@ -112,11 +118,72 @@ class EventRegistrationController extends Controller
 
     public function myEvents()
     {
-        $registrations = EventRegistration::with('event')
-            ->where('user_id', Auth::id())
-            ->orderBy('created_at', 'desc')
-            ->paginate(12);
+        $query = EventRegistration::with(['event', 'event.category'])
+            ->where('user_id', Auth::id());
+        
+        // Filter by status
+        $status = request('status', 'all');
+        if ($status === 'upcoming') {
+            $query->whereHas('event', function ($q) {
+                $q->where('event_date', '>=', now());
+            });
+        } elseif ($status === 'past') {
+            $query->whereHas('event', function ($q) {
+                $q->where('event_date', '<', now());
+            });
+        }
+        
+        $registrations = $query->orderBy('created_at', 'desc')->paginate(12);
 
         return view('member.events.my-events', compact('registrations'));
+    }
+
+    /**
+     * Download certificate for an event
+     */
+    public function downloadCertificate(Event $event)
+    {
+        $registration = EventRegistration::where('event_id', $event->id)
+            ->where('user_id', Auth::id())
+            ->where('status', '!=', 'cancelled')
+            ->first();
+
+        if (!$registration) {
+            return back()->with('error', 'Anda tidak terdaftar untuk event ini');
+        }
+
+        if (!$registration->canDownloadCertificate()) {
+            return back()->with('error', 'Sertifikat belum tersedia untuk event ini');
+        }
+
+        $user = Auth::user();
+        $member = $user->member;
+
+        // Generate certificate PDF
+        $pdf = Pdf::loadView('member.events.certificate', [
+            'event' => $event,
+            'registration' => $registration,
+            'user' => $user,
+            'member' => $member,
+            'certificate_number' => 'CERT/' . strtoupper(substr(md5($event->id . $user->id), 0, 8)) . '/' . $event->event_date->format('Y'),
+            'issued_date' => now(),
+        ]);
+
+        $pdf->setPaper('A4', 'landscape');
+
+        // Save certificate path if not already saved
+        if (!$registration->certificate_path) {
+            $filename = 'certificates/event-' . $event->id . '-user-' . $user->id . '.pdf';
+            Storage::disk('public')->put($filename, $pdf->output());
+            
+            $registration->update([
+                'certificate_path' => $filename,
+                'certificate_generated_at' => now(),
+            ]);
+        }
+
+        $filename = 'Sertifikat-' . str_replace(' ', '-', $event->title) . '-' . $user->name . '.pdf';
+
+        return $pdf->download($filename);
     }
 }

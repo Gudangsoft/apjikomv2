@@ -297,7 +297,29 @@
     </nav>
 
     <!-- Main Content -->
+
     <main>
+        @if(session('success'))
+            <div class="max-w-2xl mx-auto mt-6">
+                <div class="bg-green-100 border border-green-300 text-green-800 px-4 py-3 rounded-lg mb-4 text-center font-semibold">
+                    {{ session('success') }}
+                </div>
+            </div>
+        @endif
+        @if(session('error'))
+            <div class="max-w-2xl mx-auto mt-6">
+                <div class="bg-red-100 border border-red-300 text-red-800 px-4 py-3 rounded-lg mb-4 text-center font-semibold">
+                    {{ session('error') }}
+                </div>
+            </div>
+        @endif
+        @if(session('info'))
+            <div class="max-w-2xl mx-auto mt-6">
+                <div class="bg-blue-100 border border-blue-300 text-blue-800 px-4 py-3 rounded-lg mb-4 text-center font-semibold">
+                    {{ session('info') }}
+                </div>
+            </div>
+        @endif
         @yield('content')
     </main>
 
