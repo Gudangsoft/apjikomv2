@@ -398,61 +398,6 @@
         </div>
     </div>
 
-    <!-- Social Media Links -->
-    @if($socialMedia->isNotEmpty())
-    <div class="bg-white rounded-xl card-shadow p-6">
-        <div class="flex items-center justify-between mb-6">
-            <h3 class="text-xl font-bold text-gray-800 flex items-center gap-2">
-                <svg class="w-6 h-6 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z"></path>
-                </svg>
-                Ikuti Kami di Media Sosial
-            </h3>
-        </div>
-        
-        <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
-            @foreach($socialMedia as $social)
-                <a href="{{ $social->url }}" 
-                   target="_blank" 
-                   class="flex flex-col items-center justify-center p-6 bg-gradient-to-br from-gray-50 to-white hover:from-purple-50 hover:to-white border-2 border-gray-100 hover:border-purple-300 rounded-xl transition-all duration-300 hover:shadow-lg group"
-                   title="{{ $social->note }}">
-                    
-                    @if($social->icon)
-                        <!-- Uploaded Icon -->
-                        <div class="w-12 h-12 mb-3 flex items-center justify-center">
-                            <img src="{{ asset('storage/' . $social->icon) }}" 
-                                 alt="{{ $social->name }}" 
-                                 class="w-12 h-12 object-contain group-hover:scale-110 transition-transform duration-300">
-                        </div>
-                    @elseif($social->icon_class)
-                        <!-- Icon Class -->
-                        <div class="w-12 h-12 mb-3 flex items-center justify-center">
-                            <i class="{{ $social->icon_class }} text-4xl text-gray-700 group-hover:text-purple-600 transition-colors duration-300"></i>
-                        </div>
-                    @else
-                        <!-- Default Icon -->
-                        <div class="w-12 h-12 mb-3 flex items-center justify-center bg-purple-100 group-hover:bg-purple-200 rounded-full transition-colors duration-300">
-                            <svg class="w-6 h-6 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"></path>
-                            </svg>
-                        </div>
-                    @endif
-                    
-                    <span class="text-sm font-semibold text-gray-700 group-hover:text-purple-600 transition-colors duration-300">
-                        {{ $social->name }}
-                    </span>
-                    
-                    @if($social->note)
-                        <span class="text-xs text-gray-500 mt-1 text-center line-clamp-2">
-                            {{ Str::limit($social->note, 40) }}
-                        </span>
-                    @endif
-                </a>
-            @endforeach
-        </div>
-    </div>
-    @endif
-
     <!-- Statistics Overview -->
     <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
         <div class="bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl p-6 text-white shadow-lg">
