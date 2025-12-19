@@ -45,13 +45,31 @@
                         @elseif($isPast)
                             <div class="absolute top-2 right-2 flex gap-2">
                                 <span class="bg-gray-800/80 text-white px-3 py-1 rounded-full text-xs font-semibold">Selesai</span>
-                                @if($event->has_certificate && $registration->canDownloadCertificate())
-                                    <span class="bg-green-600 text-white px-3 py-1 rounded-full text-xs font-semibold flex items-center">
-                                        <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                                        </svg>
-                                        Sertifikat
-                                    </span>
+                                @if($event->has_certificate)
+                                    @if($registration->canDownloadCertificate())
+                                        @if($registration->hasCertificate())
+                                        <span class="bg-green-600 text-white px-3 py-1 rounded-full text-xs font-semibold flex items-center">
+                                            <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                                            </svg>
+                                            Sertifikat Tersedia
+                                        </span>
+                                        @else
+                                        <span class="bg-orange-600 text-white px-3 py-1 rounded-full text-xs font-semibold flex items-center">
+                                            <svg class="w-3 h-3 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                                                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd"/>
+                                            </svg>
+                                            Belum Tersedia
+                                        </span>
+                                        @endif
+                                    @else
+                                        <span class="bg-gray-600 text-white px-3 py-1 rounded-full text-xs font-semibold flex items-center">
+                                            <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                            </svg>
+                                            Sertifikat
+                                        </span>
+                                    @endif
                                 @endif
                             </div>
                         @else
@@ -118,13 +136,29 @@
                         </a>
                         
                         @if($registration->canDownloadCertificate())
-                            <a href="{{ route('member.events.certificate', $event) }}" 
-                               class="flex-shrink-0 px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded-lg font-medium text-sm transition flex items-center"
+                            @if($registration->hasCertificate())
+                            <a href="{{ route('member.certificates.download', $registration) }}" 
+                               class="flex-shrink-0 px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded-lg font-medium text-sm transition flex items-center gap-1"
                                title="Download Sertifikat">
                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
                                 </svg>
+                                <span class="hidden sm:inline">Sertifikat</span>
                             </a>
+                            @else
+                            <div class="relative group">
+                                <span class="flex-shrink-0 px-4 py-2 bg-gray-400 text-white rounded-lg font-medium text-sm flex items-center gap-1 cursor-not-allowed">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
+                                    </svg>
+                                    <span class="hidden sm:inline">Sertifikat</span>
+                                </span>
+                                <div class="hidden group-hover:block absolute bottom-full right-0 mb-2 w-64 bg-gray-900 text-white text-xs rounded-lg p-3 shadow-lg z-10">
+                                    <div class="font-semibold mb-1">📋 Sertifikat Belum Tersedia</div>
+                                    <div class="text-gray-300">Sertifikat belum digenerate oleh admin. Silakan hubungi admin untuk informasi lebih lanjut.</div>
+                                </div>
+                            </div>
+                            @endif
                         @endif
                         
                         @if(!$registration->isCancelled() && !$isPast)

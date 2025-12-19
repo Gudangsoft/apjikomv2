@@ -1,0 +1,421 @@
+
+
+<?php $__env->startSection('title', 'Kelola Pendaftaran'); ?>
+
+<?php $__env->startSection('content'); ?>
+<div class="container mx-auto px-4 py-6">
+    <!-- Header -->
+    <div class="mb-6">
+        <h1 class="text-2xl font-bold text-gray-900">Kelola Pendaftaran Anggota</h1>
+        <p class="text-gray-600">Kelola dan review pendaftaran anggota APJIKOM</p>
+    </div>
+
+    <!-- Tutorial Note -->
+    <div class="mb-6 bg-blue-50 border-l-4 border-blue-500 p-4 rounded-lg">
+        <div class="flex items-start">
+            <svg class="w-6 h-6 text-blue-500 mr-3 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+            </svg>
+            <div class="flex-1">
+                <h3 class="text-sm font-semibold text-blue-800 mb-1">📚 Tutorial Penggunaan</h3>
+                <p class="text-sm text-blue-700 mb-2">
+                    Halaman ini untuk <strong>review pendaftaran baru</strong> yang masuk dari publik. 
+                    Klik <strong>👁️ Lihat</strong> untuk review data → <strong>✅ Approve</strong> (otomatis jadi Member) atau <strong>❌ Reject</strong>.
+                </p>
+                <a href="<?php echo e(asset('TUTORIAL_ADMIN_MEMBER_REGISTRATION.md')); ?>" target="_blank" class="text-sm text-blue-600 hover:text-blue-800 font-medium underline">
+                    📖 Baca Tutorial Lengkap →
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <?php if(session('success')): ?>
+    <div class="bg-green-50 border border-green-200 text-green-800 px-4 py-3 rounded-lg mb-6">
+        <?php echo e(session('success')); ?>
+
+    </div>
+    <?php endif; ?>
+
+    <!-- Statistics Cards -->
+    <div class="grid grid-cols-2 md:grid-cols-6 gap-4 mb-6">
+        <div class="bg-white rounded-lg shadow p-4 border">
+            <div class="text-sm text-gray-600 mb-1">Total</div>
+            <div class="text-2xl font-bold text-gray-900"><?php echo e($stats['total']); ?></div>
+        </div>
+        <div class="bg-white rounded-lg shadow p-4 border">
+            <div class="text-sm text-gray-600 mb-1">Pending</div>
+            <div class="text-2xl font-bold text-yellow-600"><?php echo e($stats['pending']); ?></div>
+        </div>
+        <div class="bg-white rounded-lg shadow p-4 border">
+            <div class="text-sm text-gray-600 mb-1">Approved</div>
+            <div class="text-2xl font-bold text-green-600"><?php echo e($stats['approved']); ?></div>
+        </div>
+        <div class="bg-white rounded-lg shadow p-4 border">
+            <div class="text-sm text-gray-600 mb-1">Rejected</div>
+            <div class="text-2xl font-bold text-red-600"><?php echo e($stats['rejected']); ?></div>
+        </div>
+        <div class="bg-white rounded-lg shadow p-4 border">
+            <div class="text-sm text-gray-600 mb-1">Individu</div>
+            <div class="text-2xl font-bold text-purple-600"><?php echo e($stats['individu']); ?></div>
+        </div>
+        <div class="bg-white rounded-lg shadow p-4 border">
+            <div class="text-sm text-gray-600 mb-1">Prodi</div>
+            <div class="text-2xl font-bold text-purple-600"><?php echo e($stats['prodi']); ?></div>
+        </div>
+    </div>
+
+    <!-- Advanced Search & Filters with Alpine.js -->
+    <div class="bg-white rounded-lg shadow mb-6 border" x-data="registrationFilter()">
+        <div class="p-4 border-b bg-gray-50 flex items-center justify-between cursor-pointer" @click="filterOpen = !filterOpen">
+            <h4 class="text-lg font-semibold text-gray-900">🔍 Pencarian & Filter</h4>
+            <svg class="w-5 h-5 text-gray-600 transform transition-transform duration-200" :class="{'rotate-180': filterOpen}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+            </svg>
+        </div>
+        <div class="p-4" x-show="filterOpen" x-transition>
+            <form @submit.prevent="applyFilters">
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                    <!-- Search -->
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Cari</label>
+                        <input type="text" 
+                               x-model.debounce.500ms="filters.search"
+                               @input="applyFilters"
+                               placeholder="Nama, email, phone, institusi..."
+                               class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#00629B]">
+                    </div>
+
+                    <!-- Status Filter -->
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Status</label>
+                        <select x-model="filters.status" @change="applyFilters" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#00629B]">
+                            <option value="">Semua Status</option>
+                            <option value="pending">Pending</option>
+                            <option value="approved">Approved</option>
+                            <option value="rejected">Rejected</option>
+                        </select>
+                    </div>
+
+                    <!-- Member Status -->
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Status Member</label>
+                        <select x-model="filters.has_member" @change="applyFilters" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#00629B]">
+                            <option value="">Semua</option>
+                            <option value="yes">Sudah Jadi Member</option>
+                            <option value="no">Belum Jadi Member</option>
+                        </select>
+                    </div>
+
+                    <!-- Date From -->
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Tanggal Dari</label>
+                        <input type="date" 
+                               x-model="filters.date_from"
+                               @change="applyFilters"
+                               class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#00629B]">
+                    </div>
+
+                    <!-- Date To -->
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Tanggal Sampai</label>
+                        <input type="date" 
+                               x-model="filters.date_to"
+                               @change="applyFilters"
+                               class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#00629B]">
+                    </div>
+
+                    <!-- Sort -->
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Urutkan</label>
+                        <select x-model="filters.sort" @change="applyFilters" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#00629B]">
+                            <option value="latest">Terbaru</option>
+                            <option value="oldest">Terlama</option>
+                            <option value="name">Nama (A-Z)</option>
+                        </select>
+                    </div>
+
+                    <!-- Per Page -->
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Tampilkan</label>
+                        <select x-model="filters.per_page" @change="applyFilters" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#00629B]">
+                            <option value="15">15</option>
+                            <option value="25">25</option>
+                            <option value="50">50</option>
+                            <option value="100">100</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="mt-4 flex items-center justify-between">
+                    <div class="text-sm text-gray-600" x-html="recordInfo">
+                        Menampilkan <?php echo e($registrations->firstItem() ?? 0); ?> - <?php echo e($registrations->lastItem() ?? 0); ?> dari <?php echo e($registrations->total()); ?> pendaftaran
+                    </div>
+                    <div class="flex space-x-2">
+                        <button type="button" @click="resetFilters" class="px-4 py-2 bg-gray-100 text-gray-700 rounded-md hover:bg-gray-200">
+                            Reset
+                        </button>
+                        <button type="submit" class="px-4 py-2 bg-[#00629B] text-white rounded-md hover:bg-[#003A5D] flex items-center space-x-2">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                            </svg>
+                            <span>Cari</span>
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Registrations Table -->
+    <div class="bg-white rounded-lg shadow border overflow-hidden" id="tableContainer">
+        <div class="overflow-x-auto">
+            <table class="min-w-full divide-y divide-gray-200">
+                <thead class="bg-gray-50">
+                    <tr>
+                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">ID</th>
+                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Tipe</th>
+                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Member Anggota</th>
+                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Email</th>
+                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Phone</th>
+                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Member</th>
+                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Tanggal</th>
+                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Aksi</th>
+                    </tr>
+                </thead>
+                <tbody class="bg-white divide-y divide-gray-200" id="tableBody">
+                    <?php $__empty_1 = true; $__currentLoopData = $registrations; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $registration): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
+                    <tr class="hover:bg-gray-50">
+                        <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-900">
+                            #<?php echo e($registration->id); ?>
+
+                        </td>
+                        <td class="px-4 py-3 whitespace-nowrap">
+                            <?php if($registration->type == 'individu'): ?>
+                                <span class="px-2 py-1 text-xs font-medium rounded-full bg-blue-100 text-blue-800">
+                                    Individu
+                                </span>
+                            <?php else: ?>
+                                <span class="px-2 py-1 text-xs font-medium rounded-full bg-purple-100 text-purple-800">
+                                    Prodi
+                                </span>
+                            <?php endif; ?>
+                        </td>
+                        <td class="px-4 py-3" style="min-width: 250px; max-width: 350px;">
+                            <?php if($registration->type == 'prodi' && $registration->institution): ?>
+                                <div class="text-sm font-medium text-gray-900"><?php echo e($registration->institution); ?></div>
+                                <div class="text-xs text-gray-500">PIC: <?php echo e($registration->full_name); ?></div>
+                            <?php else: ?>
+                                <div class="text-sm font-medium text-gray-900"><?php echo e($registration->full_name); ?></div>
+                                <?php if($registration->institution): ?>
+                                    <div class="text-xs text-gray-500"><?php echo e($registration->institution); ?></div>
+                                <?php endif; ?>
+                            <?php endif; ?>
+                        </td>
+                        <td class="px-4 py-3 text-sm text-gray-900">
+                            <?php echo e($registration->email); ?>
+
+                        </td>
+                        <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-900">
+                            <?php echo e($registration->phone); ?>
+
+                        </td>
+                        <td class="px-4 py-3 whitespace-nowrap">
+                            <?php if($registration->status == 'pending'): ?>
+                                <span class="px-2 py-1 text-xs font-medium rounded-full bg-yellow-100 text-yellow-800">
+                                    Pending
+                                </span>
+                            <?php elseif($registration->status == 'approved'): ?>
+                                <span class="px-2 py-1 text-xs font-medium rounded-full bg-green-100 text-green-800">
+                                    Approved
+                                </span>
+                            <?php else: ?>
+                                <span class="px-2 py-1 text-xs font-medium rounded-full bg-red-100 text-red-800">
+                                    Rejected
+                                </span>
+                            <?php endif; ?>
+                        </td>
+                        <td class="px-4 py-3 whitespace-nowrap">
+                            <?php
+                                $user = \App\Models\User::where('email', $registration->email)->first();
+                                $member = $user ? \App\Models\Member::where('user_id', $user->id)->first() : null;
+                            ?>
+                            <?php if($member): ?>
+                                <a href="<?php echo e(route('admin.members.show', $member->id)); ?>" 
+                                   class="inline-flex items-center px-2 py-1 text-xs font-medium rounded-full bg-green-100 text-green-800 hover:bg-green-200">
+                                    <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                    </svg>
+                                    <?php echo e($member->member_number); ?>
+
+                                </a>
+                            <?php elseif($registration->status === 'approved'): ?>
+                                <span class="inline-flex items-center px-2 py-1 text-xs font-medium rounded-full bg-yellow-100 text-yellow-800">
+                                    <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path>
+                                    </svg>
+                                    Belum
+                                </span>
+                            <?php else: ?>
+                                <span class="text-xs text-gray-400">-</span>
+                            <?php endif; ?>
+                        </td>
+                        <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-500">
+                            <?php echo e($registration->created_at->format('d/m/Y')); ?>
+
+                        </td>
+                        <td class="px-4 py-3 whitespace-nowrap text-sm">
+                            <a href="<?php echo e(route('admin.registrations.show', $registration->id)); ?>" 
+                               class="text-purple-600 hover:text-purple-900 font-medium">
+                                Detail
+                            </a>
+                        </td>
+                    </tr>
+                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
+                    <tr>
+                        <td colspan="9" class="px-4 py-8 text-center text-gray-500">
+                            Tidak ada data pendaftaran.
+                        </td>
+                    </tr>
+                    <?php endif; ?>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Pagination -->
+        <div class="px-4 py-3 border-t" id="paginationContainer">
+            <?php if($registrations->hasPages()): ?>
+                <?php echo e($registrations->links()); ?>
+
+            <?php endif; ?>
+        </div>
+    </div>
+</div>
+<?php $__env->stopSection(); ?>
+
+<?php $__env->startPush('scripts'); ?>
+<script>
+// Alpine.js Filter Component
+function registrationFilter() {
+    return {
+        filterOpen: true,
+        loading: false,
+        filters: {
+            search: '<?php echo e(request("search")); ?>',
+            status: '<?php echo e(request("status")); ?>',
+            has_member: '<?php echo e(request("has_member")); ?>',
+            date_from: '<?php echo e(request("date_from")); ?>',
+            date_to: '<?php echo e(request("date_to")); ?>',
+            sort: '<?php echo e(request("sort", "latest")); ?>',
+            per_page: '<?php echo e(request("per_page", 15)); ?>'
+        },
+        currentPage: 1,
+        recordInfo: 'Menampilkan <?php echo e($registrations->firstItem() ?? 0); ?> - <?php echo e($registrations->lastItem() ?? 0); ?> dari <?php echo e($registrations->total()); ?> pendaftaran',
+        
+        init() {
+            // Bind pagination clicks on init
+            this.$nextTick(() => {
+                this.bindPaginationLinks();
+            });
+        },
+        
+        applyFilters() {
+            this.currentPage = 1;
+            this.loadData();
+        },
+        
+        resetFilters() {
+            this.filters = {
+                search: '',
+                status: '',
+                has_member: '',
+                date_from: '',
+                date_to: '',
+                sort: 'latest',
+                per_page: 15
+            };
+            this.currentPage = 1;
+            this.loadData();
+        },
+        
+        loadData(page = null) {
+            if (page) this.currentPage = page;
+            
+            const params = new URLSearchParams({
+                ...this.filters,
+                page: this.currentPage
+            });
+            
+            // Remove empty values
+            for (let [key, value] of [...params.entries()]) {
+                if (!value) params.delete(key);
+            }
+            
+            this.loading = true;
+            const tableBody = document.getElementById('tableBody');
+            tableBody.innerHTML = '<tr><td colspan="9" class="px-4 py-8 text-center"><div class="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-[#00629B]"></div><div class="mt-2 text-gray-600">Memuat data...</div></td></tr>';
+            
+            fetch(`<?php echo e(route("admin.registrations.index")); ?>?${params.toString()}`, {
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest'
+                }
+            })
+            .then(response => response.text())
+            .then(html => {
+                const parser = new DOMParser();
+                const doc = parser.parseFromString(html, 'text/html');
+                
+                // Update table body
+                const newTableBody = doc.querySelector('#tableBody');
+                if (newTableBody) {
+                    tableBody.innerHTML = newTableBody.innerHTML;
+                }
+                
+                // Update pagination
+                const newPagination = doc.querySelector('#paginationContainer');
+                const paginationContainer = document.getElementById('paginationContainer');
+                if (newPagination && paginationContainer) {
+                    paginationContainer.innerHTML = newPagination.innerHTML;
+                    this.bindPaginationLinks();
+                }
+                
+                // Update record info
+                const newRecordInfo = doc.querySelector('#recordInfo');
+                if (newRecordInfo) {
+                    this.recordInfo = newRecordInfo.innerHTML;
+                }
+                
+                this.loading = false;
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                tableBody.innerHTML = '<tr><td colspan="9" class="px-4 py-8 text-center text-red-600">Terjadi kesalahan saat memuat data. Silakan coba lagi.</td></tr>';
+                this.loading = false;
+            });
+        },
+        
+        bindPaginationLinks() {
+            document.querySelectorAll('#paginationContainer a').forEach(link => {
+                link.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    const url = link.getAttribute('href');
+                    if (url) {
+                        const urlParams = new URLSearchParams(url.split('?')[1]);
+                        const page = urlParams.get('page') || 1;
+                        this.loadData(page);
+                        
+                        // Scroll to top of table
+                        document.getElementById('tableContainer').scrollIntoView({ 
+                            behavior: 'smooth', 
+                            block: 'start' 
+                        });
+                    }
+                });
+            });
+        }
+    }
+}
+</script>
+<?php $__env->stopPush(); ?>
+
+<?php echo $__env->make('layouts.admin', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?><?php /**PATH D:\LPKD-APJI\APJIKOM\resources\views/admin/registrations/index.blade.php ENDPATH**/ ?>

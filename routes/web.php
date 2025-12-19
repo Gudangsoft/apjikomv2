@@ -4,6 +4,7 @@ use App\Http\Controllers\EventController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\MemberController;
 use App\Http\Controllers\MemberDirectoryController;
+use App\Http\Controllers\MemberCertificateController;
 use App\Http\Controllers\Member\TestimonialController as MemberTestimonialController;
 use App\Http\Controllers\NewsController;
 use App\Http\Controllers\ProfileController;
@@ -35,6 +36,8 @@ use App\Http\Controllers\Admin\PartnerController as AdminPartnerController;
 use App\Http\Controllers\Admin\SectionLabelController as AdminSectionLabelController;
 use App\Http\Controllers\Admin\MemberCardTemplateController as AdminMemberCardTemplateController;
 use App\Http\Controllers\Admin\ChangelogController as AdminChangelogController;
+use App\Http\Controllers\Admin\CertificateTemplateController as AdminCertificateTemplateController;
+use App\Http\Controllers\Admin\EventCertificateController as AdminEventCertificateController;
 
 // Public Routes
 Route::get('/', [HomeController::class, 'index'])->name('home');
@@ -117,6 +120,10 @@ Route::prefix('member')->name('member.')->middleware(['auth', 'member'])->group(
     Route::get('/events/{event}/certificate', [EventRegistrationController::class, 'downloadCertificate'])->name('events.certificate');
     Route::get('/my-events', [EventRegistrationController::class, 'myEvents'])->name('events.my');
     
+    // Member Certificates
+    Route::get('/certificates/{registration}/download', [MemberCertificateController::class, 'download'])->name('certificates.download');
+    Route::get('/certificates/{registration}/view', [MemberCertificateController::class, 'view'])->name('certificates.view');
+    
     // Member Testimonials
     Route::resource('testimonials', MemberTestimonialController::class)->except(['show']);
     
@@ -195,6 +202,15 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'admin'])->group(fun
     // Member Card Templates
     Route::resource('card-templates', AdminMemberCardTemplateController::class);
     Route::post('card-templates/{cardTemplate}/activate', [AdminMemberCardTemplateController::class, 'activate'])->name('card-templates.activate');
+    
+    // Certificate Templates Management
+    Route::resource('certificate-templates', AdminCertificateTemplateController::class);
+    Route::post('certificate-templates/{certificateTemplate}/activate', [AdminCertificateTemplateController::class, 'setActive'])->name('certificate-templates.activate');
+    
+    // Event Certificates Management
+    Route::post('certificates/{registration}/generate', [AdminEventCertificateController::class, 'generate'])->name('certificates.generate');
+    Route::post('certificates/bulk-generate', [AdminEventCertificateController::class, 'bulkGenerate'])->name('certificates.bulk-generate');
+    Route::delete('certificates/{registration}', [AdminEventCertificateController::class, 'destroy'])->name('certificates.destroy');
     
     // Categories Management
     Route::resource('categories', AdminCategoryController::class);
