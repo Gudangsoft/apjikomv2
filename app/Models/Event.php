@@ -18,6 +18,7 @@ class Event extends Model
         'event_type',
         'has_registration',
         'has_certificate',
+        'certificate_template',
         'online_platform',
         'registration_requirements',
         'participant_quota',

@@ -112,7 +112,7 @@
                     </div>
 
                     <div class="flex gap-2">
-                        <a href="{{ route('events.show', $event) }}" 
+                        <a href="{{ route('events.show', $event->slug) }}" 
                            class="flex-1 px-4 py-2 bg-purple-600 hover:bg-purple-700 text-white text-center rounded-lg font-medium text-sm transition">
                             Lihat Detail
                         </a>

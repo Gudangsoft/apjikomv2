@@ -9,7 +9,7 @@ use App\Services\NotificationService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
-use Barryvdh\DomPDF\Facade\Pdf;
+use Barryvdh\DomPDF\Facade\Pdf as PDF;
 
 class EventRegistrationController extends Controller
 {
@@ -152,21 +152,43 @@ class EventRegistrationController extends Controller
             return back()->with('error', 'Anda tidak terdaftar untuk event ini');
         }
 
-        if (!$registration->canDownloadCertificate()) {
-            return back()->with('error', 'Sertifikat belum tersedia untuk event ini');
+        // Check conditions for certificate download
+        if (!$event->has_certificate) {
+            return back()->with('error', 'Event ini tidak menyediakan sertifikat');
+        }
+
+        if ($event->event_date >= now()) {
+            return back()->with('error', 'Sertifikat hanya tersedia setelah event selesai');
+        }
+
+        if ($registration->status === 'cancelled') {
+            return back()->with('error', 'Pendaftaran Anda telah dibatalkan');
+        }
+
+        if ($event->is_paid && $registration->payment_status !== 'verified') {
+            return back()->with('error', 'Pembayaran Anda belum diverifikasi. Silakan hubungi admin.');
         }
 
         $user = Auth::user();
         $member = $user->member;
 
-        // Generate certificate PDF
-        $pdf = Pdf::loadView('member.events.certificate', [
+        $certificateNumber = 'CERT/' . strtoupper(substr(md5($event->id . $user->id), 0, 8)) . '/' . $event->event_date->format('Y');
+        $issuedDate = now();
+
+        // Check if event has custom certificate template
+        if ($event->certificate_template && Storage::disk('public')->exists($event->certificate_template)) {
+            // Use custom template - Generate image-based certificate
+            return $this->generateCustomCertificate($event, $registration, $user, $member);
+        }
+
+        // Use default template - Generate PDF certificate
+        $pdf = PDF::loadView('member.events.certificate', [
             'event' => $event,
             'registration' => $registration,
             'user' => $user,
             'member' => $member,
-            'certificate_number' => 'CERT/' . strtoupper(substr(md5($event->id . $user->id), 0, 8)) . '/' . $event->event_date->format('Y'),
-            'issued_date' => now(),
+            'certificate_number' => $certificateNumber,
+            'issued_date' => $issuedDate,
         ]);
 
         $pdf->setPaper('A4', 'landscape');
@@ -185,5 +207,19 @@ class EventRegistrationController extends Controller
         $filename = 'Sertifikat-' . str_replace(' ', '-', $event->title) . '-' . $user->name . '.pdf';
 
         return $pdf->download($filename);
+    }
+
+    /**
+     * Generate certificate with custom template
+     */
+    private function generateCustomCertificate($event, $registration, $user, $member)
+    {
+        // For now, just provide download of the template
+        // In future, this can be enhanced to overlay text on the template using Intervention Image
+        
+        $templatePath = storage_path('app/public/' . $event->certificate_template);
+        $filename = 'Sertifikat-' . str_replace(' ', '-', $event->title) . '-' . $user->name . '.' . pathinfo($event->certificate_template, PATHINFO_EXTENSION);
+        
+        return response()->download($templatePath, $filename);
     }
 }
