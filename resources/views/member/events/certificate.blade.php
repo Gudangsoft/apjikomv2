@@ -7,268 +7,215 @@
     <style>
         @page {
             margin: 0;
+            size: A4 landscape;
         }
         
         body {
-            font-family: 'DejaVu Sans', sans-serif;
+            font-family: Arial, sans-serif;
             margin: 0;
             padding: 0;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            height: 100vh;
-            width: 100vw;
-        }
-        
-        .certificate-container {
-            position: relative;
-            width: 100%;
-            height: 100%;
             background: white;
-            padding: 40px;
-            box-sizing: border-box;
         }
         
-        .border-outer {
-            border: 3px solid #6B46C1;
-            padding: 20px;
-            height: calc(100% - 80px);
-            box-sizing: border-box;
-        }
-        
-        .border-inner {
-            border: 1px solid #9F7AEA;
-            padding: 30px;
-            height: 100%;
-            box-sizing: border-box;
+        .certificate {
+            width: 297mm;
+            height: 210mm;
+            background: white;
+            border: 12px solid #6B46C1;
             position: relative;
         }
         
-        .corner-decoration {
-            position: absolute;
-            width: 60px;
-            height: 60px;
-            border: 3px solid #6B46C1;
+        .header {
+            background: #6B46C1;
+            padding: 20px 40px;
+            color: white;
+            text-align: center;
         }
         
-        .corner-tl {
-            top: 10px;
-            left: 10px;
-            border-right: none;
-            border-bottom: none;
+        .apjikom-title {
+            font-size: 48px;
+            font-weight: bold;
+            letter-spacing: 6px;
+            color: #FCD34D;
+            margin-bottom: 5px;
         }
         
-        .corner-tr {
-            top: 10px;
-            right: 10px;
-            border-left: none;
-            border-bottom: none;
+        .apjikom-subtitle {
+            font-size: 11px;
+            font-weight: bold;
+            letter-spacing: 0.5px;
+            margin-bottom: 5px;
         }
         
-        .corner-bl {
-            bottom: 10px;
-            left: 10px;
-            border-right: none;
-            border-top: none;
-        }
-        
-        .corner-br {
-            bottom: 10px;
-            right: 10px;
-            border-left: none;
-            border-top: none;
+        .apjikom-details {
+            font-size: 7px;
+            line-height: 1.3;
         }
         
         .content {
             text-align: center;
-            height: 100%;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
+            padding: 35px 50px 20px 50px;
+            position: relative;
         }
         
-        .header-text {
-            font-size: 14px;
-            color: #718096;
-            letter-spacing: 3px;
-            text-transform: uppercase;
-            margin-bottom: 5px;
-        }
-        
-        .title {
-            font-size: 42px;
+        .watermark {
+            position: absolute;
+            top: 45%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 150px;
+            color: rgba(107, 70, 193, 0.02);
             font-weight: bold;
-            color: #6B46C1;
-            margin: 10px 0;
-            letter-spacing: 5px;
+            z-index: 0;
         }
         
-        .subtitle {
-            font-size: 14px;
-            color: #718096;
-            margin-bottom: 30px;
+        .content-inner {
+            position: relative;
+            z-index: 1;
         }
         
-        .certifies-text {
+        .certificate-title {
+            font-size: 48px;
+            font-weight: bold;
+            color: #8B5CF6;
+            margin: 15px 0 20px 0;
+            letter-spacing: 6px;
+        }
+        
+        .given-to {
             font-size: 14px;
-            color: #4A5568;
-            margin-bottom: 15px;
+            color: #8B5CF6;
+            margin: 15px 0 10px 0;
+        }
+        
+        .name-box {
+            border: 3px solid #DC2626;
+            padding: 18px 35px;
+            margin: 10px auto;
+            max-width: 550px;
+            min-height: 65px;
+            background: white;
         }
         
         .participant-name {
-            font-size: 32px;
+            font-size: 28px;
             font-weight: bold;
-            color: #2D3748;
-            margin: 10px 0 20px 0;
-            padding-bottom: 10px;
-            border-bottom: 2px solid #6B46C1;
-            display: inline-block;
+            color: #1F2937;
+            letter-spacing: 1px;
         }
         
-        .description {
-            font-size: 14px;
-            color: #4A5568;
-            line-height: 1.6;
-            max-width: 80%;
-            margin: 0 auto 20px auto;
+        .as-participant {
+            font-size: 16px;
+            color: #8B5CF6;
+            margin: 20px 0 10px 0;
+            font-style: italic;
         }
         
-        .event-title {
+        .event-box {
+            border: 3px solid #DC2626;
+            padding: 22px 35px;
+            margin: 10px auto;
+            max-width: 650px;
+            min-height: 80px;
+            background: white;
+        }
+        
+        .event-name {
             font-size: 18px;
             font-weight: bold;
-            color: #6B46C1;
-            margin: 15px 0;
-        }
-        
-        .event-details {
-            font-size: 12px;
-            color: #718096;
-            margin-bottom: 30px;
+            color: #1F2937;
+            line-height: 1.4;
         }
         
         .footer {
-            margin-top: 30px;
+            padding: 25px 70px 15px 70px;
+            text-align: right;
         }
         
-        .signature-section {
-            display: flex;
-            justify-content: space-between;
-            padding: 0 80px;
-            margin-top: 30px;
-        }
-        
-        .signature-box {
+        .signature {
+            display: inline-block;
             text-align: center;
-            width: 200px;
         }
         
-        .signature-line {
-            border-top: 1px solid #2D3748;
-            margin-bottom: 5px;
-            margin-top: 50px;
+        .signature-location {
+            font-size: 10px;
+            color: #4B5563;
+            margin-bottom: 3px;
+        }
+        
+        .signature-space {
+            margin: 35px 0 8px 0;
         }
         
         .signature-name {
             font-size: 12px;
             font-weight: bold;
-            color: #2D3748;
+            color: #1F2937;
+            border-top: 1px solid #1F2937;
+            padding-top: 4px;
+            min-width: 180px;
+            display: inline-block;
         }
         
-        .signature-title {
-            font-size: 10px;
-            color: #718096;
-        }
-        
-        .certificate-number {
+        .cert-number {
             position: absolute;
             bottom: 15px;
-            left: 30px;
-            font-size: 10px;
-            color: #A0AEC0;
+            left: 25px;
+            font-size: 8px;
+            color: #9CA3AF;
         }
         
         .issue-date {
             position: absolute;
             bottom: 15px;
-            right: 30px;
-            font-size: 10px;
-            color: #A0AEC0;
-        }
-        
-        .organization-name {
-            font-size: 16px;
-            font-weight: bold;
-            color: #6B46C1;
-            margin-bottom: 5px;
-        }
-        
-        .watermark {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            font-size: 120px;
-            color: rgba(107, 70, 193, 0.03);
-            font-weight: bold;
-            z-index: 0;
-            white-space: nowrap;
+            right: 25px;
+            font-size: 8px;
+            color: #9CA3AF;
         }
     </style>
 </head>
 <body>
-    <div class="certificate-container">
-        <div class="border-outer">
-            <div class="border-inner">
-                <div class="corner-decoration corner-tl"></div>
-                <div class="corner-decoration corner-tr"></div>
-                <div class="corner-decoration corner-bl"></div>
-                <div class="corner-decoration corner-br"></div>
-                
-                <div class="watermark">APJIKOM</div>
-                
-                <div class="content">
-                    <div class="organization-name">{{ site_name() }}</div>
-                    <div class="header-text">Dengan Bangga Memberikan</div>
-                    <div class="title">SERTIFIKAT</div>
-                    <div class="subtitle">Keikutsertaan Event</div>
-                    
-                    <div class="certifies-text">Diberikan kepada:</div>
-                    <div class="participant-name">{{ $user->name }}</div>
-                    
-                    <div class="description">
-                        Telah berpartisipasi dalam kegiatan yang diselenggarakan oleh {{ site_name() }}
-                    </div>
-                    
-                    <div class="event-title">"{{ $event->title }}"</div>
-                    
-                    <div class="event-details">
-                        @if($event->location)
-                            {{ $event->location }} • 
-                        @endif
-                        {{ $event->event_date->translatedFormat('d F Y') }}
-                        @if($event->event_time)
-                            • {{ date('H:i', strtotime($event->event_time)) }} WIB
-                        @endif
-                    </div>
-                    
-                    <table style="width: 100%; margin-top: 20px;">
-                        <tr>
-                            <td style="width: 33%; text-align: center;"></td>
-                            <td style="width: 34%; text-align: center;"></td>
-                            <td style="width: 33%; text-align: center;">
-                                <div style="font-size: 11px; color: #718096; margin-bottom: 40px;">
-                                    {{ $issued_date->translatedFormat('d F Y') }}
-                                </div>
-                                <div style="border-top: 1px solid #2D3748; display: inline-block; padding-top: 5px; min-width: 150px;">
-                                    <div style="font-size: 12px; font-weight: bold; color: #2D3748;">Ketua APJIKOM</div>
-                                </div>
-                            </td>
-                        </tr>
-                    </table>
-                </div>
-                
-                <div class="certificate-number">No: {{ $certificate_number }}</div>
-                <div class="issue-date">Diterbitkan: {{ $issued_date->translatedFormat('d F Y') }}</div>
+    <div class="certificate">
+        <div class="header">
+            <div class="apjikom-title">APJIKOM</div>
+            <div class="apjikom-subtitle">ASOSIASI PENGELOLA JURNAL INFORMATIKA DAN KOMPUTER INDONESIA</div>
+            <div class="apjikom-details">
+                S.K. KEMENKUMHAM Nomor AHU-0007794.AH.01.07.TAHUN 2025, Akta Nomor 37 Tanggal 28 Oktober 2025<br>
+                Kantor Sekretariat Pusat: Jl. Radin Inten II No.63 A, RT.7/RW.14, Duren Sawit, Kec. Duren Sawit, Kota Jakarta Timur, Daerah Khusus Ibukota Jakarta 13440
             </div>
         </div>
+
+        <div class="content">
+            <div class="watermark">APJIKOM</div>
+            
+            <div class="content-inner">
+                <div class="certificate-title">SERTIFIKAT</div>
+                
+                <div class="given-to">diberikan kepada :</div>
+                
+                <div class="name-box">
+                    <div class="participant-name">{{ strtoupper($user->name) }}</div>
+                </div>
+                
+                <div class="as-participant">Sebagai Peserta Dalam</div>
+                
+                <div class="event-box">
+                    <div class="event-name">{{ $event->title }}</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer">
+            <div class="signature">
+                <div class="signature-location">Jakarta, {{ $issued_date->translatedFormat('d F Y') }}</div>
+                <div style="font-size: 10px; color: #4B5563;">Ketua Umum</div>
+                <div class="signature-space"></div>
+                <div class="signature-name">Prof. Zainal A.Hasibuan, Ir.,MLS, PhD</div>
+            </div>
+        </div>
+
+        <div class="cert-number">No: {{ $certificate_number }}</div>
+        <div class="issue-date">Diterbitkan: {{ $issued_date->translatedFormat('d F Y') }}</div>
     </div>
 </body>
 </html>

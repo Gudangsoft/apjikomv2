@@ -72,7 +72,7 @@
             </div>
             
             <nav class="p-3 pb-8 space-y-0.5 overflow-y-auto" style="max-height: calc(100vh - 100px);" x-data="{ 
-                openMenu: '{{ request()->routeIs("admin.dashboard") ? "" : (request()->routeIs("admin.news.*") || request()->routeIs("admin.events.*") || request()->routeIs("admin.categories.*") || request()->routeIs("admin.about-page.*") || request()->routeIs("admin.organizational-structure.*") || request()->routeIs("admin.services.*") ? "konten" : (request()->routeIs("admin.journals.*") ? "publikasi" : (request()->routeIs("admin.members.*") || request()->routeIs("admin.card-templates.*") || request()->routeIs("admin.registrations.*") ? "keanggotaan" : (request()->routeIs("admin.sliders.*") || request()->routeIs("admin.pages.*") || request()->routeIs("admin.menus.*") || request()->routeIs("admin.partners.*") || request()->routeIs("admin.section-labels.*") ? "tampilan" : (request()->routeIs("admin.settings.*") || request()->routeIs("admin.about-settings.*") || request()->routeIs("admin.footer-settings.*") ? "pengaturan" : ""))))) }}' 
+                openMenu: '{{ request()->routeIs("admin.dashboard") ? "" : (request()->routeIs("admin.news.*") || request()->routeIs("admin.events.*") || request()->routeIs("admin.categories.*") || request()->routeIs("admin.about-page.*") || request()->routeIs("admin.organizational-structure.*") || request()->routeIs("admin.services.*") ? "konten" : (request()->routeIs("admin.journals.*") ? "publikasi" : (request()->routeIs("admin.members.*") || request()->routeIs("admin.card-templates.*") || request()->routeIs("admin.certificate-templates.*") || request()->routeIs("admin.registrations.*") ? "keanggotaan" : (request()->routeIs("admin.sliders.*") || request()->routeIs("admin.pages.*") || request()->routeIs("admin.menus.*") || request()->routeIs("admin.partners.*") || request()->routeIs("admin.section-labels.*") ? "tampilan" : (request()->routeIs("admin.settings.*") || request()->routeIs("admin.about-settings.*") || request()->routeIs("admin.footer-settings.*") ? "pengaturan" : ""))))) }}' 
             }"">
                 <!-- Dashboard -->
                 <a href="{{ route('admin.dashboard') }}" class="flex items-center space-x-3 px-3 py-2.5 rounded-lg text-sm transition-all {{ request()->routeIs('admin.dashboard') ? 'bg-white/10 shadow-lg' : 'hover:bg-white/5' }}">
@@ -206,6 +206,15 @@
                                 </svg>
                             </div>
                             <span>Template Kartu</span>
+                        </a>
+                        
+                        <a href="{{ route('admin.certificate-templates.index') }}" class="flex items-center space-x-3 px-3 py-2 rounded-lg text-sm transition-all {{ request()->routeIs('admin.certificate-templates.*') ? 'bg-white/10 shadow-lg' : 'hover:bg-white/5' }}">
+                            <div class="w-4 h-4 flex items-center justify-center">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                                </svg>
+                            </div>
+                            <span>Template Sertifikat</span>
                         </a>
                         
                         <a href="{{ route('admin.registrations.index') }}" class="flex items-center justify-between px-3 py-2 rounded-lg text-sm transition-all {{ request()->routeIs('admin.registrations.*') ? 'bg-white/10 shadow-lg' : 'hover:bg-white/5' }}">

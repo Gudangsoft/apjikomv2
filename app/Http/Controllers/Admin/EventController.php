@@ -96,6 +96,7 @@ class EventController extends Controller
             'online_platform' => 'required_if:event_type,online,hybrid|nullable|string|max:255',
             'has_registration' => 'boolean',
             'has_certificate' => 'boolean',
+            'certificate_template' => 'nullable|image|mimes:jpeg,jpg,png,gif,webp|max:5120',
             'registration_requirements' => 'nullable|string',
             'participant_quota' => 'nullable|integer|min:1',
             'is_paid' => 'boolean',
@@ -114,6 +115,11 @@ class EventController extends Controller
         // Upload image
         if ($request->hasFile('image')) {
             $validated['image'] = $request->file('image')->store('events', 'public');
+        }
+
+        // Upload certificate template
+        if ($request->hasFile('certificate_template')) {
+            $validated['certificate_template'] = $request->file('certificate_template')->store('certificates/templates', 'public');
         }
 
         Event::create($validated);
@@ -142,6 +148,7 @@ class EventController extends Controller
             'online_platform' => 'required_if:event_type,online,hybrid|nullable|string|max:255',
             'has_registration' => 'boolean',
             'has_certificate' => 'boolean',
+            'certificate_template' => 'nullable|image|mimes:jpeg,jpg,png,gif,webp|max:5120',
             'registration_requirements' => 'nullable|string',
             'participant_quota' => 'nullable|integer|min:1',
             'is_paid' => 'boolean',
@@ -166,6 +173,15 @@ class EventController extends Controller
             $validated['image'] = $request->file('image')->store('events', 'public');
         }
 
+        // Upload certificate template baru jika ada
+        if ($request->hasFile('certificate_template')) {
+            // Hapus template lama
+            if ($event->certificate_template && Storage::disk('public')->exists($event->certificate_template)) {
+                Storage::disk('public')->delete($event->certificate_template);
+            }
+            $validated['certificate_template'] = $request->file('certificate_template')->store('certificates/templates', 'public');
+        }
+
         $event->update($validated);
 
         return redirect()->route('admin.events.index')
@@ -177,6 +193,11 @@ class EventController extends Controller
         // Hapus image jika ada
         if ($event->image && Storage::disk('public')->exists($event->image)) {
             Storage::disk('public')->delete($event->image);
+        }
+        
+        // Hapus certificate template jika ada
+        if ($event->certificate_template && Storage::disk('public')->exists($event->certificate_template)) {
+            Storage::disk('public')->delete($event->certificate_template);
         }
         
         $event->delete();

@@ -130,8 +130,19 @@
 
 <!-- Participants Table -->
 <div class="bg-white rounded-lg shadow overflow-hidden">
-    <div class="p-4 border-b border-gray-200">
+    <div class="p-4 border-b border-gray-200 flex justify-between items-center">
         <h3 class="text-lg font-semibold text-gray-900">Daftar Peserta</h3>
+        <?php if($event->has_certificate && $registrations->count() > 0): ?>
+        <form action="<?php echo e(route('admin.certificates.bulk-generate')); ?>" method="POST" class="inline">
+            <?php echo csrf_field(); ?>
+            <input type="hidden" name="event_id" value="<?php echo e($event->id); ?>">
+            <button type="submit" 
+                    onclick="return confirm('Generate sertifikat untuk semua peserta yang memenuhi syarat?')"
+                    class="px-4 py-2 bg-purple-600 text-white text-sm rounded-lg hover:bg-purple-700 transition">
+                🎓 Generate Semua Sertifikat
+            </button>
+        </form>
+        <?php endif; ?>
     </div>
     
     <?php if($registrations->count() > 0): ?>
@@ -147,6 +158,9 @@
                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Pembayaran</th>
                     <?php endif; ?>
                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                    <?php if($event->has_certificate): ?>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Sertifikat</th>
+                    <?php endif; ?>
                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Aksi</th>
                 </tr>
             </thead>
@@ -210,6 +224,36 @@
                             <span class="px-2 py-1 text-xs bg-red-100 text-red-800 rounded-full">Batal</span>
                         <?php endif; ?>
                     </td>
+                    <?php if($event->has_certificate): ?>
+                    <td class="px-6 py-4 whitespace-nowrap">
+                        <?php if($registration->hasCertificate()): ?>
+                            <div class="flex items-center gap-2">
+                                <span class="px-2 py-1 text-xs bg-green-100 text-green-800 rounded-full">✓ Sudah</span>
+                                <form action="<?php echo e(route('admin.certificates.destroy', $registration)); ?>" method="POST" class="inline">
+                                    <?php echo csrf_field(); ?>
+                                    <?php echo method_field('DELETE'); ?>
+                                    <button type="submit" 
+                                            onclick="return confirm('Hapus sertifikat ini?')"
+                                            class="text-red-600 hover:text-red-900" 
+                                            title="Hapus Sertifikat">
+                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
+                                        </svg>
+                                    </button>
+                                </form>
+                            </div>
+                        <?php elseif($registration->canDownloadCertificate()): ?>
+                            <form action="<?php echo e(route('admin.certificates.generate', $registration)); ?>" method="POST" class="inline">
+                                <?php echo csrf_field(); ?>
+                                <button type="submit" class="px-2 py-1 bg-purple-600 text-white text-xs rounded hover:bg-purple-700">
+                                    Generate
+                                </button>
+                            </form>
+                        <?php else: ?>
+                            <span class="text-gray-400 text-xs">Belum eligible</span>
+                        <?php endif; ?>
+                    </td>
+                    <?php endif; ?>
                     <td class="px-6 py-4 whitespace-nowrap text-sm space-x-2">
                         <?php if($event->is_paid && $registration->payment_proof && $registration->payment_status === 'paid'): ?>
                         <div class="flex gap-1">

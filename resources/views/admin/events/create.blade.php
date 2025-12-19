@@ -146,9 +146,35 @@
                 <div>
                     <label class="flex items-center space-x-2 cursor-pointer">
                         <input type="checkbox" name="has_certificate" value="1" {{ old('has_certificate') ? 'checked' : '' }}
-                               class="w-4 h-4 text-purple-600 border-gray-300 rounded">
+                               class="w-4 h-4 text-purple-600 border-gray-300 rounded" onchange="toggleCertificateFields()">
                         <span class="text-sm font-medium text-gray-700">Menyediakan Sertifikat</span>
                     </label>
+                </div>
+            </div>
+            
+            <!-- Certificate Template Upload -->
+            <div id="certificateTemplateField" class="bg-purple-50 border border-purple-200 rounded-lg p-4 mb-4 {{ old('has_certificate') ? '' : 'hidden' }}">
+                <h4 class="font-semibold text-purple-800 flex items-center gap-2 mb-3">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                    </svg>
+                    Template Sertifikat
+                </h4>
+                
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Upload Template Sertifikat</label>
+                    <input type="file" name="certificate_template" accept="image/*"
+                           class="w-full px-4 py-2 border rounded focus:ring-2 focus:ring-[#00629B] @error('certificate_template') border-red-500 @enderror"
+                           onchange="previewCertificateTemplate(event)">
+                    <p class="text-xs text-gray-500 mt-1">Format: JPG, PNG, GIF, WEBP. Maksimal 5MB. Template akan digunakan untuk generate sertifikat peserta.</p>
+                    @error('certificate_template')
+                        <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                    @enderror
+                    
+                    <!-- Preview Certificate Template -->
+                    <div id="certificateTemplatePreview" class="mt-3 hidden">
+                        <img id="templatePreview" src="" alt="Preview Template" class="max-w-full rounded shadow border">
+                    </div>
                 </div>
             </div>
             
@@ -414,9 +440,35 @@ function togglePaymentFields() {
     }
 }
 
+// Toggle certificate template field
+function toggleCertificateFields() {
+    const hasCertificate = document.querySelector('input[name="has_certificate"]').checked;
+    const certificateTemplateField = document.getElementById('certificateTemplateField');
+    
+    if (hasCertificate) {
+        certificateTemplateField.classList.remove('hidden');
+    } else {
+        certificateTemplateField.classList.add('hidden');
+    }
+}
+
+// Preview certificate template
+function previewCertificateTemplate(event) {
+    const file = event.target.files[0];
+    if (file) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            document.getElementById('templatePreview').src = e.target.result;
+            document.getElementById('certificateTemplatePreview').classList.remove('hidden');
+        }
+        reader.readAsDataURL(file);
+    }
+}
+
 // Initialize on page load
 toggleEventFields();
 toggleRegistrationFields();
 togglePaymentFields();
+toggleCertificateFields();
 </script>
 @endsection
