@@ -4,20 +4,26 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Member;
+use App\Models\Registration;
 use App\Services\MemberCardGenerator;
 use App\Services\NotificationService;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;
 
 class MemberController extends Controller
 {
     public function index(Request $request)
     {
-        $query = Member::with('user')->latest();
+        $tab = $request->input('tab', 'members');
         
-        // Search
-        if ($request->filled('search')) {
+        // MEMBERS TAB
+        $queryMembers = Member::with('user')->latest();
+        
+        // Search members
+        if ($request->filled('search') && $tab === 'members') {
             $search = $request->search;
             
             // Get user IDs that match the search
@@ -25,7 +31,7 @@ class MemberController extends Controller
                           ->orWhere('email', 'like', "%{$search}%")
                           ->pluck('id');
             
-            $query->where(function($q) use ($search, $userIds) {
+            $queryMembers->where(function($q) use ($search, $userIds) {
                 $q->where('institution_name', 'like', "%{$search}%")
                   ->orWhere('position', 'like', "%{$search}%")
                   ->orWhere('member_number', 'like', "%{$search}%")
@@ -34,75 +40,101 @@ class MemberController extends Controller
         }
         
         // Status filter
-        if ($request->filled('status')) {
-            $query->where('status', $request->status);
+        if ($request->filled('status') && $tab === 'members') {
+            $queryMembers->where('status', $request->status);
         }
         
         // Member type filter
-        if ($request->filled('type')) {
-            $query->where('member_type', $request->type);
+        if ($request->filled('type') && $tab === 'members') {
+            $queryMembers->where('member_type', $request->type);
         }
         
         // Verification filter
-        if ($request->has('verified') && $request->verified !== '') {
-            $query->where('is_verified', $request->verified);
+        if ($request->has('verified') && $request->verified !== '' && $tab === 'members') {
+            $queryMembers->where('is_verified', $request->verified);
         }
         
         // Card status filter
-        if ($request->has('has_card') && $request->has_card !== '') {
+        if ($request->has('has_card') && $request->has_card !== '' && $tab === 'members') {
             if ($request->has_card == '1') {
-                $query->whereNotNull('member_card');
+                $queryMembers->whereNotNull('member_card');
             } else {
-                $query->whereNull('member_card');
+                $queryMembers->whereNull('member_card');
             }
         }
         
         // Card request filter
-        if ($request->has('card_requested') && $request->card_requested !== '') {
-            $query->where('card_requested', $request->card_requested);
+        if ($request->has('card_requested') && $request->card_requested !== '' && $tab === 'members') {
+            $queryMembers->where('card_requested', $request->card_requested);
         }
         
         // Card update request filter
-        if ($request->has('card_update_requested') && $request->card_update_requested !== '') {
-            $query->where('card_update_requested', $request->card_update_requested);
+        if ($request->has('card_update_requested') && $request->card_update_requested !== '' && $tab === 'members') {
+            $queryMembers->where('card_update_requested', $request->card_update_requested);
         }
         
         // Date range filter
-        if ($request->filled('date_from')) {
-            $query->whereDate('created_at', '>=', $request->date_from);
+        if ($request->filled('date_from') && $tab === 'members') {
+            $queryMembers->whereDate('created_at', '>=', $request->date_from);
         }
         
-        if ($request->filled('date_to')) {
-            $query->whereDate('created_at', '<=', $request->date_to);
+        if ($request->filled('date_to') && $tab === 'members') {
+            $queryMembers->whereDate('created_at', '<=', $request->date_to);
         }
         
         // Sorting
         $sortBy = $request->input('sort', 'latest');
         
-        if (in_array($sortBy, ['name', 'name_desc'])) {
-            // For name sorting, we need to join with users table
-            $query->select('members.*')
+        if (in_array($sortBy, ['name', 'name_desc']) && $tab === 'members') {
+            $queryMembers->select('members.*')
                   ->join('users', 'members.user_id', '=', 'users.id')
                   ->orderBy('users.name', $sortBy === 'name' ? 'asc' : 'desc');
         } else {
             switch ($sortBy) {
                 case 'oldest':
-                    $query->oldest();
+                    $queryMembers->oldest();
                     break;
                 default:
-                    $query->latest();
+                    $queryMembers->latest();
             }
         }
         
-        $members = $query->paginate(15)->withQueryString();
+        $members = $queryMembers->paginate(15)->withQueryString();
         
-        // Stats for dashboard
+        // REGISTRATIONS TAB
+        $queryRegistrations = Registration::query();
+        
+        // Search registrations
+        if ($request->filled('search') && $tab === 'registrations') {
+            $search = $request->search;
+            $queryRegistrations->where(function($q) use ($search) {
+                $q->where('full_name', 'like', '%' . $search . '%')
+                  ->orWhere('email', 'like', '%' . $search . '%')
+                  ->orWhere('phone', 'like', '%' . $search . '%')
+                  ->orWhere('institution', 'like', '%' . $search . '%');
+            });
+        }
+        
+        // Filter registrations by type
+        if ($request->filled('reg_type') && $tab === 'registrations') {
+            $queryRegistrations->where('type', $request->reg_type);
+        }
+        
+        // Filter registrations by status
+        if ($request->filled('reg_status') && $tab === 'registrations') {
+            $queryRegistrations->where('status', $request->reg_status);
+        }
+        
+        $registrations = $queryRegistrations->latest()->paginate(15)->withQueryString();
+        
+        // Stats
         $stats = [
             'card_requests' => Member::where('card_requested', true)->count(),
             'card_update_requests' => Member::where('card_update_requested', true)->count(),
+            'pending_registrations' => Registration::where('status', 'pending')->count(),
         ];
 
-        return view('admin.members.index', compact('members', 'stats'));
+        return view('admin.members.index', compact('members', 'registrations', 'stats', 'tab'));
     }
 
     public function show(Member $member)
@@ -372,4 +404,195 @@ class MemberController extends Controller
         return redirect()->back()
             ->with('success', 'Dokumen verifikasi berhasil diunggah!');
     }
+
+    /**
+     * Show registration detail
+     */
+    public function showRegistration(Registration $registration)
+    {
+        return view('admin.registrations.show', compact('registration'));
+    }
+
+    /**
+     * Update registration status (approve/reject)
+     */
+    public function updateRegistrationStatus(Request $request, Registration $registration)
+    {
+        $validated = $request->validate([
+            'status' => 'required|in:approved,rejected',
+            'notes' => 'nullable|string|max:1000',
+        ]);
+
+        $registration->update([
+            'status' => $validated['status'],
+            'notes' => $validated['notes'] ?? null,
+            'processed_at' => now(),
+            'processed_by' => auth()->id(),
+        ]);
+
+        // If approved, create user and member
+        if ($validated['status'] === 'approved') {
+            // Check if user already exists
+            $existingUser = User::where('email', $registration->email)->first();
+            
+            if (!$existingUser) {
+                // Generate member number
+                $lastMember = Member::latest('id')->first();
+                $nextNumber = $lastMember ? intval(substr($lastMember->member_number, -4)) + 1 : 1;
+                $memberNumber = 'APJIKOM-' . str_pad($nextNumber, 4, '0', STR_PAD_LEFT);
+
+                // Create user
+                $user = User::create([
+                    'name' => $registration->full_name,
+                    'email' => $registration->email,
+                    'password' => Hash::make('password123'),
+                    'is_admin' => false,
+                ]);
+
+                // Create member
+                $member = Member::create([
+                    'user_id' => $user->id,
+                    'member_number' => $memberNumber,
+                    'institution_name' => $registration->institution,
+                    'position' => $registration->position ?? null,
+                    'member_type' => $registration->type,
+                    'phone' => $registration->phone,
+                    'address' => $registration->address,
+                    'city' => $registration->city ?? null,
+                    'province' => $registration->province ?? null,
+                    'status' => 'active',
+                    'join_date' => now(),
+                    'expiry_date' => now()->addYear(),
+                ]);
+
+                // Update registration with member_id
+                $registration->update(['member_id' => $member->id]);
+
+                // Generate member card if card generator available
+                if ($registration->photo) {
+                    try {
+                        $generator = new MemberCardGenerator();
+                        $cardPath = $generator->generate($member);
+                        $member->update(['member_card' => $cardPath]);
+                    } catch (\Exception $e) {
+                        \Log::error('Card generation failed: ' . $e->getMessage());
+                    }
+                }
+            }
+        }
+
+        return redirect()->route('admin.members.index', ['tab' => 'registrations'])
+            ->with('success', 'Status pendaftaran berhasil diperbarui!');
+    }
+
+    /**
+     * Delete registration
+     */
+    public function destroyRegistration(Registration $registration)
+    {
+        // Delete photo if exists
+        if ($registration->photo && Storage::disk('public')->exists($registration->photo)) {
+            Storage::disk('public')->delete($registration->photo);
+        }
+
+        $registration->delete();
+
+        return redirect()->route('admin.members.index', ['tab' => 'registrations'])
+            ->with('success', 'Pendaftaran berhasil dihapus!');
+    }
+
+    /**
+     * Bulk action for registrations (approve/reject multiple)
+     */
+    public function bulkActionRegistrations(Request $request)
+    {
+        $validated = $request->validate([
+            'action' => 'required|in:approve,reject',
+            'registration_ids' => 'required|array|min:1',
+            'registration_ids.*' => 'exists:registrations,id',
+        ]);
+
+        $action = $validated['action'];
+        $registrationIds = $validated['registration_ids'];
+        
+        $successCount = 0;
+        $failCount = 0;
+        $errors = [];
+
+        foreach ($registrationIds as $id) {
+            try {
+                $registration = Registration::findOrFail($id);
+                
+                // Skip if already processed
+                if ($registration->status !== 'pending') {
+                    continue;
+                }
+
+                if ($action === 'approve') {
+                    // Create user account
+                    $password = Str::random(12);
+                    $user = User::create([
+                        'name' => $registration->full_name,
+                        'email' => $registration->email,
+                        'password' => Hash::make($password),
+                        'role' => 'member',
+                    ]);
+
+                    // Create member
+                    $memberData = [
+                        'user_id' => $user->id,
+                        'name' => $registration->full_name,
+                        'email' => $registration->email,
+                        'phone' => $registration->phone,
+                        'address' => $registration->address ?? null,
+                        'institution' => $registration->institution ?? null,
+                        'position' => $registration->position ?? null,
+                        'type' => $registration->type,
+                        'photo' => $registration->photo,
+                        'id_card' => $registration->id_card ?? null,
+                        'status' => 'active',
+                        'is_verified' => true,
+                    ];
+
+                    $member = Member::create($memberData);
+
+                    // Update registration status
+                    $registration->update(['status' => 'approved']);
+
+                    // Send email notification (optional - comment out if no mail configured)
+                    try {
+                        \Mail::to($user->email)->send(new \App\Mail\MemberApproved($user, $password, $member));
+                    } catch (\Exception $e) {
+                        // Log error but don't fail the whole process
+                        \Log::warning('Failed to send approval email: ' . $e->getMessage());
+                    }
+
+                    $successCount++;
+                } elseif ($action === 'reject') {
+                    $registration->update(['status' => 'rejected']);
+                    $successCount++;
+                }
+            } catch (\Exception $e) {
+                $failCount++;
+                $errors[] = "ID {$id}: " . $e->getMessage();
+                \Log::error("Bulk action failed for registration {$id}: " . $e->getMessage());
+            }
+        }
+
+        // Prepare success message
+        $message = '';
+        if ($action === 'approve') {
+            $message = "Berhasil approve {$successCount} pendaftaran!";
+        } else {
+            $message = "Berhasil reject {$successCount} pendaftaran!";
+        }
+
+        if ($failCount > 0) {
+            $message .= " ({$failCount} gagal diproses)";
+        }
+
+        return redirect()->route('admin.members.index', ['tab' => 'registrations'])
+            ->with('success', $message);
+    }
 }
+
