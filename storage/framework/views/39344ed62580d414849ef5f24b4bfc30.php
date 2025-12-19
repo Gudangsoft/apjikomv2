@@ -163,22 +163,6 @@
                     <span class="font-medium">Kartu Anggota</span>
                 </a>
                 
-                <a href="<?php echo e(route('news.index')); ?>" 
-                   class="flex items-center space-x-3 px-4 py-3 rounded-lg text-gray-700 hover:bg-gray-100 transition">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z"></path>
-                    </svg>
-                    <span class="font-medium">Berita</span>
-                </a>
-                
-                <a href="<?php echo e(route('events.index')); ?>" 
-                   class="flex items-center space-x-3 px-4 py-3 rounded-lg text-gray-700 hover:bg-gray-100 transition">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
-                    </svg>
-                    <span class="font-medium">Event</span>
-                </a>
-                
                 <a href="<?php echo e(route('member.events.my')); ?>" 
                    class="flex items-center space-x-3 px-4 py-3 rounded-lg <?php echo e(request()->routeIs('member.events.*') ? 'bg-purple-100 text-purple-700' : 'text-gray-700 hover:bg-gray-100'); ?> transition">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
