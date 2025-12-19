@@ -1,0 +1,347 @@
+@extends('layouts.admin')
+
+@section('title', 'Tambah Media Sosial')
+
+@section('content')
+<div class="container-fluid px-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h1 class="mt-4 mb-1">Tambah Media Sosial</h1>
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="{{ route('admin.dashboard') }}">Dashboard</a></li>
+                    <li class="breadcrumb-item"><a href="{{ route('admin.social-media.index') }}">Media Sosial</a></li>
+                    <li class="breadcrumb-item active">Tambah</li>
+                </ol>
+            </nav>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-8">
+            <div class="card shadow-sm border-0 mb-4">
+                <div class="card-header bg-gradient-primary text-white py-3">
+                    <h5 class="mb-0">
+                        <i class="fas fa-plus-circle me-2"></i>
+                        Form Tambah Media Sosial
+                    </h5>
+                </div>
+                <div class="card-body p-4">
+                    <form action="{{ route('admin.social-media.store') }}" method="POST" enctype="multipart/form-data" id="socialMediaForm">
+                        @csrf
+
+                        <!-- Nama Platform -->
+                        <div class="mb-4">
+                            <label for="name" class="form-label fw-bold">
+                                <i class="fas fa-tag text-primary me-1"></i>
+                                Nama Platform <span class="text-danger">*</span>
+                            </label>
+                            <input type="text" 
+                                   class="form-control form-control-lg @error('name') is-invalid @enderror" 
+                                   id="name" 
+                                   name="name" 
+                                   value="{{ old('name') }}"
+                                   placeholder="Contoh: Facebook, Instagram, Twitter"
+                                   required>
+                            @error('name')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
+                        </div>
+
+                        <!-- URL -->
+                        <div class="mb-4">
+                            <label for="url" class="form-label fw-bold">
+                                <i class="fas fa-link text-primary me-1"></i>
+                                URL Link <span class="text-danger">*</span>
+                            </label>
+                            <div class="input-group input-group-lg">
+                                <span class="input-group-text bg-light">
+                                    <i class="fas fa-globe text-muted"></i>
+                                </span>
+                                <input type="url" 
+                                       class="form-control @error('url') is-invalid @enderror" 
+                                       id="url" 
+                                       name="url" 
+                                       value="{{ old('url') }}"
+                                       placeholder="https://facebook.com/apjikom"
+                                       required>
+                                @error('url')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
+                            </div>
+                            <small class="text-muted"><i class="fas fa-info-circle"></i> Format lengkap dengan https:// atau http://</small>
+                        </div>
+
+                        <!-- Icon Section -->
+                        <div class="mb-4">
+                            <label class="form-label fw-bold">
+                                <i class="fas fa-image text-primary me-1"></i>
+                                Icon/Logo Media Sosial
+                            </label>
+                            
+                            <div class="row g-3">
+                                <!-- Upload Icon -->
+                                <div class="col-md-6">
+                                    <div class="card border-2 border-dashed h-100">
+                                        <div class="card-body text-center">
+                                            <div class="mb-3">
+                                                <i class="fas fa-cloud-upload-alt fa-3x text-primary mb-2"></i>
+                                                <h6 class="fw-bold">Upload Icon</h6>
+                                            </div>
+                                            <input type="file" 
+                                                   class="form-control @error('icon') is-invalid @enderror" 
+                                                   id="icon" 
+                                                   name="icon"
+                                                   accept="image/png,image/jpg,image/jpeg,image/svg+xml"
+                                                   onchange="previewIcon(event)">
+                                            @error('icon')
+                                                <div class="invalid-feedback">{{ $message }}</div>
+                                            @enderror
+                                            <small class="text-muted d-block mt-2">
+                                                <i class="fas fa-check-circle text-success"></i> PNG, JPG, SVG<br>
+                                                <i class="fas fa-weight-hanging"></i> Max: 2MB
+                                            </small>
+                                            
+                                            <!-- Preview Upload -->
+                                            <div id="iconPreview" class="mt-3" style="display: none;">
+                                                <img id="iconPreviewImg" src="" alt="Preview" class="img-thumbnail" style="max-width: 100px; max-height: 100px;">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Icon Class -->
+                                <div class="col-md-6">
+                                    <div class="card border-2 border-dashed h-100">
+                                        <div class="card-body text-center">
+                                            <div class="mb-3">
+                                                <i class="fas fa-icons fa-3x text-success mb-2"></i>
+                                                <h6 class="fw-bold">Atau Icon Class</h6>
+                                            </div>
+                                            <input type="text" 
+                                                   class="form-control text-center @error('icon_class') is-invalid @enderror" 
+                                                   id="icon_class" 
+                                                   name="icon_class" 
+                                                   value="{{ old('icon_class') }}"
+                                                   placeholder="fab fa-facebook"
+                                                   oninput="previewIconClass()">
+                                            @error('icon_class')
+                                                <div class="invalid-feedback">{{ $message }}</div>
+                                            @enderror
+                                            <small class="text-muted d-block mt-2">
+                                                Font Awesome Class
+                                            </small>
+                                            
+                                            <!-- Preview Icon Class -->
+                                            <div id="iconClassPreview" class="mt-3" style="display: none;">
+                                                <i id="iconClassPreviewIcon" class="" style="font-size: 48px;"></i>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Note -->
+                        <div class="mb-4">
+                            <label for="note" class="form-label fw-bold">
+                                <i class="fas fa-sticky-note text-primary me-1"></i>
+                                Note/Keterangan
+                            </label>
+                            <textarea class="form-control @error('note') is-invalid @enderror" 
+                                      id="note" 
+                                      name="note" 
+                                      rows="3"
+                                      placeholder="Keterangan tambahan tentang media sosial ini...">{{ old('note') }}</textarea>
+                            @error('note')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
+                            <small class="text-muted"><i class="fas fa-lightbulb"></i> Akan ditampilkan sebagai tooltip di dashboard member</small>
+                        </div>
+
+                        <div class="row">
+                            <!-- Urutan -->
+                            <div class="col-md-6 mb-4">
+                                <label for="order" class="form-label fw-bold">
+                                    <i class="fas fa-sort-numeric-down text-primary me-1"></i>
+                                    Urutan Tampilan <span class="text-danger">*</span>
+                                </label>
+                                <input type="number" 
+                                       class="form-control form-control-lg @error('order') is-invalid @enderror" 
+                                       id="order" 
+                                       name="order" 
+                                       value="{{ old('order', 0) }}"
+                                       min="0"
+                                       required>
+                                @error('order')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
+                                <small class="text-muted"><i class="fas fa-arrow-up"></i> Angka kecil = awal tampilan</small>
+                            </div>
+
+                            <!-- Status -->
+                            <div class="col-md-6 mb-4">
+                                <label class="form-label fw-bold">
+                                    <i class="fas fa-toggle-on text-primary me-1"></i>
+                                    Status
+                                </label>
+                                <div class="card bg-light border-0">
+                                    <div class="card-body">
+                                        <div class="form-check form-switch">
+                                            <input class="form-check-input" 
+                                                   type="checkbox" 
+                                                   id="is_active" 
+                                                   name="is_active"
+                                                   value="1"
+                                                   {{ old('is_active', true) ? 'checked' : '' }}
+                                                   style="width: 3em; height: 1.5em;">
+                                            <label class="form-check-label fw-bold" for="is_active">
+                                                <span id="statusLabel">Aktif</span>
+                                                <span class="badge bg-success ms-2" id="statusBadge">Tampil di Dashboard</span>
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <hr class="my-4">
+
+                        <!-- Action Buttons -->
+                        <div class="d-flex justify-content-between align-items-center">
+                            <a href="{{ route('admin.social-media.index') }}" class="btn btn-outline-secondary btn-lg">
+                                <i class="fas fa-arrow-left me-2"></i> Kembali
+                            </a>
+                            <button type="submit" class="btn btn-primary btn-lg px-5">
+                                <i class="fas fa-save me-2"></i> Simpan Media Sosial
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Sidebar -->
+        <div class="col-lg-4">
+            <!-- Panduan -->
+            <div class="card shadow-sm border-0 mb-4">
+                <div class="card-header bg-gradient-info text-white py-3">
+                    <h6 class="mb-0">
+                        <i class="fas fa-info-circle me-2"></i>
+                        Panduan Penggunaan
+                    </h6>
+                </div>
+                <div class="card-body">
+                    <h6 class="fw-bold text-primary"><i class="fas fa-image me-1"></i> Tentang Icon</h6>
+                    <p class="small text-muted">Pilih salah satu metode:</p>
+                    <ol class="small">
+                        <li class="mb-2"><strong>Upload Icon</strong>: Upload file logo (recommended untuk custom logo)</li>
+                        <li><strong>Icon Class</strong>: Gunakan Font Awesome untuk icon standar</li>
+                    </ol>
+                    
+                    <div class="alert alert-warning small mb-3">
+                        <i class="fas fa-exclamation-triangle me-1"></i>
+                        Jika keduanya diisi, upload icon akan diprioritaskan
+                    </div>
+
+                    <hr>
+
+                    <h6 class="fw-bold text-success"><i class="fab fa-font-awesome-flag me-1"></i> Contoh Icon Class</h6>
+                    <div class="list-group list-group-flush">
+                        <div class="list-group-item px-0 py-2">
+                            <i class="fab fa-facebook text-primary fa-lg me-2"></i>
+                            <code class="small">fab fa-facebook</code>
+                        </div>
+                        <div class="list-group-item px-0 py-2">
+                            <i class="fab fa-instagram text-danger fa-lg me-2"></i>
+                            <code class="small">fab fa-instagram</code>
+                        </div>
+                        <div class="list-group-item px-0 py-2">
+                            <i class="fab fa-twitter text-info fa-lg me-2"></i>
+                            <code class="small">fab fa-twitter</code>
+                        </div>
+                        <div class="list-group-item px-0 py-2">
+                            <i class="fab fa-linkedin text-primary fa-lg me-2"></i>
+                            <code class="small">fab fa-linkedin</code>
+                        </div>
+                        <div class="list-group-item px-0 py-2">
+                            <i class="fab fa-youtube text-danger fa-lg me-2"></i>
+                            <code class="small">fab fa-youtube</code>
+                        </div>
+                        <div class="list-group-item px-0 py-2">
+                            <i class="fab fa-tiktok text-dark fa-lg me-2"></i>
+                            <code class="small">fab fa-tiktok</code>
+                        </div>
+                    </div>
+
+                    <div class="mt-3">
+                        <a href="https://fontawesome.com/icons?d=gallery&s=brands" target="_blank" class="btn btn-sm btn-outline-primary w-100">
+                            <i class="fas fa-external-link-alt me-1"></i> Lihat Semua Icon
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tips -->
+            <div class="card shadow-sm border-0 bg-light">
+                <div class="card-body">
+                    <h6 class="fw-bold text-warning"><i class="fas fa-lightbulb me-1"></i> Tips</h6>
+                    <ul class="small mb-0 ps-3">
+                        <li>Gunakan icon class untuk kemudahan maintenance</li>
+                        <li>URL harus lengkap dengan https://</li>
+                        <li>Urutan bisa diubah dengan drag & drop nanti</li>
+                        <li>Note maksimal 40 karakter untuk tampilan optimal</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@push('scripts')
+<script>
+// Preview uploaded icon
+function previewIcon(event) {
+    const file = event.target.files[0];
+    if (file) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            document.getElementById('iconPreviewImg').src = e.target.result;
+            document.getElementById('iconPreview').style.display = 'block';
+        }
+        reader.readAsDataURL(file);
+    }
+}
+
+// Preview icon class
+function previewIconClass() {
+    const iconClass = document.getElementById('icon_class').value.trim();
+    const preview = document.getElementById('iconClassPreview');
+    const icon = document.getElementById('iconClassPreviewIcon');
+    
+    if (iconClass) {
+        icon.className = iconClass;
+        preview.style.display = 'block';
+    } else {
+        preview.style.display = 'none';
+    }
+}
+
+// Toggle status label
+document.getElementById('is_active').addEventListener('change', function() {
+    const label = document.getElementById('statusLabel');
+    const badge = document.getElementById('statusBadge');
+    
+    if (this.checked) {
+        label.textContent = 'Aktif';
+        badge.textContent = 'Tampil di Dashboard';
+        badge.className = 'badge bg-success ms-2';
+    } else {
+        label.textContent = 'Nonaktif';
+        badge.textContent = 'Tidak Tampil';
+        badge.className = 'badge bg-secondary ms-2';
+    }
+});
+</script>
+@endpush
+@endsection

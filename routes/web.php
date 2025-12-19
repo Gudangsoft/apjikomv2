@@ -212,14 +212,21 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'admin'])->group(fun
     Route::post('certificates/bulk-generate', [AdminEventCertificateController::class, 'bulkGenerate'])->name('certificates.bulk-generate');
     Route::delete('certificates/{registration}', [AdminEventCertificateController::class, 'destroy'])->name('certificates.destroy');
     
+    // Social Media Management
+    Route::resource('social-media', App\Http\Controllers\Admin\SocialMediaController::class)->except(['show']);
+    Route::post('social-media/update-order', [App\Http\Controllers\Admin\SocialMediaController::class, 'updateOrder'])->name('social-media.update-order');
+    
     // Categories Management
     Route::resource('categories', AdminCategoryController::class);
     
-    // Registrations Management
-    Route::get('registrations', [AdminRegistrationController::class, 'index'])->name('registrations.index');
-    Route::get('registrations/{registration}', [AdminRegistrationController::class, 'show'])->name('registrations.show');
-    Route::put('registrations/{registration}/status', [AdminRegistrationController::class, 'updateStatus'])->name('registrations.update-status');
-    Route::delete('registrations/{registration}', [AdminRegistrationController::class, 'destroy'])->name('registrations.destroy');
+    // Registrations Management (now handled by MemberController)
+    Route::get('registrations', function() {
+        return redirect()->route('admin.members.index', ['tab' => 'registrations']);
+    })->name('registrations.index');
+    Route::post('registrations/bulk-action', [AdminMemberController::class, 'bulkActionRegistrations'])->name('registrations.bulk-action');
+    Route::get('registrations/{registration}', [AdminMemberController::class, 'showRegistration'])->name('registrations.show');
+    Route::put('registrations/{registration}/status', [AdminMemberController::class, 'updateRegistrationStatus'])->name('registrations.update-status');
+    Route::delete('registrations/{registration}', [AdminMemberController::class, 'destroyRegistration'])->name('registrations.destroy');
     
     // Settings Management
     Route::get('settings', [AdminSettingController::class, 'index'])->name('settings.index');

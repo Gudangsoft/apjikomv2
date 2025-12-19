@@ -7,6 +7,7 @@ use App\Models\Event;
 use App\Models\Journal;
 use App\Models\News;
 use App\Models\Member;
+use App\Models\SocialMedia;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -182,6 +183,9 @@ class MemberDashboardController extends Controller
             ->orderBy('month', 'asc')
             ->get();
 
+            // Get active social media
+            $socialMedia = SocialMedia::active()->ordered()->get();
+
             return view('member.dashboard', compact(
                 'member', 
                 'needsProfileUpdate', 
@@ -190,7 +194,8 @@ class MemberDashboardController extends Controller
                 'recentNews',
                 'upcomingEvents',
                 'recentJournals',
-                'memberGrowth'
+                'memberGrowth',
+                'socialMedia'
             ));
         } catch (\Exception $e) {
             \Log::error('Dashboard Error: ' . $e->getMessage());
@@ -211,6 +216,7 @@ class MemberDashboardController extends Controller
             $upcomingEvents = collect();
             $recentJournals = collect();
             $memberGrowth = collect();
+            $socialMedia = collect();
             
             return view('member.dashboard', compact(
                 'member', 
@@ -220,7 +226,8 @@ class MemberDashboardController extends Controller
                 'recentNews',
                 'upcomingEvents',
                 'recentJournals',
-                'memberGrowth'
+                'memberGrowth',
+                'socialMedia'
             ));
         }
     }

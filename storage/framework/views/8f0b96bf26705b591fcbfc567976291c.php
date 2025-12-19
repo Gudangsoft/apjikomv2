@@ -72,7 +72,7 @@
             </div>
             
             <nav class="p-3 pb-8 space-y-0.5 overflow-y-auto" style="max-height: calc(100vh - 100px);" x-data="{ 
-                openMenu: '<?php echo e(request()->routeIs("admin.dashboard") ? "" : (request()->routeIs("admin.news.*") || request()->routeIs("admin.events.*") || request()->routeIs("admin.categories.*") || request()->routeIs("admin.about-page.*") || request()->routeIs("admin.organizational-structure.*") || request()->routeIs("admin.services.*") ? "konten" : (request()->routeIs("admin.journals.*") ? "publikasi" : (request()->routeIs("admin.members.*") || request()->routeIs("admin.card-templates.*") || request()->routeIs("admin.certificate-templates.*") || request()->routeIs("admin.registrations.*") ? "keanggotaan" : (request()->routeIs("admin.sliders.*") || request()->routeIs("admin.pages.*") || request()->routeIs("admin.menus.*") || request()->routeIs("admin.partners.*") || request()->routeIs("admin.section-labels.*") ? "tampilan" : (request()->routeIs("admin.settings.*") || request()->routeIs("admin.about-settings.*") || request()->routeIs("admin.footer-settings.*") ? "pengaturan" : "")))))); ?>' 
+                openMenu: '<?php echo e(request()->routeIs("admin.dashboard") ? "" : (request()->routeIs("admin.news.*") || request()->routeIs("admin.events.*") || request()->routeIs("admin.categories.*") || request()->routeIs("admin.about-page.*") || request()->routeIs("admin.organizational-structure.*") || request()->routeIs("admin.services.*") ? "konten" : (request()->routeIs("admin.journals.*") ? "publikasi" : (request()->routeIs("admin.members.*") || request()->routeIs("admin.card-templates.*") || request()->routeIs("admin.certificate-templates.*") || request()->routeIs("admin.registrations.*") ? "keanggotaan" : (request()->routeIs("admin.sliders.*") || request()->routeIs("admin.pages.*") || request()->routeIs("admin.menus.*") || request()->routeIs("admin.partners.*") || request()->routeIs("admin.section-labels.*") ? "tampilan" : (request()->routeIs("admin.settings.*") || request()->routeIs("admin.about-settings.*") || request()->routeIs("admin.footer-settings.*") || request()->routeIs("admin.social-media.*") ? "pengaturan" : "")))))); ?>' 
             }"">
                 <!-- Dashboard -->
                 <a href="<?php echo e(route('admin.dashboard')); ?>" class="flex items-center space-x-3 px-3 py-2.5 rounded-lg text-sm transition-all <?php echo e(request()->routeIs('admin.dashboard') ? 'bg-white/10 shadow-lg' : 'hover:bg-white/5'); ?>">
@@ -192,10 +192,12 @@
                                           ->whereNotNull('phone');
                                 })->count();
                                 
-                                $totalNotifications = $newMembersCount;
+                                $pendingRegistrations = \App\Models\Registration::where('status', 'pending')->count();
+                                
+                                $totalNotifications = $newMembersCount + $pendingRegistrations;
                             ?>
                             <?php if($totalNotifications > 0): ?>
-                                <span class="px-2 py-0.5 text-xs font-bold bg-red-500 text-white rounded-full"><?php echo e($totalNotifications); ?></span>
+                                <span class="px-2 py-0.5 text-xs font-bold bg-red-500 text-white rounded-full <?php echo e($pendingRegistrations > 0 ? 'animate-pulse' : ''); ?>"><?php echo e($totalNotifications); ?></span>
                             <?php endif; ?>
                         </a>
                         
@@ -215,23 +217,6 @@
                                 </svg>
                             </div>
                             <span>Template Sertifikat</span>
-                        </a>
-                        
-                        <a href="<?php echo e(route('admin.registrations.index')); ?>" class="flex items-center justify-between px-3 py-2 rounded-lg text-sm transition-all <?php echo e(request()->routeIs('admin.registrations.*') ? 'bg-white/10 shadow-lg' : 'hover:bg-white/5'); ?>">
-                            <div class="flex items-center space-x-3">
-                                <div class="w-4 h-4 flex items-center justify-center">
-                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"></path>
-                                    </svg>
-                                </div>
-                                <span>Pendaftaran</span>
-                            </div>
-                            <?php
-                                $pendingRegistrations = \App\Models\Registration::where('status', 'pending')->count();
-                            ?>
-                            <?php if($pendingRegistrations > 0): ?>
-                                <span class="bg-red-500 text-white text-xs font-bold px-2 py-0.5 rounded-full"><?php echo e($pendingRegistrations); ?></span>
-                            <?php endif; ?>
                         </a>
                     </div>
                 </div>
@@ -344,6 +329,15 @@
                                 </svg>
                             </div>
                             <span>Menu Footer</span>
+                        </a>
+                        
+                        <a href="<?php echo e(route('admin.social-media.index')); ?>" class="flex items-center space-x-3 px-3 py-2 rounded-lg text-sm transition-all <?php echo e(request()->routeIs('admin.social-media.*') ? 'bg-white/10 shadow-lg' : 'hover:bg-white/5'); ?>">
+                            <div class="w-4 h-4 flex items-center justify-center">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z"></path>
+                                </svg>
+                            </div>
+                            <span>Media Sosial</span>
                         </a>
                         
                         <a href="<?php echo e(route('admin.email-settings.index')); ?>" class="flex items-center space-x-3 px-3 py-2 rounded-lg text-sm transition-all <?php echo e(request()->routeIs('admin.email-settings.*') ? 'bg-white/10 shadow-lg' : 'hover:bg-white/5'); ?>">
