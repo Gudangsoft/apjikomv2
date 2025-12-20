@@ -297,6 +297,12 @@ class MemberController extends Controller
 
     public function uploadPhoto(Request $request, Member $member)
     {
+        // Hanya izinkan upload foto untuk member yang sudah divalidasi
+        if (!$member->is_verified) {
+            return redirect()->route('admin.members.show', $member)
+                ->with('error', 'Foto hanya dapat di-upload untuk member yang sudah divalidasi.');
+        }
+
         $request->validate([
             'photo' => 'required|image|mimes:jpg,jpeg,png|max:2048',
         ], [
@@ -319,12 +325,26 @@ class MemberController extends Controller
             'photo' => $photoPath,
         ]);
 
+        // Log activity
+        \App\Helpers\ActivityLogger::log(
+            'upload_member_photo',
+            'updated',
+            'Member',
+            "Admin uploaded photo for member: {$member->user->name}"
+        );
+
         return redirect()->route('admin.members.show', $member)
             ->with('success', 'Foto member berhasil diunggah!');
     }
 
     public function deletePhoto(Member $member)
     {
+        // Hanya izinkan hapus foto untuk member yang sudah divalidasi
+        if (!$member->is_verified) {
+            return redirect()->route('admin.members.show', $member)
+                ->with('error', 'Foto hanya dapat dihapus untuk member yang sudah divalidasi.');
+        }
+
         if ($member->photo && Storage::disk('public')->exists($member->photo)) {
             Storage::disk('public')->delete($member->photo);
         }
@@ -332,6 +352,14 @@ class MemberController extends Controller
         $member->update([
             'photo' => null,
         ]);
+
+        // Log activity
+        \App\Helpers\ActivityLogger::log(
+            'delete_member_photo',
+            'deleted',
+            'Member',
+            "Admin deleted photo for member: {$member->user->name}"
+        );
 
         return redirect()->route('admin.members.show', $member)
             ->with('success', 'Foto member berhasil dihapus!');
