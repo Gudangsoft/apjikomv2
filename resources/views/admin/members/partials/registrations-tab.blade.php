@@ -1,28 +1,36 @@
 <!-- Registrations Tab Content -->
 <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
     <!-- Bulk Actions Bar -->
-    <div id="bulkActionsBar" class="mb-4 bg-purple-50 border-2 border-purple-200 rounded-lg p-4 hidden">
+    <div id="bulkActionsBar" class="mb-4 bg-gradient-to-r from-purple-50 to-blue-50 border-2 border-purple-300 rounded-lg p-4 shadow-sm hidden">
         <div class="flex items-center justify-between">
             <div class="flex items-center space-x-3">
-                <svg class="w-5 h-5 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"></path>
-                </svg>
-                <span class="font-semibold text-purple-900"><span id="selectedCount">0</span> pendaftaran dipilih</span>
+                <div class="bg-purple-100 p-2 rounded-lg">
+                    <svg class="w-5 h-5 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"></path>
+                    </svg>
+                </div>
+                <div>
+                    <span class="font-bold text-purple-900 text-lg"><span id="selectedCount">0</span> pendaftaran dipilih</span>
+                    <p class="text-xs text-purple-700 mt-0.5">Pilih aksi untuk pendaftaran yang dipilih</p>
+                </div>
             </div>
             <div class="flex items-center space-x-2">
-                <button type="button" onclick="bulkApprove()" class="inline-flex items-center px-4 py-2 bg-green-600 hover:bg-green-700 text-white font-semibold rounded-lg transition-colors">
-                    <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <button type="button" onclick="bulkApprove()" class="inline-flex items-center px-5 py-2.5 bg-green-600 hover:bg-green-700 text-white font-semibold rounded-lg transition-all shadow-md hover:shadow-lg transform hover:-translate-y-0.5">
+                    <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
                     </svg>
-                    Approve Terpilih
+                    Approve Semua
                 </button>
-                <button type="button" onclick="bulkReject()" class="inline-flex items-center px-4 py-2 bg-red-600 hover:bg-red-700 text-white font-semibold rounded-lg transition-colors">
+                <button type="button" onclick="bulkReject()" class="inline-flex items-center px-5 py-2.5 bg-red-600 hover:bg-red-700 text-white font-semibold rounded-lg transition-all shadow-md hover:shadow-lg transform hover:-translate-y-0.5">
+                    <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                    </svg>
+                    Reject Semua
+                </button>
+                <button type="button" onclick="deselectAll()" class="inline-flex items-center px-4 py-2.5 bg-gray-500 hover:bg-gray-600 text-white font-medium rounded-lg transition-all">
                     <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
                     </svg>
-                    Reject Terpilih
-                </button>
-                <button type="button" onclick="deselectAll()" class="inline-flex items-center px-4 py-2 bg-gray-500 hover:bg-gray-600 text-white font-medium rounded-lg transition-colors">
                     Batal
                 </button>
             </div>
@@ -56,6 +64,30 @@
             </select>
         </form>
     </div>
+
+    <!-- Quick Actions -->
+    @php
+        $pendingCount = $registrations->where('status', 'pending')->count();
+    @endphp
+    
+    @if($pendingCount > 0 && request('reg_status') != 'approved' && request('reg_status') != 'rejected')
+    <div class="mb-4 flex items-center justify-between bg-blue-50 border border-blue-200 rounded-lg p-3">
+        <div class="flex items-center space-x-3">
+            <svg class="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+            </svg>
+            <span class="text-sm font-medium text-blue-800">
+                Ada <strong>{{ $pendingCount }}</strong> pendaftaran pending yang menunggu persetujuan
+            </span>
+        </div>
+        <button type="button" onclick="selectAllPending()" class="inline-flex items-center px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold rounded-lg transition-colors">
+            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"></path>
+            </svg>
+            Pilih Semua Pending
+        </button>
+    </div>
+    @endif
 
     <!-- Registrations Table -->
     <div class="overflow-x-auto">
@@ -212,6 +244,14 @@
 
 <script>
 // Bulk Actions JavaScript
+function selectAllPending() {
+    const checkboxes = document.querySelectorAll('.registration-checkbox');
+    checkboxes.forEach(cb => {
+        cb.checked = true;
+    });
+    updateBulkActionsBar();
+}
+
 function toggleSelectAll(checkbox) {
     const checkboxes = document.querySelectorAll('.registration-checkbox');
     checkboxes.forEach(cb => {
@@ -259,9 +299,29 @@ function bulkApprove() {
         return;
     }
     
-    if (!confirm(`Approve ${selectedIds.length} pendaftaran terpilih? Akun member baru akan dibuat dan email dikirim.`)) {
+    const message = selectedIds.length === 1 
+        ? 'Approve 1 pendaftaran ini? Akun member baru akan dibuat dan email dikirim.'
+        : `Approve ${selectedIds.length} pendaftaran terpilih? Akun member baru akan dibuat dan email dikirim ke semua member.`;
+    
+    if (!confirm(message)) {
         return;
     }
+
+    // Show loading indicator
+    const loadingDiv = document.createElement('div');
+    loadingDiv.className = 'fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50';
+    loadingDiv.innerHTML = `
+        <div class="bg-white rounded-lg p-6 shadow-xl">
+            <div class="flex items-center space-x-3">
+                <svg class="animate-spin h-8 w-8 text-purple-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                </svg>
+                <span class="text-lg font-semibold text-gray-900">Memproses approve ${selectedIds.length} pendaftaran...</span>
+            </div>
+        </div>
+    `;
+    document.body.appendChild(loadingDiv);
     
     // Create form and submit
     const form = document.createElement('form');
@@ -302,9 +362,29 @@ function bulkReject() {
         return;
     }
     
-    if (!confirm(`Reject ${selectedIds.length} pendaftaran terpilih? Status akan diubah menjadi 'Rejected'.`)) {
+    const message = selectedIds.length === 1
+        ? 'Reject 1 pendaftaran ini? Status akan diubah menjadi "Rejected".'
+        : `Reject ${selectedIds.length} pendaftaran terpilih? Status akan diubah menjadi "Rejected".`;
+    
+    if (!confirm(message)) {
         return;
     }
+
+    // Show loading indicator
+    const loadingDiv = document.createElement('div');
+    loadingDiv.className = 'fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50';
+    loadingDiv.innerHTML = `
+        <div class="bg-white rounded-lg p-6 shadow-xl">
+            <div class="flex items-center space-x-3">
+                <svg class="animate-spin h-8 w-8 text-red-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                </svg>
+                <span class="text-lg font-semibold text-gray-900">Memproses reject ${selectedIds.length} pendaftaran...</span>
+            </div>
+        </div>
+    `;
+    document.body.appendChild(loadingDiv);
     
     // Create form and submit
     const form = document.createElement('form');
