@@ -26,21 +26,6 @@
     <div class="border-b border-gray-200">
         <nav class="flex -mb-px" role="tablist">
             <button 
-                onclick="switchTab('members')" 
-                id="tab-members"
-                class="tab-button {{ $tab === 'members' ? 'tab-active' : 'tab-inactive' }} flex items-center gap-2 px-6 py-4 text-sm font-semibold border-b-2 transition-colors"
-                role="tab"
-                aria-selected="{{ $tab === 'members' ? 'true' : 'false' }}">
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path>
-                </svg>
-                Member Aktif
-                <span class="ml-2 px-2.5 py-0.5 text-xs font-medium rounded-full bg-purple-100 text-purple-700">
-                    {{ $members->total() }}
-                </span>
-            </button>
-
-            <button 
                 onclick="switchTab('registrations')" 
                 id="tab-registrations"
                 class="tab-button {{ $tab === 'registrations' ? 'tab-active' : 'tab-inactive' }} flex items-center gap-2 px-6 py-4 text-sm font-semibold border-b-2 transition-colors"
@@ -59,6 +44,21 @@
                     {{ $registrations->total() }}
                 </span>
                 @endif
+            </button>
+
+            <button 
+                onclick="switchTab('members')" 
+                id="tab-members"
+                class="tab-button {{ $tab === 'members' ? 'tab-active' : 'tab-inactive' }} flex items-center gap-2 px-6 py-4 text-sm font-semibold border-b-2 transition-colors"
+                role="tab"
+                aria-selected="{{ $tab === 'members' ? 'true' : 'false' }}">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path>
+                </svg>
+                Member Aktif
+                <span class="ml-2 px-2.5 py-0.5 text-xs font-medium rounded-full bg-purple-100 text-purple-700">
+                    {{ $members->total() }}
+                </span>
             </button>
         </nav>
     </div>
