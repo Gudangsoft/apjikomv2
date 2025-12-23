@@ -20,9 +20,18 @@ class MemberMiddleware
             return redirect()->route('member.login');
         }
 
-        // Check if user is member
-        if (!auth()->user()->isMember()) {
+        $user = auth()->user();
+
+        // Check if user is member by role OR has a member record
+        // This handles legacy users who have member records but role wasn't set properly
+        if (!$user->isMember() && !$user->member) {
             abort(403, 'Akses ditolak. Halaman ini hanya untuk Member.');
+        }
+
+        // If user has member record but role is not set, fix it automatically
+        if ($user->member && !$user->isMember() && $user->role !== 'admin') {
+            $user->role = 'member';
+            $user->save();
         }
 
         return $next($request);

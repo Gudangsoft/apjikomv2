@@ -166,7 +166,14 @@ class RegistrationController extends Controller
                 'email' => $registration->email,
                 'password' => $registration->password ?? Hash::make('password123'), // Password sudah di-hash saat registrasi
                 'email_verified_at' => now(),
+                'role' => 'member', // Set role sebagai member agar bisa akses dashboard member
             ]);
+        } else {
+            // Jika user sudah ada tapi role belum member, update role-nya
+            if ($user->role !== 'member' && $user->role !== 'admin') {
+                $user->role = 'member';
+                $user->save();
+            }
         }
 
         // Cek apakah member sudah ada
