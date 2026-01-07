@@ -29,25 +29,25 @@
         }
     </style>
 </head>
-<body class="gradient-bg min-h-screen flex items-center justify-center p-4">
+<body class="gradient-bg min-h-screen flex items-center justify-center p-3 sm:p-4">
     <div class="w-full max-w-md">
         <!-- Logo & Title -->
-        <div class="text-center mb-8">
-            <div class="inline-flex items-center justify-center w-20 h-20 bg-white rounded-2xl shadow-lg mb-4">
+        <div class="text-center mb-6 sm:mb-8">
+            <div class="inline-flex items-center justify-center w-16 h-16 sm:w-20 sm:h-20 bg-white rounded-2xl shadow-lg mb-3 sm:mb-4">
                 @if($siteLogo)
-                    <img src="{{ asset('storage/' . $siteLogo) }}" alt="{{ $siteName }}" class="w-16 h-16 object-contain">
+                    <img src="{{ asset('storage/' . $siteLogo) }}" alt="{{ $siteName }}" class="w-12 h-12 sm:w-16 sm:h-16 object-contain">
                 @else
-                    <svg class="w-12 h-12 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <svg class="w-10 h-10 sm:w-12 sm:h-12 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path>
                     </svg>
                 @endif
             </div>
-            <h1 class="text-3xl font-bold text-white mb-2">{{ $siteName }}</h1>
-            <p class="text-purple-100">Admin Panel Login</p>
+            <h1 class="text-2xl sm:text-3xl font-bold text-white mb-2">{{ $siteName }}</h1>
+            <p class="text-sm sm:text-base text-purple-100">Admin Panel Login</p>
         </div>
 
         <!-- Login Card -->
-        <div class="glass-effect rounded-2xl shadow-2xl p-8 border border-white/20">
+        <div class="glass-effect rounded-2xl shadow-2xl p-6 sm:p-8 border border-white/20">
             <!-- Session Status -->
             @if (session('status'))
                 <div class="mb-4 p-3 bg-green-50 border border-green-200 text-green-700 rounded-lg text-sm">
@@ -70,34 +70,34 @@
                 @csrf
 
                 <!-- Email Address -->
-                <div class="mb-5">
-                    <label for="email" class="block text-sm font-semibold text-gray-700 mb-2">Email</label>
+                <div class="mb-4 sm:mb-5">
+                    <label for="email" class="block text-xs sm:text-sm font-semibold text-gray-700 mb-2">Email</label>
                     <div class="relative">
                         <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                            <svg class="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <svg class="h-4 w-4 sm:h-5 sm:w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 12a4 4 0 10-8 0 4 4 0 008 0zm0 0v1.5a2.5 2.5 0 005 0V12a9 9 0 10-9 9m4.5-1.206a8.959 8.959 0 01-4.5 1.207"></path>
                             </svg>
                         </div>
                         <input id="email" type="email" name="email" value="{{ old('email') }}" required autofocus
-                            class="block w-full pl-10 pr-3 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all"
+                            class="block w-full pl-9 sm:pl-10 pr-3 py-2.5 sm:py-3 border border-gray-300 rounded-lg text-sm sm:text-base focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all"
                             placeholder="admin@apjikom.or.id">
                     </div>
                 </div>
 
                 <!-- Password -->
-                <div class="mb-5">
-                    <label for="password" class="block text-sm font-semibold text-gray-700 mb-2">Password</label>
+                <div class="mb-4 sm:mb-5">
+                    <label for="password" class="block text-xs sm:text-sm font-semibold text-gray-700 mb-2">Password</label>
                     <div class="relative">
                         <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                            <svg class="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <svg class="h-4 w-4 sm:h-5 sm:w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path>
                             </svg>
                         </div>
                         <input id="password" type="password" name="password" required
-                            class="block w-full pl-10 pr-10 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all"
+                            class="block w-full pl-9 sm:pl-10 pr-9 sm:pr-10 py-2.5 sm:py-3 border border-gray-300 rounded-lg text-sm sm:text-base focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all"
                             placeholder="••••••••">
                         <button type="button" onclick="togglePassword()" class="absolute inset-y-0 right-0 pr-3 flex items-center">
-                            <svg id="eye-icon" class="h-5 w-5 text-gray-400 hover:text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <svg id="eye-icon" class="h-4 w-4 sm:h-5 sm:w-5 text-gray-400 hover:text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
                             </svg>
@@ -106,46 +106,46 @@
                 </div>
 
                 <!-- Remember Me -->
-                <div class="flex items-center justify-between mb-6">
+                <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-5 sm:mb-6 gap-2 sm:gap-0">
                     <label class="flex items-center">
                         <input type="checkbox" name="remember" class="w-4 h-4 text-purple-600 border-gray-300 rounded focus:ring-purple-500">
-                        <span class="ml-2 text-sm text-gray-600">Remember me</span>
+                        <span class="ml-2 text-xs sm:text-sm text-gray-600">Remember me</span>
                     </label>
                     @if (Route::has('password.request'))
-                        <a href="{{ route('password.request') }}" class="text-sm text-purple-600 hover:text-purple-700 font-medium">
+                        <a href="{{ route('password.request') }}" class="text-xs sm:text-sm text-purple-600 hover:text-purple-700 font-medium">
                             Forgot password?
                         </a>
                     @endif
                 </div>
 
                 <!-- CAPTCHA -->
-                <div class="mb-6">
-                    <label for="captcha" class="block text-sm font-semibold text-gray-700 mb-2">
-                        Keamanan: Berapa hasil dari 
-                        <span class="inline-flex items-center px-3 py-1 bg-purple-100 text-purple-700 rounded-lg font-bold text-lg mx-1">
+                <div class="mb-5 sm:mb-6">
+                    <label for="captcha" class="block text-xs sm:text-sm font-semibold text-gray-700 mb-2">
+                        <span class="block sm:inline">Keamanan: Berapa hasil dari</span>
+                        <span class="inline-flex items-center px-2 sm:px-3 py-1 bg-purple-100 text-purple-700 rounded-lg font-bold text-base sm:text-lg mx-1 my-1">
                             {{ session('captcha_num1', rand(1, 10)) }} + {{ session('captcha_num2', rand(1, 10)) }}
                         </span>
-                        ?
+                        <span class="block sm:inline">?</span>
                     </label>
                     <div class="relative">
                         <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                            <svg class="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <svg class="h-4 w-4 sm:h-5 sm:w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path>
                             </svg>
                         </div>
                         <input id="captcha" type="number" name="captcha_answer" required
-                            class="block w-full pl-10 pr-3 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all"
+                            class="block w-full pl-9 sm:pl-10 pr-3 py-2.5 sm:py-3 border border-gray-300 rounded-lg text-sm sm:text-base focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all"
                             placeholder="Masukkan jawaban">
                     </div>
                     @error('captcha_answer')
-                        <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                        <p class="mt-1 text-xs sm:text-sm text-red-600">{{ $message }}</p>
                     @enderror
                 </div>
 
                 <!-- Login Button -->
-                <button type="submit" class="w-full bg-gradient-to-r from-purple-600 to-purple-700 text-white py-3 rounded-lg font-semibold hover:from-purple-700 hover:to-purple-800 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 transform transition-all hover:scale-[1.02] shadow-lg">
+                <button type="submit" class="w-full bg-gradient-to-r from-purple-600 to-purple-700 text-white py-2.5 sm:py-3 rounded-lg text-sm sm:text-base font-semibold hover:from-purple-700 hover:to-purple-800 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 transform transition-all hover:scale-[1.02] shadow-lg">
                     <span class="flex items-center justify-center">
-                        <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <svg class="w-4 h-4 sm:w-5 sm:h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1"></path>
                         </svg>
                         LOG IN
@@ -162,7 +162,7 @@
         </div>
 
         <!-- Footer -->
-        <div class="text-center mt-6 text-white text-sm">
+        <div class="text-center mt-4 sm:mt-6 text-white text-xs sm:text-sm">
             <p>&copy; 2025 APJIKOM. All rights reserved.</p>
         </div>
     </div>

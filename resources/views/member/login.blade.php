@@ -19,7 +19,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            padding: 2rem;
+            padding: 1rem;
         }
         
         .login-card {
@@ -33,13 +33,25 @@
         
         .login-header {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            padding: 3rem 2rem;
+            padding: 2rem 1.5rem;
             text-align: center;
             color: white;
         }
         
         .login-body {
-            padding: 2.5rem 2rem;
+            padding: 2rem 1.5rem;
+        }
+        
+        @media (min-width: 640px) {
+            .login-container {
+                padding: 2rem;
+            }
+            .login-header {
+                padding: 3rem 2rem;
+            }
+            .login-body {
+                padding: 2.5rem 2rem;
+            }
         }
         
         .input-group {
@@ -49,11 +61,18 @@
         
         .input-group input {
             width: 100%;
-            padding: 1rem 1rem 1rem 3rem;
+            padding: 0.875rem 0.875rem 0.875rem 2.75rem;
             border: 2px solid #e5e7eb;
             border-radius: 10px;
-            font-size: 1rem;
+            font-size: 0.95rem;
             transition: all 0.3s;
+        }
+        
+        @media (min-width: 640px) {
+            .input-group input {
+                padding: 1rem 1rem 1rem 3rem;
+                font-size: 1rem;
+            }
         }
         
         .input-group input:focus {
@@ -117,25 +136,25 @@
         <div class="login-card">
             <!-- Header with Logo -->
             <div class="login-header">
-                <div class="flex items-center justify-center mb-4">
+                <div class="flex items-center justify-center mb-3 sm:mb-4">
                     @if(site_logo())
-                        <img src="{{ site_logo() }}" alt="APJIKOM" class="h-12 w-auto object-contain bg-white p-2 rounded mr-3">
+                        <img src="{{ site_logo() }}" alt="APJIKOM" class="h-10 sm:h-12 w-auto object-contain bg-white p-2 rounded mr-2 sm:mr-3">
                     @else
-                        <img src="{{ asset('images/logo.png') }}" alt="APJIKOM" class="h-12 mr-3">
+                        <img src="{{ asset('images/logo.png') }}" alt="APJIKOM" class="h-10 sm:h-12 mr-2 sm:mr-3">
                     @endif
                     <div class="text-left">
-                        <h1 class="text-2xl font-bold">{{ site_name() }}</h1>
+                        <h1 class="text-xl sm:text-2xl font-bold">{{ site_name() }}</h1>
                         <p class="text-white/90 text-xs">Member Dashboard</p>
                     </div>
                 </div>
-                <p class="text-white/80 text-sm mt-2">{{ site_tagline() }}</p>
+                <p class="text-white/80 text-xs sm:text-sm mt-2">{{ site_tagline() }}</p>
             </div>
 
             <!-- Login Form -->
             <div class="login-body">
-                <div class="text-center mb-6">
-                    <h2 class="text-2xl font-bold text-gray-800 mb-1">Selamat Datang</h2>
-                    <p class="text-gray-600 text-sm">Login ke dashboard member Anda</p>
+                <div class="text-center mb-5 sm:mb-6">
+                    <h2 class="text-xl sm:text-2xl font-bold text-gray-800 mb-1">Selamat Datang</h2>
+                    <p class="text-gray-600 text-xs sm:text-sm">Login ke dashboard member Anda</p>
                 </div>
 
                 <!-- Error Messages -->
@@ -183,24 +202,24 @@
                     </div>
 
                     <!-- Remember & Forgot -->
-                    <div class="flex items-center justify-between mb-6">
-                        <label class="flex items-center text-sm text-gray-600 cursor-pointer">
+                    <div class="flex items-center justify-between mb-5 sm:mb-6">
+                        <label class="flex items-center text-xs sm:text-sm text-gray-600 cursor-pointer">
                             <input type="checkbox" name="remember" class="checkbox-custom mr-2">
-                            <span>Ingat saya</span>
+                            <span class="whitespace-nowrap">Ingat saya</span>
                         </label>
 
                         @if (Route::has('password.request'))
-                        <a href="{{ route('password.request') }}" class="text-sm text-purple-600 hover:text-purple-800 font-medium">
+                        <a href="{{ route('password.request') }}" class="text-xs sm:text-sm text-purple-600 hover:text-purple-800 font-medium whitespace-nowrap">
                             Lupa password?
                         </a>
                         @endif
                     </div>
 
                     <!-- CAPTCHA -->
-                    <div class="mb-6">
-                        <label class="block text-sm font-semibold text-gray-700 mb-2">
+                    <div class="mb-5 sm:mb-6">
+                        <label class="block text-xs sm:text-sm font-semibold text-gray-700 mb-2">
                             Keamanan: Berapa hasil dari 
-                            <span class="inline-flex items-center px-3 py-1 bg-purple-100 text-purple-700 rounded-lg font-bold text-lg mx-1">
+                            <span class="inline-flex items-center px-2 sm:px-3 py-1 bg-purple-100 text-purple-700 rounded-lg font-bold text-base sm:text-lg mx-1">
                                 {{ session('member_captcha_num1', rand(1, 10)) }} + {{ session('member_captcha_num2', rand(1, 10)) }}
                             </span>
                             ?
@@ -227,8 +246,8 @@
                 </form>
 
                 <!-- Register Link -->
-                <div class="text-center mt-6 pt-6 border-t border-gray-200">
-                    <p class="text-sm text-gray-600">
+                <div class="text-center mt-5 sm:mt-6 pt-5 sm:pt-6 border-t border-gray-200">
+                    <p class="text-xs sm:text-sm text-gray-600">
                         Belum punya akun? 
                         <a href="{{ route('registration.create') }}" class="text-purple-600 hover:text-purple-800 font-semibold">
                             Daftar Sekarang
@@ -237,9 +256,9 @@
                 </div>
 
                 <!-- Back to Home -->
-                <div class="text-center mt-4">
-                    <a href="{{ route('home') }}" class="text-sm text-gray-500 hover:text-gray-700 inline-flex items-center">
-                        <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <div class="text-center mt-3 sm:mt-4">
+                    <a href="{{ route('home') }}" class="text-xs sm:text-sm text-gray-500 hover:text-gray-700 inline-flex items-center">
+                        <svg class="w-3 h-3 sm:w-4 sm:h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
                         </svg>
                         Kembali ke Beranda
