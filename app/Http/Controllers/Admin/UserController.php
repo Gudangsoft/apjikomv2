@@ -103,11 +103,27 @@ class UserController extends Controller
     {
         $user = User::findOrFail($id);
         
-        $user->password = Hash::make('@apjikom.oke');
+        $defaultPassword = '@apjikom.oke';
+        $user->password = Hash::make($defaultPassword);
         $user->save();
         
+        // Send email notification
+        $this->sendPasswordResetEmail($user, $defaultPassword);
+        
+        // Create in-app notification
+        \App\Models\Notification::create([
+            'user_id' => $user->id,
+            'type' => 'password_reset_by_admin',
+            'title' => 'Password Anda Telah Direset oleh Admin',
+            'message' => "Password Anda telah direset oleh admin. Password default: {$defaultPassword}. Segera ubah password Anda untuk keamanan akun.",
+            'icon' => 'key',
+            'color' => 'blue',
+            'action_url' => route('member.profile'),
+            'action_text' => 'Ubah Password',
+        ]);
+        
         return redirect()->route('admin.users.index')
-            ->with('success', 'Password berhasil direset ke @apjikom.oke');
+            ->with('success', "Password berhasil direset ke {$defaultPassword}. Email notifikasi telah dikirim.");
     }
     
     /**
@@ -135,5 +151,52 @@ class UserController extends Controller
         $count = count($userIds);
         return redirect()->route('admin.users.index')
             ->with('success', "{$count} user berhasil dihapus!");
+    }
+    
+    /**
+     * Send password reset email
+     */
+    private function sendPasswordResetEmail($user, $newPassword)
+    {
+        try {
+            // Update mail config from database
+            $this->updateMailConfig();
+            
+            \Mail::send('emails.password-reset', [
+                'user' => $user,
+                'newPassword' => $newPassword,
+            ], function ($message) use ($user) {
+                $message->to($user->email, $user->name)
+                        ->subject('Password Anda Telah Direset - APJIKOM');
+            });
+        } catch (\Exception $e) {
+            \Log::error('Failed to send password reset email: ' . $e->getMessage());
+        }
+    }
+    
+    /**
+     * Update mail config from database settings
+     */
+    private function updateMailConfig()
+    {
+        $settings = \App\Models\Setting::where('group', 'email')->pluck('value', 'key');
+        
+        if ($settings->isEmpty()) {
+            return;
+        }
+
+        config([
+            'mail.default' => $settings['mail_mailer'] ?? 'smtp',
+            'mail.mailers.smtp.host' => $settings['mail_host'] ?? '',
+            'mail.mailers.smtp.port' => $settings['mail_port'] ?? 465,
+            'mail.mailers.smtp.username' => $settings['mail_username'] ?? '',
+            'mail.mailers.smtp.password' => $settings['mail_password'] ?? '',
+            'mail.mailers.smtp.encryption' => $settings['mail_encryption'] ?? 'ssl',
+            'mail.from.address' => $settings['mail_from_address'] ?? '',
+            'mail.from.name' => $settings['mail_from_name'] ?? 'APJIKOM',
+        ]);
+
+        // Purge mailer instance to force recreation with new config
+        \Mail::purge();
     }
 }
