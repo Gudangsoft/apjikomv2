@@ -65,6 +65,7 @@
 <body class="bg-gray-50 dark:bg-gray-900">
     <!-- Mobile Overlay -->
     <div data-member-overlay
+         onclick="closeMemberMenu(event); return false;"
          class="fixed inset-0 bg-gray-600 bg-opacity-75 z-40 lg:hidden transition-opacity duration-300"
          style="display: none; opacity: 0;"></div>
     
@@ -74,6 +75,7 @@
             <div class="flex items-center justify-between py-3 sm:py-4">
                 <!-- Mobile Menu Button -->
                 <button type="button"
+                        onclick="toggleMemberMenu(event); return false;"
                         data-member-menu-toggle
                         class="lg:hidden p-2 rounded-lg hover:bg-purple-700 transition-colors focus:outline-none focus:ring-2 focus:ring-white">
                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -294,12 +296,18 @@
         let isMemberMenuOpen = false;
         
         function toggleMemberMenu(e) {
-            if (e) e.preventDefault();
+            if (e && e.preventDefault) e.preventDefault();
+            if (e && e.stopPropagation) e.stopPropagation();
             
             const sidebar = document.querySelector('.member-sidebar');
             const overlay = document.querySelector('[data-member-overlay]');
             
-            if (!sidebar || !overlay) return;
+            console.log('Toggle member menu', { sidebar, overlay, isOpen: isMemberMenuOpen });
+            
+            if (!sidebar || !overlay) {
+                console.error('Member sidebar or overlay not found');
+                return;
+            }
             
             isMemberMenuOpen = !isMemberMenuOpen;
             
@@ -316,10 +324,13 @@
                 }, 300);
                 document.body.style.overflow = '';
             }
+            
+            return false;
         }
         
         function closeMemberMenu(e) {
-            if (e) e.preventDefault();
+            if (e && e.preventDefault) e.preventDefault();
+            if (e && e.stopPropagation) e.stopPropagation();
             
             const sidebar = document.querySelector('.member-sidebar');
             const overlay = document.querySelector('[data-member-overlay]');
@@ -333,19 +344,30 @@
                 overlay.style.display = 'none';
             }, 300);
             document.body.style.overflow = '';
+            
+            return false;
         }
         
         // Setup event listeners when DOM is ready
-        document.addEventListener('DOMContentLoaded', function() {
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', setupMemberMenu);
+        } else {
+            setupMemberMenu();
+        }
+        
+        function setupMemberMenu() {
             const menuButton = document.querySelector('[data-member-menu-toggle]');
             const overlay = document.querySelector('[data-member-overlay]');
             const sidebar = document.querySelector('.member-sidebar');
+            
+            console.log('Setup member menu', { menuButton, overlay, sidebar });
             
             // Menu button click
             if (menuButton) {
                 menuButton.addEventListener('click', toggleMemberMenu);
                 menuButton.addEventListener('touchstart', function(e) {
                     e.preventDefault();
+                    e.stopPropagation();
                     toggleMemberMenu();
                 }, { passive: false });
             }
@@ -355,6 +377,7 @@
                 overlay.addEventListener('click', closeMemberMenu);
                 overlay.addEventListener('touchstart', function(e) {
                     e.preventDefault();
+                    e.stopPropagation();
                     closeMemberMenu();
                 }, { passive: false });
             }
@@ -377,7 +400,7 @@
                     });
                 });
             }
-        });
+        }
     </script>
     
     <!-- Alpine.js for other interactive components -->

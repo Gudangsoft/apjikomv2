@@ -74,9 +74,7 @@
 <body class="antialiased bg-gray-100">
     <!-- Mobile Overlay -->
     <div data-mobile-overlay
-         x-transition:enter="transition-opacity ease-linear duration-300"
-         x-transition:enter-start="opacity-0"
-         x-transition:enter-end="opacity-100"
+         onclick="closeMobileMenu(event); return false;"
          class="fixed inset-0 bg-gray-600 bg-opacity-75 z-30 lg:hidden transition-opacity duration-300"
          style="display: none; opacity: 0;"></div>
 
@@ -517,10 +515,10 @@
             <header class="bg-white border-b px-3 sm:px-6 py-3 sm:py-4">
                 <div class="flex justify-between items-center">
                     <!-- Mobile Menu Button -->
-                    <button @click="sidebarOpen = !sidebarOpen" 
-                            onclick="toggleMobileMenu()"
+                    <button type="button"
+                            onclick="toggleMobileMenu(event); return false;"
                             data-mobile-menu-toggle
-                            class="lg:hidden p-2 rounded-lg text-gray-600 hover:bg-gray-100 transition-colors">
+                            class="lg:hidden p-2 rounded-lg text-gray-600 hover:bg-gray-100 transition-colors focus:outline-none focus:ring-2 focus:ring-purple-500">
                         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
                         </svg>
@@ -690,12 +688,18 @@
         let isMobileMenuOpen = false;
         
         function toggleMobileMenu(e) {
-            if (e) e.preventDefault();
+            if (e && e.preventDefault) e.preventDefault();
+            if (e && e.stopPropagation) e.stopPropagation();
             
             const sidebar = document.querySelector('.admin-sidebar');
             const overlay = document.querySelector('[data-mobile-overlay]');
             
-            if (!sidebar || !overlay) return;
+            console.log('Toggle menu clicked', { sidebar, overlay, isOpen: isMobileMenuOpen });
+            
+            if (!sidebar || !overlay) {
+                console.error('Sidebar or overlay not found');
+                return;
+            }
             
             isMobileMenuOpen = !isMobileMenuOpen;
             
@@ -712,10 +716,13 @@
                 }, 300);
                 document.body.style.overflow = '';
             }
+            
+            return false;
         }
         
         function closeMobileMenu(e) {
-            if (e) e.preventDefault();
+            if (e && e.preventDefault) e.preventDefault();
+            if (e && e.stopPropagation) e.stopPropagation();
             
             const sidebar = document.querySelector('.admin-sidebar');
             const overlay = document.querySelector('[data-mobile-overlay]');
@@ -729,19 +736,30 @@
                 overlay.style.display = 'none';
             }, 300);
             document.body.style.overflow = '';
+            
+            return false;
         }
         
         // Setup event listeners when DOM is ready
-        document.addEventListener('DOMContentLoaded', function() {
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', setupMobileMenu);
+        } else {
+            setupMobileMenu();
+        }
+        
+        function setupMobileMenu() {
             const menuButton = document.querySelector('[data-mobile-menu-toggle]');
             const overlay = document.querySelector('[data-mobile-overlay]');
             const sidebar = document.querySelector('.admin-sidebar');
+            
+            console.log('Setup mobile menu', { menuButton, overlay, sidebar });
             
             // Menu button click with touch support
             if (menuButton) {
                 menuButton.addEventListener('click', toggleMobileMenu);
                 menuButton.addEventListener('touchstart', function(e) {
                     e.preventDefault();
+                    e.stopPropagation();
                     toggleMobileMenu();
                 }, { passive: false });
             }
@@ -751,6 +769,7 @@
                 overlay.addEventListener('click', closeMobileMenu);
                 overlay.addEventListener('touchstart', function(e) {
                     e.preventDefault();
+                    e.stopPropagation();
                     closeMobileMenu();
                 }, { passive: false });
             }
@@ -773,7 +792,7 @@
                     });
                 });
             }
-        });
+        }
     </script>
     
     <!-- Alpine.js for other interactive components -->
