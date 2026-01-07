@@ -16,9 +16,6 @@
     
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     
-    <!-- Alpine.js for interactive components -->
-    <script defer src="https://unpkg.com/alpinejs@3.13.3/dist/cdn.min.js"></script>
-    
     <style>
         * {
             transition: background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease;
@@ -65,24 +62,14 @@
         }
     </script>
 </head>
-<body class="bg-gray-50 dark:bg-gray-900" x-data="{ sidebarOpen: false }">
+<body class="bg-gray-50 dark:bg-gray-900">
     <!-- Mobile Overlay -->
-    <div x-show="sidebarOpen" 
-         @click="sidebarOpen = false"
-         onclick="closeMemberMenu()"
-         data-member-overlay
+    <div data-member-overlay
          x-transition:enter="transition-opacity ease-linear duration-300"
          x-transition:enter-start="opacity-0"
          x-transition:enter-end="opacity-100"
-         x-transition:leave="transition-opacity ease-linear duration-300"
-         x-transition:leave-start="opacity-100"
-         x-transition:leave-end="opacity-0"
-         class="fixed inset-0 bg-gray-600 bg-opacity-75 z-40 lg:hidden"
-         style="display: none;"
-         x-cloak></div>
-    
-    <!-- Navbar -->
-    <nav class="gradient-purple text-white shadow-lg">
+         class="fixed inset-0 bg-gray-600 bg-opacity-75 z-40 lg:hidden transition-opacity duration-300"
+         style="display: none; opacity: 0;"gradient-purple text-white shadow-lg">
         <div class="container mx-auto px-3 sm:px-4">
             <div class="flex items-center justify-between py-3 sm:py-4">
                 <!-- Mobile Menu Button -->
@@ -93,10 +80,9 @@
                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
                     </svg>
-                </button>
-                
-                <div class="flex items-center space-x-2 sm:space-x-4">
-                    @if(site_logo())
+                </buttontype="button"
+                        data-member-menu-toggle
+                        class="lg:hidden p-2 rounded-lg hover:bg-purple-700 transition-colors focus:outline-none focus:ring-2 focus:ring-white
                         <img src="{{ site_logo() }}" alt="APJIKOM" class="h-10 sm:h-12 w-auto object-contain bg-white p-1 rounded">
                     @else
                         <img src="{{ asset('images/logo.png') }}" alt="APJIKOM" class="h-10 sm:h-12">
@@ -180,9 +166,7 @@
     <!-- Sidebar & Content -->
     <div class="flex min-h-screen">
         <!-- Sidebar -->
-        <aside class="member-sidebar w-64 bg-white dark:bg-gray-800 shadow-lg lg:block"
-               :class="{'mobile-open': sidebarOpen}"
-               @click.away="sidebarOpen = false">
+        <aside class="member-sidebar w-64 bg-white dark:bg-gray-800 shadow-lg lg:block">
             <nav class="p-3 sm:p-4 space-y-2">
                 <a href="{{ route('member.dashboard') }}" 
                    class="flex items-center space-x-3 px-4 py-3 rounded-lg {{ request()->routeIs('member.dashboard') ? 'bg-purple-100 dark:bg-purple-900 text-purple-700 dark:text-purple-300' : 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700' }} transition">
@@ -304,52 +288,99 @@
         }
     </script>
     
-    <!-- Mobile Menu Script -->
+    <!-- Mobile Menu Script - Pure JavaScript -->
     <script>
-        // Vanilla JavaScript untuk mobile menu (fallback & tambahan)
-        function toggleMemberMenu() {
-            const sidebar = document.querySelector('.member-sidebar');
-            const overlay = document.querySelector('[data-member-overlay]');
-            
-            if (sidebar) {
-                sidebar.classList.toggle('mobile-open');
-                if (overlay) {
-                    const isOpen = sidebar.classList.contains('mobile-open');
-                    overlay.style.display = isOpen ? 'block' : 'none';
-                }
-            }
-        }
+        // State management
+        let isMemberMenuOpen = false;
         
-        function closeMemberMenu() {
+        function toggleMemberMenu(e) {
+            if (e) e.preventDefault();
+            
             const sidebar = document.querySelector('.member-sidebar');
             const overlay = document.querySelector('[data-member-overlay]');
             
-            if (sidebar) {
-                sidebar.classList.remove('mobile-open');
-                if (overlay) {
+            if (!sidebar || !overlay) return;
+            
+            isMemberMenuOpen = !isMemberMenuOpen;
+            
+            if (isMemberMenuOpen) {
+                sidebar.classList.add('mobile-open');
+                overlay.style.display = 'block';
+                setTimeout(() => overlay.style.opacity = '1', 10);
+                document.body.style.overflow = 'hidden';
+            } else {
+                overlay.style.opacity = '0';
+                setTimeout(() => {
+                    sidebar.classList.remove('mobile-open');
                     overlay.style.display = 'none';
-                }
+                }, 300);
+                document.body.style.overflow = '';
             }
         }
         
-        // Auto-close on desktop resize
-        window.addEventListener('resize', function() {
-            if (window.innerWidth >= 1024) {
-                closeMemberMenu();
-            }
-        });
+        function closeMemberMenu(e) {
+            if (e) e.preventDefault();
+            
+            const sidebar = document.querySelector('.member-sidebar');
+            const overlay = document.querySelector('[data-member-overlay]');
+            
+            if (!sidebar || !overlay) return;
+            
+            isMemberMenuOpen = false;
+            overlay.style.opacity = '0';
+            setTimeout(() => {
+                sidebar.classList.remove('mobile-open');
+                overlay.style.display = 'none';
+            }, 300);
+            document.body.style.overflow = '';
+        }
         
-        // Tambahan: close menu saat klik link di dalam sidebar (mobile)
+        // Setup event listeners when DOM is ready
         document.addEventListener('DOMContentLoaded', function() {
-            const sidebarLinks = document.querySelectorAll('.member-sidebar a');
-            sidebarLinks.forEach(link => {
-                link.addEventListener('click', function() {
-                    if (window.innerWidth < 1024) {
-                        setTimeout(closeMemberMenu, 100);
-                    }
-                });
+            const menuButton = document.querySelector('[data-member-menu-toggle]');
+            const overlay = document.querySelector('[data-member-overlay]');
+            const sidebar = document.querySelector('.member-sidebar');
+            
+            // Menu button click
+            if (menuButton) {
+                menuButton.addEventListener('click', toggleMemberMenu);
+                menuButton.addEventListener('touchstart', function(e) {
+                    e.preventDefault();
+                    toggleMemberMenu();
+                }, { passive: false });
+            }
+            
+            // Overlay click
+            if (overlay) {
+                overlay.addEventListener('click', closeMemberMenu);
+                overlay.addEventListener('touchstart', function(e) {
+                    e.preventDefault();
+                    closeMemberMenu();
+                }, { passive: false });
+            }
+            
+            // Close on window resize to desktop
+            window.addEventListener('resize', function() {
+                if (window.innerWidth >= 1024 && isMemberMenuOpen) {
+                    closeMemberMenu();
+                }
             });
+            
+            // Close when clicking sidebar links on mobile
+            if (sidebar) {
+                const links = sidebar.querySelectorAll('a');
+                links.forEach(link => {
+                    link.addEventListener('click', function() {
+                        if (window.innerWidth < 1024 && isMemberMenuOpen) {
+                            setTimeout(closeMemberMenu, 150);
+                        }
+                    });
+                });
+            }
         });
     </script>
+    
+    <!-- Alpine.js for other interactive components -->
+    <script defer src="https://unpkg.com/alpinejs@3.13.3/dist/cdn.min.js"></script>
 </body>
 </html>
