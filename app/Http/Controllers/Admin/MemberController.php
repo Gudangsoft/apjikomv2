@@ -584,8 +584,11 @@ class MemberController extends Controller
 
                     $member = Member::create($memberData);
 
-                    // Update registration status
-                    $registration->update(['status' => 'approved']);
+                    // Link registration to member
+                    $registration->update([
+                        'status' => 'approved',
+                        'member_id' => $member->id
+                    ]);
 
                     // Send email notification (optional - comment out if no mail configured)
                     try {
@@ -595,9 +598,26 @@ class MemberController extends Controller
                         \Log::warning('Failed to send approval email: ' . $e->getMessage());
                     }
 
+                    // Log activity
+                    \App\Helpers\ActivityLogger::log(
+                        'approve_registration',
+                        'approved',
+                        'Registration',
+                        "Approved registration #{$registration->id} and created member #{$member->id} for {$registration->full_name}"
+                    );
+
                     $successCount++;
                 } elseif ($action === 'reject') {
                     $registration->update(['status' => 'rejected']);
+                    
+                    // Log activity
+                    \App\Helpers\ActivityLogger::log(
+                        'reject_registration',
+                        'rejected',
+                        'Registration',
+                        "Rejected registration #{$registration->id} for {$registration->full_name}"
+                    );
+                    
                     $successCount++;
                 }
             } catch (\Exception $e) {
@@ -607,16 +627,16 @@ class MemberController extends Controller
             }
         }
 
-        // Prepare success message
+        // Prepare detailed success message
         $message = '';
         if ($action === 'approve') {
-            $message = "Berhasil approve {$successCount} pendaftaran!";
+            $message = "🎉 Berhasil approve {$successCount} pendaftaran! Member baru telah dibuat dan email notifikasi telah dikirim.";
         } else {
-            $message = "Berhasil reject {$successCount} pendaftaran!";
+            $message = "✅ Berhasil reject {$successCount} pendaftaran.";
         }
 
         if ($failCount > 0) {
-            $message .= " ({$failCount} gagal diproses)";
+            $message .= " ⚠️ ({$failCount} gagal diproses, cek log untuk detail)";
         }
 
         return redirect()->route('admin.members.index', ['tab' => 'registrations'])

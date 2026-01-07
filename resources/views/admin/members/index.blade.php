@@ -4,8 +4,79 @@
 
 @section('content')
 <div class="mb-6">
-    <h3 class="text-2xl font-bold text-gray-900">Manajemen Keanggotaan</h3>
-    <p class="text-gray-600 mt-1">Kelola member aktif dan pendaftaran baru dalam satu halaman</p>
+    <div class="flex items-center justify-between">
+        <div>
+            <h3 class="text-2xl font-bold text-gray-900">Manajemen Keanggotaan</h3>
+            <p class="text-gray-600 mt-1">Kelola member aktif dan pendaftaran baru dalam satu halaman</p>
+        </div>
+    </div>
+
+    <!-- Quick Stats Cards -->
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mt-6">
+        <!-- Pending Registrations -->
+        <div class="bg-gradient-to-br from-yellow-50 to-yellow-100 border-2 border-yellow-200 rounded-xl p-4 shadow-sm hover:shadow-md transition cursor-pointer" onclick="switchTab('registrations')">
+            <div class="flex items-center justify-between">
+                <div>
+                    <p class="text-xs font-semibold text-yellow-700 uppercase tracking-wide">Pending</p>
+                    <p class="text-3xl font-bold text-yellow-900 mt-1">{{ $stats['pending_registrations'] }}</p>
+                    <p class="text-xs text-yellow-600 mt-1">Menunggu approval</p>
+                </div>
+                <div class="bg-yellow-200 p-3 rounded-lg">
+                    <svg class="w-8 h-8 text-yellow-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                    </svg>
+                </div>
+            </div>
+        </div>
+
+        <!-- Total Members -->
+        <div class="bg-gradient-to-br from-purple-50 to-purple-100 border-2 border-purple-200 rounded-xl p-4 shadow-sm hover:shadow-md transition cursor-pointer" onclick="switchTab('members')">
+            <div class="flex items-center justify-between">
+                <div>
+                    <p class="text-xs font-semibold text-purple-700 uppercase tracking-wide">Member Aktif</p>
+                    <p class="text-3xl font-bold text-purple-900 mt-1">{{ $members->total() }}</p>
+                    <p class="text-xs text-purple-600 mt-1">Total anggota</p>
+                </div>
+                <div class="bg-purple-200 p-3 rounded-lg">
+                    <svg class="w-8 h-8 text-purple-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path>
+                    </svg>
+                </div>
+            </div>
+        </div>
+
+        <!-- Card Requests -->
+        <div class="bg-gradient-to-br from-blue-50 to-blue-100 border-2 border-blue-200 rounded-xl p-4 shadow-sm hover:shadow-md transition cursor-pointer" onclick="window.location.href='{{ route('admin.members.index', ['tab' => 'members', 'card_requested' => 1]) }}'">
+            <div class="flex items-center justify-between">
+                <div>
+                    <p class="text-xs font-semibold text-blue-700 uppercase tracking-wide">Request Kartu</p>
+                    <p class="text-3xl font-bold text-blue-900 mt-1">{{ $stats['card_requests'] }}</p>
+                    <p class="text-xs text-blue-600 mt-1">Permintaan baru</p>
+                </div>
+                <div class="bg-blue-200 p-3 rounded-lg">
+                    <svg class="w-8 h-8 text-blue-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"></path>
+                    </svg>
+                </div>
+            </div>
+        </div>
+
+        <!-- Card Update Requests -->
+        <div class="bg-gradient-to-br from-green-50 to-green-100 border-2 border-green-200 rounded-xl p-4 shadow-sm hover:shadow-md transition cursor-pointer" onclick="window.location.href='{{ route('admin.members.index', ['tab' => 'members', 'card_update_requested' => 1]) }}'">
+            <div class="flex items-center justify-between">
+                <div>
+                    <p class="text-xs font-semibold text-green-700 uppercase tracking-wide">Update Kartu</p>
+                    <p class="text-3xl font-bold text-green-900 mt-1">{{ $stats['card_update_requests'] }}</p>
+                    <p class="text-xs text-green-600 mt-1">Permintaan update</p>
+                </div>
+                <div class="bg-green-200 p-3 rounded-lg">
+                    <svg class="w-8 h-8 text-green-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
+                    </svg>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 
 @if(session('success'))
