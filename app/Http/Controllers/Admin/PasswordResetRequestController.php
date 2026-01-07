@@ -64,7 +64,10 @@ class PasswordResetRequestController extends Controller
             'action_text' => 'Ubah Password',
         ]);
         
-        return back()->with('success', "Password {$user->name} berhasil direset ke {$defaultPassword}");
+        // Send email notification
+        $this->sendPasswordResetEmail($user, $defaultPassword);
+        
+        return back()->with('success', "Password {$user->name} berhasil direset ke {$defaultPassword}. Email notifikasi telah dikirim.");
     }
     
     /**
@@ -99,6 +102,76 @@ class PasswordResetRequestController extends Controller
             'action_text' => 'Lihat Profil',
         ]);
         
-        return back()->with('success', "Permintaan reset password dari {$user->name} telah ditolak.");
+        // Send email notification for rejection
+        $this->sendPasswordResetRejectedEmail($user);
+        
+        return back()->with('success', "Permintaan reset password dari {$user->name} telah ditolak. Email notifikasi telah dikirim.");
+    }
+    
+    /**
+     * Send password reset email
+     */
+    private function sendPasswordResetEmail($user, $newPassword)
+    {
+        try {
+            // Update mail config from database
+            $this->updateMailConfig();
+            
+            \Mail::send('emails.password-reset', [
+                'user' => $user,
+                'newPassword' => $newPassword,
+            ], function ($message) use ($user) {
+                $message->to($user->email, $user->name)
+                        ->subject('Password Anda Telah Direset - APJIKOM');
+            });
+        } catch (\Exception $e) {
+            \Log::error('Failed to send password reset email: ' . $e->getMessage());
+        }
+    }
+    
+    /**
+     * Send password reset rejected email
+     */
+    private function sendPasswordResetRejectedEmail($user)
+    {
+        try {
+            // Update mail config from database
+            $this->updateMailConfig();
+            
+            \Mail::send('emails.password-reset-rejected', [
+                'user' => $user,
+            ], function ($message) use ($user) {
+                $message->to($user->email, $user->name)
+                        ->subject('Permintaan Reset Password Ditolak - APJIKOM');
+            });
+        } catch (\Exception $e) {
+            \Log::error('Failed to send password reset rejected email: ' . $e->getMessage());
+        }
+    }
+    
+    /**
+     * Update mail config from database settings
+     */
+    private function updateMailConfig()
+    {
+        $settings = \App\Models\Setting::where('group', 'email')->pluck('value', 'key');
+        
+        if ($settings->isEmpty()) {
+            return;
+        }
+
+        config([
+            'mail.default' => $settings['mail_mailer'] ?? 'smtp',
+            'mail.mailers.smtp.host' => $settings['mail_host'] ?? '',
+            'mail.mailers.smtp.port' => $settings['mail_port'] ?? 465,
+            'mail.mailers.smtp.username' => $settings['mail_username'] ?? '',
+            'mail.mailers.smtp.password' => $settings['mail_password'] ?? '',
+            'mail.mailers.smtp.encryption' => $settings['mail_encryption'] ?? 'ssl',
+            'mail.from.address' => $settings['mail_from_address'] ?? '',
+            'mail.from.name' => $settings['mail_from_name'] ?? 'APJIKOM',
+        ]);
+
+        // Purge mailer instance to force recreation with new config
+        \Mail::purge();
     }
 }
