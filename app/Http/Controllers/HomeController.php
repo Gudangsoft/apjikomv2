@@ -51,61 +51,20 @@ class HomeController extends Controller
         }
 
         // Load about section settings
-        $aboutImage = Setting::where('group', 'general')
-            ->where('key', 'about_image')
-            ->value('value');
-        
-        $aboutDescription = Setting::where('group', 'general')
-            ->where('key', 'about_description')
-            ->value('value');
-        
-        $aboutStat1Number = Setting::where('group', 'general')
-            ->where('key', 'about_stat1_number')
-            ->value('value');
-        
-        $aboutStat1Label = Setting::where('group', 'general')
-            ->where('key', 'about_stat1_label')
-            ->value('value');
-        
-        $aboutStat2Number = Setting::where('group', 'general')
-            ->where('key', 'about_stat2_number')
-            ->value('value');
-        
-        $aboutStat2Label = Setting::where('group', 'general')
-            ->where('key', 'about_stat2_label')
-            ->value('value');
-        
-        $aboutFeature1Title = Setting::where('group', 'general')
-            ->where('key', 'about_feature1_title')
-            ->value('value');
-        
-        $aboutFeature1Desc = Setting::where('group', 'general')
-            ->where('key', 'about_feature1_desc')
-            ->value('value');
-        
-        $aboutFeature2Title = Setting::where('group', 'general')
-            ->where('key', 'about_feature2_title')
-            ->value('value');
-        
-        $aboutFeature2Desc = Setting::where('group', 'general')
-            ->where('key', 'about_feature2_desc')
-            ->value('value');
-        
-        $aboutFeature3Title = Setting::where('group', 'general')
-            ->where('key', 'about_feature3_title')
-            ->value('value');
-        
-        $aboutFeature3Desc = Setting::where('group', 'general')
-            ->where('key', 'about_feature3_desc')
-            ->value('value');
-        
-        $aboutCtaLabel = Setting::where('group', 'general')
-            ->where('key', 'about_cta_label')
-            ->value('value');
-        
-        $aboutCtaLink = Setting::where('group', 'general')
-            ->where('key', 'about_cta_link')
-            ->value('value');
+        $aboutImage = setting('about_image');
+        $aboutDescription = setting('about_description');
+        $aboutStat1Number = setting('about_stat1_number');
+        $aboutStat1Label = setting('about_stat1_label');
+        $aboutStat2Number = setting('about_stat2_number');
+        $aboutStat2Label = setting('about_stat2_label');
+        $aboutFeature1Title = setting('about_feature1_title');
+        $aboutFeature1Desc = setting('about_feature1_desc');
+        $aboutFeature2Title = setting('about_feature2_title');
+        $aboutFeature2Desc = setting('about_feature2_desc');
+        $aboutFeature3Title = setting('about_feature3_title');
+        $aboutFeature3Desc = setting('about_feature3_desc');
+        $aboutCtaLabel = setting('about_cta_label');
+        $aboutCtaLink = setting('about_cta_link');
 
         // Load FAQs for homepage
         $faqs = Faq::active()
