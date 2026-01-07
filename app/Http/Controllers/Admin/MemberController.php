@@ -127,11 +127,15 @@ class MemberController extends Controller
         
         $registrations = $queryRegistrations->latest()->paginate(15)->withQueryString();
         
-        // Stats
+        // Stats - Get accurate total counts (not affected by filters)
         $stats = [
+            'total_members' => Member::count(),
+            'total_registrations' => Registration::count(),
             'card_requests' => Member::where('card_requested', true)->count(),
             'card_update_requests' => Member::where('card_update_requested', true)->count(),
             'pending_registrations' => Registration::where('status', 'pending')->count(),
+            'approved_registrations' => Registration::where('status', 'approved')->count(),
+            'rejected_registrations' => Registration::where('status', 'rejected')->count(),
         ];
 
         return view('admin.members.index', compact('members', 'registrations', 'stats', 'tab'));

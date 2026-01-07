@@ -12,14 +12,33 @@
     </div>
 
     <!-- Quick Stats Cards -->
-    <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mt-6">
+    <div class="grid grid-cols-1 md:grid-cols-5 gap-4 mt-6">
+        <!-- Total Registrations -->
+        <div class="bg-gradient-to-br from-indigo-50 to-indigo-100 border-2 border-indigo-200 rounded-xl p-4 shadow-sm hover:shadow-md transition cursor-pointer" onclick="switchTab('registrations')">
+            <div class="flex items-center justify-between">
+                <div>
+                    <p class="text-xs font-semibold text-indigo-700 uppercase tracking-wide">Pendaftaran</p>
+                    <p class="text-3xl font-bold text-indigo-900 mt-1">{{ $stats['total_registrations'] }}</p>
+                    <p class="text-[10px] text-indigo-600 mt-0.5">
+                        <span class="font-semibold">{{ $stats['pending_registrations'] }}</span> pending • 
+                        <span class="font-semibold">{{ $stats['approved_registrations'] }}</span> approved
+                    </p>
+                </div>
+                <div class="bg-indigo-200 p-3 rounded-lg">
+                    <svg class="w-8 h-8 text-indigo-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                    </svg>
+                </div>
+            </div>
+        </div>
+
         <!-- Pending Registrations -->
-        <div class="bg-gradient-to-br from-yellow-50 to-yellow-100 border-2 border-yellow-200 rounded-xl p-4 shadow-sm hover:shadow-md transition cursor-pointer" onclick="switchTab('registrations')">
+        <div class="bg-gradient-to-br from-yellow-50 to-yellow-100 border-2 border-yellow-200 rounded-xl p-4 shadow-sm hover:shadow-md transition cursor-pointer" onclick="window.location.href='{{ route('admin.members.index', ['tab' => 'registrations', 'reg_status' => 'pending']) }}'">
             <div class="flex items-center justify-between">
                 <div>
                     <p class="text-xs font-semibold text-yellow-700 uppercase tracking-wide">Pending</p>
                     <p class="text-3xl font-bold text-yellow-900 mt-1">{{ $stats['pending_registrations'] }}</p>
-                    <p class="text-xs text-yellow-600 mt-1">Menunggu approval</p>
+                    <p class="text-xs text-yellow-600 mt-1">Perlu approval</p>
                 </div>
                 <div class="bg-yellow-200 p-3 rounded-lg">
                     <svg class="w-8 h-8 text-yellow-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -34,7 +53,7 @@
             <div class="flex items-center justify-between">
                 <div>
                     <p class="text-xs font-semibold text-purple-700 uppercase tracking-wide">Member Aktif</p>
-                    <p class="text-3xl font-bold text-purple-900 mt-1">{{ $members->total() }}</p>
+                    <p class="text-3xl font-bold text-purple-900 mt-1">{{ $stats['total_members'] }}</p>
                     <p class="text-xs text-purple-600 mt-1">Total anggota</p>
                 </div>
                 <div class="bg-purple-200 p-3 rounded-lg">
@@ -112,7 +131,7 @@
                 </span>
                 @else
                 <span class="ml-2 px-2.5 py-0.5 text-xs font-medium rounded-full bg-gray-100 text-gray-600">
-                    {{ $registrations->total() }}
+                    {{ $stats['total_registrations'] }}
                 </span>
                 @endif
             </button>
@@ -128,7 +147,7 @@
                 </svg>
                 Member Aktif
                 <span class="ml-2 px-2.5 py-0.5 text-xs font-medium rounded-full bg-purple-100 text-purple-700">
-                    {{ $members->total() }}
+                    {{ $stats['total_members'] }}
                 </span>
             </button>
         </nav>
