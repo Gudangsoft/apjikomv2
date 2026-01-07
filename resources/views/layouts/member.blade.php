@@ -65,24 +65,24 @@
 <body class="bg-gray-50 dark:bg-gray-900">
     <!-- Mobile Overlay -->
     <div data-member-overlay
-         x-transition:enter="transition-opacity ease-linear duration-300"
-         x-transition:enter-start="opacity-0"
-         x-transition:enter-end="opacity-100"
          class="fixed inset-0 bg-gray-600 bg-opacity-75 z-40 lg:hidden transition-opacity duration-300"
-         style="display: none; opacity: 0;"gradient-purple text-white shadow-lg">
+         style="display: none; opacity: 0;"></div>
+    
+    <!-- Navbar -->
+    <nav class="gradient-purple text-white shadow-lg">
         <div class="container mx-auto px-3 sm:px-4">
             <div class="flex items-center justify-between py-3 sm:py-4">
                 <!-- Mobile Menu Button -->
-                <button @click="sidebarOpen = !sidebarOpen" 
-                        onclick="toggleMemberMenu()"
+                <button type="button"
                         data-member-menu-toggle
-                        class="lg:hidden p-2 rounded-lg hover:bg-purple-700 transition-colors">
+                        class="lg:hidden p-2 rounded-lg hover:bg-purple-700 transition-colors focus:outline-none focus:ring-2 focus:ring-white">
                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
                     </svg>
-                </buttontype="button"
-                        data-member-menu-toggle
-                        class="lg:hidden p-2 rounded-lg hover:bg-purple-700 transition-colors focus:outline-none focus:ring-2 focus:ring-white
+                </button>
+                
+                <div class="flex items-center space-x-2 sm:space-x-4">
+                    @if(site_logo())
                         <img src="{{ site_logo() }}" alt="APJIKOM" class="h-10 sm:h-12 w-auto object-contain bg-white p-1 rounded">
                     @else
                         <img src="{{ asset('images/logo.png') }}" alt="APJIKOM" class="h-10 sm:h-12">
