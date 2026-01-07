@@ -37,7 +37,7 @@ class PaymentSettingController extends Controller
                 $type = 'boolean';
             }
 
-            Setting::set($key, $value, $type, 'payment');
+            Setting::setValue($key, $value, $type, 'payment');
         }
 
         return redirect()->route('admin.payment-settings.index')

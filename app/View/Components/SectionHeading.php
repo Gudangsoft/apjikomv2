@@ -19,11 +19,11 @@ class SectionHeading extends Component
     {
         // If settingKey is provided, get from database
         if ($settingKey) {
-            $this->title = Setting::get($settingKey, $title ?? '');
+            $this->title = Setting::getValue($settingKey, $title ?? '');
             
             // Check for subtitle setting key
             $subtitleKey = $settingKey . '_subtitle';
-            $this->subtitle = Setting::get($subtitleKey, $subtitle);
+            $this->subtitle = Setting::getValue($subtitleKey, $subtitle);
         } else {
             $this->title = $title;
             $this->subtitle = $subtitle;

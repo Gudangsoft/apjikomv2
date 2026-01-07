@@ -42,7 +42,7 @@ class EmailSettingController extends Controller
                 $type = 'boolean';
             }
 
-            Setting::set($key, $value, $type, 'email');
+            Setting::setValue($key, $value, $type, 'email');
         }
 
         // Update .env file (optional - for immediate effect)

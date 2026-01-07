@@ -35,7 +35,7 @@ class AboutPageController extends Controller
 
         foreach ($validated as $key => $value) {
             if ($value !== null) {
-                Setting::set($key, $value, 'text', 'about');
+                Setting::setValue($key, $value, 'text', 'about');
             }
         }
 

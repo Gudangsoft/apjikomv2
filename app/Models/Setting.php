@@ -16,7 +16,7 @@ class Setting extends Model
     /**
      * Get setting value by key
      */
-    public static function get($key, $default = null)
+    public static function getValue($key, $default = null)
     {
         $setting = self::where('key', $key)->first();
         return $setting ? $setting->value : $default;
@@ -25,7 +25,7 @@ class Setting extends Model
     /**
      * Set setting value
      */
-    public static function set($key, $value, $type = 'text', $group = 'general')
+    public static function setValue($key, $value, $type = 'text', $group = 'general')
     {
         return self::updateOrCreate(
             ['key' => $key],

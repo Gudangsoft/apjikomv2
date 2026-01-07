@@ -44,12 +44,12 @@ class SettingController extends Controller
             $logoPath = $request->file('site_logo')->store('settings', 'public');
             
             // Delete old logo
-            $oldLogo = Setting::get('site_logo');
+            $oldLogo = Setting::getValue('site_logo');
             if ($oldLogo && Storage::disk('public')->exists($oldLogo)) {
                 Storage::disk('public')->delete($oldLogo);
             }
             
-            Setting::set('site_logo', $logoPath, 'image', 'general');
+            Setting::setValue('site_logo', $logoPath, 'image', 'general');
         }
 
         // Handle favicon upload
@@ -61,12 +61,12 @@ class SettingController extends Controller
             $faviconPath = $request->file('site_favicon')->store('settings', 'public');
             
             // Delete old favicon
-            $oldFavicon = Setting::get('site_favicon');
+            $oldFavicon = Setting::getValue('site_favicon');
             if ($oldFavicon && Storage::disk('public')->exists($oldFavicon)) {
                 Storage::disk('public')->delete($oldFavicon);
             }
             
-            Setting::set('site_favicon', $faviconPath, 'image', 'general');
+            Setting::setValue('site_favicon', $faviconPath, 'image', 'general');
         }
 
         // Save all text settings
@@ -92,7 +92,7 @@ class SettingController extends Controller
                 $type = 'email';
             }
 
-            Setting::set($key, $value, $type, $group);
+            Setting::setValue($key, $value, $type, $group);
         }
 
         return redirect()->route('admin.settings.index')

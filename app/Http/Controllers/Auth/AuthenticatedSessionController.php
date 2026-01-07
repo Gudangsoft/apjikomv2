@@ -17,8 +17,8 @@ class AuthenticatedSessionController extends Controller
      */
     public function create(): View
     {
-        $siteName = Setting::get('site_name') ?? 'APJIKOM';
-        $siteLogo = Setting::get('site_logo');
+        $siteName = Setting::getValue('site_name') ?? 'APJIKOM';
+        $siteLogo = Setting::getValue('site_logo');
         
         // Generate simple math CAPTCHA
         $num1 = rand(1, 10);

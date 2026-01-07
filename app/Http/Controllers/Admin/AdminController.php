@@ -117,7 +117,7 @@ class AdminController extends Controller
             ->count();
         
         // Satisfaction Rate from settings
-        $satisfactionRate = Setting::get('satisfaction_rate', 98);
+        $satisfactionRate = Setting::getValue('satisfaction_rate', 98);
 
         return view('admin.dashboard', compact(
             'stats',

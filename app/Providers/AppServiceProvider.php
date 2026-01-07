@@ -26,9 +26,9 @@ class AppServiceProvider extends ServiceProvider
         View::composer('*', function ($view) {
             try {
                 $view->with([
-                    'globalSiteName' => Setting::get('site_name') ?? 'APJIKOM',
-                    'globalSiteLogo' => Setting::get('site_logo'),
-                    'globalSiteFavicon' => Setting::get('site_favicon'),
+                    'globalSiteName' => Setting::getValue('site_name') ?? 'APJIKOM',
+                    'globalSiteLogo' => Setting::getValue('site_logo'),
+                    'globalSiteFavicon' => Setting::getValue('site_favicon'),
                 ]);
             } catch (\Exception $e) {
                 // Fallback if settings table doesn't exist

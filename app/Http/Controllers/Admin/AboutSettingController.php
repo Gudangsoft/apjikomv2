@@ -44,12 +44,12 @@ class AboutSettingController extends Controller
             $aboutImagePath = $request->file('about_image')->store('about', 'public');
             
             // Delete old about image
-            $oldAboutImage = Setting::get('about_image');
+            $oldAboutImage = Setting::getValue('about_image');
             if ($oldAboutImage && Storage::disk('public')->exists($oldAboutImage)) {
                 Storage::disk('public')->delete($oldAboutImage);
             }
             
-            Setting::set('about_image', $aboutImagePath, 'image', 'about');
+            Setting::setValue('about_image', $aboutImagePath, 'image', 'about');
         }
 
         // Save all text settings
@@ -60,7 +60,7 @@ class AboutSettingController extends Controller
                 $type = 'textarea';
             }
 
-            Setting::set($key, $value, $type, 'about');
+            Setting::setValue($key, $value, $type, 'about');
         }
 
         return redirect()->route('admin.about-settings.index')

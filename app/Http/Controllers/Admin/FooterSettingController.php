@@ -49,7 +49,7 @@ class FooterSettingController extends Controller
 
         // Save all footer settings
         foreach ($validated as $key => $value) {
-            Setting::set($key, $value, 'text', 'footer');
+            Setting::setValue($key, $value, 'text', 'footer');
         }
 
         return redirect()->route('admin.footer-settings.index')
