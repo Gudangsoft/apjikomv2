@@ -526,9 +526,10 @@
                     <h2 class="text-base sm:text-xl font-semibold text-gray-800">@yield('page-title', 'Dashboard')</h2>
                     
                     <div class="flex items-center space-x-2 sm:space-x-4">
-                        <!--type="button"
-                            data-mobile-menu-toggle
-                            class="lg:hidden p-2 rounded-lg text-gray-600 hover:bg-gray-100 transition-colors focus:outline-none focus:ring-2 focus:ring-purple-500
+                        <!-- Update Request Badge -->
+                        @php
+                            $pendingUpdateRequests = \App\Models\UpdateRequest::where('status', 'pending')->count();
+                        @endphp
                         @if($pendingUpdateRequests > 0)
                         <a href="{{ route('admin.changelog.index') }}#requests" 
                            class="relative p-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition-colors group"
