@@ -161,8 +161,22 @@
                 @if ($errors->any())
                 <div class="error-message">
                     @foreach ($errors->all() as $error)
-                        {{ $error }}
+                        {{ $error }}<br>
                     @endforeach
+                    
+                    @if (session('show_reset_password'))
+                        <div class="mt-3 pt-3 border-t border-red-300">
+                            <p class="font-semibold mb-2">❌ Password salah 3 kali!</p>
+                            <p class="text-xs mb-2">Lupa password? Klik tombol di bawah untuk reset password:</p>
+                            <button type="button" onclick="showResetPasswordForm()" 
+                                class="w-full bg-orange-500 hover:bg-orange-600 text-white py-2 px-4 rounded-lg text-sm font-semibold transition-all">
+                                <svg class="w-4 h-4 inline-block mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z"></path>
+                                </svg>
+                                Reset Password
+                            </button>
+                        </div>
+                    @endif
                 </div>
                 @endif
 
@@ -172,7 +186,30 @@
                 </div>
                 @endif
 
-                <form method="POST" action="{{ route('member.login.post') }}">
+                <!-- Reset Password Form (Hidden by default) -->
+                <div id="resetPasswordForm" class="mb-4 p-4 bg-yellow-50 border border-yellow-300 rounded-lg" style="display: none;">
+                    <h3 class="text-sm font-bold text-yellow-800 mb-3">🔐 Reset Password</h3>
+                    <p class="text-xs text-yellow-700 mb-3">Masukkan email Anda untuk menerima link reset password:</p>
+                    
+                    <form id="resetForm" action="{{ route('password.email') }}" method="POST">
+                        @csrf
+                        <div class="flex gap-2">
+                            <input type="email" name="email" id="reset_email" required
+                                class="flex-1 px-3 py-2 border border-yellow-300 rounded-lg text-sm focus:ring-2 focus:ring-yellow-500 focus:border-transparent"
+                                placeholder="email@example.com">
+                            <button type="submit" class="bg-yellow-600 hover:bg-yellow-700 text-white px-4 py-2 rounded-lg text-sm font-semibold transition-all whitespace-nowrap">
+                                Kirim Link
+                            </button>
+                        </div>
+                    </form>
+                    
+                    <button type="button" onclick="hideResetPasswordForm()" 
+                        class="mt-2 text-xs text-yellow-600 hover:text-yellow-800 underline">
+                        Kembali ke login
+                    </button>
+                </div>
+
+                <form method="POST" action="{{ route('member.login.post') }}" id="loginForm">
                     @csrf
 
                     <!-- Email Input -->
@@ -267,5 +304,34 @@
             </div>
         </div>
     </div>
+
+    <script>
+        function showResetPasswordForm() {
+            const resetForm = document.getElementById('resetPasswordForm');
+            const loginForm = document.getElementById('loginForm');
+            const emailValue = document.querySelector('input[name="email"]').value;
+            
+            // Pre-fill email in reset form
+            if (emailValue) {
+                document.getElementById('reset_email').value = emailValue;
+            }
+            
+            // Show reset form, hide login form
+            resetForm.style.display = 'block';
+            loginForm.style.display = 'none';
+            
+            // Scroll to reset form
+            resetForm.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }
+
+        function hideResetPasswordForm() {
+            const resetForm = document.getElementById('resetPasswordForm');
+            const loginForm = document.getElementById('loginForm');
+            
+            // Hide reset form, show login form
+            resetForm.style.display = 'none';
+            loginForm.style.display = 'block';
+        }
+    </script>
 </body>
 </html>

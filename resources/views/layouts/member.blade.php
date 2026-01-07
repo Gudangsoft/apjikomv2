@@ -16,6 +16,9 @@
     
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     
+    <!-- Alpine.js for interactive components -->
+    <script defer src="https://unpkg.com/alpinejs@3.13.3/dist/cdn.min.js"></script>
+    
     <style>
         * {
             transition: background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease;
@@ -66,6 +69,8 @@
     <!-- Mobile Overlay -->
     <div x-show="sidebarOpen" 
          @click="sidebarOpen = false"
+         onclick="closeMemberMenu()"
+         data-member-overlay
          x-transition:enter="transition-opacity ease-linear duration-300"
          x-transition:enter-start="opacity-0"
          x-transition:enter-end="opacity-100"
@@ -73,6 +78,7 @@
          x-transition:leave-start="opacity-100"
          x-transition:leave-end="opacity-0"
          class="fixed inset-0 bg-gray-600 bg-opacity-75 z-40 lg:hidden"
+         style="display: none;"
          x-cloak></div>
     
     <!-- Navbar -->
@@ -81,6 +87,8 @@
             <div class="flex items-center justify-between py-3 sm:py-4">
                 <!-- Mobile Menu Button -->
                 <button @click="sidebarOpen = !sidebarOpen" 
+                        onclick="toggleMemberMenu()"
+                        data-member-menu-toggle
                         class="lg:hidden p-2 rounded-lg hover:bg-purple-700 transition-colors">
                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
@@ -294,6 +302,54 @@
                 }
             });
         }
+    </script>
+    
+    <!-- Mobile Menu Script -->
+    <script>
+        // Vanilla JavaScript untuk mobile menu (fallback & tambahan)
+        function toggleMemberMenu() {
+            const sidebar = document.querySelector('.member-sidebar');
+            const overlay = document.querySelector('[data-member-overlay]');
+            
+            if (sidebar) {
+                sidebar.classList.toggle('mobile-open');
+                if (overlay) {
+                    const isOpen = sidebar.classList.contains('mobile-open');
+                    overlay.style.display = isOpen ? 'block' : 'none';
+                }
+            }
+        }
+        
+        function closeMemberMenu() {
+            const sidebar = document.querySelector('.member-sidebar');
+            const overlay = document.querySelector('[data-member-overlay]');
+            
+            if (sidebar) {
+                sidebar.classList.remove('mobile-open');
+                if (overlay) {
+                    overlay.style.display = 'none';
+                }
+            }
+        }
+        
+        // Auto-close on desktop resize
+        window.addEventListener('resize', function() {
+            if (window.innerWidth >= 1024) {
+                closeMemberMenu();
+            }
+        });
+        
+        // Tambahan: close menu saat klik link di dalam sidebar (mobile)
+        document.addEventListener('DOMContentLoaded', function() {
+            const sidebarLinks = document.querySelectorAll('.member-sidebar a');
+            sidebarLinks.forEach(link => {
+                link.addEventListener('click', function() {
+                    if (window.innerWidth < 1024) {
+                        setTimeout(closeMemberMenu, 100);
+                    }
+                });
+            });
+        });
     </script>
 </body>
 </html>

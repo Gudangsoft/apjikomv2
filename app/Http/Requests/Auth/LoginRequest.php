@@ -59,11 +59,24 @@ class LoginRequest extends FormRequest
         if (! Auth::attempt($this->only('email', 'password'), $this->boolean('remember'))) {
             RateLimiter::hit($this->throttleKey());
 
+            // Track failed attempts per email
+            $failedKey = 'login_failed_' . $this->string('email');
+            $attempts = (int) session($failedKey, 0) + 1;
+            session([$failedKey => $attempts]);
+            
+            // Set flag to show reset password option after 3 failed attempts
+            if ($attempts >= 3) {
+                session(['show_reset_password' => true]);
+            }
+
             throw ValidationException::withMessages([
                 'email' => trans('auth.failed'),
             ]);
         }
 
+        // Clear failed attempts on successful login
+        $failedKey = 'login_failed_' . $this->string('email');
+        session()->forget([$failedKey, 'show_reset_password']);
         RateLimiter::clear($this->throttleKey());
     }
 

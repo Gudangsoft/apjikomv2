@@ -90,6 +90,10 @@ class MemberDashboardController extends Controller
         if (Auth::attempt($credentials, $remember)) {
             $request->session()->regenerate();
             
+            // Clear failed attempts on successful login
+            $failedKey = 'login_failed_' . $request->email;
+            session()->forget([$failedKey, 'show_reset_password']);
+            
             // Check if user has member record
             if (!Auth::user()->member) {
                 Auth::logout();
@@ -105,6 +109,16 @@ class MemberDashboardController extends Controller
             }
 
             return redirect()->intended(route('member.dashboard'));
+        }
+
+        // Track failed attempts per email
+        $failedKey = 'login_failed_' . $request->email;
+        $attempts = (int) session($failedKey, 0) + 1;
+        session([$failedKey => $attempts]);
+        
+        // Set flag to show reset password option after 3 failed attempts
+        if ($attempts >= 3) {
+            session(['show_reset_password' => true]);
         }
 
         // Email exists but password is wrong
