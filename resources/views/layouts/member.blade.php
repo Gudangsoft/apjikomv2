@@ -36,6 +36,22 @@
         .dark .card-shadow {
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
         }
+        
+        /* Responsive sidebar */
+        @media (max-width: 1023px) {
+            .member-sidebar {
+                transform: translateX(-100%);
+                position: fixed;
+                top: 0;
+                left: 0;
+                height: 100vh;
+                z-index: 50;
+                transition: transform 0.3s ease-in-out;
+            }
+            .member-sidebar.mobile-open {
+                transform: translateX(0);
+            }
+        }
     </style>
     
     <!-- Dark Mode Script -->
@@ -46,24 +62,44 @@
         }
     </script>
 </head>
-<body class="bg-gray-50 dark:bg-gray-900">
+<body class="bg-gray-50 dark:bg-gray-900" x-data="{ sidebarOpen: false }">
+    <!-- Mobile Overlay -->
+    <div x-show="sidebarOpen" 
+         @click="sidebarOpen = false"
+         x-transition:enter="transition-opacity ease-linear duration-300"
+         x-transition:enter-start="opacity-0"
+         x-transition:enter-end="opacity-100"
+         x-transition:leave="transition-opacity ease-linear duration-300"
+         x-transition:leave-start="opacity-100"
+         x-transition:leave-end="opacity-0"
+         class="fixed inset-0 bg-gray-600 bg-opacity-75 z-40 lg:hidden"
+         x-cloak></div>
+    
     <!-- Navbar -->
     <nav class="gradient-purple text-white shadow-lg">
-        <div class="container mx-auto px-4">
-            <div class="flex items-center justify-between py-4">
-                <div class="flex items-center space-x-4">
+        <div class="container mx-auto px-3 sm:px-4">
+            <div class="flex items-center justify-between py-3 sm:py-4">
+                <!-- Mobile Menu Button -->
+                <button @click="sidebarOpen = !sidebarOpen" 
+                        class="lg:hidden p-2 rounded-lg hover:bg-purple-700 transition-colors">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                    </svg>
+                </button>
+                
+                <div class="flex items-center space-x-2 sm:space-x-4">
                     @if(site_logo())
-                        <img src="{{ site_logo() }}" alt="APJIKOM" class="h-12 w-auto object-contain bg-white p-1 rounded">
+                        <img src="{{ site_logo() }}" alt="APJIKOM" class="h-10 sm:h-12 w-auto object-contain bg-white p-1 rounded">
                     @else
-                        <img src="{{ asset('images/logo.png') }}" alt="APJIKOM" class="h-12">
+                        <img src="{{ asset('images/logo.png') }}" alt="APJIKOM" class="h-10 sm:h-12">
                     @endif
-                    <div>
-                        <h1 class="text-xl font-bold">{{ site_name() }}</h1>
+                    <div class="hidden sm:block">
+                        <h1 class="text-lg sm:text-xl font-bold">{{ site_name() }}</h1>
                         <p class="text-xs text-purple-200">{{ site_tagline() }}</p>
                     </div>
                 </div>
                 
-                <div class="flex items-center space-x-6">
+                <div class="flex items-center space-x-3 sm:space-x-6">
                     <!-- Dark Mode Toggle -->
                     <button id="darkModeToggleMember" class="p-2 rounded-lg hover:bg-purple-700 transition-colors" title="Toggle Dark Mode">
                         <svg id="sunIconMember" class="w-5 h-5 text-white hidden dark:block" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -98,12 +134,12 @@
                     </div>
                     
                     <div class="relative" x-data="{ open: false }">
-                        <button @click="open = !open" class="flex items-center space-x-2 hover:text-purple-200 transition">
-                            <div class="w-10 h-10 bg-white/20 rounded-full flex items-center justify-center">
-                                <span class="text-lg font-bold">{{ substr(Auth::user()->name, 0, 1) }}</span>
+                        <button @click="open = !open" class="flex items-center space-x-1 sm:space-x-2 hover:text-purple-200 transition">
+                            <div class="w-8 h-8 sm:w-10 sm:h-10 bg-white/20 rounded-full flex items-center justify-center">
+                                <span class="text-base sm:text-lg font-bold">{{ substr(Auth::user()->name, 0, 1) }}</span>
                             </div>
-                            <span class="hidden md:block">{{ Auth::user()->name }}</span>
-                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <span class="hidden md:block text-sm">{{ Auth::user()->name }}</span>
+                            <svg class="w-3 h-3 sm:w-4 sm:h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
                             </svg>
                         </button>
@@ -136,8 +172,10 @@
     <!-- Sidebar & Content -->
     <div class="flex min-h-screen">
         <!-- Sidebar -->
-        <aside class="w-64 bg-white dark:bg-gray-800 shadow-lg">
-            <nav class="p-4 space-y-2">
+        <aside class="member-sidebar w-64 bg-white dark:bg-gray-800 shadow-lg lg:block"
+               :class="{'mobile-open': sidebarOpen}"
+               @click.away="sidebarOpen = false">
+            <nav class="p-3 sm:p-4 space-y-2">
                 <a href="{{ route('member.dashboard') }}" 
                    class="flex items-center space-x-3 px-4 py-3 rounded-lg {{ request()->routeIs('member.dashboard') ? 'bg-purple-100 dark:bg-purple-900 text-purple-700 dark:text-purple-300' : 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700' }} transition">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">

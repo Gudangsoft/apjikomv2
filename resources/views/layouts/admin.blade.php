@@ -39,20 +39,57 @@
             top: 0;
             overflow-y: auto;
             flex-shrink: 0;
+            z-index: 40;
+            transition: transform 0.3s ease-in-out;
         }
         
         .admin-main {
             flex: 1;
             min-width: 0;
             background-color: #f9fafb;
-            margin-left: 16rem;
+            margin-left: 0;
+            transition: margin-left 0.3s ease-in-out;
+        }
+        
+        /* Desktop styles */
+        @media (min-width: 1024px) {
+            .admin-sidebar {
+                transform: translateX(0) !important;
+            }
+            .admin-main {
+                margin-left: 16rem;
+            }
+        }
+        
+        /* Mobile styles */
+        @media (max-width: 1023px) {
+            .admin-sidebar {
+                transform: translateX(-100%);
+            }
+            .admin-sidebar.mobile-open {
+                transform: translateX(0);
+            }
         }
     </style>
 </head>
-<body class="antialiased bg-gray-100">
+<body class="antialiased bg-gray-100" x-data="{ sidebarOpen: false }">
+    <!-- Mobile Overlay -->
+    <div x-show="sidebarOpen" 
+         @click="sidebarOpen = false"
+         x-transition:enter="transition-opacity ease-linear duration-300"
+         x-transition:enter-start="opacity-0"
+         x-transition:enter-end="opacity-100"
+         x-transition:leave="transition-opacity ease-linear duration-300"
+         x-transition:leave-start="opacity-100"
+         x-transition:leave-end="opacity-0"
+         class="fixed inset-0 bg-gray-600 bg-opacity-75 z-30 lg:hidden"
+         x-cloak></div>
+
     <div class="admin-wrapper">
         <!-- Sidebar -->
-        <aside class="admin-sidebar bg-gradient-to-b from-purple-900 to-purple-800 text-white flex-shrink-0">
+        <aside class="admin-sidebar bg-gradient-to-b from-purple-900 to-purple-800 text-white flex-shrink-0"
+               :class="{'mobile-open': sidebarOpen}"
+               @click.away="sidebarOpen = false">
             <div class="p-4 border-b border-purple-700">
                 <div class="flex items-center space-x-2">
                     <div class="w-9 h-9 bg-white rounded-lg flex items-center justify-center">
@@ -484,11 +521,19 @@
         <!-- Main Content -->
         <div class="admin-main flex flex-col overflow-hidden">
             <!-- Header -->
-            <header class="bg-white border-b px-6 py-4">
+            <header class="bg-white border-b px-3 sm:px-6 py-3 sm:py-4">
                 <div class="flex justify-between items-center">
-                    <h2 class="text-xl font-semibold text-gray-800">@yield('page-title', 'Dashboard')</h2>
+                    <!-- Mobile Menu Button -->
+                    <button @click="sidebarOpen = !sidebarOpen" 
+                            class="lg:hidden p-2 rounded-lg text-gray-600 hover:bg-gray-100 transition-colors">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                        </svg>
+                    </button>
                     
-                    <div class="flex items-center space-x-4">
+                    <h2 class="text-base sm:text-xl font-semibold text-gray-800">@yield('page-title', 'Dashboard')</h2>
+                    
+                    <div class="flex items-center space-x-2 sm:space-x-4">
                         <!-- Update Request Badge -->
                         @php
                             $pendingUpdateRequests = \App\Models\UpdateRequest::where('status', 'pending')->count();

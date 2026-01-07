@@ -84,14 +84,14 @@
     @endif
 
     <!-- Welcome Card -->
-    <div class="bg-white rounded-xl card-shadow p-6">
-        <div class="flex items-center justify-between">
-            <div>
-                <h2 class="text-2xl font-bold text-gray-800">Selamat Datang, {{ Auth::user()->name }}!</h2>
-                <p class="text-gray-600 mt-1">No. Anggota: <span class="font-semibold text-purple-600">{{ $member->member_number ?? 'Belum ada' }}</span></p>
+    <div class="bg-white dark:bg-gray-800 rounded-xl card-shadow p-4 sm:p-6">
+        <div class="flex flex-col sm:flex-row items-center justify-between gap-4">
+            <div class="text-center sm:text-left">
+                <h2 class="text-xl sm:text-2xl font-bold text-gray-800 dark:text-gray-100">Selamat Datang, {{ Auth::user()->name }}!</h2>
+                <p class="text-gray-600 dark:text-gray-400 mt-1 text-sm sm:text-base">No. Anggota: <span class="font-semibold text-purple-600">{{ $member->member_number ?? 'Belum ada' }}</span></p>
             </div>
-            <div class="w-20 h-20 gradient-purple rounded-full flex items-center justify-center">
-                <svg class="w-10 h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <div class="w-16 h-16 sm:w-20 sm:h-20 gradient-purple rounded-full flex items-center justify-center">
+                <svg class="w-8 h-8 sm:w-10 sm:h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5.121 17.804A13.937 13.937 0 0112 16c2.5 0 4.847.655 6.879 1.804M15 10a3 3 0 11-6 0 3 3 0 016 0zm6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                 </svg>
             </div>

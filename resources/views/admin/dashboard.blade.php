@@ -8,14 +8,14 @@
 
 @section('content')
 <!-- Welcome Banner -->
-<div class="bg-gradient-to-r from-[#00629B] to-[#003A5D] rounded-lg shadow-lg p-8 mb-8 text-white">
+<div class="bg-gradient-to-r from-[#00629B] to-[#003A5D] rounded-lg shadow-lg p-4 sm:p-6 lg:p-8 mb-4 sm:mb-6 lg:mb-8 text-white">
     <div class="flex items-center justify-between">
         <div>
-            <h1 class="text-3xl font-bold mb-2">Selamat Datang, {{ auth()->user()->name }}! 👋</h1>
-            <p class="text-blue-100">Kelola konten website APJIKOM dengan mudah</p>
+            <h1 class="text-xl sm:text-2xl lg:text-3xl font-bold mb-1 sm:mb-2">Selamat Datang, {{ auth()->user()->name }}! 👋</h1>
+            <p class="text-xs sm:text-sm text-blue-100">Kelola konten website APJIKOM dengan mudah</p>
         </div>
         <div class="hidden md:block">
-            <svg class="w-24 h-24 text-white opacity-20" fill="currentColor" viewBox="0 0 20 20">
+            <svg class="w-16 h-16 lg:w-24 lg:h-24 text-white opacity-20" fill="currentColor" viewBox="0 0 20 20">
                 <path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z"></path>
             </svg>
         </div>
@@ -88,13 +88,13 @@
 @endif
 
 <!-- Stats Grid -->
-<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 lg:gap-6 mb-4 sm:mb-6 lg:mb-8">
     <!-- Total News -->
-    <div class="bg-white rounded-xl shadow-sm hover:shadow-md transition-shadow p-6 border-l-4 border-[#00629B]">
+    <div class="bg-white rounded-xl shadow-sm hover:shadow-md transition-shadow p-4 sm:p-5 lg:p-6 border-l-4 border-[#00629B]">
         <div class="flex items-center justify-between">
             <div>
-                <p class="text-sm font-medium text-gray-600 mb-1">Total Berita</p>
-                <p class="text-3xl font-bold text-gray-900">{{ $stats['total_news'] }}</p>
+                <p class="text-xs sm:text-sm font-medium text-gray-600 mb-1">Total Berita</p>
+                <p class="text-2xl sm:text-3xl font-bold text-gray-900">{{ $stats['total_news'] }}</p>
                 <div class="mt-2 flex items-center">
                     <span class="text-xs font-medium text-green-600 bg-green-50 px-2 py-1 rounded">{{ $stats['published_news'] }} Published</span>
                 </div>
