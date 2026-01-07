@@ -7,7 +7,7 @@
     <title>@yield('title', 'Member Dashboard') - APJIKOM</title>
     
     @php
-        $globalSiteFavicon = \App\Models\Setting::where('key', 'site_favicon')->value('value');
+        $globalSiteFavicon = setting('site_favicon');
     @endphp
     
     @if($globalSiteFavicon)
