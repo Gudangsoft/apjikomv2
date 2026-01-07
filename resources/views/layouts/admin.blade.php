@@ -82,7 +82,10 @@
 
     <div class="admin-wrapper">
         <!-- Sidebar -->
-        <aside class="admin-sidebar bg-gradient-to-b from-purple-900 to-purple-800 text-white flex-shrink-0e rounded-lg flex items-center justify-center">
+        <aside class="admin-sidebar bg-gradient-to-b from-purple-900 to-purple-800 text-white flex-shrink-0">
+            <div class="p-4 border-b border-purple-700">
+                <div class="flex items-center space-x-2">
+                    <div class="w-9 h-9 bg-white rounded-lg flex items-center justify-center">
                         @if($globalSiteLogo)
                             <img src="{{ asset('storage/' . $globalSiteLogo) }}" alt="{{ $globalSiteName }}" class="w-7 h-7 object-contain">
                         @else
