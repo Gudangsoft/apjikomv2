@@ -105,20 +105,45 @@ class EmailSettingController extends Controller
         ]);
 
         try {
-            \Mail::raw('This is a test email from ' . config('app.name'), function($message) use ($request) {
+            // Update mail config from database
+            $this->updateMailConfig();
+
+            \Mail::raw('Halo! Ini adalah test email dari sistem APJIKOM. Jika Anda menerima email ini, berarti konfigurasi email sudah berhasil! ✅', function($message) use ($request) {
                 $message->to($request->test_email)
                         ->subject('Test Email - ' . config('app.name'));
             });
 
             return response()->json([
                 'success' => true,
-                'message' => 'Email test berhasil dikirim ke ' . $request->test_email
+                'message' => '✅ Email test berhasil dikirim ke ' . $request->test_email . '! Silakan cek inbox Anda.'
             ]);
         } catch (\Exception $e) {
             return response()->json([
                 'success' => false,
-                'message' => 'Gagal mengirim email: ' . $e->getMessage()
+                'message' => '❌ Gagal mengirim email: ' . $e->getMessage()
             ], 500);
         }
+    }
+
+    /**
+     * Update mail config from database settings
+     */
+    private function updateMailConfig()
+    {
+        $settings = Setting::where('group', 'email')->pluck('value', 'key');
+
+        config([
+            'mail.default' => $settings['mail_mailer'] ?? 'smtp',
+            'mail.mailers.smtp.host' => $settings['mail_host'] ?? '',
+            'mail.mailers.smtp.port' => $settings['mail_port'] ?? 465,
+            'mail.mailers.smtp.username' => $settings['mail_username'] ?? '',
+            'mail.mailers.smtp.password' => $settings['mail_password'] ?? '',
+            'mail.mailers.smtp.encryption' => $settings['mail_encryption'] ?? 'ssl',
+            'mail.from.address' => $settings['mail_from_address'] ?? '',
+            'mail.from.name' => $settings['mail_from_name'] ?? 'APJIKOM',
+        ]);
+
+        // Purge mailer instance to force recreation with new config
+        \Mail::purge();
     }
 }
