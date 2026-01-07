@@ -171,8 +171,20 @@ class RegistrationController extends Controller
         } else {
             // Jika user sudah ada tapi role belum member, update role-nya
             // Hanya update jika role adalah 'user', jangan ubah jika sudah 'admin' atau 'member'
+            $needsUpdate = false;
+            
             if ($user->role === 'user') {
                 $user->role = 'member';
+                $needsUpdate = true;
+            }
+            
+            // Verifikasi email jika belum terverifikasi
+            if (!$user->email_verified_at) {
+                $user->email_verified_at = now();
+                $needsUpdate = true;
+            }
+            
+            if ($needsUpdate) {
                 $user->save();
             }
         }

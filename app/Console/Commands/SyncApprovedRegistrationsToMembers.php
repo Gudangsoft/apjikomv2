@@ -44,6 +44,7 @@ class SyncApprovedRegistrationsToMembers extends Command
 
         $stats = [
             'user_role_fixed' => 0,
+            'email_verified' => 0,
             'member_linked' => 0,
             'already_ok' => 0,
             'errors' => 0,
@@ -63,11 +64,25 @@ class SyncApprovedRegistrationsToMembers extends Command
                 }
 
                 // Fix user role if needed
+                $needsUpdate = false;
+                
                 if ($user->role === 'user') {
                     $user->role = 'member';
-                    $user->save();
+                    $needsUpdate = true;
                     $this->info("  ✅ Updated user role: user → member");
                     $stats['user_role_fixed']++;
+                }
+                
+                // Verify email if not verified
+                if (!$user->email_verified_at) {
+                    $user->email_verified_at = now();
+                    $needsUpdate = true;
+                    $this->info("  ✅ Email verified");
+                    $stats['email_verified']++;
+                }
+                
+                if ($needsUpdate) {
+                    $user->save();
                 }
 
                 // Check if member exists
@@ -105,6 +120,7 @@ class SyncApprovedRegistrationsToMembers extends Command
             ['Action', 'Count'],
             [
                 ['User roles fixed (user → member)', $stats['user_role_fixed']],
+                ['Emails verified', $stats['email_verified']],
                 ['Registrations linked to members', $stats['member_linked']],
                 ['Already OK', $stats['already_ok']],
                 ['Errors', $stats['errors']],
