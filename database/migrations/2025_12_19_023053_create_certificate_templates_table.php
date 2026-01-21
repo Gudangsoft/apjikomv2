@@ -11,14 +11,16 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('certificate_templates', function (Blueprint $table) {
-            $table->id();
-            $table->string('name');
-            $table->string('template_image');
-            $table->boolean('is_active')->default(false);
-            $table->text('description')->nullable();
-            $table->timestamps();
-        });
+        if (!Schema::hasTable('certificate_templates')) {
+            Schema::create('certificate_templates', function (Blueprint $table) {
+                $table->id();
+                $table->string('name');
+                $table->string('template_image');
+                $table->boolean('is_active')->default(false);
+                $table->text('description')->nullable();
+                $table->timestamps();
+            });
+        }
     }
 
     /**

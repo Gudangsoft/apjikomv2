@@ -12,10 +12,18 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('members', function (Blueprint $table) {
-            $table->string('google_scholar_link')->nullable()->after('bio');
-            $table->string('sinta_link')->nullable()->after('google_scholar_link');
-            $table->string('orcid_link')->nullable()->after('sinta_link');
-            $table->string('scopus_link')->nullable()->after('orcid_link');
+            if (!Schema::hasColumn('members', 'google_scholar_link')) {
+                $table->string('google_scholar_link')->nullable()->after('bio');
+            }
+            if (!Schema::hasColumn('members', 'sinta_link')) {
+                $table->string('sinta_link')->nullable()->after('google_scholar_link');
+            }
+            if (!Schema::hasColumn('members', 'orcid_link')) {
+                $table->string('orcid_link')->nullable()->after('sinta_link');
+            }
+            if (!Schema::hasColumn('members', 'scopus_link')) {
+                $table->string('scopus_link')->nullable()->after('orcid_link');
+            }
         });
     }
 

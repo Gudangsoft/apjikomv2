@@ -12,7 +12,9 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('members', function (Blueprint $table) {
-            $table->string('cv_file')->nullable()->after('bio'); // CV/Curriculum Vitae file path
+            if (!Schema::hasColumn('members', 'cv_file')) {
+                $table->string('cv_file')->nullable()->after('bio'); // CV/Curriculum Vitae file path
+            }
         });
     }
 

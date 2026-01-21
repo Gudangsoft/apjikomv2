@@ -9,11 +9,21 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('event_registrations', function (Blueprint $table) {
-            $table->string('payment_proof')->nullable()->after('notes');
-            $table->string('payment_status')->default('pending')->after('payment_proof'); // pending, paid, verified, rejected
-            $table->timestamp('payment_verified_at')->nullable()->after('payment_status');
-            $table->unsignedBigInteger('verified_by')->nullable()->after('payment_verified_at');
-            $table->text('payment_notes')->nullable()->after('verified_by');
+            if (!Schema::hasColumn('event_registrations', 'payment_proof')) {
+                $table->string('payment_proof')->nullable()->after('notes');
+            }
+            if (!Schema::hasColumn('event_registrations', 'payment_status')) {
+                $table->string('payment_status')->default('pending')->after('payment_proof'); // pending, paid, verified, rejected
+            }
+            if (!Schema::hasColumn('event_registrations', 'payment_verified_at')) {
+                $table->timestamp('payment_verified_at')->nullable()->after('payment_status');
+            }
+            if (!Schema::hasColumn('event_registrations', 'verified_by')) {
+                $table->unsignedBigInteger('verified_by')->nullable()->after('payment_verified_at');
+            }
+            if (!Schema::hasColumn('event_registrations', 'payment_notes')) {
+                $table->text('payment_notes')->nullable()->after('verified_by');
+            }
         });
     }
 

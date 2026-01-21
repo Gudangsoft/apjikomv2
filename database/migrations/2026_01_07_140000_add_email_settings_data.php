@@ -7,73 +7,29 @@ return new class extends Migration
 {
     public function up(): void
     {
-        // Insert default email settings
-        DB::table('settings')->insert([
-            [
-                'key' => 'mail_mailer',
-                'value' => 'smtp',
-                'type' => 'text',
-                'group' => 'email',
-                'created_at' => now(),
-                'updated_at' => now(),
-            ],
-            [
-                'key' => 'mail_host',
-                'value' => 'smtp.titan.email',
-                'type' => 'text',
-                'group' => 'email',
-                'created_at' => now(),
-                'updated_at' => now(),
-            ],
-            [
-                'key' => 'mail_port',
-                'value' => '465',
-                'type' => 'text',
-                'group' => 'email',
-                'created_at' => now(),
-                'updated_at' => now(),
-            ],
-            [
-                'key' => 'mail_username',
-                'value' => 'info@scirepid.com',
-                'type' => 'text',
-                'group' => 'email',
-                'created_at' => now(),
-                'updated_at' => now(),
-            ],
-            [
-                'key' => 'mail_password',
-                'value' => 'LpkdApjiJaya100%',
-                'type' => 'password',
-                'group' => 'email',
-                'created_at' => now(),
-                'updated_at' => now(),
-            ],
-            [
-                'key' => 'mail_encryption',
-                'value' => 'ssl',
-                'type' => 'text',
-                'group' => 'email',
-                'created_at' => now(),
-                'updated_at' => now(),
-            ],
-            [
-                'key' => 'mail_from_address',
-                'value' => 'info@scirepid.com',
-                'type' => 'text',
-                'group' => 'email',
-                'created_at' => now(),
-                'updated_at' => now(),
-            ],
-            [
-                'key' => 'mail_from_name',
-                'value' => 'APJIKOM',
-                'type' => 'text',
-                'group' => 'email',
-                'created_at' => now(),
-                'updated_at' => now(),
-            ],
-        ]);
+        // Insert default email settings only if they don't exist
+        $emailSettings = [
+            ['key' => 'mail_mailer', 'value' => 'smtp', 'type' => 'text', 'group' => 'email'],
+            ['key' => 'mail_host', 'value' => 'smtp.titan.email', 'type' => 'text', 'group' => 'email'],
+            ['key' => 'mail_port', 'value' => '465', 'type' => 'text', 'group' => 'email'],
+            ['key' => 'mail_username', 'value' => 'info@scirepid.com', 'type' => 'text', 'group' => 'email'],
+            ['key' => 'mail_password', 'value' => 'LpkdApjiJaya100%', 'type' => 'password', 'group' => 'email'],
+            ['key' => 'mail_encryption', 'value' => 'ssl', 'type' => 'text', 'group' => 'email'],
+            ['key' => 'mail_from_address', 'value' => 'info@scirepid.com', 'type' => 'text', 'group' => 'email'],
+            ['key' => 'mail_from_name', 'value' => 'APJIKOM', 'type' => 'text', 'group' => 'email'],
+        ];
+
+        foreach ($emailSettings as $setting) {
+            // Check if setting already exists
+            $exists = DB::table('settings')->where('key', $setting['key'])->exists();
+            
+            if (!$exists) {
+                DB::table('settings')->insert(array_merge($setting, [
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                ]));
+            }
+        }
     }
 
     public function down(): void

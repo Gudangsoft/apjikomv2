@@ -9,11 +9,21 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('events', function (Blueprint $table) {
-            $table->boolean('is_paid')->default(false)->after('registration_fee');
-            $table->string('bank_name')->nullable()->after('is_paid');
-            $table->string('bank_account')->nullable()->after('bank_name');
-            $table->string('bank_account_name')->nullable()->after('bank_account');
-            $table->string('payment_contact')->nullable()->after('bank_account_name');
+            if (!Schema::hasColumn('events', 'is_paid')) {
+                $table->boolean('is_paid')->default(false)->after('registration_fee');
+            }
+            if (!Schema::hasColumn('events', 'bank_name')) {
+                $table->string('bank_name')->nullable()->after('is_paid');
+            }
+            if (!Schema::hasColumn('events', 'bank_account')) {
+                $table->string('bank_account')->nullable()->after('bank_name');
+            }
+            if (!Schema::hasColumn('events', 'bank_account_name')) {
+                $table->string('bank_account_name')->nullable()->after('bank_account');
+            }
+            if (!Schema::hasColumn('events', 'payment_contact')) {
+                $table->string('payment_contact')->nullable()->after('bank_account_name');
+            }
         });
     }
 

@@ -12,8 +12,11 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('registrations', function (Blueprint $table) {
-            $table->unsignedBigInteger('member_id')->nullable()->after('id');
-            $table->foreign('member_id')->references('id')->on('members')->onDelete('set null');
+            // Check if column already exists before adding
+            if (!Schema::hasColumn('registrations', 'member_id')) {
+                $table->unsignedBigInteger('member_id')->nullable()->after('id');
+                $table->foreign('member_id')->references('id')->on('members')->onDelete('set null');
+            }
         });
     }
 

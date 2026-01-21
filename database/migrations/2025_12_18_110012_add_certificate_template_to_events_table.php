@@ -12,7 +12,9 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('events', function (Blueprint $table) {
-            $table->string('certificate_template')->nullable()->after('has_certificate');
+            if (!Schema::hasColumn('events', 'certificate_template')) {
+                $table->string('certificate_template')->nullable()->after('has_certificate');
+            }
         });
     }
 

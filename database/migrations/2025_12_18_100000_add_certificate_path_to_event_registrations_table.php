@@ -9,8 +9,12 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('event_registrations', function (Blueprint $table) {
-            $table->string('certificate_path')->nullable()->after('payment_notes');
-            $table->timestamp('certificate_generated_at')->nullable()->after('certificate_path');
+            if (!Schema::hasColumn('event_registrations', 'certificate_path')) {
+                $table->string('certificate_path')->nullable()->after('payment_notes');
+            }
+            if (!Schema::hasColumn('event_registrations', 'certificate_generated_at')) {
+                $table->timestamp('certificate_generated_at')->nullable()->after('certificate_path');
+            }
         });
     }
 

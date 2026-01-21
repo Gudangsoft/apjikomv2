@@ -45,7 +45,7 @@
                 top: 0;
                 left: 0;
                 height: 100vh;
-                z-index: 50;
+                z-index: 1000;
                 transition: transform 0.3s ease-in-out;
             }
             .member-sidebar.mobile-open {
@@ -66,8 +66,8 @@
     <!-- Mobile Overlay -->
     <div data-member-overlay
          onclick="closeMemberMenu(event); return false;"
-         class="fixed inset-0 bg-gray-600 bg-opacity-75 z-40 lg:hidden transition-opacity duration-300"
-         style="display: none; opacity: 0;"></div>
+         class="fixed inset-0 bg-gray-600 bg-opacity-75 lg:hidden transition-opacity duration-300"
+         style="display: none; opacity: 0; z-index: 999;"></div>
     
     <!-- Navbar -->
     <nav class="gradient-purple text-white shadow-lg">
@@ -166,7 +166,7 @@
     </nav>
 
     <!-- Sidebar & Content -->
-    <div class="flex min-h-screen">
+    <div class="flex min-h-screen relative">
         <!-- Sidebar -->
         <aside class="member-sidebar w-64 bg-white dark:bg-gray-800 shadow-lg lg:block">
             <nav class="p-3 sm:p-4 space-y-2">

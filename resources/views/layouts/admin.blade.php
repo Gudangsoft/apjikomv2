@@ -38,7 +38,7 @@
             top: 0;
             overflow-y: auto;
             flex-shrink: 0;
-            z-index: 40;
+            z-index: 1000;
             transition: transform 0.3s ease-in-out;
         }
         
@@ -75,8 +75,8 @@
     <!-- Mobile Overlay -->
     <div data-mobile-overlay
          onclick="closeMobileMenu(event); return false;"
-         class="fixed inset-0 bg-gray-600 bg-opacity-75 z-30 lg:hidden transition-opacity duration-300"
-         style="display: none; opacity: 0;"></div>
+         class="fixed inset-0 bg-gray-600 bg-opacity-75 lg:hidden transition-opacity duration-300"
+         style="display: none; opacity: 0; z-index: 999;"></div>
 
     <div class="admin-wrapper">
         <!-- Sidebar -->
@@ -510,15 +510,16 @@
         </aside>
         
         <!-- Main Content -->
-        <div class="admin-main flex flex-col overflow-hidden">
+        <div class="admin-main flex flex-col overflow-hidden relative">
             <!-- Header -->
-            <header class="bg-white border-b px-3 sm:px-6 py-3 sm:py-4">
+            <header class="bg-white border-b px-3 sm:px-6 py-3 sm:py-4" style="position: relative; z-index: 10;">
                 <div class="flex justify-between items-center">
                     <!-- Mobile Menu Button -->
                     <button type="button"
                             onclick="toggleMobileMenu(event); return false;"
                             data-mobile-menu-toggle
-                            class="lg:hidden p-2 rounded-lg text-gray-600 hover:bg-gray-100 transition-colors focus:outline-none focus:ring-2 focus:ring-purple-500">
+                            class="lg:hidden p-2 rounded-lg text-gray-600 hover:bg-gray-100 transition-colors focus:outline-none focus:ring-2 focus:ring-purple-500"
+                            style="position: relative; z-index: 9999 !important; pointer-events: auto !important; touch-action: manipulation !important; cursor: pointer !important;">
                         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
                         </svg>

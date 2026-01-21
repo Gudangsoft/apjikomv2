@@ -11,17 +11,19 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('social_media', function (Blueprint $table) {
-            $table->id();
-            $table->string('name'); // Nama platform (Facebook, Instagram, etc)
-            $table->string('url'); // Link URL
-            $table->string('icon')->nullable(); // Path icon/logo yang diupload
-            $table->string('icon_class')->nullable(); // CSS class untuk icon (misal: fab fa-facebook)
-            $table->text('note')->nullable(); // Catatan/keterangan
-            $table->integer('order')->default(0); // Urutan tampil
-            $table->boolean('is_active')->default(true); // Aktif atau tidak
-            $table->timestamps();
-        });
+        if (!Schema::hasTable('social_media')) {
+            Schema::create('social_media', function (Blueprint $table) {
+                $table->id();
+                $table->string('name'); // Nama platform (Facebook, Instagram, etc)
+                $table->string('url'); // Link URL
+                $table->string('icon')->nullable(); // Path icon/logo yang diupload
+                $table->string('icon_class')->nullable(); // CSS class untuk icon (misal: fab fa-facebook)
+                $table->text('note')->nullable(); // Catatan/keterangan
+                $table->integer('order')->default(0); // Urutan tampil
+                $table->boolean('is_active')->default(true); // Aktif atau tidak
+                $table->timestamps();
+            });
+        }
     }
 
     /**
