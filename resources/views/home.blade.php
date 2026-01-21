@@ -168,19 +168,19 @@ document.addEventListener('DOMContentLoaded', () => {
     <div class="container mx-auto px-4">
         <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
             <div class="text-center p-6 stats-card">
-                <div class="text-3xl md:text-4xl font-bold text-purple-600 mb-2">36k+</div>
+                <div class="text-3xl md:text-4xl font-bold text-purple-600 mb-2">{{ format_stat_number($totalOrganizationMembers) }}</div>
                 <div class="text-gray-600 text-sm">Anggota PT</div>
             </div>
             <div class="text-center p-6 stats-card">
-                <div class="text-3xl md:text-4xl font-bold text-purple-600 mb-2">10k+</div>
+                <div class="text-3xl md:text-4xl font-bold text-purple-600 mb-2">{{ format_stat_number($totalIndividualMembers) }}</div>
                 <div class="text-gray-600 text-sm">Anggota Individu</div>
             </div>
             <div class="text-center p-6 stats-card">
-                <div class="text-3xl md:text-4xl font-bold text-purple-600 mb-2">12k+</div>
+                <div class="text-3xl md:text-4xl font-bold text-purple-600 mb-2">{{ format_stat_number($totalActiveMembers) }}</div>
                 <div class="text-gray-600 text-sm">Anggota Aktif</div>
             </div>
             <div class="text-center p-6 stats-card">
-                <div class="text-3xl md:text-4xl font-bold text-purple-600 mb-2">98%</div>
+                <div class="text-3xl md:text-4xl font-bold text-purple-600 mb-2">{{ number_format($satisfactionRate) }}%</div>
                 <div class="text-gray-600 text-sm">Tingkat Kepuasan</div>
             </div>
         </div>

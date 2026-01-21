@@ -10,6 +10,8 @@ use App\Models\Setting;
 use App\Models\Faq;
 use App\Models\Testimonial;
 use App\Models\Gallery;
+use App\Models\Member;
+use App\Models\Registration;
 use Illuminate\Http\Request;
 
 class HomeController extends Controller
@@ -86,6 +88,20 @@ class HomeController extends Controller
             ->take(8)
             ->get();
 
+        // Calculate real statistics
+        $totalOrganizationMembers = Member::where('member_type', 'institution')->count();
+        $totalIndividualMembers = Member::where('member_type', 'individual')->count();
+        $totalActiveMembers = Member::whereIn('status', ['active', 'approved'])->count();
+        
+        // Calculate satisfaction rate from testimonials (average rating if available)
+        $satisfactionRate = Testimonial::where('is_active', true)
+            ->avg('rating'); // Assuming testimonials have a rating field
+        if (!$satisfactionRate) {
+            $satisfactionRate = setting('satisfaction_rate', 98); // Fallback to setting or 98
+        } else {
+            $satisfactionRate = round(($satisfactionRate / 5) * 100); // Convert 1-5 rating to percentage
+        }
+
         return view('home', compact(
             'sliders', 
             'featuredNews', 
@@ -108,7 +124,11 @@ class HomeController extends Controller
             'aboutCtaLink',
             'faqs',
             'testimonials',
-            'galleries'
+            'galleries',
+            'totalOrganizationMembers',
+            'totalIndividualMembers',
+            'totalActiveMembers',
+            'satisfactionRate'
         ));
     }
 }
