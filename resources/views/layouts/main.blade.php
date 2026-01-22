@@ -7,7 +7,7 @@
     
     <title>{{ setting('site_name', 'APJIKOM') }} - @yield('title', setting('site_tagline', 'Asosiasi Pengelola Jurnal Informatika dan Komputer'))</title>
     <meta name="description" content="{{ setting('meta_description', setting('site_description', 'APJIKOM - Asosiasi Pengelola Jurnal Ilmu Komunikasi Indonesia')) }}">
-    <meta name="keywords" content="{{ setting('meta_keywords', 'apjikom, jurnal ilmiah, komunikasi') }}">
+    <meta name="keywords" content="{{ setting('meta_keywords', 'apjikom, jurnal ilmiah, asosiasi pengelola jurnal komputer') }}">
     
     @stack('meta')
     
