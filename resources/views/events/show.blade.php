@@ -24,10 +24,10 @@
         </svg>
     </div>
     
-    <div class="container mx-auto px-4 py-16 relative z-10">
-        <div class="max-w-4xl mx-auto">
+    <div class="container mx-auto px-4 py-8 md:py-12 relative z-10">
+        <div class="max-w-7xl mx-auto">
             <!-- Breadcrumb -->
-            <nav class="mb-6">
+            <nav class="mb-4">
                 <ol class="flex items-center space-x-2 text-sm text-purple-200">
                     <li><a href="{{ route('home') }}" class="hover:text-white">Home</a></li>
                     <li>/</li>
@@ -37,10 +37,10 @@
                 </ol>
             </nav>
             
-            <div class="grid md:grid-cols-3 gap-8 items-start">
+            <div class="grid lg:grid-cols-4 gap-6 items-start">
                 <!-- Date Card with enhanced styling -->
-                <div class="md:col-span-1">
-                    <div class="bg-white rounded-2xl shadow-2xl p-6 text-center sticky top-24 transform hover:scale-105 transition-all duration-300">
+                <div class="lg:col-span-1">
+                    <div class="bg-white rounded-2xl shadow-2xl p-4 text-center sticky top-20 transform hover:scale-105 transition-all duration-300">
                         <!-- Decorative top bar -->
                         <div class="absolute top-0 left-0 right-0 h-2 bg-gradient-to-r from-purple-500 via-pink-500 to-purple-500 rounded-t-2xl"></div>
                         
@@ -283,7 +283,7 @@
                 </div>
                 
                 <!-- Event Info -->
-                <div class="md:col-span-2">
+                <div class="lg:col-span-3">
                     @if($event->category)
                     <div class="mb-4">
                         <span class="inline-flex items-center bg-white/20 backdrop-blur-sm text-white px-4 py-2 rounded-full text-sm font-semibold">
@@ -295,10 +295,10 @@
                     </div>
                     @endif
                     
-                    <h1 class="text-4xl md:text-5xl font-bold mb-6 leading-tight">{{ $event->title }}</h1>
+                    <h1 class="text-3xl md:text-4xl font-bold mb-4 leading-tight">{{ $event->title }}</h1>
                     
                     @if($event->image)
-                    <div class="rounded-2xl overflow-hidden shadow-2xl mb-6">
+                    <div class="rounded-2xl overflow-hidden shadow-2xl mb-4">
                         <img src="{{ asset('storage/' . $event->image) }}" alt="{{ $event->title }}" 
                              class="w-full h-auto">
                     </div>
@@ -310,22 +310,22 @@
 </section>
 
 <!-- Event Content -->
-<section class="py-16 bg-gradient-to-br from-purple-50 via-white to-blue-50">
+<section class="py-8 md:py-12 bg-gradient-to-br from-purple-50 via-white to-blue-50">
     <div class="container mx-auto px-4">
-        <div class="max-w-4xl mx-auto">
+        <div class="max-w-7xl mx-auto">
             <!-- Description with Enhanced Design -->
-            <div class="bg-white rounded-2xl shadow-xl p-8 md:p-12 mb-8 border-t-4 border-purple-500 transform hover:shadow-2xl transition-all duration-300">
-                <h2 class="text-3xl font-bold mb-6 text-gray-900 flex items-center">
-                    <span class="text-4xl mr-3 animate-bounce">📋</span>
+            <div class="bg-white rounded-2xl shadow-xl p-6 md:p-8 mb-6 border-t-4 border-purple-500 transform hover:shadow-2xl transition-all duration-300">
+                <h2 class="text-2xl font-bold mb-4 text-gray-900 flex items-center">
+                    <span class="text-3xl mr-2 animate-bounce">📋</span>
                     <span class="bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">Tentang Kegiatan</span>
                 </h2>
-                <div class="prose prose-lg max-w-none">
-                    <p class="text-gray-700 leading-relaxed text-lg whitespace-pre-line">{{ $event->description }}</p>
+                <div class="prose max-w-none">
+                    <p class="text-gray-700 leading-relaxed text-base whitespace-pre-line">{{ $event->description }}</p>
                 </div>
                 
                 <!-- Additional Event Details in Cards -->
                 @if($event->event_time || $event->location || $event->category)
-                <div class="mt-8 grid md:grid-cols-3 gap-4">
+                <div class="mt-6 grid md:grid-cols-3 gap-3">
                     @if($event->event_time)
                     <div class="flex items-center gap-3 p-4 bg-purple-50 rounded-xl border border-purple-200">
                         <div class="bg-purple-500 text-white p-3 rounded-lg">
@@ -373,10 +373,10 @@
             
             <!-- Related Events with Enhanced Design -->
             @if($relatedEvents->count() > 0)
-            <div class="mt-16">
-                <div class="flex items-center justify-between mb-8">
-                    <h2 class="text-3xl font-bold text-gray-900 flex items-center">
-                        <span class="text-4xl mr-3">🎯</span>
+            <div class="mt-8">
+                <div class="flex items-center justify-between mb-6">
+                    <h2 class="text-2xl font-bold text-gray-900 flex items-center">
+                        <span class="text-3xl mr-2">🎯</span>
                         Kegiatan Mendatang Lainnya
                     </h2>
                     <a href="{{ route('events.index') }}" 
@@ -392,14 +392,14 @@
                     <a href="{{ route('events.show', $related->slug) }}" class="group">
                         <div class="bg-white rounded-xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 hover:-translate-y-2 border border-gray-100 h-full">
                             @if($related->image)
-                            <div class="h-48 overflow-hidden relative">
+                            <div class="h-40 overflow-hidden relative">
                                 <img src="{{ asset('storage/' . $related->image) }}" alt="{{ $related->title }}" 
                                      class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
                                 <!-- Overlay gradient -->
                                 <div class="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
                             </div>
                             @else
-                            <div class="h-48 bg-gradient-to-br from-purple-500 via-pink-500 to-purple-700 relative">
+                            <div class="h-40 bg-gradient-to-br from-purple-500 via-pink-500 to-purple-700 relative">
                                 <div class="absolute inset-0 opacity-20">
                                     <div class="absolute top-0 right-0 w-32 h-32 bg-white rounded-full blur-2xl"></div>
                                     <div class="absolute bottom-0 left-0 w-32 h-32 bg-purple-300 rounded-full blur-2xl"></div>
@@ -450,9 +450,9 @@
                     @endforeach
                 </div>
                 
-                <div class="text-center mt-8">
+                <div class="text-center mt-6">
                     <a href="{{ route('events.index') }}" 
-                       class="inline-flex items-center bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white px-8 py-4 rounded-xl font-bold transition-all hover:shadow-2xl transform hover:scale-105 hover:-translate-y-1 duration-300">
+                       class="inline-flex items-center bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white px-6 py-3 rounded-xl font-bold transition-all hover:shadow-2xl transform hover:scale-105 hover:-translate-y-1 duration-300">
                         Lihat Semua Kegiatan
                         <svg class="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
