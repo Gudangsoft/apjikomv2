@@ -8,7 +8,7 @@
 - ✅ Menambahkan import model Member dan Registration
 - ✅ Menambahkan query untuk menghitung data real dari database:
   - `$totalOrganizationMembers` - Jumlah anggota institusi (PT)
-  - `$totalIndividualMembers` - Jumlah anggota individu
+  - `$totalIndividualMembers` - Jumlah anggota bergabung
   - `$totalActiveMembers` - Jumlah anggota aktif
   - `$satisfactionRate` - Tingkat kepuasan (dari testimonial atau setting)
 - ✅ Mengirim variabel ke view home
@@ -24,13 +24,13 @@
 
 ### Data Real Saat Ini (dari database)
 - **Anggota PT (Institution):** 1+
-- **Anggota Individu:** 155+
+- **Anggota Bergabung:** 155+
 - **Anggota Aktif:** 156+
 - **Tingkat Kepuasan:** 98%
 
 ### Sebelumnya (Hardcoded)
 - Anggota PT: 36k+
-- Anggota Individu: 10k+
+- Anggota Bergabung: 10k+
 - Anggota Aktif: 12k+
 - Tingkat Kepuasan: 98%
 

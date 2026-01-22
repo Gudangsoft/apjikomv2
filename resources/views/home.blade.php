@@ -169,7 +169,7 @@ document.addEventListener('DOMContentLoaded', () => {
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-4xl mx-auto">
             <div class="text-center p-6 stats-card">
                 <div class="text-3xl md:text-4xl font-bold text-purple-600 mb-2">{{ format_stat_number($totalIndividualMembers) }}</div>
-                <div class="text-gray-600 text-sm">Anggota Individu</div>
+                <div class="text-gray-600 text-sm">Anggota Bergabung</div>
             </div>
             <div class="text-center p-6 stats-card">
                 <div class="text-3xl md:text-4xl font-bold text-purple-600 mb-2">{{ format_stat_number($totalActiveMembers) }}</div>

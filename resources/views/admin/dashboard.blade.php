@@ -186,7 +186,7 @@
     <div class="bg-white rounded-xl shadow-sm hover:shadow-md transition-shadow p-6 border-l-4 border-blue-600">
         <div class="flex items-center justify-between">
             <div>
-                <p class="text-sm font-medium text-gray-600 mb-1">Anggota Individu</p>
+                <p class="text-sm font-medium text-gray-600 mb-1">Anggota Bergabung</p>
                 <p class="text-3xl font-bold text-gray-900">{{ number_format($membersByType['individual'] ?? 0) }}{{ ($membersByType['individual'] ?? 0) >= 1000 ? '+' : '' }}</p>
                 <div class="mt-2 flex items-center">
                     <span class="text-xs font-medium text-blue-600 bg-blue-50 px-2 py-1 rounded">Perorangan</span>
