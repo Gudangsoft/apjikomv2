@@ -344,7 +344,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 <div class="flex gap-4">
                     @php
                         $ctaLabel = $aboutCtaLabel ?? 'Bergabung Sekarang';
-                        $ctaLink = $aboutCtaLink ?? route('register');
+                        $ctaLink = $aboutCtaLink ?? route('registration.create');
                         // Check if it's an external URL
                         $isExternal = filter_var($ctaLink, FILTER_VALIDATE_URL) !== false;
                         // If not external and doesn't start with /, add it

@@ -15,7 +15,7 @@ class SliderSeeder extends Seeder
                 'description' => 'Meningkatkan kualitas publikasi ilmiah di bidang informatika dan komputer di Indonesia',
                 'image' => 'sliders/default-1.jpg', // You need to add actual images
                 'button_text' => 'Bergabung Sekarang',
-                'button_link' => route('registration.create'),
+                'button_link' => url('/daftar-anggota'),
                 'order' => 1,
                 'is_active' => true,
             ],
@@ -33,7 +33,7 @@ class SliderSeeder extends Seeder
                 'description' => 'Jadilah bagian dari komunitas jurnal informatika dan komputer terbaik di Indonesia',
                 'image' => 'sliders/default-3.jpg',
                 'button_text' => 'Daftar Member',
-                'button_link' => route('registration.create'),
+                'button_link' => url('/daftar-anggota'),
                 'order' => 3,
                 'is_active' => true,
             ],
