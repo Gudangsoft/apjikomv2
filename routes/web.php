@@ -178,6 +178,7 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'admin'])->group(fun
     
     // Members Management
     Route::get('members', [AdminMemberController::class, 'index'])->name('members.index');
+    Route::get('members/export', [AdminMemberController::class, 'export'])->name('members.export');
     Route::get('members/{member}', [AdminMemberController::class, 'show'])->name('members.show');
     Route::post('members/{member}/approve', [AdminMemberController::class, 'approve'])->name('members.approve');
     Route::post('members/{member}/reject', [AdminMemberController::class, 'reject'])->name('members.reject');

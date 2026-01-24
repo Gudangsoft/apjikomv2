@@ -8,6 +8,7 @@ use App\Models\Registration;
 use App\Services\MemberCardGenerator;
 use App\Services\NotificationService;
 use App\Models\User;
+use App\Exports\MembersExport;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Hash;
@@ -139,6 +140,141 @@ class MemberController extends Controller
         ];
 
         return view('admin.members.index', compact('members', 'registrations', 'stats', 'tab'));
+    }
+
+    /**
+     * Export members to Excel/CSV
+     */
+    public function export(Request $request)
+    {
+        $format = $request->input('format', 'csv'); // csv or excel
+        
+        // Get members with same filters as index method
+        $queryMembers = Member::with('user')->latest();
+        
+        // Apply same filters as in index method
+        if ($request->filled('search')) {
+            $search = $request->search;
+            $userIds = User::where('name', 'like', "%{$search}%")
+                          ->orWhere('email', 'like', "%{$search}%")
+                          ->pluck('id');
+            
+            $queryMembers->where(function($q) use ($search, $userIds) {
+                $q->where('institution_name', 'like', "%{$search}%")
+                  ->orWhere('position', 'like', "%{$search}%")
+                  ->orWhere('member_number', 'like', "%{$search}%")
+                  ->orWhereIn('user_id', $userIds);
+            });
+        }
+        
+        if ($request->filled('status')) {
+            $queryMembers->where('status', $request->status);
+        }
+        
+        if ($request->filled('type')) {
+            $queryMembers->where('member_type', $request->type);
+        }
+        
+        if ($request->filled('verified')) {
+            $queryMembers->where('is_verified', $request->verified);
+        }
+        
+        $members = $queryMembers->get();
+        
+        $filename = 'members_export_' . date('Y-m-d_H-i-s');
+        
+        if ($format === 'excel') {
+            return $this->exportExcel($members, $filename);
+        } else {
+            return $this->exportCsv($members, $filename);
+        }
+    }
+
+    /**
+     * Export members as CSV
+     */
+    private function exportCsv($members, $filename)
+    {
+        $headers = [
+            'Content-Type' => 'text/csv',
+            'Content-Disposition' => 'attachment; filename="' . $filename . '.csv"',
+        ];
+        
+        $callback = function() use ($members) {
+            $file = fopen('php://output', 'w');
+            
+            // Add BOM for proper UTF-8 encoding in Excel
+            fwrite($file, "\xEF\xBB\xBF");
+            
+            // Summary information
+            fputcsv($file, ['LAPORAN DATA ANGGOTA APJIKOM']);
+            fputcsv($file, ['Diekspor pada:', date('d/m/Y H:i:s')]);
+            fputcsv($file, []);
+            
+            // Statistics
+            $totalMembers = collect($members)->count();
+            $activeMembers = collect($members)->where('status', 'active')->count();
+            $verifiedMembers = collect($members)->where('is_verified', true)->count();
+            $membersWithCity = collect($members)->whereNotNull('city')->where('city', '!=', '')->count();
+            
+            fputcsv($file, ['STATISTIK']);
+            fputcsv($file, ['Total Anggota', $totalMembers]);
+            fputcsv($file, ['Anggota Aktif', $activeMembers]);
+            fputcsv($file, ['Anggota Terverifikasi', $verifiedMembers]);
+            fputcsv($file, ['Anggota dengan Info Kota', $membersWithCity]);
+            fputcsv($file, []);
+            
+            // CSV Headers
+            fputcsv($file, [
+                'No Anggota',
+                'Nama Lengkap', 
+                'Email',
+                'Telepon',
+                'Institusi',
+                'Posisi',
+                'Kota',
+                'Provinsi',
+                'Alamat',
+                'Status',
+                'Verifikasi',
+                'Tanggal Bergabung',
+                'Tipe Member',
+                'Website'
+            ]);
+            
+            // Data rows
+            foreach ($members as $member) {
+                fputcsv($file, [
+                    $member->member_number ?? '-',
+                    $member->user->name ?? '-',
+                    $member->user->email ?? '-', 
+                    $member->phone ?? '-',
+                    $member->institution_name ?? '-',
+                    $member->position ?? '-',
+                    $member->city ?? '-',
+                    $member->province ?? '-',
+                    $member->address ?? '-',
+                    ucfirst($member->status),
+                    $member->is_verified ? 'Terverifikasi' : 'Belum Verifikasi',
+                    $member->join_date ? $member->join_date->format('d/m/Y') : '-',
+                    ucfirst($member->member_type),
+                    $member->website ?? '-'
+                ]);
+            }
+            
+            fclose($file);
+        };
+        
+        return response()->stream($callback, 200, $headers);
+    }
+
+    /**
+     * Export members as Excel (using custom export class)
+     */
+    private function exportExcel($members, $filename)
+    {
+        $exporter = new MembersExport($members);
+        return $exporter->export($filename);
     }
 
     public function show(Member $member)
