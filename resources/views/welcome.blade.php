@@ -39,11 +39,11 @@
                         </a>
 
                         @if (Route::has('register'))
-                            <a
-                                href="{{ route('register') }}"
-                                class="inline-block px-3 sm:px-5 py-1 sm:py-1.5 dark:text-[#EDEDEC] border-[#19140035] hover:border-[#1915014a] border text-[#1b1b18] dark:border-[#3E3E3A] dark:hover:border-[#62605b] rounded-sm text-xs sm:text-sm leading-normal">
-                                Register
-                            </a>
+                                <a
+                                    href="https://apjikom.or.id/daftar-anggota"
+                                    class="inline-block px-3 sm:px-5 py-1 sm:py-1.5 dark:text-[#EDEDEC] border-[#19140035] hover:border-[#1915014a] border text-[#1b1b18] dark:border-[#3E3E3A] dark:hover:border-[#62605b] rounded-sm text-xs sm:text-sm leading-normal" target="_blank" rel="noopener">
+                                    Daftar Anggota
+                                </a>
                         @endif
                     @endauth
                 </nav>
