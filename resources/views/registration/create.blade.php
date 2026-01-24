@@ -371,6 +371,17 @@
                                 @enderror
                             </div>
 
+                            <!-- City -->
+                            <div class="mb-6">
+                                <label class="block text-gray-700 font-medium mb-2">Kota</label>
+                                <input type="text" name="city" value="{{ old('city') }}"
+                                       class="w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500 @error('city') border-red-500 @enderror"
+                                       placeholder="Nama Kota">
+                                @error('city')
+                                    <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                                @enderror
+                            </div>
+
                             <!-- Authorization Letter -->
                             <div class="mb-6">
                                 <label class="block text-gray-700 font-medium mb-2">Upload Surat Kuasa</label>

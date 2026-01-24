@@ -156,8 +156,18 @@
                 </div>
                 <div>
                     <dt class="text-sm text-gray-600">Alamat</dt>
-                    <dd class="text-base font-medium text-gray-900">{{ $member->address }}</dd>
+                    <dd class="text-base font-medium text-gray-900">{{ $member->address ?: '-' }}</dd>
                 </div>
+                @if($member->city || $member->province)
+                <div>
+                    <dt class="text-sm text-gray-600">Kota / Provinsi</dt>
+                    <dd class="text-base font-medium text-gray-900">
+                        {{ $member->city ? $member->city : '-' }}
+                        @if($member->city && $member->province), @endif
+                        {{ $member->province ? $member->province : '' }}
+                    </dd>
+                </div>
+                @endif
                 @if($member->website)
                 <div>
                     <dt class="text-sm text-gray-600">Website</dt>

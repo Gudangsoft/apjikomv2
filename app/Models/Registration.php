@@ -21,6 +21,7 @@ class Registration extends Model
         'accreditation',
         'accreditation_valid_until',
         'province',
+        'city',
         'authorization_letter',
         'status',
         'notes',

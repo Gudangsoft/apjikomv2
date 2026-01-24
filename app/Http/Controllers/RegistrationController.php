@@ -22,6 +22,7 @@ class RegistrationController extends Controller
             'phone' => 'required|string|max:13',
             'password' => 'required|string|min:8|confirmed',
             'full_name' => 'required|string|max:255',
+            'city' => 'nullable|string|max:100',
         ];
 
         // Validasi tambahan untuk tipe prodi

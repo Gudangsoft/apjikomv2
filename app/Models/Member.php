@@ -13,6 +13,8 @@ class Member extends Model
         'institution_name',
         'position',
         'address',
+        'city',
+        'province',
         'phone',
         'website',
         'status',
