@@ -54,6 +54,11 @@
                 <div class="text-xs sm:text-[13px] leading-[18px] sm:leading-[20px] flex-1 p-4 pb-8 sm:p-6 sm:pb-12 lg:p-20 bg-white dark:bg-[#161615] dark:text-[#EDEDEC] shadow-[inset_0px_0px_0px_1px_rgba(26,26,0,0.16)] dark:shadow-[inset_0px_0px_0px_1px_#fffaed2d] rounded-bl-lg rounded-br-lg lg:rounded-tl-lg lg:rounded-br-none">
                     <h1 class="mb-1 font-medium text-sm sm:text-base">Let's get started</h1>
                     <p class="mb-2 text-[#706f6c] dark:text-[#A1A09A] text-xs sm:text-sm">Laravel has an incredibly rich ecosystem. <br class="hidden sm:block">We suggest starting with the following.</p>
+                    <div class="mb-4 flex justify-center">
+                        <a href="https://apjikom.or.id/daftar-anggota" target="_blank" rel="noopener" class="inline-block px-6 py-2 text-white bg-[#F53003] rounded-lg shadow hover:bg-[#d42a00] transition-colors font-semibold text-base">
+                            Bergabung Sekarang
+                        </a>
+                    </div>
                     <ul class="flex flex-col mb-3 sm:mb-4 lg:mb-6">
                         <li class="flex items-center gap-3 sm:gap-4 py-1.5 sm:py-2 relative before:border-l before:border-[#e3e3e0] dark:before:border-[#3E3E3A] before:top-1/2 before:bottom-0 before:left-[0.3rem] sm:before:left-[0.4rem] before:absolute">
                             <span class="relative py-1 bg-white dark:bg-[#161615]">
