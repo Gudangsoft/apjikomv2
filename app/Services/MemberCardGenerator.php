@@ -131,8 +131,8 @@ class MemberCardGenerator
         $this->addLabelValueClean($img, 'No.Anggota', $member->member_number ?? 'N/A', $dataStartX, $currentY);
         $currentY += $lineSpacing;
 
-        // Nama
-        $name = $this->truncateText($member->user->name ?? 'N/A', 45);
+        // Nama (diperpanjang dari 45 ke 100 karakter untuk nama yang lebih panjang)
+        $name = $this->truncateText($member->user->name ?? 'N/A', 100);
         $this->addLabelValueClean($img, 'Nama', $name, $dataStartX, $currentY);
         $currentY += $lineSpacing;
 
