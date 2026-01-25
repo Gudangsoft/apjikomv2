@@ -15,8 +15,8 @@ class SettingSeeder extends Seeder
         $settings = [
             // General Settings
             ['key' => 'site_name', 'value' => 'APJIKOM', 'type' => 'text', 'group' => 'general'],
-            ['key' => 'site_tagline', 'value' => 'Asosiasi Pendidikan Jurnalistik dan Komunikasi', 'type' => 'text', 'group' => 'general'],
-            ['key' => 'site_description', 'value' => 'APJIKOM adalah Asosiasi Pendidikan Jurnalistik dan Komunikasi yang menghimpun institusi pendidikan tinggi jurnalistik dan komunikasi di Indonesia untuk meningkatkan kualitas pendidikan dan publikasi ilmiah.', 'type' => 'textarea', 'group' => 'general'],
+            ['key' => 'site_tagline', 'value' => 'Asosiasi Pengelola Jurnal Informatika dan Komputer', 'type' => 'text', 'group' => 'general'],
+            ['key' => 'site_description', 'value' => 'APJIKOM adalah Asosiasi Pengelola Jurnal Informatika dan Komputer yang menghimpun pengelola jurnal ilmiah di bidang informatika, komputer, dan teknologi informasi di Indonesia untuk meningkatkan kualitas publikasi ilmiah.', 'type' => 'textarea', 'group' => 'general'],
             
             // Contact Settings
             ['key' => 'contact_email', 'value' => 'info@apjikom.or.id', 'type' => 'text', 'group' => 'contact'],
@@ -31,8 +31,8 @@ class SettingSeeder extends Seeder
             ['key' => 'youtube_url', 'value' => 'https://youtube.com/@apjikom', 'type' => 'text', 'group' => 'social'],
             
             // SEO Settings
-            ['key' => 'meta_keywords', 'value' => 'apjikom, jurnal ilmiah, komunikasi, publikasi, indonesia', 'type' => 'text', 'group' => 'seo'],
-            ['key' => 'meta_description', 'value' => 'APJIKOM - Asosiasi Pengelola Jurnal Ilmu Komunikasi Indonesia. Platform untuk meningkatkan kualitas publikasi ilmiah komunikasi.', 'type' => 'textarea', 'group' => 'seo'],
+            ['key' => 'meta_keywords', 'value' => 'apjikom, jurnal ilmiah, informatika, komputer, teknologi informasi, publikasi ilmiah, asosiasi', 'type' => 'text', 'group' => 'seo'],
+            ['key' => 'meta_description', 'value' => 'APJIKOM - Asosiasi Pengelola Jurnal Informatika dan Komputer Indonesia. Platform untuk meningkatkan kualitas publikasi ilmiah informatika dan komputer.', 'type' => 'textarea', 'group' => 'seo'],
         ];
 
         foreach ($settings as $setting) {

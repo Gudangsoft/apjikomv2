@@ -57,9 +57,9 @@
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-2">Judul Section About</label>
                         <input type="text" name="section_label_about" 
-                            value="{{ old('section_label_about', $settings->firstWhere('key', 'section_label_about')?->value ?? 'Asosiasi Pendidikan Tinggi Informatika dan Komputer') }}"
+                            value="{{ old('section_label_about', $settings->firstWhere('key', 'section_label_about')?->value ?? 'Asosiasi Pengelola Jurnal Informatika dan Komputer') }}"
                             class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#00629B] focus:border-transparent"
-                            placeholder="Asosiasi Pendidikan Tinggi Informatika dan Komputer">
+                            placeholder="Asosiasi Pengelola Jurnal Informatika dan Komputer">
                         <p class="text-xs text-gray-500 mt-1">Judul lengkap yang muncul di section About</p>
                         @error('section_label_about')
                             <p class="text-red-500 text-xs mt-1">{{ $message }}</p>

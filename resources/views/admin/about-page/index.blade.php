@@ -36,7 +36,7 @@
     <div class="mb-6">
         <div class="bg-gradient-to-r from-purple-600 to-indigo-700 rounded-t-lg p-8 text-center">
             <h2 class="text-3xl font-bold text-white mb-2" id="preview_title">{{ setting('about_page_title', 'Tentang APJIKOM') }}</h2>
-            <p class="text-purple-100 border border-purple-300 inline-block px-6 py-2 rounded" id="preview_subtitle">{{ setting('about_page_subtitle', 'Asosiasi Pengelola Jurnal Ilmu Komunikasi Indonesia') }}</p>
+            <p class="text-purple-100 border border-purple-300 inline-block px-6 py-2 rounded" id="preview_subtitle">{{ setting('about_page_subtitle', 'Asosiasi Pengelola Jurnal Informatika dan Komputer Indonesia') }}</p>
         </div>
         <div class="bg-white rounded-b-lg shadow-md p-6">
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -51,7 +51,7 @@
                         </div>
                         <h3 class="text-xl font-bold text-gray-800">Visi</h3>
                     </div>
-                    <p class="text-gray-700 text-sm" id="preview_vision">{{ setting('about_vision', 'Menjadi organisasi profesional yang terpercaya dalam meningkatkan kualitas dan kredibilitas jurnal ilmu komunikasi di Indonesia.') }}</p>
+                    <p class="text-gray-700 text-sm" id="preview_vision">{{ setting('about_vision', 'Menjadi organisasi profesional yang terpercaya dalam meningkatkan kualitas dan kredibilitas jurnal informatika dan komputer di Indonesia.') }}</p>
                 </div>
 
                 <!-- Preview Misi -->
@@ -125,7 +125,7 @@
                             type="text" 
                             id="about_page_subtitle" 
                             name="about_page_subtitle" 
-                            value="{{ old('about_page_subtitle', setting('about_page_subtitle', 'Asosiasi Pengelola Jurnal Ilmu Komunikasi Indonesia')) }}"
+                            value="{{ old('about_page_subtitle', setting('about_page_subtitle', 'Asosiasi Pengelola Jurnal Informatika dan Komputer Indonesia')) }}"
                             class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent @error('about_page_subtitle') border-red-500 @enderror"
                             required
                         >
@@ -153,7 +153,7 @@
                     rows="4"
                     class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent @error('about_vision') border-red-500 @enderror"
                     required
-                >{{ old('about_vision', setting('about_vision', 'Menjadi organisasi profesional yang terpercaya dalam meningkatkan kualitas dan kredibilitas jurnal ilmu komunikasi di Indonesia.')) }}</textarea>
+                >{{ old('about_vision', setting('about_vision', 'Menjadi organisasi profesional yang terpercaya dalam meningkatkan kualitas dan kredibilitas jurnal informatika dan komputer di Indonesia.')) }}</textarea>
                 @error('about_vision')
                     <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
                 @enderror
@@ -220,7 +220,7 @@
                         rows="4"
                         class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent @error('about_history') border-red-500 @enderror"
                         required
-                    >{{ old('about_history', setting('about_history', 'Asosiasi Pengelola Jurnal Ilmu Komunikasi (APJIKOM) didirikan sebagai wadah profesional bagi para pengelola jurnal ilmiah di bidang Ilmu Komunikasi. Organisasi ini lahir dari kebutuhan untuk meningkatkan kualitas pengelolaan jurnal ilmiah dan membangun standar profesional dalam publikasi ilmiah di Indonesia.')) }}</textarea>
+                    >{{ old('about_history', setting('about_history', 'Asosiasi Pengelola Jurnal Informatika dan Komputer (APJIKOM) didirikan sebagai wadah profesional bagi para pengelola jurnal ilmiah di bidang Informatika dan Komputer. Organisasi ini lahir dari kebutuhan untuk meningkatkan kualitas pengelolaan jurnal ilmiah dan membangun standar profesional dalam publikasi ilmiah di Indonesia.')) }}</textarea>
                     @error('about_history')
                         <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
                     @enderror

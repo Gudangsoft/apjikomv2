@@ -252,14 +252,14 @@ document.addEventListener('DOMContentLoaded', () => {
                     </span>
                     <x-section-heading 
                         setting-key="section_label_about" 
-                        title="{{ setting('section_label_about', 'Asosiasi Pendidikan Tinggi Informatika dan Komputer') }}"
+                        title="{{ setting('section_label_about', 'Asosiasi Pengelola Jurnal Informatika dan Komputer') }}"
                         align="left"
                         class="mt-2"
                     />
                 </div>
                 
                 @php
-                    $aboutText = $aboutDescription ?? 'Asosiasi yang mewadahi perguruan tinggi di indonesia yang memiliki rumpun ilmu komputer. APTIKOM mempunyai tujuan untuk meningkatkan kualitas pendidikan, penelitian dan pengabdian kepada masyarakat di bidang teknologi informasi dan komputer.';
+                    $aboutText = $aboutDescription ?? 'Asosiasi Pengelola Jurnal Informatika dan Komputer (APJIKOM) adalah organisasi yang menghimpun pengelola jurnal ilmiah di bidang informatika, komputer, dan teknologi informasi di Indonesia. APJIKOM bertujuan untuk meningkatkan kualitas publikasi ilmiah, penelitian, dan pengabdian kepada masyarakat di bidang teknologi informasi dan komputer.';
                     $textLength = mb_strlen($aboutText);
                     $showReadMore = $textLength > 200;
                 @endphp

@@ -97,7 +97,7 @@
     <div class="container">
         <div class="header">
             <h1>🔐 Password Reset</h1>
-            <p>Asosiasi Pengelola Jurnal Ilmu Komunikasi (APJIKOM)</p>
+            <p>Asosiasi Pengelola Jurnal Informatika dan Komputer (APJIKOM)</p>
         </div>
         
         <div class="content">

@@ -17,7 +17,7 @@ class FaqSeeder extends Seeder
             // General
             [
                 'question' => 'Apa itu APJIKOM?',
-                'answer' => 'APJIKOM (Asosiasi Perguruan Jurnalistik dan Komunikasi) adalah organisasi yang menghimpun institusi pendidikan tinggi yang menyelenggarakan program studi Ilmu Komunikasi dan Jurnalistik di Indonesia.',
+                'answer' => 'APJIKOM (Asosiasi Pengelola Jurnal Informatika dan Komputer) adalah organisasi yang menghimpun pengelola jurnal ilmiah di bidang informatika, komputer, dan teknologi informasi di Indonesia.',
                 'category' => 'general',
                 'order' => 1,
                 'is_active' => true,

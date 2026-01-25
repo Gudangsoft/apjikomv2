@@ -6,11 +6,8 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     
     <title>{{ setting('site_name', 'APJIKOM') }} - @yield('title', setting('site_tagline', 'Asosiasi Pengelola Jurnal Informatika dan Komputer'))</title>
-    <meta name="description" content="{{ setting('meta_description', setting('site_description', 'APJIKOM - Asosiasi Pengelola Jurnal Ilmu Komunikasi Indonesia')) }}">
-    <meta name="keywords" content="{{ setting('meta_keywords', 'apjikom, jurnal ilmiah, asosiasi pengelola jurnal komputer') }}">
-    
-    @stack('meta')
-    
+    <meta name="description" content="{{ setting('meta_description', setting('site_description', 'APJIKOM - Asosiasi Pengelola Jurnal Informatika dan Komputer Indonesia')) }}">
+    <meta name="keywords" content="{{ setting('meta_keywords', 'apjikom, jurnal ilmiah, informatika, komputer, teknologi informasi, publikasi ilmiah') }}">
     @if(setting('site_favicon'))
     <link rel="icon" type="image/png" href="{{ asset('storage/' . setting('site_favicon')) }}">
     @endif

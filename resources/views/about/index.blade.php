@@ -8,7 +8,7 @@
     <div class="container mx-auto px-4">
         <div class="text-center max-w-4xl mx-auto">
             <h1 class="text-5xl md:text-6xl font-bold mb-6">{{ setting('about_page_title', 'Tentang APJIKOM') }}</h1>
-            <p class="text-xl text-purple-100 border border-purple-300/50 inline-block px-6 py-2 rounded">{{ setting('about_page_subtitle', 'Asosiasi Pengelola Jurnal Ilmu Komunikasi Indonesia') }}</p>
+            <p class="text-xl text-purple-100 border border-purple-300/50 inline-block px-6 py-2 rounded">{{ setting('about_page_subtitle', 'Asosiasi Pengelola Jurnal Informatika dan Komputer Indonesia') }}</p>
         </div>
     </div>
 </div>
@@ -29,7 +29,7 @@
                     <h2 class="text-3xl font-bold text-gray-800">Visi</h2>
                 </div>
                 <p class="text-lg text-gray-700 leading-relaxed">
-                    {{ setting('about_vision', 'Menjadi organisasi profesional yang terpercaya dalam meningkatkan kualitas dan kredibilitas jurnal ilmu komunikasi di Indonesia.') }}
+                    {{ setting('about_vision', 'Menjadi organisasi profesional yang terpercaya dalam meningkatkan kualitas dan kredibilitas jurnal informatika dan komputer di Indonesia.') }}
                 </p>
             </div>
 
@@ -76,7 +76,7 @@
             <div class="bg-white rounded-2xl shadow-xl p-8 md:p-12">
                 <div class="prose prose-lg max-w-none">
                     <p class="text-gray-700 leading-relaxed mb-6">
-                        {{ setting('about_history', 'Asosiasi Pengelola Jurnal Ilmu Komunikasi Indonesia (APJIKOM) didirikan sebagai wadah bagi para pengelola jurnal ilmiah di bidang ilmu komunikasi untuk saling berbagi pengalaman, pengetahuan, dan best practices dalam pengelolaan jurnal ilmiah.') }}
+                        {{ setting('about_history', 'Asosiasi Pengelola Jurnal Informatika dan Komputer Indonesia (APJIKOM) didirikan sebagai wadah bagi para pengelola jurnal ilmiah di bidang informatika dan komputer untuk saling berbagi pengalaman, pengetahuan, dan best practices dalam pengelolaan jurnal ilmiah.') }}
                     </p>
                     
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-8">

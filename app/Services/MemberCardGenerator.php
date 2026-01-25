@@ -132,7 +132,7 @@ class MemberCardGenerator
         $currentY += $lineSpacing;
 
         // Nama
-        $name = $this->truncateText($member->user->name ?? 'N/A', 28);
+        $name = $this->truncateText($member->user->name ?? 'N/A', 45);
         $this->addLabelValueClean($img, 'Nama', $name, $dataStartX, $currentY);
         $currentY += $lineSpacing;
 

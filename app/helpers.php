@@ -49,7 +49,7 @@ if (!function_exists('site_tagline')) {
      */
     function site_tagline()
     {
-        return setting('site_tagline', 'Asosiasi Pendidikan Jurnalistik dan Komunikasi');
+        return setting('site_tagline', 'Asosiasi Pengelola Jurnal Informatika dan Komputer');
     }
 }
 

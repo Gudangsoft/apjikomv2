@@ -30,7 +30,7 @@ class VideoGallerySeeder extends Seeder
             ],
             [
                 'title' => 'Profil APJIKOM',
-                'description' => 'Video profil Asosiasi Pengelola Jurnal Ilmu Komunikasi Indonesia',
+                'description' => 'Video profil Asosiasi Pengelola Jurnal Informatika dan Komputer Indonesia',
                 'type' => 'video',
                 'youtube_url' => 'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
                 'category' => 'other',

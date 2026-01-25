@@ -95,7 +95,7 @@
     <div class="container">
         <div class="header">
             <h1>✅ Pendaftaran Disetujui</h1>
-            <p style="color: #6b7280; margin: 10px 0 0 0;">Asosiasi Pendidikan Jurnalistik dan Komunikasi</p>
+            <p style="color: #6b7280; margin: 10px 0 0 0;">Asosiasi Pengelola Jurnal Informatika dan Komputer</p>
         </div>
 
         <div class="content">
@@ -156,7 +156,7 @@
         <div class="footer">
             <p style="margin: 5px 0;">
                 <strong>APJIKOM</strong><br>
-                Asosiasi Pendidikan Jurnalistik dan Komunikasi
+                Asosiasi Pengelola Jurnal Informatika dan Komputer
             </p>
             <p style="margin: 5px 0; font-size: 13px;">
                 Email ini dikirim secara otomatis. Mohon tidak membalas email ini.

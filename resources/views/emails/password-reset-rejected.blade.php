@@ -68,7 +68,7 @@
     <div class="container">
         <div class="header">
             <h1>❌ Permintaan Reset Password Ditolak</h1>
-            <p>Asosiasi Pengelola Jurnal Ilmu Komunikasi (APJIKOM)</p>
+            <p>Asosiasi Pengelola Jurnal Informatika dan Komputer (APJIKOM)</p>
         </div>
         
         <div class="content">
