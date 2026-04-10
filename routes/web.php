@@ -187,7 +187,7 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'admin'])->group(fun
     // Member Card Management
     Route::get('members/{member}/upload-card', [AdminMemberController::class, 'showUploadCard'])->name('members.upload-card');
     Route::post('members/{member}/upload-card', [AdminMemberController::class, 'uploadCard'])->name('members.upload-card.store');
-    Route::post('members/{member}/generate-card', [AdminMemberController::class, 'generateCard'])->name('members.generate-card');
+    Route::match(['get', 'post'], 'members/{member}/generate-card', [AdminMemberController::class, 'generateCard'])->name('members.generate-card');
     Route::delete('members/{member}/delete-card', [AdminMemberController::class, 'deleteCard'])->name('members.delete-card');
     
     // Member Photo Management
