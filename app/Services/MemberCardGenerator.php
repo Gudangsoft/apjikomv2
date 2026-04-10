@@ -15,6 +15,9 @@ class MemberCardGenerator
      */
     public function generate(Member $member)
     {
+        // Increase memory limit for image processing
+        ini_set('memory_limit', '512M');
+
         // Get active template
         $template = MemberCardTemplate::getActive();
         
@@ -38,6 +41,11 @@ class MemberCardGenerator
         // Create image manager
         $manager = new ImageManager(new Driver());
         $img = $manager->read($templatePath);
+
+        // Resize template if too large (max 1200px wide to save memory)
+        if ($img->width() > 1200) {
+            $img->scale(width: 1200);
+        }
 
         // Get dimensions (template should be around 850x535 like ISET card)
         $cardWidth = $img->width();
@@ -81,6 +89,11 @@ class MemberCardGenerator
             $photoPath = storage_path('app/public/' . $member->photo);
             $photo = $manager->read($photoPath);
             
+            // Resize photo to max 600px before cover to save memory
+            if ($photo->width() > 600 || $photo->height() > 600) {
+                $photo->scale(width: 600);
+            }
+
             // Resize and crop photo to fit
             $photo->cover($photoWidth, $photoHeight);
             
