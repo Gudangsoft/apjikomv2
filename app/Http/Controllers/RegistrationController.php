@@ -11,11 +11,26 @@ class RegistrationController extends Controller
 {
     public function create()
     {
+        $a = rand(1, 9);
+        $b = rand(1, 9);
+        session(['captcha_answer' => $a + $b, 'captcha_question' => "$a + $b"]);
+
         return view('registration.create');
     }
 
     public function store(Request $request)
     {
+        // Verify math CAPTCHA
+        $captchaInput = (int) $request->input('captcha_answer');
+        $captchaExpected = (int) session('captcha_answer');
+
+        if ($captchaInput !== $captchaExpected || $captchaExpected === 0) {
+            return back()->withErrors(['captcha_answer' => 'Jawaban CAPTCHA salah. Silakan coba lagi.'])->withInput();
+        }
+
+        // Clear captcha session after use
+        session()->forget(['captcha_answer', 'captcha_question']);
+
         $rules = [
             'type' => 'required|in:individu,prodi',
             'email' => 'required|email|unique:registrations,email',

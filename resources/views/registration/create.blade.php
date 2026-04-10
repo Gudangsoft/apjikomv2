@@ -401,6 +401,24 @@
                         </div>
                     </div>
 
+                    <!-- CAPTCHA -->
+                    <div class="mt-6">
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Verifikasi CAPTCHA <span class="text-red-500">*</span></label>
+                        <div class="flex items-center gap-3">
+                            <span class="inline-flex items-center justify-center bg-purple-100 text-purple-800 font-bold text-lg px-5 py-3 rounded-lg border border-purple-300 select-none tracking-widest">
+                                {{ session('captcha_question') }} = ?
+                            </span>
+                            <input type="number"
+                                   name="captcha_answer"
+                                   placeholder="Jawaban"
+                                   autocomplete="off"
+                                   class="w-32 px-4 py-3 border rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500 @error('captcha_answer') border-red-500 @enderror">
+                        </div>
+                        @error('captcha_answer')
+                            <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                        @enderror
+                    </div>
+
                     <!-- Submit Button -->
                     <div class="mt-8 flex gap-4">
                         <button type="button" onclick="resetForm()" class="px-6 py-3 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition">
