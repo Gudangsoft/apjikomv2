@@ -61,20 +61,43 @@ class UserController extends Controller
         //
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
     public function edit(string $id)
     {
-        //
+        $user = User::with('member')->findOrFail($id);
+        return view('admin.users.edit', compact('user'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
     public function update(Request $request, string $id)
     {
-        //
+        $user = User::findOrFail($id);
+
+        $rules = [
+            'name'     => 'required|string|max:255',
+            'username' => 'required|string|max:100|unique:users,username,' . $id,
+            'email'    => 'required|email|max:255|unique:users,email,' . $id,
+            'role'     => 'required|in:admin,member,editor',
+        ];
+
+        if ($request->filled('password')) {
+            $rules['password']              = 'min:8|confirmed';
+            $rules['password_confirmation'] = 'required';
+        }
+
+        $validated = $request->validate($rules);
+
+        $user->name     = $validated['name'];
+        $user->username = $validated['username'];
+        $user->email    = $validated['email'];
+        $user->role     = $validated['role'];
+
+        if ($request->filled('password')) {
+            $user->password = Hash::make($request->password);
+        }
+
+        $user->save();
+
+        return redirect()->route('admin.users.index')
+            ->with('success', "Data user {$user->name} berhasil diperbarui.");
     }
 
     /**

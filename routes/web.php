@@ -258,7 +258,7 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'admin'])->group(fun
     Route::post('email-settings/test', [AdminEmailSettingController::class, 'testConnection'])->name('email-settings.test');
     
     // Users Management
-    Route::resource('users', App\Http\Controllers\Admin\UserController::class)->only(['index', 'destroy']);
+    Route::resource('users', App\Http\Controllers\Admin\UserController::class)->only(['index', 'edit', 'update', 'destroy']);
     Route::post('users/{user}/reset-password', [App\Http\Controllers\Admin\UserController::class, 'resetPassword'])->name('users.reset-password');
     Route::post('users/bulk-delete', [App\Http\Controllers\Admin\UserController::class, 'bulkDelete'])->name('users.bulk-delete');
     
