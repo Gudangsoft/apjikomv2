@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Setting;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Password;
 use Illuminate\View\View;
 
@@ -30,15 +31,20 @@ class PasswordResetLinkController extends Controller
             'email' => ['required', 'email'],
         ]);
 
-        // We will send the password reset link to this user. Once we have attempted
-        // to send the link, we will examine the response then see the message we
-        // need to show to the user. Finally, we'll send out a proper response.
-        $status = Password::sendResetLink(
-            $request->only('email')
-        );
+        try {
+            $status = Password::sendResetLink($request->only('email'));
+        } catch (\Symfony\Component\Mailer\Exception\TransportException $e) {
+            Log::error('Password reset mail failed: ' . $e->getMessage());
+            return back()->withInput($request->only('email'))
+                ->withErrors(['email' => 'Gagal mengirim email. Konfigurasi SMTP belum benar. Hubungi administrator.']);
+        } catch (\Exception $e) {
+            Log::error('Password reset failed: ' . $e->getMessage());
+            return back()->withInput($request->only('email'))
+                ->withErrors(['email' => 'Terjadi kesalahan saat mengirim email. Silakan coba lagi nanti.']);
+        }
 
         return $status == Password::RESET_LINK_SENT
-                    ? back()->with('status', __($status))
+                    ? back()->with('status', 'Link reset password telah dikirim ke email Anda. Silakan cek inbox atau folder spam.')
                     : back()->withInput($request->only('email'))
                         ->withErrors(['email' => __($status)]);
     }
