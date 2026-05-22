@@ -5,9 +5,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     
-    <title>{{ setting('site_name', 'APJIKOM') }} - @yield('title', setting('site_tagline', 'Asosiasi Pengelola Jurnal Informatika dan Komputer'))</title>
-    <meta name="description" content="{{ setting('meta_description', setting('site_description', 'APJIKOM - Asosiasi Pengelola Jurnal Informatika dan Komputer Indonesia')) }}">
-    <meta name="keywords" content="{{ setting('meta_keywords', 'apjikom, jurnal ilmiah, informatika, komputer, teknologi informasi, publikasi ilmiah') }}">
+    <title>{{ $globalSiteName }} - @yield('title', $globalSiteTagline)</title>
+    <meta name="description" content="{{ $globalMetaDescription }}">
+    <meta name="keywords" content="{{ $globalMetaKeywords }}">
+    <meta property="og:title" content="{{ $globalSiteName }} - @yield('title', $globalSiteTagline)">
+    <meta property="og:description" content="{{ $globalMetaDescription }}">
+    <meta property="og:site_name" content="{{ $globalSiteName }}">
+    @if($globalSiteLogo)
+    <meta property="og:image" content="{{ asset('storage/' . $globalSiteLogo) }}">
+    @endif
     @if(setting('site_favicon'))
     <link rel="icon" type="image/png" href="{{ asset('storage/' . setting('site_favicon')) }}">
     @endif
@@ -49,83 +55,81 @@
     @endif
     
     <style>
+        /* ===== TEMA VARIABEL ===== */
+        :root {
+            --theme-primary:  {{ $globalThemePrimary }};
+            --theme-dark:     {{ $globalThemeDark }};
+            --theme-light:    {{ $globalThemeLight }};
+            --theme-pale:     {{ $globalThemePale }};
+            --theme-footer:   {{ $globalThemeFooter }};
+        }
+
         body {
             font-family: 'Inter', system-ui, -apple-system, sans-serif;
             margin: 0;
             padding: 0;
             transition: background-color 0.3s ease, color 0.3s ease;
         }
-        
-        .dark body {
-            background-color: #0f172a;
-            color: #e2e8f0;
-        }
-        
-        .hero-section {
-            background: linear-gradient(135deg, #7C3AED 0%, #5B21B6 100%);
-        }
-        
-        .gradient-purple {
-            background: linear-gradient(135deg, #7C3AED 0%, #5B21B6 100%);
-        }
-        
-        .apjikom-purple {
-            background-color: #7C3AED;
-        }
-        
-        .apjikom-dark-purple {
-            background-color: #5B21B6;
-        }
-        
-        .news-card {
-            transition: all 0.3s ease;
-            border: 1px solid #e5e7eb;
-        }
-        
-        .dark .news-card {
-            background-color: #1e293b;
-            border-color: #334155;
-        }
-        
-        .news-card:hover {
-            box-shadow: 0 4px 12px rgba(124, 58, 237, 0.2);
-            border-color: #7C3AED;
-        }
-        
+
+        .dark body { background-color: #0f172a; color: #e2e8f0; }
+
+        /* Custom classes pakai CSS variable */
+        .hero-section      { background: linear-gradient(135deg, var(--theme-primary) 0%, var(--theme-dark) 100%); }
+        .gradient-purple   { background: linear-gradient(135deg, var(--theme-primary) 0%, var(--theme-dark) 100%); }
+        .apjikom-purple    { background-color: var(--theme-primary) !important; }
+        .apjikom-dark-purple { background-color: var(--theme-footer) !important; }
+
+        .news-card { transition: all 0.3s ease; border: 1px solid #e5e7eb; }
+        .dark .news-card { background-color: #1e293b; border-color: #334155; }
+        .news-card:hover { box-shadow: 0 4px 12px rgba(0,0,0,0.15); border-color: var(--theme-primary); }
+
         .navbar-fixed {
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-            background: white;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            position: sticky; top: 0; z-index: 1000;
+            background: white; box-shadow: 0 1px 3px rgba(0,0,0,0.1);
             transition: background-color 0.3s ease;
         }
-        
-        .dark .navbar-fixed {
-            background: #1e293b;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.3);
-        }
-        
-        .stats-card {
-            background: white;
-            border: 2px solid #7C3AED;
-            border-radius: 8px;
-            transition: all 0.3s ease;
-        }
-        
-        .dark .stats-card {
-            background: #1e293b;
-            border-color: #7C3AED;
-        }
-        
-        .btn-apjikom {
-            background-color: #7C3AED;
-            transition: background-color 0.3s ease;
-        }
-        
-        .btn-apjikom:hover {
-            background-color: #5B21B6;
-        }
+        .dark .navbar-fixed { background: #1e293b; box-shadow: 0 1px 3px rgba(0,0,0,0.3); }
+
+        .stats-card { background: white; border: 2px solid var(--theme-primary); border-radius: 8px; transition: all 0.3s ease; }
+        .dark .stats-card { background: #1e293b; border-color: var(--theme-primary); }
+
+        .btn-apjikom       { background-color: var(--theme-primary) !important; transition: background-color 0.3s ease; }
+        .btn-apjikom:hover { background-color: var(--theme-dark)    !important; }
+
+        /* ===== OVERRIDE TAILWIND PURPLE → TEMA ===== */
+        .bg-purple-50  { background-color: var(--theme-pale)    !important; }
+        .bg-purple-100 { background-color: var(--theme-pale)    !important; }
+        .bg-purple-600 { background-color: var(--theme-primary) !important; }
+        .bg-purple-700 { background-color: var(--theme-dark)    !important; }
+        .bg-purple-800 { background-color: var(--theme-dark)    !important; }
+        .bg-purple-900 { background-color: var(--theme-footer)  !important; }
+
+        .text-purple-100 { color: rgba(255,255,255,0.75) !important; }
+        .text-purple-200 { color: rgba(255,255,255,0.65) !important; }
+        .text-purple-600 { color: var(--theme-primary) !important; }
+        .text-purple-700 { color: var(--theme-dark)    !important; }
+
+        .hover\:text-purple-600:hover { color: var(--theme-primary) !important; }
+        .hover\:text-purple-400:hover { color: var(--theme-light)   !important; }
+        .hover\:bg-purple-700:hover   { background-color: var(--theme-dark) !important; }
+
+        .border-purple-600 { border-color: var(--theme-primary) !important; }
+        .border-purple-700 { border-color: var(--theme-dark)    !important; }
+        .border-purple-800 { border-color: var(--theme-dark)    !important; }
+
+        .from-purple-600 { --tw-gradient-from: var(--theme-primary) !important; }
+        .from-purple-700 { --tw-gradient-from: var(--theme-dark)    !important; }
+        .from-purple-900 { --tw-gradient-from: var(--theme-footer)  !important; }
+        .to-purple-600   { --tw-gradient-to:   var(--theme-primary) !important; }
+        .to-purple-700   { --tw-gradient-to:   var(--theme-dark)    !important; }
+        .to-purple-800   { --tw-gradient-to:   var(--theme-dark)    !important; }
+
+        .ring-purple-500 { --tw-ring-color: var(--theme-primary) !important; }
+        .focus\:ring-purple-500:focus { --tw-ring-color: var(--theme-primary) !important; }
+
+        /* Footer section */
+        footer.apjikom-dark-purple,
+        .apjikom-dark-purple { background-color: var(--theme-footer) !important; }
         
         /* Dark mode transitions */
         * {
@@ -212,7 +216,7 @@
                     @endif
                     <div>
                         <h1 class="text-lg font-bold text-gray-900 dark:text-gray-100">{{ site_name() }}</h1>
-                        <p class="text-xs text-gray-600 dark:text-gray-400 hidden sm:block">{{ setting('site_tagline', 'Asosiasi Pengelola Jurnal Informatika dan Komputer') }}</p>
+                        <p class="text-xs text-gray-600 dark:text-gray-400 hidden sm:block">{{ $globalSiteTagline }}</p>
                     </div>
                 </div>
                 
@@ -335,7 +339,7 @@
                         @endif
                         <span class="text-xl font-bold">{{ site_name() }}</span>
                     </div>
-                    <p class="text-purple-200 text-sm mb-4">{{ setting('site_description', setting('site_tagline', 'Asosiasi Pengelola Jurnal Informatika dan Komputer Indonesia')) }}</p>
+                    <p class="text-purple-200 text-sm mb-4">{{ $globalSiteDescription }}</p>
                     <div class="flex space-x-3">
                         @if(setting('facebook_url'))
                         <a href="{{ setting('facebook_url') }}" target="_blank" class="w-8 h-8 bg-white bg-opacity-10 rounded-full flex items-center justify-center hover:bg-opacity-20">
@@ -447,7 +451,7 @@
             </div>
             
             <div class="border-t border-purple-800 mt-8 pt-6 text-center text-purple-200 text-xs">
-                <p>{{ setting('footer_copyright_text', '© ' . date('Y') . ' ' . site_name() . '. All Rights Reserved.') }}</p>
+                <p>{{ $globalCopyrightText }}</p>
             </div>
         </div>
     </footer>

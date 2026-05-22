@@ -147,6 +147,7 @@
             <!-- Registration Form -->
             <form method="POST" action="{{ route('registration.store') }}" enctype="multipart/form-data" id="registration-form" style="display: none;">
                 @csrf
+                <x-honeypot />
                 <div class="bg-white rounded-lg shadow-sm border p-8">
                     <h2 class="text-2xl font-bold mb-6 text-gray-900">Form Pendaftaran</h2>
                     

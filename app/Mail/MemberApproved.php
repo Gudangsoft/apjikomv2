@@ -31,8 +31,9 @@ class MemberApproved extends Mailable
      */
     public function envelope(): Envelope
     {
+        $siteName = \App\Models\Setting::getValue('site_name', 'Website Asosiasi');
         return new Envelope(
-            subject: 'Pendaftaran Anggota APJIKOM Disetujui',
+            subject: "Pendaftaran Anggota {$siteName} Disetujui",
         );
     }
 

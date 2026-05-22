@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>Login Member - APJIKOM</title>
+    <title>Login Member - {{ $globalSiteName }}</title>
     
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -138,9 +138,9 @@
             <div class="login-header">
                 <div class="flex items-center justify-center mb-3 sm:mb-4">
                     @if(site_logo())
-                        <img src="{{ site_logo() }}" alt="APJIKOM" class="h-10 sm:h-12 w-auto object-contain bg-white p-2 rounded mr-2 sm:mr-3">
+                        <img src="{{ site_logo() }}" alt="{{ $globalSiteName }}" class="h-10 sm:h-12 w-auto object-contain bg-white p-2 rounded mr-2 sm:mr-3">
                     @else
-                        <img src="{{ asset('images/logo.png') }}" alt="APJIKOM" class="h-10 sm:h-12 mr-2 sm:mr-3">
+                        <img src="{{ asset('images/logo.png') }}" alt="{{ $globalSiteName }}" class="h-10 sm:h-12 mr-2 sm:mr-3">
                     @endif
                     <div class="text-left">
                         <h1 class="text-xl sm:text-2xl font-bold">{{ site_name() }}</h1>
@@ -211,6 +211,7 @@
 
                 <form method="POST" action="{{ route('member.login.post') }}" id="loginForm">
                     @csrf
+                    <x-honeypot />
 
                     <!-- Email Input -->
                     <div class="input-group">

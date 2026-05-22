@@ -200,7 +200,7 @@
 
         <!-- Footer -->
         <div class="text-center mt-4 sm:mt-6 text-white text-xs sm:text-sm">
-            <p>&copy; 2025 APJIKOM. All rights reserved.</p>
+            <p>{{ $globalCopyrightText }}</p>
         </div>
     </div>
 

@@ -11,16 +11,26 @@ use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\Auth\VerifyEmailController;
 use Illuminate\Support\Facades\Route;
 
-Route::middleware('guest')->group(function () {
+// Resolve admin login URL dynamically from settings (fallback to default if DB unavailable)
+$adminLoginSlug = 'admin-login';
+try {
+    $adminLoginSlug = \App\Models\Setting::getValue('admin_login_url', 'admin-login') ?: 'admin-login';
+} catch (\Exception $e) {
+    // Use default if DB not available
+}
+
+Route::middleware('guest')->group(function () use ($adminLoginSlug) {
     Route::get('register', [RegisteredUserController::class, 'create'])
         ->name('register');
 
-    Route::post('register', [RegisteredUserController::class, 'store']);
+    Route::post('register', [RegisteredUserController::class, 'store'])
+        ->middleware(['throttle:5,1', 'antibot']);
 
-    Route::get('admin-panel-apjikom', [AuthenticatedSessionController::class, 'create'])
+    Route::get($adminLoginSlug, [AuthenticatedSessionController::class, 'create'])
         ->name('login');
 
-    Route::post('admin-panel-apjikom', [AuthenticatedSessionController::class, 'store']);
+    Route::post($adminLoginSlug, [AuthenticatedSessionController::class, 'store'])
+        ->middleware(['throttle:10,1', 'antibot']);
 
     Route::get('forgot-password', [PasswordResetLinkController::class, 'create'])
         ->name('password.request');

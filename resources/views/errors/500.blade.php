@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>500 - Server Error | APJIKOM</title>
+    <title>500 - Server Error | {{ $globalSiteName }}</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         @keyframes shake {
@@ -69,15 +69,15 @@
             <div class="mt-8 pt-6 border-t border-gray-200">
                 <p class="text-sm text-gray-500">
                     Jika masalah berlanjut, hubungi 
-                    <a href="mailto:admin@apjikom.or.id" class="text-red-600 hover:text-red-700 font-medium">
-                        admin@apjikom.or.id
+                    <a href="mailto:{{ $globalContactEmail ?: 'admin@example.com' }}" class="text-red-600 hover:text-red-700 font-medium">
+                        {{ $globalContactEmail ?: 'admin@example.com' }}
                     </a>
                 </p>
             </div>
         </div>
 
         <div class="text-center mt-6 text-white text-sm">
-            <p>&copy; 2025 APJIKOM. All rights reserved.</p>
+            <p>{{ $globalCopyrightText }}</p>
         </div>
     </div>
 </body>

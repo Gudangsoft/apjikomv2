@@ -18,7 +18,7 @@
             </div>
             <div class="ml-3 flex-1">
                 <h3 class="text-sm font-semibold text-blue-800">
-                    🎉 Selamat Datang di APJIKOM!
+                    🎉 Selamat Datang di {{ $globalSiteName }}!
                 </h3>
                 <div class="mt-2 text-sm text-blue-700">
                     <p class="mb-2">Terima kasih telah bergabung. Password default Anda adalah <strong>password123</strong></p>
@@ -171,7 +171,7 @@
             </div>
             <div>
                 <h3 class="text-2xl font-bold">Ikuti Media Sosial Kami :</h3>
-                <p class="text-purple-100 mt-1">Tetap terhubung dengan update terbaru dari APJIKOM</p>
+                <p class="text-purple-100 mt-1">Tetap terhubung dengan update terbaru dari {{ $globalSiteName }}</p>
             </div>
         </div>
         

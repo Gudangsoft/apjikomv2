@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Password Reset - APJIKOM</title>
+    <title>Password Reset - {{ $globalSiteName }}</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -97,13 +97,13 @@
     <div class="container">
         <div class="header">
             <h1>🔐 Password Reset</h1>
-            <p>Asosiasi Pengelola Jurnal Informatika dan Komputer (APJIKOM)</p>
+            <p>{{ $globalSiteName }} - {{ $globalSiteTagline }}</p>
         </div>
         
         <div class="content">
             <p>Halo <strong>{{ $user->name }}</strong>,</p>
             
-            <p>Password akun Anda telah berhasil direset oleh administrator APJIKOM.</p>
+            <p>Password akun Anda telah berhasil direset oleh administrator {{ $globalSiteName }}.</p>
             
             <div class="credentials">
                 <h3>📧 Informasi Login Baru</h3>
@@ -142,9 +142,9 @@
         </div>
         
         <div class="footer">
-            <p>Email ini dikirim secara otomatis oleh sistem APJIKOM.</p>
+            <p>Email ini dikirim secara otomatis oleh sistem {{ $globalSiteName }}.</p>
             <p>Jika Anda tidak merasa meminta reset password, segera hubungi admin.</p>
-            <p>&copy; {{ date('Y') }} APJIKOM. All rights reserved.</p>
+            <p>{{ $globalCopyrightText }}</p>
         </div>
     </div>
 </body>

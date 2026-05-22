@@ -30,7 +30,7 @@
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
         </svg>
         <div class="flex-1">
-            <p class="text-sm text-green-800">{!! session('success') !!}</p>
+            <p class="text-sm text-green-800">{{ strip_tags(session('success'), '<br><pre><code><strong>') }}</p>
         </div>
     </div>
 </div>
@@ -44,7 +44,7 @@
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
         </svg>
         <div class="flex-1">
-            <p class="text-sm text-red-800 mb-3">{!! session('error') !!}</p>
+            <p class="text-sm text-red-800 mb-3">{{ strip_tags(session('error')) }}</p>
             @if(str_contains(session('error'), 'belum ada') || str_contains(session('error'), 'migration'))
             <a href="{{ route('admin.run-migration') }}" 
                class="inline-flex items-center px-4 py-2 bg-red-600 hover:bg-red-700 text-white text-sm rounded-lg transition">
@@ -805,16 +805,17 @@
 <script>
 document.addEventListener('DOMContentLoaded', function() {
     // Chart colors
+    const _css = (v) => getComputedStyle(document.documentElement).getPropertyValue(v).trim();
     const colors = {
-        primary: '#00629B',
-        secondary: '#003A5D',
-        success: '#10B981',
-        warning: '#F59E0B',
-        danger: '#EF4444',
-        info: '#3B82F6',
-        purple: '#8B5CF6',
-        pink: '#EC4899',
-        indigo: '#6366F1'
+        primary:   _css('--theme-primary') || '#00629B',
+        secondary: _css('--theme-dark')    || '#003A5D',
+        success:   '#10B981',
+        warning:   '#F59E0B',
+        danger:    '#EF4444',
+        info:      '#3B82F6',
+        purple:    _css('--theme-light')   || '#8B5CF6',
+        pink:      '#EC4899',
+        indigo:    '#6366F1'
     };
 
     // Member Growth Chart

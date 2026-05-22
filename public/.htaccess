@@ -23,3 +23,61 @@
     RewriteCond %{REQUEST_FILENAME} !-f
     RewriteRule ^ index.php [L]
 </IfModule>
+
+# =============================================
+# SECURITY HEADERS
+# =============================================
+<IfModule mod_headers.c>
+    # Prevent clickjacking
+    Header always set X-Frame-Options "DENY"
+
+    # Prevent MIME type sniffing
+    Header always set X-Content-Type-Options "nosniff"
+
+    # XSS Protection (legacy browsers)
+    Header always set X-XSS-Protection "1; mode=block"
+
+    # Referrer Policy
+    Header always set Referrer-Policy "strict-origin-when-cross-origin"
+
+    # Disable browser features not needed
+    Header always set Permissions-Policy "camera=(), microphone=(), geolocation=(), payment=()"
+
+    # Remove server fingerprints
+    Header always unset X-Powered-By
+    Header always unset Server
+
+    # HSTS (enable only if using HTTPS in production)
+    # Header always set Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
+</IfModule>
+
+# =============================================
+# BLOCK DANGEROUS FILE ACCESS
+# =============================================
+<FilesMatch "\.(env|log|bak|backup|sql|db|sqlite|ini|conf|config|htpasswd|DS_Store)$">
+    Order allow,deny
+    Deny from all
+</FilesMatch>
+
+# Block access to .git directory
+<IfModule mod_rewrite.c>
+    RewriteRule ^\.git - [F,L]
+    RewriteRule ^vendor/.*\.php$ - [F,L]
+    RewriteRule ^storage/.*\.php$ - [F,L]
+    RewriteRule ^bootstrap/.*\.php$ - [F,L]
+</IfModule>
+
+# Block common exploit scanners and bad bots
+<IfModule mod_rewrite.c>
+    RewriteCond %{HTTP_USER_AGENT} (sqlmap|nikto|nmap|masscan|acunetix|nessus|w3af|dirbuster|havij) [NC]
+    RewriteRule .* - [F,L]
+</IfModule>
+
+# Prevent directory listing
+Options -Indexes
+
+# Block access to hidden files
+<FilesMatch "^\.">
+    Order allow,deny
+    Deny from all
+</FilesMatch>

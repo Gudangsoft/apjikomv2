@@ -38,6 +38,7 @@ use App\Http\Controllers\Admin\MemberCardTemplateController as AdminMemberCardTe
 use App\Http\Controllers\Admin\ChangelogController as AdminChangelogController;
 use App\Http\Controllers\Admin\CertificateTemplateController as AdminCertificateTemplateController;
 use App\Http\Controllers\Admin\EventCertificateController as AdminEventCertificateController;
+use App\Http\Controllers\Admin\LoginUrlController as AdminLoginUrlController;
 
 // Public Routes
 Route::get('/', [HomeController::class, 'index'])->name('home');
@@ -71,7 +72,9 @@ Route::get('/page/{slug}', [PageController::class, 'show'])->name('page.show');
 
 // Registration Routes
 Route::get('/daftar-anggota', [RegistrationController::class, 'create'])->name('registration.create');
-Route::post('/daftar-anggota', [RegistrationController::class, 'store'])->name('registration.store');
+Route::post('/daftar-anggota', [RegistrationController::class, 'store'])
+    ->middleware(['throttle:5,1', 'antibot'])
+    ->name('registration.store');
 
 // Redirect old routes to new registration
 Route::get('/daftar-member', function() {
@@ -87,7 +90,9 @@ use App\Http\Controllers\Member\NotificationController;
 use App\Http\Controllers\Member\EventRegistrationController;
 
 Route::get('/member/login', [MemberDashboardController::class, 'showLogin'])->name('member.login')->middleware('guest');
-Route::post('/member/login', [MemberDashboardController::class, 'login'])->name('member.login.post');
+Route::post('/member/login', [MemberDashboardController::class, 'login'])
+    ->middleware(['throttle:10,1', 'antibot'])
+    ->name('member.login.post');
 
 // Member Dashboard (Protected)
 Route::prefix('member')->name('member.')->middleware(['auth', 'member'])->group(function () {
@@ -102,7 +107,9 @@ Route::prefix('member')->name('member.')->middleware(['auth', 'member'])->group(
     Route::post('/request-card-update', [MemberDashboardController::class, 'requestCardUpdate'])->name('request-card-update');
     
     // Password Reset Request
-    Route::post('/password-reset-request', [MemberDashboardController::class, 'requestPasswordReset'])->name('password-reset-request');
+    Route::post('/password-reset-request', [MemberDashboardController::class, 'requestPasswordReset'])
+        ->middleware('throttle:3,5')
+        ->name('password-reset-request');
     
     Route::get('/card', [MemberDashboardController::class, 'card'])->name('card');
     
@@ -218,7 +225,7 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'admin'])->group(fun
     Route::post('social-media/update-order', [App\Http\Controllers\Admin\SocialMediaController::class, 'updateOrder'])->name('social-media.update-order');
     
     // Categories Management
-    Route::resource('categories', AdminCategoryController::class);
+    Route::resource('categories', AdminCategoryController::class)->except(['show']);
     
     // Registrations Management (now handled by MemberController)
     Route::get('registrations', function() {
@@ -251,12 +258,12 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'admin'])->group(fun
     Route::post('email-settings/test', [AdminEmailSettingController::class, 'testConnection'])->name('email-settings.test');
     
     // Users Management
-    Route::resource('users', App\Http\Controllers\Admin\UserController::class);
+    Route::resource('users', App\Http\Controllers\Admin\UserController::class)->only(['index', 'destroy']);
     Route::post('users/{user}/reset-password', [App\Http\Controllers\Admin\UserController::class, 'resetPassword'])->name('users.reset-password');
     Route::post('users/bulk-delete', [App\Http\Controllers\Admin\UserController::class, 'bulkDelete'])->name('users.bulk-delete');
     
     // Sliders Management
-    Route::resource('sliders', AdminSliderController::class);
+    Route::resource('sliders', AdminSliderController::class)->except(['show']);
     
     // Pages Management
     Route::resource('pages', AdminPageController::class);
@@ -266,7 +273,7 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'admin'])->group(fun
     Route::post('menus/update-order', [AdminMenuController::class, 'updateOrder'])->name('menus.update-order');
     
     // Partners Management
-    Route::resource('partners', AdminPartnerController::class);
+    Route::resource('partners', AdminPartnerController::class)->except(['show']);
     Route::post('partners/update-order', [AdminPartnerController::class, 'updateOrder'])->name('partners.update-order');
     
     // Journals Management
@@ -327,6 +334,27 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'admin'])->group(fun
     Route::put('update-requests/{updateRequest}/status', [AdminChangelogController::class, 'updateRequestStatus'])->name('update-requests.status');
     Route::delete('update-requests/{updateRequest}', [AdminChangelogController::class, 'destroyRequest'])->name('update-requests.destroy');
     
+    // Login URL Settings
+    Route::get('login-url', [AdminLoginUrlController::class, 'index'])->name('login-url.index');
+    Route::put('login-url', [AdminLoginUrlController::class, 'update'])->name('login-url.update');
+
+    // Theme Settings
+    Route::get('theme', [\App\Http\Controllers\Admin\ThemeController::class, 'index'])->name('theme.index');
+    Route::put('theme', [\App\Http\Controllers\Admin\ThemeController::class, 'update'])->name('theme.update');
+
+    // WA Blaster
+    Route::get('wa-blaster', [\App\Http\Controllers\Admin\WaBlasterController::class, 'index'])->name('wa-blaster.index');
+    Route::get('wa-blaster/preview-recipients', [\App\Http\Controllers\Admin\WaBlasterController::class, 'previewRecipients'])->name('wa-blaster.preview');
+    Route::post('wa-blaster/send', [\App\Http\Controllers\Admin\WaBlasterController::class, 'send'])->name('wa-blaster.send');
+    Route::post('wa-blaster/settings', [\App\Http\Controllers\Admin\WaBlasterController::class, 'saveSettings'])->name('wa-blaster.save-settings');
+    Route::get('wa-blaster/{waBlastLog}', [\App\Http\Controllers\Admin\WaBlasterController::class, 'show'])->name('wa-blaster.show');
+    Route::delete('wa-blaster/{waBlastLog}', [\App\Http\Controllers\Admin\WaBlasterController::class, 'destroy'])->name('wa-blaster.destroy');
+
+    // Audit Trail
+    Route::get('activity-logs', [\App\Http\Controllers\Admin\ActivityLogController::class, 'index'])->name('activity-logs.index');
+    Route::delete('activity-logs/{activityLog}', [\App\Http\Controllers\Admin\ActivityLogController::class, 'destroy'])->name('activity-logs.destroy');
+    Route::post('activity-logs/clear', [\App\Http\Controllers\Admin\ActivityLogController::class, 'clear'])->name('activity-logs.clear');
+
     // Migration Helper (Development Only)
     Route::get('run-migration', [AdminMigrationController::class, 'showMigrationForm'])->name('run-migration');
     Route::post('run-migration', [AdminMigrationController::class, 'runMigration'])->name('run-migration.execute');

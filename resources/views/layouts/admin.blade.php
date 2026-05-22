@@ -16,20 +16,27 @@
     <script src="https://cdn.tailwindcss.com"></script>
     
     <style>
+        :root {
+            --theme-primary:  {{ $globalThemePrimary }};
+            --theme-dark:     {{ $globalThemeDark }};
+            --theme-light:    {{ $globalThemeLight }};
+            --theme-pale:     {{ $globalThemePale }};
+            --theme-footer:   {{ $globalThemeFooter }};
+        }
+
         body {
             font-family: 'Inter', system-ui, -apple-system, sans-serif;
         }
-        
-        [x-cloak] { 
-            display: none !important; 
+
+        [x-cloak] {
+            display: none !important;
         }
-        
-        /* Fix untuk memastikan content tidak terhalang */
+
         .admin-wrapper {
             min-height: 100vh;
             display: flex;
         }
-        
+
         .admin-sidebar {
             width: 16rem;
             height: 100vh;
@@ -40,8 +47,9 @@
             flex-shrink: 0;
             z-index: 1000;
             transition: transform 0.3s ease-in-out;
+            background: linear-gradient(to bottom, var(--theme-footer), var(--theme-dark)) !important;
         }
-        
+
         .admin-main {
             flex: 1;
             min-width: 0;
@@ -49,26 +57,95 @@
             margin-left: 0;
             transition: margin-left 0.3s ease-in-out;
         }
-        
-        /* Desktop styles */
+
         @media (min-width: 1024px) {
-            .admin-sidebar {
-                transform: translateX(0) !important;
-            }
-            .admin-main {
-                margin-left: 16rem;
-            }
+            .admin-sidebar { transform: translateX(0) !important; }
+            .admin-main { margin-left: 16rem; }
         }
-        
-        /* Mobile styles */
+
         @media (max-width: 1023px) {
-            .admin-sidebar {
-                transform: translateX(-100%);
-            }
-            .admin-sidebar.mobile-open {
-                transform: translateX(0);
-            }
+            .admin-sidebar { transform: translateX(-100%); }
+            .admin-sidebar.mobile-open { transform: translateX(0); }
         }
+
+        /* =====================================================
+           THEME OVERRIDES: semua purple Tailwind → CSS vars
+           ===================================================== */
+
+        /* Background */
+        .bg-purple-50  { background-color: color-mix(in srgb, var(--theme-pale) 50%, white) !important; }
+        .bg-purple-100 { background-color: var(--theme-pale)    !important; }
+        .bg-purple-200 { background-color: color-mix(in srgb, var(--theme-pale) 80%, var(--theme-light)) !important; }
+        .bg-purple-300 { background-color: color-mix(in srgb, var(--theme-light) 35%, white) !important; }
+        .bg-purple-400 { background-color: color-mix(in srgb, var(--theme-light) 65%, white) !important; }
+        .bg-purple-500 { background-color: var(--theme-light)   !important; }
+        .bg-purple-600 { background-color: var(--theme-primary) !important; }
+        .bg-purple-700 { background-color: var(--theme-dark)    !important; }
+        .bg-purple-800 { background-color: color-mix(in srgb, var(--theme-dark) 85%, black) !important; }
+        .bg-purple-900 { background-color: var(--theme-footer)  !important; }
+
+        /* Text */
+        .text-purple-100 { color: color-mix(in srgb, var(--theme-pale) 50%, white) !important; }
+        .text-purple-200 { color: var(--theme-pale)    !important; }
+        .text-purple-300 { color: color-mix(in srgb, var(--theme-light) 35%, white) !important; }
+        .text-purple-400 { color: color-mix(in srgb, var(--theme-light) 65%, white) !important; }
+        .text-purple-500 { color: var(--theme-light)   !important; }
+        .text-purple-600 { color: var(--theme-primary) !important; }
+        .text-purple-700 { color: var(--theme-dark)    !important; }
+        .text-purple-800 { color: color-mix(in srgb, var(--theme-dark) 80%, black) !important; }
+        .text-purple-900 { color: var(--theme-footer)  !important; }
+
+        /* Border */
+        .border-purple-100 { border-color: color-mix(in srgb, var(--theme-pale) 50%, white) !important; }
+        .border-purple-200 { border-color: var(--theme-pale)    !important; }
+        .border-purple-300 { border-color: color-mix(in srgb, var(--theme-light) 35%, white) !important; }
+        .border-purple-400 { border-color: color-mix(in srgb, var(--theme-light) 65%, white) !important; }
+        .border-purple-500 { border-color: var(--theme-light)   !important; }
+        .border-purple-600 { border-color: var(--theme-primary) !important; }
+        .border-purple-700 { border-color: var(--theme-dark)    !important; }
+        .border-purple-800 { border-color: color-mix(in srgb, var(--theme-dark) 85%, black) !important; }
+        .border-purple-900 { border-color: var(--theme-footer)  !important; }
+
+        /* Ring */
+        .ring-purple-500,
+        .focus\:ring-purple-500:focus { --tw-ring-color: var(--theme-primary) !important; }
+
+        /* Gradient from */
+        .from-purple-50  { --tw-gradient-from: color-mix(in srgb, var(--theme-pale) 50%, white) !important; }
+        .from-purple-100 { --tw-gradient-from: var(--theme-pale)    !important; }
+        .from-purple-500 { --tw-gradient-from: var(--theme-light)   !important; }
+        .from-purple-600 { --tw-gradient-from: var(--theme-primary) !important; }
+        .from-purple-700 { --tw-gradient-from: var(--theme-dark)    !important; }
+        .from-purple-800 { --tw-gradient-from: color-mix(in srgb, var(--theme-dark) 85%, black) !important; }
+        .from-purple-900 { --tw-gradient-from: var(--theme-footer)  !important; }
+
+        /* Gradient to */
+        .to-purple-50  { --tw-gradient-to: color-mix(in srgb, var(--theme-pale) 50%, white) !important; }
+        .to-purple-100 { --tw-gradient-to: var(--theme-pale)    !important; }
+        .to-purple-500 { --tw-gradient-to: var(--theme-light)   !important; }
+        .to-purple-600 { --tw-gradient-to: var(--theme-primary) !important; }
+        .to-purple-700 { --tw-gradient-to: var(--theme-dark)    !important; }
+        .to-purple-800 { --tw-gradient-to: color-mix(in srgb, var(--theme-dark) 85%, black) !important; }
+        .to-purple-900 { --tw-gradient-to: var(--theme-footer)  !important; }
+
+        /* Gradient via */
+        .via-purple-600 { --tw-gradient-via: var(--theme-primary) !important; }
+        .via-purple-700 { --tw-gradient-via: var(--theme-dark)    !important; }
+
+        /* Hover states */
+        .hover\:bg-purple-50:hover  { background-color: color-mix(in srgb, var(--theme-pale) 50%, white) !important; }
+        .hover\:bg-purple-100:hover { background-color: var(--theme-pale)    !important; }
+        .hover\:bg-purple-600:hover { background-color: var(--theme-primary) !important; }
+        .hover\:bg-purple-700:hover { background-color: var(--theme-dark)    !important; }
+        .hover\:bg-purple-800:hover { background-color: color-mix(in srgb, var(--theme-dark) 85%, black) !important; }
+        .hover\:text-purple-600:hover { color: var(--theme-primary) !important; }
+        .hover\:text-purple-700:hover { color: var(--theme-dark)    !important; }
+        .hover\:text-purple-800:hover { color: color-mix(in srgb, var(--theme-dark) 80%, black) !important; }
+        .hover\:border-purple-500:hover { border-color: var(--theme-light) !important; }
+        .hover\:from-purple-700:hover { --tw-gradient-from: var(--theme-dark) !important; }
+        .hover\:from-purple-800:hover { --tw-gradient-from: color-mix(in srgb, var(--theme-dark) 85%, black) !important; }
+        .hover\:to-purple-700:hover { --tw-gradient-to: var(--theme-dark) !important; }
+        .hover\:to-purple-800:hover { --tw-gradient-to: color-mix(in srgb, var(--theme-dark) 85%, black) !important; }
     </style>
 </head>
 <body class="antialiased bg-gray-100">
@@ -99,8 +176,8 @@
                 </div>
             </div>
             
-            <nav class="p-3 pb-8 space-y-0.5 overflow-y-auto" style="max-height: calc(100vh - 100px);" x-data="{ 
-                openMenu: '{{ request()->routeIs("admin.dashboard") ? "" : (request()->routeIs("admin.news.*") || request()->routeIs("admin.events.*") || request()->routeIs("admin.categories.*") || request()->routeIs("admin.about-page.*") || request()->routeIs("admin.organizational-structure.*") || request()->routeIs("admin.services.*") ? "konten" : (request()->routeIs("admin.journals.*") ? "publikasi" : (request()->routeIs("admin.members.*") || request()->routeIs("admin.card-templates.*") || request()->routeIs("admin.certificate-templates.*") || request()->routeIs("admin.registrations.*") ? "keanggotaan" : (request()->routeIs("admin.sliders.*") || request()->routeIs("admin.pages.*") || request()->routeIs("admin.menus.*") || request()->routeIs("admin.partners.*") || request()->routeIs("admin.section-labels.*") ? "tampilan" : (request()->routeIs("admin.settings.*") || request()->routeIs("admin.about-settings.*") || request()->routeIs("admin.footer-settings.*") || request()->routeIs("admin.social-media.*") ? "pengaturan" : ""))))) }}' 
+            <nav class="p-3 pb-8 space-y-0.5 overflow-y-auto" style="max-height: calc(100vh - 100px);" x-data="{
+                openMenu: '{{ request()->routeIs("admin.dashboard") ? "" : (request()->routeIs("admin.news.*") || request()->routeIs("admin.events.*") || request()->routeIs("admin.categories.*") || request()->routeIs("admin.about-page.*") || request()->routeIs("admin.organizational-structure.*") || request()->routeIs("admin.services.*") || request()->routeIs("admin.faqs.*") || request()->routeIs("admin.testimonials.*") || request()->routeIs("admin.galleries.*") ? "konten" : (request()->routeIs("admin.journals.*") ? "publikasi" : (request()->routeIs("admin.members.*") || request()->routeIs("admin.card-templates.*") || request()->routeIs("admin.certificate-templates.*") || request()->routeIs("admin.registrations.*") || request()->routeIs("admin.institutions.*") ? "keanggotaan" : (request()->routeIs("admin.sliders.*") || request()->routeIs("admin.pages.*") || request()->routeIs("admin.menus.*") || request()->routeIs("admin.partners.*") || request()->routeIs("admin.section-labels.*") || request()->routeIs("admin.theme.*") ? "tampilan" : (request()->routeIs("admin.users.*") || request()->routeIs("admin.assignments.*") || request()->routeIs("admin.password-reset-requests.*") ? "users" : (request()->routeIs("admin.settings.*") || request()->routeIs("admin.about-settings.*") || request()->routeIs("admin.footer-settings.*") || request()->routeIs("admin.social-media.*") || request()->routeIs("admin.email-settings.*") || request()->routeIs("admin.login-url.*") || request()->routeIs("admin.activity-logs.*") ? "pengaturan" : ""))))))  }}'
             }"">
                 <!-- Dashboard -->
                 <a href="{{ route('admin.dashboard') }}" class="flex items-center space-x-3 px-3 py-2.5 rounded-lg text-sm transition-all {{ request()->routeIs('admin.dashboard') ? 'bg-white/10 shadow-lg' : 'hover:bg-white/5' }}">
@@ -181,9 +258,36 @@
                             </div>
                             <span>Layanan & Program</span>
                         </a>
+
+                        <a href="{{ route('admin.faqs.index') }}" class="flex items-center space-x-3 px-3 py-2 rounded-lg text-sm transition-all {{ request()->routeIs('admin.faqs.*') ? 'bg-white/10 shadow-lg' : 'hover:bg-white/5' }}">
+                            <div class="w-4 h-4 flex items-center justify-center">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                </svg>
+                            </div>
+                            <span>FAQ</span>
+                        </a>
+
+                        <a href="{{ route('admin.testimonials.index') }}" class="flex items-center space-x-3 px-3 py-2 rounded-lg text-sm transition-all {{ request()->routeIs('admin.testimonials.*') ? 'bg-white/10 shadow-lg' : 'hover:bg-white/5' }}">
+                            <div class="w-4 h-4 flex items-center justify-center">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M7 8h10M7 12h4m1 8l-4-4H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-3l-4 4z"></path>
+                                </svg>
+                            </div>
+                            <span>Testimoni</span>
+                        </a>
+
+                        <a href="{{ route('admin.galleries.index') }}" class="flex items-center space-x-3 px-3 py-2 rounded-lg text-sm transition-all {{ request()->routeIs('admin.galleries.*') ? 'bg-white/10 shadow-lg' : 'hover:bg-white/5' }}">
+                            <div class="w-4 h-4 flex items-center justify-center">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                                </svg>
+                            </div>
+                            <span>Gallery</span>
+                        </a>
                     </div>
                 </div>
-                
+
                 <!-- KELOMPOK: Keanggotaan -->
                 <div class="mt-2">
                     <button @click="openMenu = openMenu === 'keanggotaan' ? '' : 'keanggotaan'" class="w-full flex items-center justify-between px-3 py-2.5 rounded-lg text-sm hover:bg-white/5 transition-all" :class="openMenu === 'keanggotaan' ? 'bg-white/5' : ''">
@@ -200,6 +304,15 @@
                         </svg>
                     </button>
                     <div x-show="openMenu === 'keanggotaan'" x-collapse class="ml-3 mt-1 space-y-0.5 border-l-2 border-white/10 pl-4">
+                        <a href="{{ route('admin.institutions.index') }}" class="flex items-center space-x-3 px-3 py-2 rounded-lg text-sm transition-all {{ request()->routeIs('admin.institutions.*') ? 'bg-white/10 shadow-lg' : 'hover:bg-white/5' }}">
+                            <div class="w-4 h-4 flex items-center justify-center">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path>
+                                </svg>
+                            </div>
+                            <span>Data Instansi</span>
+                        </a>
+
                         <a href="{{ route('admin.members.index') }}" class="flex items-center justify-between px-3 py-2 rounded-lg text-sm transition-all {{ request()->routeIs('admin.members.*') && !request()->routeIs('admin.card-templates.*') ? 'bg-white/10 shadow-lg' : 'hover:bg-white/5' }}">
                             <div class="flex items-center space-x-3">
                                 <div class="w-4 h-4 flex items-center justify-center">
@@ -249,6 +362,20 @@
                     </div>
                 </div>
                 
+                <!-- WA Blaster -->
+                <a href="{{ route('admin.wa-blaster.index') }}" class="flex items-center justify-between px-3 py-2.5 rounded-lg text-sm transition-all {{ request()->routeIs('admin.wa-blaster.*') ? 'bg-white/10 shadow-lg' : 'hover:bg-white/5' }}">
+                    <div class="flex items-center space-x-3">
+                        <div class="w-5 h-5 flex items-center justify-center {{ request()->routeIs('admin.wa-blaster.*') ? 'text-green-400' : 'text-white/70' }}">
+                            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+                            </svg>
+                        </div>
+                        <span class="font-medium">WA Blaster</span>
+                    </div>
+                </a>
+
+                <hr class="my-2 border-white/10">
+
                 <!-- KELOMPOK: Tampilan & UI -->
                 <div class="mt-2">
                     <button @click="openMenu = openMenu === 'tampilan' ? '' : 'tampilan'" class="w-full flex items-center justify-between px-3 py-2.5 rounded-lg text-sm hover:bg-white/5 transition-all" :class="openMenu === 'tampilan' ? 'bg-white/5' : ''">
@@ -309,11 +436,73 @@
                             </div>
                             <span>Label Section</span>
                         </a>
+
+                        <a href="{{ route('admin.theme.index') }}" class="flex items-center space-x-3 px-3 py-2 rounded-lg text-sm transition-all {{ request()->routeIs('admin.theme.*') ? 'bg-white/10 shadow-lg' : 'hover:bg-white/5' }}">
+                            <div class="w-4 h-4 flex items-center justify-center">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h.01"></path>
+                                </svg>
+                            </div>
+                            <span>Tema Website</span>
+                        </a>
                     </div>
                 </div>
                 
-                <hr class="my-3 border-white/10">
-                
+                <hr class="my-2 border-white/10">
+
+                <!-- KELOMPOK: Users -->
+                <div class="mt-2">
+                    <button @click="openMenu = openMenu === 'users' ? '' : 'users'" class="w-full flex items-center justify-between px-3 py-2.5 rounded-lg text-sm hover:bg-white/5 transition-all" :class="openMenu === 'users' ? 'bg-white/5' : ''">
+                        <div class="flex items-center space-x-3">
+                            <div class="w-5 h-5 flex items-center justify-center">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path>
+                                </svg>
+                            </div>
+                            <span class="font-semibold">Manajemen User</span>
+                        </div>
+                        <svg class="w-4 h-4 transition-transform duration-200" :class="openMenu === 'users' ? 'rotate-180' : ''" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                        </svg>
+                    </button>
+                    <div x-show="openMenu === 'users'" x-collapse class="ml-3 mt-1 space-y-0.5 border-l-2 border-white/10 pl-4">
+                        <a href="{{ route('admin.users.index') }}" class="flex items-center space-x-3 px-3 py-2 rounded-lg text-sm transition-all {{ request()->routeIs('admin.users.*') ? 'bg-white/10 shadow-lg' : 'hover:bg-white/5' }}">
+                            <div class="w-4 h-4 flex items-center justify-center">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path>
+                                </svg>
+                            </div>
+                            <span>Kelola User</span>
+                        </a>
+
+                        <a href="{{ route('admin.assignments.index') }}" class="flex items-center space-x-3 px-3 py-2 rounded-lg text-sm transition-all {{ request()->routeIs('admin.assignments.*') ? 'bg-white/10 shadow-lg' : 'hover:bg-white/5' }}">
+                            <div class="w-4 h-4 flex items-center justify-center">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                                </svg>
+                            </div>
+                            <span>Penugasan Editor</span>
+                        </a>
+
+                        <a href="{{ route('admin.password-reset-requests.index') }}" class="flex items-center justify-between px-3 py-2 rounded-lg text-sm transition-all {{ request()->routeIs('admin.password-reset-requests.*') ? 'bg-white/10 shadow-lg' : 'hover:bg-white/5' }}">
+                            <div class="flex items-center space-x-3">
+                                <div class="w-4 h-4 flex items-center justify-center">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z"></path>
+                                    </svg>
+                                </div>
+                                <span>Reset Password</span>
+                            </div>
+                            @php
+                                $pendingResetRequests = \App\Models\PasswordResetRequest::where('status', 'pending')->count();
+                            @endphp
+                            @if($pendingResetRequests > 0)
+                                <span class="px-2 py-0.5 text-xs font-bold bg-orange-500 text-white rounded-full">{{ $pendingResetRequests }}</span>
+                            @endif
+                        </a>
+                    </div>
+                </div>
+
                 <!-- KELOMPOK: Pengaturan -->
                 <div class="mt-2">
                     <button @click="openMenu = openMenu === 'pengaturan' ? '' : 'pengaturan'" class="w-full flex items-center justify-between px-3 py-2.5 rounded-lg text-sm hover:bg-white/5 transition-all" :class="openMenu === 'pengaturan' ? 'bg-white/5' : ''">
@@ -376,11 +565,29 @@
                             </div>
                             <span>Email & Notifikasi</span>
                         </a>
+
+                        <a href="{{ route('admin.login-url.index') }}" class="flex items-center space-x-3 px-3 py-2 rounded-lg text-sm transition-all {{ request()->routeIs('admin.login-url.*') ? 'bg-white/10 shadow-lg' : 'hover:bg-white/5' }}">
+                            <div class="w-4 h-4 flex items-center justify-center">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"></path>
+                                </svg>
+                            </div>
+                            <span>URL Halaman Login</span>
+                        </a>
+
+                        <a href="{{ route('admin.activity-logs.index') }}" class="flex items-center space-x-3 px-3 py-2 rounded-lg text-sm transition-all {{ request()->routeIs('admin.activity-logs.*') ? 'bg-white/10 shadow-lg' : 'hover:bg-white/5' }}">
+                            <div class="w-4 h-4 flex items-center justify-center">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                                </svg>
+                            </div>
+                            <span>Audit Trail</span>
+                        </a>
                     </div>
                 </div>
                 
                 <hr class="my-3 border-white/10">
-                
+
                 <!-- Changelog Menu -->
                 <a href="{{ route('admin.changelog.index') }}" class="flex items-center justify-between px-3 py-2.5 rounded-lg text-sm transition-all {{ request()->routeIs('admin.changelog.*') || request()->routeIs('admin.update-requests.*') ? 'bg-white/10 shadow-lg' : 'hover:bg-white/5' }}">
                     <div class="flex items-center space-x-3">
@@ -404,99 +611,9 @@
                         </span>
                     @endif
                 </a>
-                
+
                 <hr class="my-3 border-white/10">
-                
-                <!-- Users Menu -->
-                <div x-data="{ openUsers: {{ request()->routeIs('admin.users.*') || request()->routeIs('admin.password-reset-requests.*') ? 'true' : 'false' }} }">
-                    <button @click="openUsers = !openUsers" class="w-full flex items-center justify-between px-3 py-2.5 rounded-lg text-sm transition-all hover:bg-white/5">
-                        <div class="flex items-center space-x-3">
-                            <div class="w-5 h-5 flex items-center justify-center">
-                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path>
-                                </svg>
-                            </div>
-                            <span class="font-medium">Users</span>
-                        </div>
-                        <svg class="w-4 h-4 transition-transform" :class="{ 'rotate-180': openUsers }" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
-                        </svg>
-                    </button>
-                    
-                    <div x-show="openUsers" x-collapse class="ml-8 mt-1 space-y-1">
-                        <a href="{{ route('admin.users.index') }}" class="flex items-center space-x-3 px-3 py-2 rounded-lg text-sm transition-all {{ request()->routeIs('admin.users.*') ? 'bg-white/10 shadow-lg' : 'hover:bg-white/5' }}">
-                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path>
-                            </svg>
-                            <span>Kelola User</span>
-                        </a>
-                        
-                        <a href="{{ route('admin.assignments.index') }}" class="flex items-center space-x-3 px-3 py-2 rounded-lg text-sm transition-all {{ request()->routeIs('admin.assignments.*') ? 'bg-white/10 shadow-lg' : 'hover:bg-white/5' }}">
-                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
-                            </svg>
-                            <span>Penugasan Editor</span>
-                        </a>
-                        
-                        <a href="{{ route('admin.password-reset-requests.index') }}" class="flex items-center justify-between px-3 py-2 rounded-lg text-sm transition-all {{ request()->routeIs('admin.password-reset-requests.*') ? 'bg-white/10 shadow-lg' : 'hover:bg-white/5' }}">
-                            <div class="flex items-center space-x-3">
-                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z"></path>
-                                </svg>
-                                <span>Reset Password</span>
-                            </div>
-                            @php
-                                $pendingResetRequests = \App\Models\PasswordResetRequest::where('status', 'pending')->count();
-                            @endphp
-                            @if($pendingResetRequests > 0)
-                                <span class="px-2 py-0.5 text-xs font-bold bg-orange-500 text-white rounded-full">{{ $pendingResetRequests }}</span>
-                            @endif
-                        </a>
-                    </div>
-                </div>
-                
-                <!-- Data Instansi -->
-                <a href="{{ route('admin.institutions.index') }}" class="flex items-center space-x-3 px-3 py-2.5 rounded-lg text-sm transition-all {{ request()->routeIs('admin.institutions.*') ? 'bg-white/10 shadow-lg' : 'hover:bg-white/5' }}">
-                    <div class="w-5 h-5 flex items-center justify-center">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path>
-                        </svg>
-                    </div>
-                    <span class="font-medium">Data Instansi</span>
-                </a>
-                
-                <!-- FAQ -->
-                <a href="{{ route('admin.faqs.index') }}" class="flex items-center space-x-3 px-3 py-2.5 rounded-lg text-sm transition-all {{ request()->routeIs('admin.faqs.*') ? 'bg-white/10 shadow-lg' : 'hover:bg-white/5' }}">
-                    <div class="w-5 h-5 flex items-center justify-center">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                        </svg>
-                    </div>
-                    <span class="font-medium">FAQ</span>
-                </a>
-                
-                <!-- Testimonials -->
-                <a href="{{ route('admin.testimonials.index') }}" class="flex items-center space-x-3 px-3 py-2.5 rounded-lg text-sm transition-all {{ request()->routeIs('admin.testimonials.*') ? 'bg-white/10 shadow-lg' : 'hover:bg-white/5' }}">
-                    <div class="w-5 h-5 flex items-center justify-center">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M7 8h10M7 12h4m1 8l-4-4H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-3l-4 4z"></path>
-                        </svg>
-                    </div>
-                    <span class="font-medium">Testimoni</span>
-                </a>
-                
-                <!-- Gallery -->
-                <a href="{{ route('admin.galleries.index') }}" class="flex items-center space-x-3 px-3 py-2.5 rounded-lg text-sm transition-all {{ request()->routeIs('admin.galleries.*') ? 'bg-white/10 shadow-lg' : 'hover:bg-white/5' }}">
-                    <div class="w-5 h-5 flex items-center justify-center">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
-                        </svg>
-                    </div>
-                    <span class="font-medium">Gallery</span>
-                </a>
-                
-                <hr class="my-3 border-white/10">
-                
+
                 <!-- Lihat Website -->
                 <a href="{{ route('home') }}" target="_blank" class="flex items-center space-x-3 px-3 py-2.5 rounded-lg text-sm bg-gradient-to-r from-blue-600 to-blue-500 hover:from-blue-700 hover:to-blue-600 transition-all shadow-md">
                     <div class="w-5 h-5 flex items-center justify-center">

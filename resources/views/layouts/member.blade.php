@@ -4,12 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>@yield('title', 'Member Dashboard') - APJIKOM</title>
-    
-    @php
-        $globalSiteFavicon = setting('site_favicon');
-    @endphp
-    
+    <title>@yield('title', 'Member Dashboard') - {{ $globalSiteName }}</title>
+    <meta name="description" content="{{ $globalMetaDescription }}">
+
     @if($globalSiteFavicon)
         <link rel="icon" type="image/x-icon" href="{{ asset('storage/' . $globalSiteFavicon) }}">
     @endif
@@ -17,17 +14,80 @@
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     
     <style>
+        :root {
+            --theme-primary:  {{ $globalThemePrimary }};
+            --theme-dark:     {{ $globalThemeDark }};
+            --theme-light:    {{ $globalThemeLight }};
+            --theme-pale:     {{ $globalThemePale }};
+            --theme-footer:   {{ $globalThemeFooter }};
+        }
+
         * {
             transition: background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease;
         }
-        
+
         .gradient-purple {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, var(--theme-primary) 0%, var(--theme-dark) 100%);
         }
-        
+
         .gradient-blue {
-            background: linear-gradient(135deg, #667eea 0%, #4facfe 100%);
+            background: linear-gradient(135deg, var(--theme-primary) 0%, var(--theme-light) 100%);
         }
+
+        /* =====================================================
+           THEME OVERRIDES: semua purple Tailwind → CSS vars
+           ===================================================== */
+
+        /* Background */
+        .bg-purple-50  { background-color: color-mix(in srgb, var(--theme-pale) 50%, white) !important; }
+        .bg-purple-100 { background-color: var(--theme-pale)    !important; }
+        .bg-purple-200 { background-color: color-mix(in srgb, var(--theme-pale) 80%, var(--theme-light)) !important; }
+        .bg-purple-300 { background-color: color-mix(in srgb, var(--theme-light) 35%, white) !important; }
+        .bg-purple-400 { background-color: color-mix(in srgb, var(--theme-light) 65%, white) !important; }
+        .bg-purple-500 { background-color: var(--theme-light)   !important; }
+        .bg-purple-600 { background-color: var(--theme-primary) !important; }
+        .bg-purple-700 { background-color: var(--theme-dark)    !important; }
+        .bg-purple-800 { background-color: color-mix(in srgb, var(--theme-dark) 85%, black) !important; }
+        .bg-purple-900 { background-color: var(--theme-footer)  !important; }
+
+        /* Text */
+        .text-purple-100 { color: color-mix(in srgb, var(--theme-pale) 50%, white) !important; }
+        .text-purple-200 { color: var(--theme-pale)    !important; }
+        .text-purple-300 { color: color-mix(in srgb, var(--theme-light) 35%, white) !important; }
+        .text-purple-400 { color: color-mix(in srgb, var(--theme-light) 65%, white) !important; }
+        .text-purple-500 { color: var(--theme-light)   !important; }
+        .text-purple-600 { color: var(--theme-primary) !important; }
+        .text-purple-700 { color: var(--theme-dark)    !important; }
+        .text-purple-800 { color: color-mix(in srgb, var(--theme-dark) 80%, black) !important; }
+        .text-purple-900 { color: var(--theme-footer)  !important; }
+
+        /* Border */
+        .border-purple-200 { border-color: var(--theme-pale)    !important; }
+        .border-purple-300 { border-color: color-mix(in srgb, var(--theme-light) 35%, white) !important; }
+        .border-purple-500 { border-color: var(--theme-light)   !important; }
+        .border-purple-600 { border-color: var(--theme-primary) !important; }
+        .border-purple-700 { border-color: var(--theme-dark)    !important; }
+
+        /* Ring */
+        .ring-purple-500,
+        .focus\:ring-purple-500:focus { --tw-ring-color: var(--theme-primary) !important; }
+
+        /* Gradient from/to */
+        .from-purple-600 { --tw-gradient-from: var(--theme-primary) !important; }
+        .from-purple-700 { --tw-gradient-from: var(--theme-dark)    !important; }
+        .from-purple-900 { --tw-gradient-from: var(--theme-footer)  !important; }
+        .to-purple-600   { --tw-gradient-to:   var(--theme-primary) !important; }
+        .to-purple-700   { --tw-gradient-to:   var(--theme-dark)    !important; }
+        .to-purple-800   { --tw-gradient-to:   color-mix(in srgb, var(--theme-dark) 85%, black) !important; }
+
+        /* Hover states */
+        .hover\:bg-purple-50:hover  { background-color: color-mix(in srgb, var(--theme-pale) 50%, white) !important; }
+        .hover\:bg-purple-100:hover { background-color: var(--theme-pale)    !important; }
+        .hover\:bg-purple-700:hover { background-color: var(--theme-dark)    !important; }
+        .hover\:text-purple-200:hover { color: var(--theme-pale)    !important; }
+        .hover\:text-purple-700:hover { color: var(--theme-dark)    !important; }
+        .hover\:from-purple-700:hover { --tw-gradient-from: var(--theme-dark) !important; }
+        .hover\:to-purple-800:hover   { --tw-gradient-to:   color-mix(in srgb, var(--theme-dark) 85%, black) !important; }
         
         .card-shadow {
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
@@ -85,9 +145,9 @@
                 
                 <div class="flex items-center space-x-2 sm:space-x-4">
                     @if(site_logo())
-                        <img src="{{ site_logo() }}" alt="APJIKOM" class="h-10 sm:h-12 w-auto object-contain bg-white p-1 rounded">
+                        <img src="{{ site_logo() }}" alt="{{ $globalSiteName }}" class="h-10 sm:h-12 w-auto object-contain bg-white p-1 rounded">
                     @else
-                        <img src="{{ asset('images/logo.png') }}" alt="APJIKOM" class="h-10 sm:h-12">
+                        <img src="{{ asset('images/logo.png') }}" alt="{{ $globalSiteName }}" class="h-10 sm:h-12">
                     @endif
                     <div class="hidden sm:block">
                         <h1 class="text-lg sm:text-xl font-bold">{{ site_name() }}</h1>

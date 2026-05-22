@@ -26,16 +26,39 @@ class AppServiceProvider extends ServiceProvider
         View::composer('*', function ($view) {
             try {
                 $view->with([
-                    'globalSiteName' => Setting::getValue('site_name') ?? 'APJIKOM',
-                    'globalSiteLogo' => Setting::getValue('site_logo'),
-                    'globalSiteFavicon' => Setting::getValue('site_favicon'),
+                    'globalSiteName'        => Setting::getValue('site_name', 'Website Asosiasi'),
+                    'globalSiteTagline'     => Setting::getValue('site_tagline', 'Website Asosiasi'),
+                    'globalSiteDescription' => Setting::getValue('site_description', 'Website Asosiasi'),
+                    'globalMetaDescription' => Setting::getValue('meta_description', Setting::getValue('site_description', 'Website Asosiasi')),
+                    'globalMetaKeywords'    => Setting::getValue('meta_keywords', 'website asosiasi'),
+                    'globalContactEmail'    => Setting::getValue('contact_email', ''),
+                    'globalSiteLogo'        => Setting::getValue('site_logo'),
+                    'globalSiteFavicon'     => Setting::getValue('site_favicon'),
+                    'globalThemePrimary'    => Setting::getValue('theme_primary', '#7C3AED'),
+                    'globalThemeDark'       => Setting::getValue('theme_dark',    '#5B21B6'),
+                    'globalThemeLight'      => Setting::getValue('theme_light',   '#8B5CF6'),
+                    'globalThemePale'       => Setting::getValue('theme_pale',    '#EDE9FE'),
+                    'globalThemeFooter'     => Setting::getValue('theme_footer',  '#3B0764'),
+                    'globalCopyrightText'   => htmlspecialchars(
+                        strip_tags(Setting::getValue('footer_copyright_text', '© ' . date('Y') . ' ' . Setting::getValue('site_name', 'Website Asosiasi') . '. All Rights Reserved.'))
+                    ),
                 ]);
             } catch (\Exception $e) {
-                // Fallback if settings table doesn't exist
                 $view->with([
-                    'globalSiteName' => 'APJIKOM',
-                    'globalSiteLogo' => null,
-                    'globalSiteFavicon' => null,
+                    'globalSiteName'        => 'Website Asosiasi',
+                    'globalSiteTagline'     => 'Website Asosiasi',
+                    'globalSiteDescription' => 'Website Asosiasi',
+                    'globalMetaDescription' => 'Website Asosiasi',
+                    'globalMetaKeywords'    => 'website asosiasi',
+                    'globalContactEmail'    => '',
+                    'globalSiteLogo'        => null,
+                    'globalSiteFavicon'     => null,
+                    'globalThemePrimary'    => '#7C3AED',
+                    'globalThemeDark'       => '#5B21B6',
+                    'globalThemeLight'      => '#8B5CF6',
+                    'globalThemePale'       => '#EDE9FE',
+                    'globalThemeFooter'     => '#3B0764',
+                    'globalCopyrightText'   => '&copy; ' . date('Y') . ' Website Asosiasi. All Rights Reserved.',
                 ]);
             }
         });

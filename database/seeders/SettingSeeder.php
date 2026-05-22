@@ -14,25 +14,28 @@ class SettingSeeder extends Seeder
     {
         $settings = [
             // General Settings
-            ['key' => 'site_name', 'value' => 'APJIKOM', 'type' => 'text', 'group' => 'general'],
-            ['key' => 'site_tagline', 'value' => 'Asosiasi Pengelola Jurnal Informatika dan Komputer', 'type' => 'text', 'group' => 'general'],
-            ['key' => 'site_description', 'value' => 'APJIKOM adalah Asosiasi Pengelola Jurnal Informatika dan Komputer yang menghimpun pengelola jurnal ilmiah di bidang informatika, komputer, dan teknologi informasi di Indonesia untuk meningkatkan kualitas publikasi ilmiah.', 'type' => 'textarea', 'group' => 'general'],
-            
+            ['key' => 'site_name', 'value' => 'Website Asosiasi', 'type' => 'text', 'group' => 'general'],
+            ['key' => 'site_tagline', 'value' => 'Website Asosiasi', 'type' => 'text', 'group' => 'general'],
+            ['key' => 'site_description', 'value' => 'Website Asosiasi', 'type' => 'textarea', 'group' => 'general'],
+
             // Contact Settings
-            ['key' => 'contact_email', 'value' => 'info@apjikom.or.id', 'type' => 'text', 'group' => 'contact'],
-            ['key' => 'contact_phone', 'value' => '+62 21 1234567', 'type' => 'text', 'group' => 'contact'],
-            ['key' => 'contact_address', 'value' => 'Jakarta, Indonesia', 'type' => 'textarea', 'group' => 'contact'],
-            
+            ['key' => 'contact_email', 'value' => 'info@example.com', 'type' => 'text', 'group' => 'contact'],
+            ['key' => 'contact_phone', 'value' => '', 'type' => 'text', 'group' => 'contact'],
+            ['key' => 'contact_address', 'value' => '', 'type' => 'textarea', 'group' => 'contact'],
+
             // Social Media
-            ['key' => 'facebook_url', 'value' => 'https://facebook.com/apjikom', 'type' => 'text', 'group' => 'social'],
-            ['key' => 'twitter_url', 'value' => 'https://twitter.com/apjikom', 'type' => 'text', 'group' => 'social'],
-            ['key' => 'instagram_url', 'value' => 'https://instagram.com/apjikom', 'type' => 'text', 'group' => 'social'],
-            ['key' => 'linkedin_url', 'value' => 'https://linkedin.com/company/apjikom', 'type' => 'text', 'group' => 'social'],
-            ['key' => 'youtube_url', 'value' => 'https://youtube.com/@apjikom', 'type' => 'text', 'group' => 'social'],
-            
+            ['key' => 'facebook_url', 'value' => '', 'type' => 'text', 'group' => 'social'],
+            ['key' => 'twitter_url', 'value' => '', 'type' => 'text', 'group' => 'social'],
+            ['key' => 'instagram_url', 'value' => '', 'type' => 'text', 'group' => 'social'],
+            ['key' => 'linkedin_url', 'value' => '', 'type' => 'text', 'group' => 'social'],
+            ['key' => 'youtube_url', 'value' => '', 'type' => 'text', 'group' => 'social'],
+
             // SEO Settings
-            ['key' => 'meta_keywords', 'value' => 'apjikom, jurnal ilmiah, informatika, komputer, teknologi informasi, publikasi ilmiah, asosiasi', 'type' => 'text', 'group' => 'seo'],
-            ['key' => 'meta_description', 'value' => 'APJIKOM - Asosiasi Pengelola Jurnal Informatika dan Komputer Indonesia. Platform untuk meningkatkan kualitas publikasi ilmiah informatika dan komputer.', 'type' => 'textarea', 'group' => 'seo'],
+            ['key' => 'meta_keywords', 'value' => 'website asosiasi', 'type' => 'text', 'group' => 'seo'],
+            ['key' => 'meta_description', 'value' => 'Website Asosiasi', 'type' => 'textarea', 'group' => 'seo'],
+
+            // Copyright
+            ['key' => 'footer_copyright_text', 'value' => '&copy; ' . date('Y') . ' Website Asosiasi. All Rights Reserved.', 'type' => 'text', 'group' => 'general'],
         ];
 
         foreach ($settings as $setting) {

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>419 - Session Expired | APJIKOM</title>
+    <title>419 - Session Expired | {{ $globalSiteName }}</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         @keyframes float {
@@ -121,8 +121,8 @@
             <div class="mt-8 pt-6 border-t border-gray-200">
                 <p class="text-sm text-gray-500">
                     Butuh bantuan? Hubungi 
-                    <a href="mailto:admin@apjikom.or.id" class="text-purple-600 hover:text-purple-700 font-medium">
-                        admin@apjikom.or.id
+                    <a href="mailto:{{ $globalContactEmail ?: 'admin@example.com' }}" class="text-purple-600 hover:text-purple-700 font-medium">
+                        {{ $globalContactEmail ?: 'admin@example.com' }}
                     </a>
                 </p>
             </div>
@@ -130,7 +130,7 @@
 
         <!-- Footer -->
         <div class="text-center mt-6 text-white text-sm">
-            <p>&copy; 2025 APJIKOM. All rights reserved.</p>
+            <p>{{ $globalCopyrightText }}</p>
         </div>
     </div>
 

@@ -162,12 +162,13 @@ class UserController extends Controller
             // Update mail config from database
             $this->updateMailConfig();
             
+            $siteName = \App\Models\Setting::getValue('site_name', 'Website Asosiasi');
             \Mail::send('emails.password-reset', [
                 'user' => $user,
                 'newPassword' => $newPassword,
-            ], function ($message) use ($user) {
+            ], function ($message) use ($user, $siteName) {
                 $message->to($user->email, $user->name)
-                        ->subject('Password Anda Telah Direset - APJIKOM');
+                        ->subject("Password Anda Telah Direset - {$siteName}");
             });
         } catch (\Exception $e) {
             \Log::error('Failed to send password reset email: ' . $e->getMessage());
@@ -193,7 +194,7 @@ class UserController extends Controller
             'mail.mailers.smtp.password' => $settings['mail_password'] ?? '',
             'mail.mailers.smtp.encryption' => $settings['mail_encryption'] ?? 'ssl',
             'mail.from.address' => $settings['mail_from_address'] ?? '',
-            'mail.from.name' => $settings['mail_from_name'] ?? 'APJIKOM',
+            'mail.from.name' => $settings['mail_from_name'] ?? \App\Models\Setting::getValue('site_name', 'Website Asosiasi'),
         ]);
 
         // Purge mailer instance to force recreation with new config

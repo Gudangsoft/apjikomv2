@@ -15,7 +15,7 @@ class ChangelogController extends Controller
      */
     public function index()
     {
-        $changelogs = Changelog::orderBy('release_date', 'desc')->paginate(10);
+        $changelogs = Changelog::orderBy('release_date', 'desc')->orderBy('id', 'desc')->paginate(10);
         $updateRequests = UpdateRequest::with('user')
             ->orderBy('created_at', 'desc')
             ->paginate(10);

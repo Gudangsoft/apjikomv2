@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pendaftaran Disetujui - APJIKOM</title>
+    <title>Pendaftaran Disetujui - {{ $globalSiteName }}</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -95,18 +95,18 @@
     <div class="container">
         <div class="header">
             <h1>✅ Pendaftaran Disetujui</h1>
-            <p style="color: #6b7280; margin: 10px 0 0 0;">Asosiasi Pengelola Jurnal Informatika dan Komputer</p>
+            <p style="color: #6b7280; margin: 10px 0 0 0;">{{ $globalSiteTagline }}</p>
         </div>
 
         <div class="content">
             <div class="success-badge">
                 <strong>🎉 Selamat!</strong><br>
-                Pendaftaran Anda sebagai anggota APJIKOM telah disetujui.
+                Pendaftaran Anda sebagai anggota {{ $globalSiteName }} telah disetujui.
             </div>
 
             <p>Halo <strong>{{ $user->name }}</strong>,</p>
             
-            <p>Kami dengan senang hati menginformasikan bahwa pendaftaran Anda sebagai anggota APJIKOM telah <strong>disetujui</strong> oleh admin.</p>
+            <p>Kami dengan senang hati menginformasikan bahwa pendaftaran Anda sebagai anggota {{ $globalSiteName }} telah <strong>disetujui</strong> oleh admin.</p>
 
             <div class="credentials">
                 <h3>📋 Informasi Akun Anda</h3>
@@ -139,7 +139,7 @@
                 <li>Login ke dashboard member menggunakan kredensial di atas</li>
                 <li>Lengkapi profil Anda</li>
                 <li>Ganti password untuk keamanan</li>
-                <li>Nikmati berbagai benefit sebagai anggota APJIKOM</li>
+                <li>Nikmati berbagai benefit sebagai anggota {{ $globalSiteName }}</li>
             </ol>
 
             <div style="text-align: center;">
@@ -155,8 +155,8 @@
 
         <div class="footer">
             <p style="margin: 5px 0;">
-                <strong>APJIKOM</strong><br>
-                Asosiasi Pengelola Jurnal Informatika dan Komputer
+                <strong>{{ $globalSiteName }}</strong><br>
+                {{ $globalSiteTagline }}
             </p>
             <p style="margin: 5px 0; font-size: 13px;">
                 Email ini dikirim secara otomatis. Mohon tidak membalas email ini.

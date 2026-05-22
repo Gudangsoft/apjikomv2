@@ -24,7 +24,7 @@ if (!function_exists('site_name')) {
      */
     function site_name()
     {
-        return setting('site_name', 'APJIKOM');
+        return setting('site_name', 'Website Asosiasi');
     }
 }
 
@@ -49,7 +49,7 @@ if (!function_exists('site_tagline')) {
      */
     function site_tagline()
     {
-        return setting('site_tagline', 'Asosiasi Pengelola Jurnal Informatika dan Komputer');
+        return setting('site_tagline', 'Website Asosiasi');
     }
 }
 

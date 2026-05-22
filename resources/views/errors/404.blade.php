@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>404 - Page Not Found | APJIKOM</title>
+    <title>404 - Page Not Found | {{ $globalSiteName }}</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         @keyframes float {
@@ -67,7 +67,7 @@
         </div>
 
         <div class="text-center mt-6 text-white text-sm">
-            <p>&copy; 2025 APJIKOM. All rights reserved.</p>
+            <p>{{ $globalCopyrightText }}</p>
         </div>
     </div>
 </body>

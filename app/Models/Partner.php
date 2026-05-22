@@ -55,8 +55,8 @@ class Partner extends Model
         parent::boot();
 
         static::deleting(function ($partner) {
-            if ($partner->logo && Storage::exists($partner->logo)) {
-                Storage::delete($partner->logo);
+            if ($partner->logo && Storage::disk('public')->exists($partner->logo)) {
+                Storage::disk('public')->delete($partner->logo);
             }
         });
     }

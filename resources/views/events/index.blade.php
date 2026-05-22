@@ -14,7 +14,7 @@
             <div class="text-5xl mr-4">📅</div>
             <div>
                 <h1 class="text-4xl font-bold mb-2">Agenda Kegiatan</h1>
-                <p class="text-lg text-purple-100">Ikuti berbagai kegiatan dan acara APJIKOM</p>
+                <p class="text-lg text-purple-100">{{ setting('events_page_subtitle', 'Ikuti berbagai kegiatan dan acara ' . $globalSiteName) }}</p>
             </div>
         </div>
         
@@ -151,7 +151,7 @@
                     </svg>
                 </div>
                 <h3 class="text-2xl font-bold text-gray-700 mb-3">Belum Ada Kegiatan</h3>
-                <p class="text-gray-500">Nantikan update kegiatan menarik dari APJIKOM</p>
+                <p class="text-gray-500">Nantikan update kegiatan menarik dari {{ $globalSiteName }}</p>
             </div>
             @endforelse
         </div>

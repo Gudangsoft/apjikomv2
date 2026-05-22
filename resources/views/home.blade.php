@@ -198,12 +198,12 @@ document.addEventListener('DOMContentLoaded', () => {
                     <div class="relative rounded-3xl overflow-hidden shadow-2xl">
                         @if($aboutImage ?? null)
                         <img src="{{ asset('storage/' . $aboutImage) }}" 
-                             alt="APJIKOM" 
+                             alt="{{ $globalSiteName }}"
                              class="w-full h-auto object-cover"
                              onerror="this.src='https://images.unsplash.com/photo-1523580494863-6f3031224c94?w=800&h=600&fit=crop'">
                         @else
                         <img src="https://images.unsplash.com/photo-1523580494863-6f3031224c94?w=800&h=600&fit=crop" 
-                             alt="APJIKOM" 
+                             alt="{{ $globalSiteName }}"
                              class="w-full h-auto object-cover">
                         @endif
                         
@@ -248,7 +248,7 @@ document.addEventListener('DOMContentLoaded', () => {
             <div class="lg:pl-8" data-aos="fade-left">
                 <div class="mb-6">
                     <span class="text-cyan-500 font-bold text-sm uppercase tracking-wider">
-                        {{ setting('about_tag', 'APJIKOM') }}
+                        {{ setting('about_tag', $globalSiteName) }}
                     </span>
                     <x-section-heading 
                         setting-key="section_label_about" 
@@ -259,7 +259,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 </div>
                 
                 @php
-                    $aboutText = $aboutDescription ?? 'Asosiasi Pengelola Jurnal Informatika dan Komputer (APJIKOM) adalah organisasi yang menghimpun pengelola jurnal ilmiah di bidang informatika, komputer, dan teknologi informasi di Indonesia. APJIKOM bertujuan untuk meningkatkan kualitas publikasi ilmiah, penelitian, dan pengabdian kepada masyarakat di bidang teknologi informasi dan komputer.';
+                    $aboutText = $aboutDescription ?? setting('site_description', $globalSiteDescription);
                     $textLength = mb_strlen($aboutText);
                     $showReadMore = $textLength > 200;
                 @endphp
@@ -503,7 +503,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     </svg>
                 </div>
                 <h3 class="text-xl font-semibold text-gray-700 mb-2">Belum Ada Kegiatan Terjadwal</h3>
-                <p class="text-gray-500">Nantikan update kegiatan menarik dari APJIKOM</p>
+                <p class="text-gray-500">Nantikan update kegiatan menarik dari {{ $globalSiteName }}</p>
             </div>
             @endforelse
         </div>
@@ -515,7 +515,7 @@ document.addEventListener('DOMContentLoaded', () => {
     <div class="container mx-auto px-4">
         <x-section-heading 
             setting-key="section_label_benefits" 
-            title="Keuntungan Menjadi Anggota APJIKOM"
+            title="{{ setting('section_label_benefits', 'Keuntungan Menjadi Anggota ' . $globalSiteName) }}"
             align="center"
             :dark-mode="true"
         />
@@ -725,7 +725,7 @@ setInterval(() => {
                     @endauth
                 </span>
             </h2>
-            <p class="text-lg text-gray-600 max-w-3xl mx-auto">Dokumentasi kegiatan dan event APJIKOM</p>
+            <p class="text-lg text-gray-600 max-w-3xl mx-auto">{{ setting('gallery_subtitle', 'Dokumentasi kegiatan dan event ' . $globalSiteName) }}</p>
         </div>
 
         <!-- Gallery Grid -->
@@ -855,7 +855,7 @@ setInterval(() => {
                     <x-section-heading 
                         setting-key="section_label_testimonials" 
                         title="Testimoni Member"
-                        subtitle="Apa kata mereka tentang APJIKOM"
+                        subtitle="{{ setting('testimonials_subtitle', 'Apa kata mereka tentang ' . $globalSiteName) }}"
                         align="left"
                     />
                 </div>
@@ -884,7 +884,7 @@ setInterval(() => {
                                     {{ $testimonial->member && $testimonial->member->user ? $testimonial->member->user->name : 'Member Tidak Tersedia' }}
                                 </h4>
                                 <p class="text-gray-600 text-sm">
-                                    {{ $testimonial->member && $testimonial->member->position ? $testimonial->member->position : 'Member APJIKOM' }}
+                                    {{ $testimonial->member && $testimonial->member->position ? $testimonial->member->position : 'Member ' . $globalSiteName }}
                                 </p>
                                 @if($testimonial->member && $testimonial->member->institution_name)
                                 <p class="text-gray-500 text-xs mt-0.5">{{ $testimonial->member->institution_name }}</p>
@@ -1022,7 +1022,7 @@ function toggleFaq(index) {
     <div class="container mx-auto px-4 text-center">
         <x-section-heading 
             setting-key="section_label_cta" 
-            title="Mari Bergabung dengan APJIKOM"
+            title="{{ setting('section_label_cta', 'Mari Bergabung dengan ' . $globalSiteName) }}"
             align="center"
         />
         <p class="text-lg text-gray-600 mb-8 max-w-2xl mx-auto">Kembangkan jaringan, tingkatkan profesionalisme, dan majukan publikasi ilmiah Indonesia bersama kami.</p>

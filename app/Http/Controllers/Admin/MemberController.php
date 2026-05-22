@@ -604,34 +604,31 @@ class MemberController extends Controller
             $existingUser = User::where('email', $registration->email)->first();
             
             if (!$existingUser) {
-                // Generate member number
-                $lastMember = Member::latest('id')->first();
-                $nextNumber = $lastMember ? intval(substr($lastMember->member_number, -4)) + 1 : 1;
-                $memberNumber = 'APJIKOM-' . str_pad($nextNumber, 4, '0', STR_PAD_LEFT);
-
-                // Create user
+                // Create user with random password
+                $password = \Illuminate\Support\Str::random(12);
                 $user = User::create([
-                    'name' => $registration->full_name,
-                    'email' => $registration->email,
-                    'password' => Hash::make('password123'),
-                    'is_admin' => false,
+                    'name'     => $registration->full_name,
+                    'email'    => $registration->email,
+                    'password' => Hash::make($password),
+                    'role'     => 'member',
                 ]);
 
-                // Create member
+                // Create member (member_number generated after create)
                 $member = Member::create([
-                    'user_id' => $user->id,
-                    'member_number' => $memberNumber,
+                    'user_id'          => $user->id,
                     'institution_name' => $registration->institution,
-                    'position' => $registration->position ?? null,
-                    'member_type' => $registration->type,
-                    'phone' => $registration->phone,
-                    'address' => $registration->address,
-                    'city' => $registration->city ?? null,
-                    'province' => $registration->province ?? null,
-                    'status' => 'active',
-                    'join_date' => now(),
-                    'expiry_date' => now()->addYear(),
+                    'position'         => $registration->position ?? null,
+                    'member_type'      => $registration->type,
+                    'phone'            => $registration->phone,
+                    'address'          => $registration->address,
+                    'city'             => $registration->city ?? null,
+                    'province'         => $registration->province ?? null,
+                    'photo'            => $registration->photo ?? null,
+                    'status'           => 'active',
+                    'join_date'        => now(),
+                    'expiry_date'      => now()->addYear(),
                 ]);
+                $member->generateMemberNumber();
 
                 // Update registration with member_id
                 $registration->update(['member_id' => $member->id]);
@@ -645,6 +642,13 @@ class MemberController extends Controller
                     } catch (\Exception $e) {
                         \Log::error('Card generation failed: ' . $e->getMessage());
                     }
+                }
+
+                // Send approval email with credentials
+                try {
+                    \Mail::to($user->email)->send(new \App\Mail\MemberApproved($user, $password, $member));
+                } catch (\Exception $e) {
+                    \Log::warning('Failed to send approval email: ' . $e->getMessage());
                 }
             }
         }
@@ -708,21 +712,23 @@ class MemberController extends Controller
 
                     // Create member
                     $memberData = [
-                        'user_id' => $user->id,
-                        'name' => $registration->full_name,
-                        'email' => $registration->email,
-                        'phone' => $registration->phone,
-                        'address' => $registration->address ?? null,
-                        'institution' => $registration->institution ?? null,
-                        'position' => $registration->position ?? null,
-                        'type' => $registration->type,
-                        'photo' => $registration->photo,
-                        'id_card' => $registration->id_card ?? null,
-                        'status' => 'active',
-                        'is_verified' => true,
+                        'user_id'          => $user->id,
+                        'phone'            => $registration->phone,
+                        'address'          => $registration->address ?? null,
+                        'city'             => $registration->city ?? null,
+                        'province'         => $registration->province ?? null,
+                        'institution_name' => $registration->institution ?? null,
+                        'position'         => $registration->position ?? null,
+                        'member_type'      => $registration->type,
+                        'photo'            => $registration->photo,
+                        'status'           => 'active',
+                        'is_verified'      => true,
+                        'join_date'        => now(),
+                        'expiry_date'      => now()->addYear(),
                     ];
 
                     $member = Member::create($memberData);
+                    $member->generateMemberNumber();
 
                     // Link registration to member
                     $registration->update([

@@ -11,9 +11,15 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware): void {
+        // Global middleware — runs on every web request
+        $middleware->web(append: [
+            \App\Http\Middleware\SecurityHeaders::class,
+        ]);
+
         $middleware->alias([
-            'admin' => \App\Http\Middleware\AdminMiddleware::class,
-            'member' => \App\Http\Middleware\MemberMiddleware::class,
+            'admin'   => \App\Http\Middleware\AdminMiddleware::class,
+            'member'  => \App\Http\Middleware\MemberMiddleware::class,
+            'antibot' => \App\Http\Middleware\AntiBotMiddleware::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {

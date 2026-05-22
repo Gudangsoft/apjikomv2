@@ -92,8 +92,8 @@ class ActivityLogger
         return self::log(
             'auth',
             'logout',
-            "{$user->name} logout dari sistem",
-            $user
+            $user,
+            "{$user->name} logout dari sistem"
         );
     }
 }

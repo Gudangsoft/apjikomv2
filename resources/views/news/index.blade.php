@@ -6,7 +6,7 @@
 <!-- Page Header -->
 <section class="bg-purple-600 text-white py-12">
     <div class="container mx-auto px-4">
-        <h1 class="text-3xl font-bold mb-2">Berita APJIKOM</h1>
+        <h1 class="text-3xl font-bold mb-2">{{ setting('news_page_title', 'Berita ' . $globalSiteName) }}</h1>
         <p class="text-lg text-purple-100">Informasi terkini seputar informatika dan komputer</p>
     </div>
 </section>
