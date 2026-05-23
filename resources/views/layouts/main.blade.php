@@ -214,10 +214,12 @@
                             {{ strtoupper(substr(site_name(), 0, 2)) }}
                         </div>
                     @endif
+                    @if(setting('show_site_name', '1') === '1')
                     <div>
                         <h1 class="text-lg font-bold text-gray-900 dark:text-gray-100">{{ site_name() }}</h1>
                         <p class="text-xs text-gray-600 dark:text-gray-400 hidden sm:block">{{ $globalSiteTagline }}</p>
                     </div>
+                    @endif
                 </div>
                 
                 <div class="hidden md:flex items-center space-x-6">

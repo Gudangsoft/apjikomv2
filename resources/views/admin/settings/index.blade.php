@@ -43,11 +43,17 @@
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-2">Nama Website</label>
-                        <input type="text" name="site_name" value="{{ old('site_name', $settings->get('general')?->firstWhere('key', 'site_name')?->value ?? 'APJIKOM') }}" 
+                        <input type="text" name="site_name" value="{{ old('site_name', $settings->get('general')?->firstWhere('key', 'site_name')?->value ?? 'APJIKOM') }}"
                             class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#00629B] focus:border-transparent">
                         @error('site_name')
                             <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
                         @enderror
+                        <div class="mt-2 flex items-center gap-2">
+                            <input type="checkbox" name="show_site_name" id="show_site_name" value="1"
+                                {{ old('show_site_name', $settings->get('general')?->firstWhere('key', 'show_site_name')?->value ?? '1') == '1' ? 'checked' : '' }}
+                                class="h-4 w-4 text-[#00629B] border-gray-300 rounded focus:ring-[#00629B]">
+                            <label for="show_site_name" class="text-sm text-gray-600">Tampilkan nama di samping logo</label>
+                        </div>
                     </div>
 
                     <div>
