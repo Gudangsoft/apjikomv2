@@ -1,13 +1,13 @@
 @extends('layouts.main')
 
-@section('title', 'Daftar Anggota APJIKOM')
+@section('title', 'Daftar Anggota')
 
 @section('content')
 <!-- Page Header -->
 <section class="bg-purple-600 text-white py-12">
     <div class="container mx-auto px-4">
-        <h1 class="text-3xl font-bold mb-2">Pendaftaran Anggota APJIKOM</h1>
-        <p class="text-xl text-purple-100 mb-1">Asosiasi Pengelola Jurnal Informatika dan Komputer</p>
+        <h1 class="text-3xl font-bold mb-2">Pendaftaran Anggota {{ site_name() }}</h1>
+        <p class="text-xl text-purple-100 mb-1">{{ $globalSiteTagline }}</p>
         <p class="text-lg text-purple-100">Bergabunglah bersama kami untuk memajukan publikasi ilmiah Indonesia</p>
     </div>
 </section>
@@ -39,7 +39,7 @@
             <!-- Membership Type Selection -->
             <div class="bg-white rounded-xl shadow-lg border-2 border-gray-100 p-8 mb-8">
                 <div class="text-center mb-8">
-                    <h2 class="text-3xl font-bold text-gray-900 mb-3">Daftar Sebagai Member APJIKOM</h2>
+                    <h2 class="text-3xl font-bold text-gray-900 mb-3">Daftar Sebagai Member {{ site_name() }}</h2>
                     <p class="text-gray-600">Wujudkan komitmen Anda dalam memajukan ekosistem publikasi ilmiah Indonesia</p>
                 </div>
                 
@@ -62,7 +62,7 @@
                                     </svg>
                                 </div>
                             </div>
-                            <label for="type-individu" class="text-2xl font-bold text-gray-900 cursor-pointer">Member APJIKOM</label>
+                            <label for="type-individu" class="text-2xl font-bold text-gray-900 cursor-pointer">Member {{ site_name() }}</label>
                             <p class="text-gray-600 mt-3 text-base leading-relaxed">Jadilah bagian dari komunitas pengelola jurnal informatika dan komputer terdepan di Indonesia</p>
                         </div>
 
