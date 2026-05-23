@@ -65,12 +65,32 @@
                         </div>
                         @endif
                         
+                        @php $etype = $event->event_type ?? 'offline'; @endphp
                         <div class="flex items-start text-gray-600 text-sm bg-gray-50 p-3 rounded-lg hover:bg-gray-100 transition">
-                            <svg class="w-5 h-5 mr-2 flex-shrink-0 text-purple-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
-                            </svg>
-                            <span class="text-left">{{ $event->location }}</span>
+                            @if($etype === 'online')
+                                <svg class="w-5 h-5 mr-2 flex-shrink-0 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.069A1 1 0 0121 8.82v6.36a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"/>
+                                </svg>
+                                <div class="text-left">
+                                    <span class="font-semibold text-blue-600">Online</span>
+                                    @if($event->online_platform)<br><span class="text-xs text-gray-500">{{ $event->online_platform }}</span>@endif
+                                </div>
+                            @elseif($etype === 'hybrid')
+                                <svg class="w-5 h-5 mr-2 flex-shrink-0 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 14v3m4-3v3m4-3v3M3 21h18M3 10h18M3 7l9-4 9 4M4 10h16v11H4V10z"/>
+                                </svg>
+                                <div class="text-left">
+                                    <span class="font-semibold text-green-600">Hybrid</span>
+                                    @if($event->location)<br><span class="text-xs text-gray-500">{{ $event->location }}</span>@endif
+                                    @if($event->online_platform)<br><span class="text-xs text-blue-500">{{ $event->online_platform }}</span>@endif
+                                </div>
+                            @else
+                                <svg class="w-5 h-5 mr-2 flex-shrink-0 text-purple-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                                </svg>
+                                <span class="text-left">{{ $event->location ?: 'Lokasi belum ditentukan' }}</span>
+                            @endif
                         </div>
                         
                         @if($event->registration_link)
@@ -324,7 +344,8 @@
                 </div>
                 
                 <!-- Additional Event Details in Cards -->
-                @if($event->event_time || $event->location || $event->category)
+                @php $etype2 = $event->event_type ?? 'offline'; @endphp
+                @if($event->event_time || $event->location || $event->online_platform || $event->category || $event->event_type)
                 <div class="mt-6 grid md:grid-cols-3 gap-3">
                     @if($event->event_time)
                     <div class="flex items-center gap-3 p-3 md:p-4 bg-purple-50 rounded-xl border border-purple-200">
@@ -339,8 +360,36 @@
                         </div>
                     </div>
                     @endif
-                    
-                    @if($event->location)
+
+                    {{-- Format / Lokasi block --}}
+                    @if($etype2 === 'online')
+                    <div class="flex items-center gap-3 p-3 md:p-4 bg-blue-50 rounded-xl border border-blue-200">
+                        <div class="bg-blue-500 text-white p-3 rounded-lg">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.069A1 1 0 0121 8.82v6.36a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"/>
+                            </svg>
+                        </div>
+                        <div>
+                            <div class="text-xs text-gray-500 font-semibold">Format</div>
+                            <div class="text-sm font-bold text-blue-700">🌐 Online</div>
+                            @if($event->online_platform)<div class="text-xs text-gray-500">{{ $event->online_platform }}</div>@endif
+                        </div>
+                    </div>
+                    @elseif($etype2 === 'hybrid')
+                    <div class="flex items-center gap-3 p-3 md:p-4 bg-green-50 rounded-xl border border-green-200">
+                        <div class="bg-green-500 text-white p-3 rounded-lg">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 14v3m4-3v3m4-3v3M3 21h18M3 10h18M3 7l9-4 9 4M4 10h16v11H4V10z"/>
+                            </svg>
+                        </div>
+                        <div>
+                            <div class="text-xs text-gray-500 font-semibold">Format</div>
+                            <div class="text-sm font-bold text-green-700">🔀 Hybrid</div>
+                            @if($event->location)<div class="text-xs text-gray-500">📍 {{ Str::limit($event->location, 20) }}</div>@endif
+                            @if($event->online_platform)<div class="text-xs text-blue-500">🌐 {{ $event->online_platform }}</div>@endif
+                        </div>
+                    </div>
+                    @else
                     <div class="flex items-center gap-3 p-3 md:p-4 bg-blue-50 rounded-xl border border-blue-200">
                         <div class="bg-blue-500 text-white p-3 rounded-lg">
                             <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -349,11 +398,11 @@
                         </div>
                         <div>
                             <div class="text-xs text-gray-500 font-semibold">Lokasi</div>
-                            <div class="text-sm font-bold text-gray-900">{{ Str::limit($event->location, 20) }}</div>
+                            <div class="text-sm font-bold text-gray-900">{{ $event->location ? Str::limit($event->location, 25) : 'Offline (TBA)' }}</div>
                         </div>
                     </div>
                     @endif
-                    
+
                     @if($event->category)
                     <div class="flex items-center gap-3 p-3 md:p-4 bg-pink-50 rounded-xl border border-pink-200">
                         <div class="bg-pink-500 text-white p-3 rounded-lg">
