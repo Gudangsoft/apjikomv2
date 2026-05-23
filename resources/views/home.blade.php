@@ -1019,17 +1019,22 @@ function toggleFaq(index) {
                     <div class="swiper-slide">
                         <div class="flex items-center justify-center p-6 h-32">
                             @if($partner->url)
-                                <a href="{{ $partner->url }}" target="_blank" rel="noopener noreferrer" class="block transition-transform hover:scale-110 duration-300">
-                                    <img src="{{ $partner->logo_url }}" 
+                                <a href="{{ $partner->url }}" target="_blank" rel="noopener noreferrer"
+                                   class="partner-logo-link block relative overflow-hidden rounded-lg transition-all duration-300 hover:scale-110 hover:shadow-lg active:scale-95 p-2"
+                                   onclick="partnerRipple(event, this)">
+                                    <img src="{{ $partner->logo_url }}"
                                          alt="{{ $partner->name }}"
-                                         class="max-w-full max-h-24 object-contain grayscale hover:grayscale-0 transition-all duration-300"
+                                         class="max-w-full max-h-24 object-contain transition-all duration-300"
                                          title="{{ $partner->name }}">
                                 </a>
                             @else
-                                <img src="{{ $partner->logo_url }}" 
-                                     alt="{{ $partner->name }}"
-                                     class="max-w-full max-h-24 object-contain grayscale hover:grayscale-0 transition-all duration-300"
-                                     title="{{ $partner->name }}">
+                                <div class="partner-logo-link block relative overflow-hidden rounded-lg transition-all duration-300 hover:scale-110 hover:shadow-lg p-2"
+                                     onclick="partnerRipple(event, this)">
+                                    <img src="{{ $partner->logo_url }}"
+                                         alt="{{ $partner->name }}"
+                                         class="max-w-full max-h-24 object-contain transition-all duration-300"
+                                         title="{{ $partner->name }}">
+                                </div>
                             @endif
                         </div>
                     </div>
@@ -1037,6 +1042,33 @@ function toggleFaq(index) {
                 </div>
             </div>
         </div>
+
+        <style>
+        .partner-logo-link .ripple {
+            position: absolute;
+            border-radius: 50%;
+            background: rgba(124, 58, 237, 0.25);
+            transform: scale(0);
+            animation: partnerRippleAnim 0.55s linear;
+            pointer-events: none;
+        }
+        @keyframes partnerRippleAnim {
+            to { transform: scale(4); opacity: 0; }
+        }
+        </style>
+        <script>
+        function partnerRipple(e, el) {
+            const ripple = document.createElement('span');
+            ripple.classList.add('ripple');
+            const rect = el.getBoundingClientRect();
+            const size = Math.max(rect.width, rect.height);
+            ripple.style.width = ripple.style.height = size + 'px';
+            ripple.style.left = (e.clientX - rect.left - size / 2) + 'px';
+            ripple.style.top = (e.clientY - rect.top - size / 2) + 'px';
+            el.appendChild(ripple);
+            ripple.addEventListener('animationend', () => ripple.remove());
+        }
+        </script>
     </div>
 </section>
 @endif
