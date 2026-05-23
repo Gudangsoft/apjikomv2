@@ -53,7 +53,7 @@
                 @error('image')
                     <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
                 @enderror
-                <x-image-hint dimensions="1920×600" ratio="16:5" max-size="5MB" formats="JPG, PNG" note="Gambar ditampilkan penuh di hero/banner halaman utama." />
+                <x-image-hint dimensions="1920×800" ratio="12:5" max-size="5MB" formats="JPG, PNG" note="Simpan konten utama di area TENGAH gambar — sisi kiri/kanan dapat terpotong di layar kecil." />
                 
                 <div id="imagePreview" class="mt-4 hidden">
                     <img id="preview" class="h-48 w-full object-cover rounded-lg" src="" alt="Preview">
