@@ -138,14 +138,10 @@
             <div class="login-header">
                 <div class="flex items-center justify-center mb-3 sm:mb-4">
                     @if(site_logo())
-                        <img src="{{ site_logo() }}" alt="{{ $globalSiteName }}" class="h-10 sm:h-12 w-auto object-contain bg-white p-2 rounded mr-2 sm:mr-3">
+                        <img src="{{ site_logo() }}" alt="{{ $globalSiteName }}" class="h-14 sm:h-16 w-auto object-contain bg-white p-2 rounded">
                     @else
-                        <img src="{{ asset('images/logo.png') }}" alt="{{ $globalSiteName }}" class="h-10 sm:h-12 mr-2 sm:mr-3">
+                        <img src="{{ asset('images/logo.png') }}" alt="{{ $globalSiteName }}" class="h-14 sm:h-16">
                     @endif
-                    <div class="text-left">
-                        <h1 class="text-xl sm:text-2xl font-bold">{{ site_name() }}</h1>
-                        <p class="text-white/90 text-xs">Member Dashboard</p>
-                    </div>
                 </div>
                 <p class="text-white/80 text-xs sm:text-sm mt-2">{{ site_tagline() }}</p>
             </div>

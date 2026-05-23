@@ -143,16 +143,12 @@
                     </svg>
                 </button>
                 
-                <div class="flex items-center space-x-2 sm:space-x-4">
+                <div class="flex items-center">
                     @if(site_logo())
                         <img src="{{ site_logo() }}" alt="{{ $globalSiteName }}" class="h-10 sm:h-12 w-auto object-contain bg-white p-1 rounded">
                     @else
                         <img src="{{ asset('images/logo.png') }}" alt="{{ $globalSiteName }}" class="h-10 sm:h-12">
                     @endif
-                    <div class="hidden sm:block">
-                        <h1 class="text-lg sm:text-xl font-bold">{{ site_name() }}</h1>
-                        <p class="text-xs text-purple-200">{{ site_tagline() }}</p>
-                    </div>
                 </div>
                 
                 <div class="flex items-center space-x-3 sm:space-x-6">

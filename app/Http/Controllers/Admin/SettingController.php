@@ -64,10 +64,6 @@ class SettingController extends Controller
             Setting::setValue('site_favicon', $faviconPath, 'image', 'general');
         }
 
-        // Handle boolean checkbox settings (unchecked = not present in request)
-        Setting::setValue('show_site_name', $request->has('show_site_name') ? '1' : '0', 'boolean', 'general');
-        Setting::setValue('show_footer_site_name', $request->has('show_footer_site_name') ? '1' : '0', 'boolean', 'general');
-
         // Save all text settings
         foreach ($validated as $key => $value) {
             $group = 'general';

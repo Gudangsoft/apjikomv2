@@ -48,20 +48,6 @@
                         @error('site_name')
                             <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
                         @enderror
-                        <div class="mt-2 space-y-1.5">
-                            <div class="flex items-center gap-2">
-                                <input type="checkbox" name="show_site_name" id="show_site_name" value="1"
-                                    {{ old('show_site_name', $settings->get('general')?->firstWhere('key', 'show_site_name')?->value ?? '1') == '1' ? 'checked' : '' }}
-                                    class="h-4 w-4 text-[#00629B] border-gray-300 rounded focus:ring-[#00629B]">
-                                <label for="show_site_name" class="text-sm text-gray-600">Tampilkan nama di samping logo (navigasi)</label>
-                            </div>
-                            <div class="flex items-center gap-2">
-                                <input type="checkbox" name="show_footer_site_name" id="show_footer_site_name" value="1"
-                                    {{ old('show_footer_site_name', $settings->get('general')?->firstWhere('key', 'show_footer_site_name')?->value ?? '1') == '1' ? 'checked' : '' }}
-                                    class="h-4 w-4 text-[#00629B] border-gray-300 rounded focus:ring-[#00629B]">
-                                <label for="show_footer_site_name" class="text-sm text-gray-600">Tampilkan nama di footer</label>
-                            </div>
-                        </div>
                     </div>
 
                     <div>

@@ -214,12 +214,6 @@
                             {{ strtoupper(substr(site_name(), 0, 2)) }}
                         </div>
                     @endif
-                    @if(setting('show_site_name', '1') === '1')
-                    <div>
-                        <h1 class="text-lg font-bold text-gray-900 dark:text-gray-100">{{ site_name() }}</h1>
-                        <p class="text-xs text-gray-600 dark:text-gray-400 hidden sm:block">{{ $globalSiteTagline }}</p>
-                    </div>
-                    @endif
                 </div>
                 
                 <div class="hidden md:flex items-center space-x-6">
@@ -348,9 +342,6 @@
                             <div class="w-10 h-10 bg-white rounded flex items-center justify-center text-purple-600 font-bold">
                                 {{ strtoupper(substr(site_name(), 0, 2)) }}
                             </div>
-                        @endif
-                        @if(setting('show_footer_site_name', '1') === '1')
-                        <span class="text-xl font-bold">{{ site_name() }}</span>
                         @endif
                     </div>
                     <p class="text-purple-200 text-sm mb-4">{{ $globalSiteDescription }}</p>
