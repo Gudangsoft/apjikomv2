@@ -467,11 +467,23 @@ document.addEventListener('DOMContentLoaded', () => {
                         
                         <div class="flex items-center justify-between">
                             <div class="flex items-center text-xs text-gray-500">
-                                <svg class="w-4 h-4 mr-1.5 text-purple-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
-                                </svg>
-                                <span class="font-medium">{{ $event->location ?? 'TBA' }}</span>
+                                @if(($event->event_type ?? 'offline') === 'online')
+                                    <svg class="w-4 h-4 mr-1.5 text-blue-500 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.069A1 1 0 0121 8.82v6.36a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"/>
+                                    </svg>
+                                    <span class="font-medium text-blue-600">Online{{ $event->online_platform ? ' · ' . $event->online_platform : '' }}</span>
+                                @elseif(($event->event_type ?? 'offline') === 'hybrid')
+                                    <svg class="w-4 h-4 mr-1.5 text-green-500 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 14v3m4-3v3m4-3v3M3 21h18M3 10h18M3 7l9-4 9 4M4 10h16v11H4V10z"/>
+                                    </svg>
+                                    <span class="font-medium text-green-600">Hybrid{{ $event->location ? ' · ' . $event->location : '' }}</span>
+                                @else
+                                    <svg class="w-4 h-4 mr-1.5 text-purple-500 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                                    </svg>
+                                    <span class="font-medium">{{ $event->location ?: 'Lokasi TBA' }}</span>
+                                @endif
                             </div>
                             
                             <a href="{{ route('events.show', $event->slug) }}" class="text-purple-600 hover:text-purple-700 font-semibold text-sm flex items-center group-hover:translate-x-1 transition">
@@ -619,11 +631,23 @@ document.addEventListener('DOMContentLoaded', () => {
                                     @endif
                                     
                                     <div class="flex items-start text-sm text-gray-600">
-                                        <svg class="w-5 h-5 mr-2 flex-shrink-0 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
-                                        </svg>
-                                        <span class="line-clamp-2">{{ $event->location }}</span>
+                                        @if(($event->event_type ?? 'offline') === 'online')
+                                            <svg class="w-5 h-5 mr-2 flex-shrink-0 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.069A1 1 0 0121 8.82v6.36a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"/>
+                                            </svg>
+                                            <span class="text-blue-600">Online{{ $event->online_platform ? ' · ' . $event->online_platform : '' }}</span>
+                                        @elseif(($event->event_type ?? 'offline') === 'hybrid')
+                                            <svg class="w-5 h-5 mr-2 flex-shrink-0 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 14v3m4-3v3m4-3v3M3 21h18M3 10h18M3 7l9-4 9 4M4 10h16v11H4V10z"/>
+                                            </svg>
+                                            <span class="text-green-600 line-clamp-2">Hybrid{{ $event->location ? ' · ' . $event->location : '' }}</span>
+                                        @else
+                                            <svg class="w-5 h-5 mr-2 flex-shrink-0 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                                            </svg>
+                                            <span class="line-clamp-2">{{ $event->location ?: 'Lokasi TBA' }}</span>
+                                        @endif
                                     </div>
                                 </div>
                                 
