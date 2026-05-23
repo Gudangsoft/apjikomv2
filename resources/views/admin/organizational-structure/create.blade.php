@@ -80,7 +80,7 @@
                     </label>
                     <input type="file" id="photo" name="photo" accept="image/*"
                            class="w-full px-3 py-2 border rounded-lg">
-                    <p class="text-sm text-gray-500 mt-1">Format: JPG, PNG (Max: 2MB)</p>
+                    <x-image-hint dimensions="400×400" ratio="1:1" max-size="2MB" formats="JPG, PNG" note="Foto persegi (1:1) direkomendasikan agar tampil rapi di kartu profil." />
                 </div>
 
                 <!-- Description -->

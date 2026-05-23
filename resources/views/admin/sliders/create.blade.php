@@ -53,7 +53,7 @@
                 @error('image')
                     <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
                 @enderror
-                <p class="text-xs text-gray-500 mt-1">Format: JPG, PNG. Ukuran maksimal 5MB. Rekomendasi: 1920x600px</p>
+                <x-image-hint dimensions="1920×600" ratio="16:5" max-size="5MB" formats="JPG, PNG" note="Gambar ditampilkan penuh di hero/banner halaman utama." />
                 
                 <div id="imagePreview" class="mt-4 hidden">
                     <img id="preview" class="h-48 w-full object-cover rounded-lg" src="" alt="Preview">

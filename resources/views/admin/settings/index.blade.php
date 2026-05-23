@@ -136,7 +136,7 @@
                         @endif
                         <input type="file" name="site_logo" accept="image/jpeg,image/png,image/jpg,image/svg+xml"
                             class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#00629B] focus:border-transparent">
-                        <p class="text-xs text-gray-500 mt-1">Format: JPG, PNG, SVG. Max 2MB</p>
+                        <x-image-hint dimensions="300×300" ratio="1:1" max-size="2MB" formats="JPG, PNG, SVG" note="Logo persegi atau landscape. Background transparan (PNG/SVG) direkomendasikan." />
                         @error('site_logo')
                             <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
                         @enderror
@@ -154,7 +154,7 @@
                         @endif
                         <input type="file" name="site_favicon" accept="image/png,.ico"
                             class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#00629B] focus:border-transparent">
-                        <p class="text-xs text-gray-500 mt-1">Format: PNG, ICO. Max 512KB</p>
+                        <x-image-hint dimensions="64×64" ratio="1:1" max-size="512KB" formats="PNG, ICO" note="Favicon tampil sebagai ikon kecil di tab browser. Gunakan ukuran persegi." />
                         @error('site_favicon')
                             <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
                         @enderror

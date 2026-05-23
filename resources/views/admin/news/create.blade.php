@@ -53,7 +53,7 @@
             <label class="block text-sm font-medium text-gray-700 mb-2">Gambar Thumbnail</label>
             <input type="file" name="image" accept="image/jpeg,image/png,image/jpg" id="imageInput"
                    class="w-full px-4 py-2 border rounded focus:ring-2 focus:ring-[#00629B] @error('image') border-red-500 @enderror">
-            <p class="text-xs text-gray-500 mt-1">Format: JPG, PNG. Maksimal 2MB. Rekomendasi ukuran: 1200x630px</p>
+            <x-image-hint dimensions="1200×630" ratio="16:9" max-size="2MB" formats="JPG, PNG" note="Rasio 16:9 direkomendasikan untuk tampilan optimal di media sosial." />
             @error('image')
                 <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
             @enderror

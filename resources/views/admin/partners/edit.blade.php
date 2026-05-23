@@ -53,7 +53,7 @@
                        accept="image/*"
                        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#00629B] focus:border-transparent @error('logo') border-red-500 @enderror"
                        onchange="previewImage(event)">
-                <p class="mt-1 text-xs text-gray-500">Format: JPG, PNG, SVG, WebP. Max: 2MB. Kosongkan jika tidak ingin mengganti.</p>
+                <x-image-hint dimensions="200×100" ratio="2:1" max-size="2MB" formats="JPG, PNG, SVG, WebP" note="Kosongkan jika tidak ingin mengganti logo." />
                 @error('logo')
                     <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                 @enderror

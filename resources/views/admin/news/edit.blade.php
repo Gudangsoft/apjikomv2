@@ -60,7 +60,7 @@
             @endif
             <input type="file" name="image" accept="image/jpeg,image/png,image/jpg" id="imageInput"
                    class="w-full px-4 py-2 border rounded focus:ring-2 focus:ring-[#00629B] @error('image') border-red-500 @enderror">
-            <p class="text-xs text-gray-500 mt-1">Format: JPG, PNG. Maksimal 2MB. Rekomendasi ukuran: 1200x630px</p>
+            <x-image-hint dimensions="1200×630" ratio="16:9" max-size="2MB" formats="JPG, PNG" note="Kosongkan jika tidak ingin mengubah thumbnail." />
             @error('image')
                 <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
             @enderror

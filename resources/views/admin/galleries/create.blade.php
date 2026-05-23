@@ -72,7 +72,7 @@
             @error('image')
                 <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
             @enderror
-            <p class="text-xs text-gray-500 mt-1">Format: JPG, JPEG, PNG. Maksimal 5MB</p>
+            <x-image-hint max-size="5MB" formats="JPG, PNG" note="Gambar akan ditampilkan di halaman gallery publik." />
         </div>
 
         <!-- YouTube URL (shown when type=video) -->

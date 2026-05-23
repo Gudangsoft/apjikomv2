@@ -69,7 +69,7 @@
                 @error('photo')
                     <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
                 @enderror
-                <p class="text-xs text-gray-500 mt-1">Format: JPG, JPEG, PNG. Maksimal 2MB. Kosongkan jika ingin menggunakan foto dari profil member.</p>
+                <x-image-hint dimensions="400×400" ratio="1:1" max-size="2MB" formats="JPG, PNG" note="Kosongkan untuk menggunakan foto profil member secara otomatis." />
             </div>
         </div>
 

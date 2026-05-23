@@ -52,7 +52,7 @@
             <input type="file" name="image" accept="image/*" required
                    class="w-full px-4 py-2 border rounded focus:ring-2 focus:ring-[#00629B] @error('image') border-red-500 @enderror"
                    onchange="previewImage(event)">
-            <p class="text-xs text-gray-500 mt-1">Format: JPG, PNG, GIF, WEBP. Maksimal 2MB. Rekomendasi ukuran: 800x600px</p>
+            <x-image-hint dimensions="800×600" ratio="4:3" max-size="2MB" formats="JPG, PNG, WEBP" />
             @error('image')
                 <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
             @enderror
@@ -166,7 +166,7 @@
                     <input type="file" name="certificate_template" accept="image/*"
                            class="w-full px-4 py-2 border rounded focus:ring-2 focus:ring-[#00629B] @error('certificate_template') border-red-500 @enderror"
                            onchange="previewCertificateTemplate(event)">
-                    <p class="text-xs text-gray-500 mt-1">Format: JPG, PNG, GIF, WEBP. Maksimal 5MB. Template akan digunakan untuk generate sertifikat peserta.</p>
+                    <x-image-hint max-size="5MB" formats="JPG, PNG, WEBP" note="Template digunakan untuk generate sertifikat peserta." />
                     @error('certificate_template')
                         <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
                     @enderror
