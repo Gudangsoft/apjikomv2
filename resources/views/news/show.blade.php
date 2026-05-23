@@ -24,13 +24,13 @@
 
 @section('content')
 <!-- Article Header -->
-<section class="bg-purple-600 text-white py-8">
+<section class="bg-purple-600 text-white py-5 md:py-8">
     <div class="container mx-auto px-4">
         <div class="max-w-4xl mx-auto">
             <div class="mb-3">
                 <span class="bg-white bg-opacity-20 px-3 py-1 rounded text-xs font-medium uppercase tracking-wide">{{ $news->category->name }}</span>
             </div>
-            <h1 class="text-3xl font-bold mb-3">{{ $news->title }}</h1>
+            <h1 class="text-2xl sm:text-3xl font-bold mb-3">{{ $news->title }}</h1>
             <div class="flex items-center text-sm text-purple-100">
                 <span class="mr-3">{{ $news->user->name }}</span>
                 <span class="mr-3">•</span>
@@ -51,7 +51,7 @@
             <article class="bg-white rounded shadow-sm p-8 border">
                 @if($news->image)
                 <div class="mb-6 -mt-8 -mx-8">
-                    <img src="{{ asset('storage/' . $news->image) }}" alt="{{ $news->title }}" class="w-full h-96 object-cover rounded-t">
+                    <img src="{{ asset('storage/' . $news->image) }}" alt="{{ $news->title }}" class="w-full h-48 sm:h-64 md:h-96 object-cover rounded-t">
                 </div>
                 @endif
                 
@@ -110,7 +110,7 @@
             <!-- Sidebar -->
             <aside class="lg:col-span-1">
                 <!-- Berita Terbaru -->
-                <div class="bg-white rounded shadow-sm border p-6 mb-6 sticky top-24">
+                <div class="bg-white rounded shadow-sm border p-6 mb-6 lg:sticky lg:top-24">
                     <h3 class="text-lg font-bold mb-4 text-gray-900 border-b pb-2">Berita Terbaru</h3>
                     <div class="space-y-4">
                         @foreach($latestNews as $latest)
@@ -186,7 +186,7 @@
             @if($relatedNews->count() > 0)
             <div class="mt-10">
                 <h2 class="text-2xl font-bold mb-6 text-gray-900">Berita Terkait</h2>
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
                     @foreach($relatedNews as $related)
                     <article class="bg-white rounded shadow-sm border hover:border-purple-600 transition-colors">
                         @if($related->image)

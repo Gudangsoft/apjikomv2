@@ -4,7 +4,7 @@
 
 @section('content')
 <!-- Page Header -->
-<section class="bg-gradient-to-br from-purple-600 via-purple-700 to-purple-800 text-white py-16 relative overflow-hidden">
+<section class="bg-gradient-to-br from-purple-600 via-purple-700 to-purple-800 text-white py-10 md:py-16 relative overflow-hidden">
     <!-- Decorative Elements -->
     <div class="absolute top-0 right-0 w-96 h-96 bg-white rounded-full mix-blend-overlay opacity-10 blur-3xl"></div>
     <div class="absolute bottom-0 left-0 w-96 h-96 bg-purple-300 rounded-full mix-blend-overlay opacity-10 blur-3xl"></div>
@@ -13,14 +13,14 @@
         <div class="flex items-center mb-4">
             <div class="text-5xl mr-4">📅</div>
             <div>
-                <h1 class="text-4xl font-bold mb-2">Agenda Kegiatan</h1>
+                <h1 class="text-2xl sm:text-3xl md:text-4xl font-bold mb-2">Agenda Kegiatan</h1>
                 <p class="text-lg text-purple-100">{{ setting('events_page_subtitle', 'Ikuti berbagai kegiatan dan acara ' . $globalSiteName) }}</p>
             </div>
         </div>
         
         <!-- Category Filter -->
         @if($categories->count() > 0)
-        <div class="mt-8 flex flex-wrap gap-3">
+        <div class="mt-8 flex flex-wrap gap-2 md:gap-3">
             <a href="{{ route('events.index') }}" 
                class="px-5 py-2 rounded-full transition-all {{ !request('category') ? 'bg-white text-purple-700 shadow-lg' : 'bg-white/20 text-white hover:bg-white/30' }}">
                 Semua Kategori
@@ -37,7 +37,7 @@
 </section>
 
 <!-- Upcoming Events -->
-<section class="py-16 bg-gradient-to-br from-purple-50 via-white to-blue-50">
+<section class="py-10 md:py-16 bg-gradient-to-br from-purple-50 via-white to-blue-50">
     <div class="container mx-auto px-4">
         <div class="flex items-center justify-between mb-8">
             <h2 class="text-3xl font-bold text-gray-900">
@@ -45,7 +45,7 @@
             </h2>
         </div>
         
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
             @forelse($upcomingEvents as $event)
             <div class="group bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 hover:-translate-y-2 border border-gray-100">
                 <!-- Event Image/Gradient -->
@@ -96,7 +96,7 @@
                 @endif
                 
                 <!-- Content -->
-                <div class="p-6">
+                <div class="p-4 md:p-6">
                     <h3 class="text-xl font-bold mb-3 text-gray-900 line-clamp-2 group-hover:text-purple-600 transition min-h-[3.5rem]">
                         <a href="{{ route('events.show', $event->slug) }}">
                             {{ $event->title }}
@@ -169,7 +169,7 @@
 
 <!-- Past Events -->
 @if($pastEvents->count() > 0)
-<section class="py-16 bg-white">
+<section class="py-10 md:py-16 bg-white">
     <div class="container mx-auto px-4">
         <h2 class="text-3xl font-bold mb-8 text-gray-900">Kegiatan Sebelumnya</h2>
         

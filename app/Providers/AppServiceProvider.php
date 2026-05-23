@@ -4,6 +4,7 @@ namespace App\Providers;
 
 use App\Models\Setting;
 use App\Models\Menu;
+use App\Models\SocialMedia;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
 
@@ -73,8 +74,16 @@ class AppServiceProvider extends ServiceProvider
                     ->get();
                 $view->with('globalMenus', $menus);
             } catch (\Exception $e) {
-                // Fallback if menus table doesn't exist
                 $view->with('globalMenus', collect());
+            }
+        });
+
+        // Share social media to all views
+        View::composer('*', function ($view) {
+            try {
+                $view->with('globalSocialMedia', SocialMedia::where('is_active', true)->orderBy('order')->get());
+            } catch (\Exception $e) {
+                $view->with('globalSocialMedia', collect());
             }
         });
     }

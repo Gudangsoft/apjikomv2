@@ -6,7 +6,7 @@
 <!-- Slider Section -->
 @if(isset($sliders) && $sliders->count() > 0)
 <section class="relative w-full">
-    <div class="slider-container relative overflow-hidden w-full" style="height: 100vh; max-height: 800px;">
+    <div class="slider-container relative overflow-hidden w-full" style="height: 60vw; min-height: 240px; max-height: 800px;">
         @foreach($sliders as $index => $slider)
         <div class="slider-item absolute inset-0 w-full h-full transition-opacity duration-1000 {{ $index === 0 ? 'opacity-100' : 'opacity-0' }}" data-slide="{{ $index }}">
             <div class="absolute inset-0 w-full h-full bg-cover bg-center" style="background-image: url('{{ asset('storage/' . $slider->image) }}');">
@@ -16,7 +16,7 @@
                 <div class="w-full px-4 md:px-8 lg:px-16">
                     <div class="max-w-4xl text-white">
                         @if($slider->title)
-                        <h1 class="text-4xl md:text-6xl lg:text-7xl font-bold mb-6 animate-fadeInUp">{{ $slider->title }}</h1>
+                        <h1 class="text-2xl sm:text-4xl md:text-6xl lg:text-7xl font-bold mb-6 animate-fadeInUp">{{ $slider->title }}</h1>
                         @endif
                         @if($slider->description)
                         <p class="text-xl md:text-2xl lg:text-3xl mb-8 text-gray-200 animate-fadeInUp animation-delay-200">{{ $slider->description }}</p>
@@ -154,9 +154,9 @@ document.addEventListener('DOMContentLoaded', () => {
         <div class="max-w-5xl mx-auto text-center">
             <h1 class="text-3xl md:text-5xl font-bold mb-6">{{ $globalSiteName }}</h1>
             <p class="text-lg md:text-xl mb-8 text-purple-100">Meningkatkan kualitas publikasi ilmiah di bidang informatika dan komputer di Indonesia</p>
-            <div class="flex flex-wrap justify-center gap-4">
-                <a href="{{ route('registration.create') }}" class="bg-white text-purple-600 px-8 py-3 rounded font-semibold hover:bg-gray-100 transition">Bergabung Sekarang</a>
-                <a href="{{ route('news.index') }}" class="border-2 border-white text-white px-8 py-3 rounded font-semibold hover:bg-white hover:text-purple-600 transition">Lihat Berita</a>
+            <div class="flex flex-col sm:flex-row flex-wrap justify-center gap-4">
+                <a href="{{ route('registration.create') }}" class="bg-white text-purple-600 px-8 py-3 rounded font-semibold hover:bg-gray-100 transition w-full sm:w-auto text-center">Bergabung Sekarang</a>
+                <a href="{{ route('news.index') }}" class="border-2 border-white text-white px-8 py-3 rounded font-semibold hover:bg-white hover:text-purple-600 transition w-full sm:w-auto text-center">Lihat Berita</a>
             </div>
         </div>
     </div>
@@ -184,16 +184,16 @@ document.addEventListener('DOMContentLoaded', () => {
 </section>
 
 <!-- About Section -->
-<section class="py-20 bg-gradient-to-br from-gray-50 via-purple-50 to-gray-50 relative overflow-hidden">
+<section class="py-12 md:py-20 bg-gradient-to-br from-gray-50 via-purple-50 to-gray-50 relative overflow-hidden">
     <!-- Background Decoration -->
-    <div class="absolute top-0 right-0 w-96 h-96 bg-purple-100 rounded-full blur-3xl opacity-30 -mr-48 -mt-48"></div>
-    <div class="absolute bottom-0 left-0 w-96 h-96 bg-blue-100 rounded-full blur-3xl opacity-30 -ml-48 -mb-48"></div>
+    <div class="absolute top-0 right-0 w-96 h-96 bg-purple-100 rounded-full blur-3xl opacity-30 -mr-48 -mt-48 pointer-events-none"></div>
+    <div class="absolute bottom-0 left-0 w-96 h-96 bg-blue-100 rounded-full blur-3xl opacity-30 -ml-48 -mb-48 pointer-events-none"></div>
     
     <div class="container mx-auto px-4 relative z-10">
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
             <!-- Left Side - Image -->
             <div class="relative" data-aos="fade-right">
-                <div class="relative">
+                <div class="relative pb-8 sm:pb-0">
                     <!-- Main Image Container with rounded corners -->
                     <div class="relative rounded-3xl overflow-hidden shadow-2xl">
                         @if($aboutImage ?? null)
@@ -341,7 +341,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 </div>
 
                 <!-- CTA Button -->
-                <div class="flex gap-4">
+                <div class="flex flex-col sm:flex-row gap-4">
                     @php
                         $ctaLabel = $aboutCtaLabel ?? 'Bergabung Sekarang';
                         $ctaLink = $aboutCtaLink ?? route('registration.create');
@@ -352,9 +352,9 @@ document.addEventListener('DOMContentLoaded', () => {
                             $ctaLink = '/' . $ctaLink;
                         }
                     @endphp
-                    <a href="{{ $ctaLink }}" 
+                    <a href="{{ $ctaLink }}"
                        @if($isExternal) target="_blank" rel="noopener noreferrer" @endif
-                       class="inline-flex items-center gap-2 px-8 py-3 bg-gradient-to-r from-purple-600 to-purple-700 text-white font-bold rounded-xl hover:from-purple-700 hover:to-purple-800 transition-all shadow-lg hover:shadow-xl transform hover:-translate-y-0.5">
+                       class="inline-flex items-center justify-center gap-2 px-8 py-3 bg-gradient-to-r from-purple-600 to-purple-700 text-white font-bold rounded-xl hover:from-purple-700 hover:to-purple-800 transition-all shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 w-full sm:w-auto">
                         <span>{{ $ctaLabel }}</span>
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"></path>
@@ -367,7 +367,7 @@ document.addEventListener('DOMContentLoaded', () => {
 </section>
 
 <!-- Featured News -->
-<section class="py-16 bg-white">
+<section class="py-10 md:py-16 bg-white">
     <div class="container mx-auto px-4">
         <div class="flex justify-between items-center mb-8">
             <h2 class="text-2xl font-bold text-gray-900">Berita Terkini</h2>
@@ -410,16 +410,16 @@ document.addEventListener('DOMContentLoaded', () => {
 </section>
 
 <!-- Upcoming Events -->
-<section class="py-16 bg-gradient-to-br from-purple-50 via-white to-blue-50 relative overflow-hidden">
+<section class="py-10 md:py-16 bg-gradient-to-br from-purple-50 via-white to-blue-50 relative overflow-hidden">
     <!-- Decorative Elements -->
-    <div class="absolute top-0 right-0 w-64 h-64 bg-purple-200 rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-blob"></div>
-    <div class="absolute bottom-0 left-0 w-64 h-64 bg-blue-200 rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-blob animation-delay-2000"></div>
+    <div class="absolute top-0 right-0 w-64 h-64 bg-purple-200 rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-blob pointer-events-none"></div>
+    <div class="absolute bottom-0 left-0 w-64 h-64 bg-blue-200 rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-blob animation-delay-2000 pointer-events-none"></div>
     
     <div class="container mx-auto px-4 relative z-10">
         <div class="flex justify-between items-center mb-10">
             <div>
                 <div class="text-purple-600 font-semibold text-sm mb-2 uppercase tracking-wide">📅 AGENDA</div>
-                <h2 class="text-3xl font-bold text-gray-900">Kegiatan Mendatang</h2>
+                <h2 class="text-2xl sm:text-3xl font-bold text-gray-900">Kegiatan Mendatang</h2>
             </div>
             <a href="{{ route('events.index') }}" class="bg-purple-600 hover:bg-purple-700 text-white px-6 py-3 rounded-lg font-medium text-sm transition-all hover:shadow-lg hover:scale-105">
                 Lihat Semua →
@@ -431,7 +431,7 @@ document.addEventListener('DOMContentLoaded', () => {
             <div class="group bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 hover:-translate-y-2 border border-gray-100">
                 <div class="flex">
                     <!-- Date Badge - More prominent -->
-                    <div class="w-32 bg-gradient-to-br from-purple-600 via-purple-700 to-purple-800 flex flex-col items-center justify-center text-white p-6 relative">
+                    <div class="w-24 sm:w-32 bg-gradient-to-br from-purple-600 via-purple-700 to-purple-800 flex flex-col items-center justify-center text-white p-6 relative">
                         <div class="absolute top-2 right-2 w-2 h-2 bg-yellow-400 rounded-full animate-pulse"></div>
                         <div class="text-4xl font-bold mb-1">{{ $event->event_date->format('d') }}</div>
                         <div class="text-xs uppercase tracking-wider font-semibold mb-1">{{ $event->event_date->format('M') }}</div>
@@ -511,7 +511,7 @@ document.addEventListener('DOMContentLoaded', () => {
 </section>
 
 <!-- Benefits Section -->
-<section class="py-16 apjikom-purple text-white">
+<section class="py-10 md:py-16 apjikom-purple text-white">
     <div class="container mx-auto px-4">
         <x-section-heading 
             setting-key="section_label_benefits" 
@@ -560,7 +560,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 <!-- Featured Events Section -->
 @if(isset($featuredEvents) && $featuredEvents->count() > 0)
-<section class="py-16 bg-white">
+<section class="py-10 md:py-16 bg-white">
     <div class="container mx-auto px-4">
         <x-section-heading 
             setting-key="section_label_upcoming_events" 
@@ -707,10 +707,10 @@ setInterval(() => {
 
 <!-- Gallery Section -->
 @if(isset($galleries) && $galleries->count() > 0)
-<section class="py-20 bg-gradient-to-br from-teal-50 via-cyan-50 to-blue-50">
+<section class="py-12 md:py-20 bg-gradient-to-br from-teal-50 via-cyan-50 to-blue-50">
     <div class="container mx-auto px-4">
         <div class="text-center mb-12">
-            <h2 class="text-4xl font-bold text-gray-900 mb-4">
+            <h2 class="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 mb-4">
                 <span class="inline-flex items-center justify-center editable-label cursor-pointer group" 
                       setting-key="section_label_gallery" 
                       data-default="Galeri Foto"
@@ -784,10 +784,10 @@ setInterval(() => {
 
 <!-- FAQ & Testimonials Section -->
 @if((isset($faqs) && $faqs->count() > 0) || (isset($testimonials) && $testimonials->count() > 0))
-<section class="py-20 bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50">
+<section class="py-12 md:py-20 bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50">
     <div class="container mx-auto px-4">
         <div class="text-center mb-16">
-            <h2 class="text-4xl font-bold text-gray-900 mb-4">FAQ & Testimoni</h2>
+            <h2 class="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 mb-4">FAQ & Testimoni</h2>
             <p class="text-lg text-gray-600 max-w-3xl mx-auto">Pertanyaan yang sering diajukan dan pengalaman member kami</p>
         </div>
         
@@ -976,7 +976,7 @@ function toggleFaq(index) {
 
 <!-- Partners Section -->
 @if(isset($partners) && $partners->count() > 0)
-<section class="py-16 bg-gray-50">
+<section class="py-10 md:py-16 bg-gray-50">
     <div class="container mx-auto px-4">
         <div class="text-center mb-12">
             <x-section-heading 
@@ -1018,7 +1018,7 @@ function toggleFaq(index) {
 @endif
 
 <!-- CTA Section -->
-<section class="py-16 bg-white">
+<section class="py-10 md:py-16 bg-white">
     <div class="container mx-auto px-4 text-center">
         <x-section-heading 
             setting-key="section_label_cta" 

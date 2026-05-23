@@ -218,68 +218,6 @@
                 </div>
             </div>
 
-            <!-- Social Media Settings -->
-            <div class="mb-8 border-t pt-8">
-                <h3 class="text-lg font-semibold text-gray-900 mb-4 flex items-center">
-                    <svg class="w-5 h-5 mr-2 text-[#00629B]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8h2a2 2 0 012 2v6a2 2 0 01-2 2h-2v4l-4-4H9a1.994 1.994 0 01-1.414-.586m0 0L11 14h4a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2v4l.586-.586z"></path>
-                    </svg>
-                    Media Sosial
-                </h3>
-                
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-2">Facebook URL</label>
-                        <input type="url" name="facebook_url" value="{{ old('facebook_url', $settings->get('social')?->firstWhere('key', 'facebook_url')?->value) }}" 
-                            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#00629B] focus:border-transparent"
-                            placeholder="https://facebook.com/apjikom">
-                        @error('facebook_url')
-                            <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
-                        @enderror
-                    </div>
-
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-2">Twitter/X URL</label>
-                        <input type="url" name="twitter_url" value="{{ old('twitter_url', $settings->get('social')?->firstWhere('key', 'twitter_url')?->value) }}" 
-                            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#00629B] focus:border-transparent"
-                            placeholder="https://twitter.com/apjikom">
-                        @error('twitter_url')
-                            <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
-                        @enderror
-                    </div>
-
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-2">Instagram URL</label>
-                        <input type="url" name="instagram_url" value="{{ old('instagram_url', $settings->get('social')?->firstWhere('key', 'instagram_url')?->value) }}" 
-                            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#00629B] focus:border-transparent"
-                            placeholder="https://instagram.com/apjikom">
-                        @error('instagram_url')
-                            <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
-                        @enderror
-                    </div>
-
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-2">LinkedIn URL</label>
-                        <input type="url" name="linkedin_url" value="{{ old('linkedin_url', $settings->get('social')?->firstWhere('key', 'linkedin_url')?->value) }}" 
-                            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#00629B] focus:border-transparent"
-                            placeholder="https://linkedin.com/company/apjikom">
-                        @error('linkedin_url')
-                            <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
-                        @enderror
-                    </div>
-
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-2">YouTube URL</label>
-                        <input type="url" name="youtube_url" value="{{ old('youtube_url', $settings->get('social')?->firstWhere('key', 'youtube_url')?->value) }}" 
-                            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#00629B] focus:border-transparent"
-                            placeholder="https://youtube.com/@apjikom">
-                        @error('youtube_url')
-                            <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
-                        @enderror
-                    </div>
-                </div>
-            </div>
-
             <!-- SEO Settings -->
             <div class="mb-8 border-t pt-8">
                 <h3 class="text-lg font-semibold text-gray-900 mb-4 flex items-center">

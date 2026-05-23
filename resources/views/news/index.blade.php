@@ -4,9 +4,9 @@
 
 @section('content')
 <!-- Page Header -->
-<section class="bg-purple-600 text-white py-12">
+<section class="bg-purple-600 text-white py-8 md:py-12">
     <div class="container mx-auto px-4">
-        <h1 class="text-3xl font-bold mb-2">{{ setting('news_page_title', 'Berita ' . $globalSiteName) }}</h1>
+        <h1 class="text-2xl sm:text-3xl font-bold mb-2">{{ setting('news_page_title', 'Berita ' . $globalSiteName) }}</h1>
         <p class="text-lg text-purple-100">Informasi terkini seputar informatika dan komputer</p>
     </div>
 </section>
@@ -17,7 +17,7 @@
         <div class="flex flex-col md:flex-row gap-8">
             <!-- Main Content -->
             <div class="flex-1">
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
                     @forelse($news as $article)
                     <article class="news-card bg-white rounded overflow-hidden">
                         @if($article->image)

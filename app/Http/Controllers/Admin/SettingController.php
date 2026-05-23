@@ -25,11 +25,6 @@ class SettingController extends Controller
             'contact_email' => 'nullable|email',
             'contact_phone' => 'nullable|string',
             'contact_address' => 'nullable|string',
-            'facebook_url' => 'nullable|url',
-            'twitter_url' => 'nullable|url',
-            'instagram_url' => 'nullable|url',
-            'linkedin_url' => 'nullable|url',
-            'youtube_url' => 'nullable|url',
             'meta_keywords' => 'nullable|string',
             'meta_description' => 'nullable|string',
             'google_analytics' => 'nullable|string',
@@ -79,8 +74,6 @@ class SettingController extends Controller
             
             if (str_starts_with($key, 'contact_')) {
                 $group = 'contact';
-            } elseif (in_array($key, ['facebook_url', 'twitter_url', 'instagram_url', 'linkedin_url', 'youtube_url'])) {
-                $group = 'social';
             } elseif (in_array($key, ['meta_keywords', 'meta_description', 'google_analytics'])) {
                 $group = 'seo';
             } elseif ($key === 'satisfaction_rate') {

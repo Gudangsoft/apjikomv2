@@ -7,8 +7,8 @@
 <div class="bg-gradient-to-r from-purple-600 to-indigo-700 text-white py-20">
     <div class="container mx-auto px-4">
         <div class="text-center max-w-4xl mx-auto">
-            <h1 class="text-5xl md:text-6xl font-bold mb-6">{{ setting('about_page_title', 'Tentang APJIKOM') }}</h1>
-            <p class="text-xl text-purple-100 border border-purple-300/50 inline-block px-6 py-2 rounded">{{ setting('about_page_subtitle', 'Asosiasi Pengelola Jurnal Informatika dan Komputer Indonesia') }}</p>
+            <h1 class="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold mb-6">{{ setting('about_page_title', 'Tentang APJIKOM') }}</h1>
+            <p class="text-base sm:text-xl text-purple-100 border border-purple-300/50 inline-block px-6 py-2 rounded">{{ setting('about_page_subtitle', 'Asosiasi Pengelola Jurnal Informatika dan Komputer Indonesia') }}</p>
         </div>
     </div>
 </div>
@@ -18,7 +18,7 @@
     <div class="container mx-auto px-4">
         <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
             <!-- Visi -->
-            <div class="bg-gradient-to-br from-purple-50 to-indigo-50 rounded-2xl p-8 shadow-lg hover:shadow-xl transition">
+            <div class="bg-gradient-to-br from-purple-50 to-indigo-50 rounded-2xl p-5 md:p-8 shadow-lg hover:shadow-xl transition">
                 <div class="flex items-center mb-6">
                     <div class="w-16 h-16 bg-gradient-to-r from-purple-600 to-indigo-600 rounded-full flex items-center justify-center mr-4">
                         <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -26,7 +26,7 @@
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
                         </svg>
                     </div>
-                    <h2 class="text-3xl font-bold text-gray-800">Visi</h2>
+                    <h2 class="text-2xl sm:text-3xl font-bold text-gray-800">Visi</h2>
                 </div>
                 <p class="text-lg text-gray-700 leading-relaxed">
                     {{ setting('about_vision', 'Menjadi organisasi profesional yang terpercaya dalam meningkatkan kualitas dan kredibilitas jurnal informatika dan komputer di Indonesia.') }}
@@ -34,14 +34,14 @@
             </div>
 
             <!-- Misi -->
-            <div class="bg-gradient-to-br from-indigo-50 to-blue-50 rounded-2xl p-8 shadow-lg hover:shadow-xl transition">
+            <div class="bg-gradient-to-br from-indigo-50 to-blue-50 rounded-2xl p-5 md:p-8 shadow-lg hover:shadow-xl transition">
                 <div class="flex items-center mb-6">
                     <div class="w-16 h-16 bg-gradient-to-r from-indigo-600 to-blue-600 rounded-full flex items-center justify-center mr-4">
                         <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                         </svg>
                     </div>
-                    <h2 class="text-3xl font-bold text-gray-800">Misi</h2>
+                    <h2 class="text-2xl sm:text-3xl font-bold text-gray-800">Misi</h2>
                 </div>
                 <ul class="space-y-3 text-gray-700">
                     @php
@@ -68,7 +68,7 @@
 <section class="py-20 bg-gradient-to-br from-gray-50 to-gray-100">
     <div class="container mx-auto px-4">
         <div class="text-center mb-12">
-            <h2 class="text-4xl font-bold text-gray-800 mb-4">{{ setting('about_history_title', 'Sejarah APJIKOM') }}</h2>
+            <h2 class="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-800 mb-4">{{ setting('about_history_title', 'Sejarah APJIKOM') }}</h2>
             <div class="w-24 h-1 bg-gradient-to-r from-purple-600 to-indigo-600 mx-auto rounded"></div>
         </div>
 
@@ -81,15 +81,15 @@
                     
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-8">
                         <div class="text-center p-6 bg-purple-50 rounded-xl">
-                            <div class="text-4xl font-bold text-purple-600 mb-2">{{ setting('about_founded_year', '2020') }}</div>
+                            <div class="text-3xl sm:text-4xl font-bold text-purple-600 mb-2">{{ setting('about_founded_year', '2020') }}</div>
                             <div class="text-gray-600">{{ setting('about_stat1_label', 'Tahun Berdiri') }}</div>
                         </div>
                         <div class="text-center p-6 bg-indigo-50 rounded-xl">
-                            <div class="text-4xl font-bold text-indigo-600 mb-2">{{ App\Models\Member::where('status', 'active')->count() }}+</div>
+                            <div class="text-3xl sm:text-4xl font-bold text-indigo-600 mb-2">{{ App\Models\Member::where('status', 'active')->count() }}+</div>
                             <div class="text-gray-600">{{ setting('about_stat2_label', 'Anggota Aktif') }}</div>
                         </div>
                         <div class="text-center p-6 bg-blue-50 rounded-xl">
-                            <div class="text-4xl font-bold text-blue-600 mb-2">{{ App\Models\Event::count() }}+</div>
+                            <div class="text-3xl sm:text-4xl font-bold text-blue-600 mb-2">{{ App\Models\Event::count() }}+</div>
                             <div class="text-gray-600">{{ setting('about_stat3_label', 'Kegiatan') }}</div>
                         </div>
                     </div>
@@ -103,7 +103,7 @@
 <section class="py-20 bg-white">
     <div class="container mx-auto px-4">
         <div class="text-center mb-12">
-            <h2 class="text-4xl font-bold text-gray-800 mb-4">{{ setting('about_structure_title', 'Struktur Organisasi') }}</h2>
+            <h2 class="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-800 mb-4">{{ setting('about_structure_title', 'Struktur Organisasi') }}</h2>
             <div class="w-24 h-1 bg-gradient-to-r from-purple-600 to-indigo-600 mx-auto rounded"></div>
         </div>
 
@@ -191,18 +191,18 @@
 <!-- CTA Section -->
 <section class="py-20 bg-gradient-to-r from-purple-600 to-indigo-700 text-white">
     <div class="container mx-auto px-4 text-center">
-        <h2 class="text-4xl font-bold mb-6">{{ setting('about_cta_title', 'Bergabung Bersama Kami') }}</h2>
-        <p class="text-xl text-purple-100 mb-8 max-w-2xl mx-auto">
+        <h2 class="text-2xl sm:text-3xl md:text-4xl font-bold mb-6">{{ setting('about_cta_title', 'Bergabung Bersama Kami') }}</h2>
+        <p class="text-base sm:text-xl text-purple-100 mb-8 max-w-2xl mx-auto">
             {{ setting('about_cta_subtitle', 'Jadilah bagian dari komunitas pengelola jurnal komunikasi terbesar di Indonesia') }}
         </p>
         <div class="flex flex-col sm:flex-row gap-4 justify-center">
-            <a href="{{ route('registration.create') }}" class="px-8 py-4 bg-white text-purple-600 rounded-lg font-semibold hover:bg-gray-100 transition shadow-lg inline-flex items-center justify-center">
+            <a href="{{ route('registration.create') }}" class="px-8 py-4 bg-white text-purple-600 rounded-lg font-semibold hover:bg-gray-100 transition shadow-lg inline-flex items-center justify-center w-full sm:w-auto">
                 <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z"></path>
                 </svg>
                 {{ setting('about_cta_button1_text', 'Daftar Sekarang') }}
             </a>
-            <a href="{{ route('services.index') }}" class="px-8 py-4 bg-transparent border-2 border-white text-white rounded-lg font-semibold hover:bg-white hover:text-purple-600 transition inline-flex items-center justify-center">
+            <a href="{{ route('services.index') }}" class="px-8 py-4 bg-transparent border-2 border-white text-white rounded-lg font-semibold hover:bg-white hover:text-purple-600 transition inline-flex items-center justify-center w-full sm:w-auto">
                 <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                 </svg>
