@@ -13,7 +13,7 @@
         <div class="max-w-4xl mx-auto text-center">
             <div class="text-6xl mb-4">👥</div>
             <h1 class="text-4xl md:text-5xl font-bold mb-4">Direktori Anggota</h1>
-            <p class="text-xl text-blue-100 mb-8">Temukan dan terhubung dengan anggota APJIKOM</p>
+            <p class="text-xl text-blue-100 mb-8">Temukan dan terhubung dengan anggota {{ site_name() }}</p>
             
             <!-- Search Bar -->
             <form method="GET" action="{{ route('directory.index') }}" class="max-w-2xl mx-auto">

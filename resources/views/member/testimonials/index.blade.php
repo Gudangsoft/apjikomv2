@@ -8,7 +8,7 @@
     <div class="flex justify-between items-center">
         <div>
             <h1 class="text-2xl font-bold text-gray-800">Testimoni Saya</h1>
-            <p class="text-gray-600 mt-1">Kelola testimoni Anda tentang APJIKOM</p>
+            <p class="text-gray-600 mt-1">Kelola testimoni Anda tentang {{ site_name() }}</p>
         </div>
         <a href="{{ route('member.testimonials.create') }}" class="inline-flex items-center px-4 py-2 bg-purple-600 hover:bg-purple-700 text-white font-medium rounded-lg transition">
             <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -141,7 +141,7 @@
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 8h10M7 12h4m1 8l-4-4H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-3l-4 4z"></path>
         </svg>
         <h3 class="text-xl font-semibold text-gray-800 mb-2">Belum Ada Testimoni</h3>
-        <p class="text-gray-600 mb-6">Bagikan pengalaman Anda dengan APJIKOM</p>
+        <p class="text-gray-600 mb-6">Bagikan pengalaman Anda dengan {{ site_name() }}</p>
         <a href="{{ route('member.testimonials.create') }}" class="inline-flex items-center px-6 py-3 bg-purple-600 hover:bg-purple-700 text-white font-medium rounded-lg transition">
             <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>

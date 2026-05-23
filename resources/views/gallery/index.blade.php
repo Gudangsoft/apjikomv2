@@ -8,7 +8,7 @@
     <div class="container mx-auto px-4">
         <div class="text-center">
             <h1 class="text-4xl md:text-5xl font-bold mb-4">Gallery</h1>
-            <p class="text-xl text-teal-100">Dokumentasi foto dan video kegiatan APJIKOM</p>
+            <p class="text-xl text-teal-100">Dokumentasi foto dan video kegiatan {{ site_name() }}</p>
         </div>
     </div>
 </div>

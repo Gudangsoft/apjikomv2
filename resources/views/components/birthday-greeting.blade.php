@@ -61,7 +61,7 @@
             <div class="bg-white/20 backdrop-blur rounded-xl p-4 mb-6 animate-slide-up">
                 <p class="text-lg">
                     Semoga di usia yang baru ini, Anda senantiasa diberikan kesehatan, keberkahan, dan kesuksesan dalam setiap langkah. 
-                    Terima kasih telah menjadi bagian dari keluarga besar <strong>APJIKOM</strong>!
+                    Terima kasih telah menjadi bagian dari keluarga besar <strong>{{ site_name() }}</strong>!
                 </p>
             </div>
             

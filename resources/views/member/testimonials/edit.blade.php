@@ -59,7 +59,7 @@
                     @endif
                     <div>
                         <h3 class="font-semibold text-gray-800">{{ auth()->user()->name }}</h3>
-                        <p class="text-sm text-gray-600">{{ $member->position ?? 'Member APJIKOM' }}</p>
+                        <p class="text-sm text-gray-600">{{ $member->position ?? 'Member ' . site_name() }}</p>
                         @if($member->institution_name)
                         <p class="text-xs text-gray-500">{{ $member->institution_name }}</p>
                         @endif
@@ -77,7 +77,7 @@
                     name="content" 
                     rows="6" 
                     class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition @error('content') border-red-500 @enderror"
-                    placeholder="Ceritakan pengalaman Anda dengan APJIKOM... (minimal 20 karakter)"
+                    placeholder="Ceritakan pengalaman Anda dengan {{ site_name() }}... (minimal 20 karakter)"
                     required>{{ old('content', $testimonial->content) }}</textarea>
                 @error('content')
                     <p class="mt-1 text-sm text-red-600">{{ $message }}</p>

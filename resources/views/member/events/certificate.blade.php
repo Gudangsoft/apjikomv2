@@ -177,8 +177,8 @@
 <body>
     <div class="certificate">
         <div class="header">
-            <div class="apjikom-title">APJIKOM</div>
-            <div class="apjikom-subtitle">ASOSIASI PENGELOLA JURNAL INFORMATIKA DAN KOMPUTER INDONESIA</div>
+            <div class="apjikom-title">{{ strtoupper(site_name()) }}</div>
+            <div class="apjikom-subtitle">{{ strtoupper($globalSiteTagline) }}</div>
             <div class="apjikom-details">
                 S.K. KEMENKUMHAM Nomor AHU-0007794.AH.01.07.TAHUN 2025, Akta Nomor 37 Tanggal 28 Oktober 2025<br>
                 Kantor Sekretariat Pusat: Jl. Radin Inten II No.63 A, RT.7/RW.14, Duren Sawit, Kec. Duren Sawit, Kota Jakarta Timur, Daerah Khusus Ibukota Jakarta 13440
@@ -186,7 +186,7 @@
         </div>
 
         <div class="content">
-            <div class="watermark">APJIKOM</div>
+            <div class="watermark">{{ strtoupper(site_name()) }}</div>
             
             <div class="content-inner">
                 <div class="certificate-title">SERTIFIKAT</div>

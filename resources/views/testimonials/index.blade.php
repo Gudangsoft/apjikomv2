@@ -8,7 +8,7 @@
     <div class="container mx-auto px-4">
         <div class="text-center">
             <h1 class="text-4xl md:text-5xl font-bold mb-4">Testimoni Member</h1>
-            <p class="text-xl text-purple-100">Apa kata mereka tentang APJIKOM</p>
+            <p class="text-xl text-purple-100">Apa kata mereka tentang {{ site_name() }}</p>
         </div>
     </div>
 </div>
@@ -78,7 +78,7 @@
                             {{ $testimonial->member && $testimonial->member->user ? $testimonial->member->user->name : 'Member Tidak Tersedia' }}
                         </p>
                         <p class="text-sm text-gray-500">
-                            {{ $testimonial->member ? $testimonial->member->institution_name : 'APJIKOM Member' }}
+                            {{ $testimonial->member ? $testimonial->member->institution_name : site_name() . ' Member' }}
                         </p>
                     </div>
                 </div>
@@ -173,7 +173,7 @@
     <div class="mt-12 bg-gradient-to-r from-purple-600 to-indigo-600 rounded-2xl p-8 md:p-12 text-center text-white shadow-xl">
         <h3 class="text-3xl font-bold mb-4">Ingin Berbagi Pengalaman Anda?</h3>
         <p class="text-lg text-purple-100 mb-6 max-w-2xl mx-auto">
-            Bergabunglah dengan APJIKOM dan rasakan manfaatnya. Pengalaman Anda sangat berharga bagi kami!
+            Bergabunglah dengan {{ site_name() }} dan rasakan manfaatnya. Pengalaman Anda sangat berharga bagi kami!
         </p>
         <div class="flex flex-wrap justify-center gap-4">
             @guest

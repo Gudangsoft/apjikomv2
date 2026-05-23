@@ -6,7 +6,7 @@
 <!-- Page Header -->
 <section class="bg-[#00629B] text-white py-12">
     <div class="container mx-auto px-4">
-        <h1 class="text-3xl font-bold mb-2">Bergabung dengan APJIKOM</h1>
+        <h1 class="text-3xl font-bold mb-2">Bergabung dengan {{ site_name() }}</h1>
         <p class="text-lg text-blue-100">Daftar sebagai anggota dan nikmati berbagai keuntungan</p>
     </div>
 </section>

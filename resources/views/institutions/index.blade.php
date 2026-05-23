@@ -8,7 +8,7 @@
     <div class="container mx-auto px-4">
         <div class="text-center">
             <h1 class="text-4xl md:text-5xl font-bold mb-4">Anggota Institusi</h1>
-            <p class="text-xl text-indigo-100 max-w-2xl mx-auto">Institusi pendidikan tinggi yang telah bergabung dengan APJIKOM</p>
+            <p class="text-xl text-indigo-100 max-w-2xl mx-auto">Institusi pendidikan tinggi yang telah bergabung dengan {{ site_name() }}</p>
         </div>
     </div>
 </div>

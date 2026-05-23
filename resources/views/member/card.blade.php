@@ -86,7 +86,7 @@
                     <li>• Simpan kartu dalam format digital di perangkat Anda</li>
                     <li>• Untuk mencetak, gunakan kertas berkualitas baik ukuran A4</li>
                     <li>• Kartu dapat dilaminasi untuk keawetan lebih baik</li>
-                    <li>• Tunjukkan kartu ini saat mengikuti kegiatan APJIKOM</li>
+                    <li>• Tunjukkan kartu ini saat mengikuti kegiatan {{ site_name() }}</li>
                     <li>• Jika kartu hilang atau rusak, hubungi admin untuk penerbitan ulang</li>
                 </ul>
             </div>

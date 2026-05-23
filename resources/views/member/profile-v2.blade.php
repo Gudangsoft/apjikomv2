@@ -192,7 +192,7 @@
                             🌐 Profil Publik Anda
                             <span class='px-2 py-0.5 bg-green-500 text-white text-xs rounded-full font-semibold'>AKTIF</span>
                         </h3>
-                        <p class='text-gray-600 text-sm mb-4'>Profil Anda ditampilkan di Direktori Anggota APJIKOM</p>
+                        <p class='text-gray-600 text-sm mb-4'>Profil Anda ditampilkan di Direktori Anggota {{ site_name() }}</p>
                         
                         <a href="{{ route('directory.index') }}" target="_blank" 
                            class='inline-flex items-center gap-2 bg-gradient-to-r from-purple-600 to-blue-600 text-white px-5 py-2.5 rounded-lg hover:from-purple-700 hover:to-blue-700 transition-all duration-300 font-semibold shadow-md hover:shadow-lg group'>
@@ -221,7 +221,7 @@
                             🔒 Profil Publik Tidak Aktif
                             <span class='px-2 py-0.5 bg-gray-400 text-white text-xs rounded-full font-semibold'>NONAKTIF</span>
                         </h3>
-                        <p class='text-gray-600 text-sm mb-3'>Aktifkan untuk menampilkan profil Anda di Direktori Anggota APJIKOM</p>
+                        <p class='text-gray-600 text-sm mb-3'>Aktifkan untuk menampilkan profil Anda di Direktori Anggota {{ site_name() }}</p>
                         <a href="{{ route('directory.index') }}" target="_blank" 
                            class='inline-flex items-center gap-2 bg-gray-500 text-white px-5 py-2.5 rounded-lg hover:bg-gray-600 transition-all duration-300 font-semibold shadow-md'>
                             <svg class='w-5 h-5' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
