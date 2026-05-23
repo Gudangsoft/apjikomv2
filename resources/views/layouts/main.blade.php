@@ -339,7 +339,9 @@
                                 {{ strtoupper(substr(site_name(), 0, 2)) }}
                             </div>
                         @endif
+                        @if(setting('show_footer_site_name', '1') === '1')
                         <span class="text-xl font-bold">{{ site_name() }}</span>
+                        @endif
                     </div>
                     <p class="text-purple-200 text-sm mb-4">{{ $globalSiteDescription }}</p>
                     <div class="flex space-x-3">
