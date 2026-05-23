@@ -327,6 +327,9 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'admin'])->group(fun
     // Services Management
     Route::resource('services', App\Http\Controllers\Admin\ServiceManagementController::class);
     
+    // Tutorial / Panduan Admin
+    Route::get('tutorial', fn() => view('admin.tutorial'))->name('tutorial');
+
     // Changelog Management
     Route::get('changelog/latest', [AdminChangelogController::class, 'getLatest'])->name('changelog.latest');
     Route::resource('changelog', AdminChangelogController::class);

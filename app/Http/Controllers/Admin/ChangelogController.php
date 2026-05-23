@@ -16,9 +16,14 @@ class ChangelogController extends Controller
     public function index()
     {
         $changelogs = Changelog::orderBy('release_date', 'desc')->orderBy('id', 'desc')->paginate(10);
-        $updateRequests = UpdateRequest::with('user')
-            ->orderBy('created_at', 'desc')
-            ->paginate(10);
+
+        try {
+            $updateRequests = UpdateRequest::with('user')
+                ->orderBy('created_at', 'desc')
+                ->paginate(10);
+        } catch (\Exception $e) {
+            $updateRequests = new \Illuminate\Pagination\LengthAwarePaginator([], 0, 10);
+        }
 
         return view('admin.changelog.index', compact('changelogs', 'updateRequests'));
     }
