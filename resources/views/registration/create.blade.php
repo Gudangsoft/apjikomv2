@@ -158,9 +158,14 @@
                         <!-- Email -->
                         <div>
                             <label class="block text-gray-700 font-medium mb-2">Email <span class="text-red-500">*</span></label>
-                            <input type="email" name="email" value="{{ old('email') }}" required
-                                   class="w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500 @error('email') border-red-500 @enderror"
-                                   placeholder="email@example.com">
+                            <div class="relative">
+                                <input type="email" name="email" id="email-input" value="{{ old('email') }}" required
+                                       class="w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500 pr-10 @error('email') border-red-500 @enderror"
+                                       placeholder="nama@domain.com"
+                                       oninput="validateEmail(this)">
+                                <span id="email-icon" class="absolute right-3 top-1/2 -translate-y-1/2 text-lg hidden"></span>
+                            </div>
+                            <p id="email-hint" class="text-xs mt-1 text-gray-500">Email aktif — konfirmasi pendaftaran akan dikirim ke alamat ini</p>
                             @error('email')
                                 <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
                             @enderror
@@ -436,6 +441,37 @@
 </section>
 
 <script>
+function validateEmail(input) {
+    const hint = document.getElementById('email-hint');
+    const icon = document.getElementById('email-icon');
+    const val = input.value.trim();
+    const rfcPattern = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
+
+    if (val === '') {
+        hint.textContent = 'Email aktif — konfirmasi pendaftaran akan dikirim ke alamat ini';
+        hint.className = 'text-xs mt-1 text-gray-500';
+        icon.className = 'absolute right-3 top-1/2 -translate-y-1/2 text-lg hidden';
+        input.classList.remove('border-red-500', 'border-green-500');
+        return;
+    }
+
+    if (!rfcPattern.test(val)) {
+        hint.textContent = 'Format email tidak valid. Contoh: nama@domain.com';
+        hint.className = 'text-xs mt-1 text-red-500';
+        icon.textContent = '✗';
+        icon.className = 'absolute right-3 top-1/2 -translate-y-1/2 text-lg text-red-500';
+        input.classList.add('border-red-500');
+        input.classList.remove('border-green-500');
+    } else {
+        hint.textContent = '✓ Format email valid — konfirmasi akan dikirim ke alamat ini';
+        hint.className = 'text-xs mt-1 text-green-600';
+        icon.textContent = '✓';
+        icon.className = 'absolute right-3 top-1/2 -translate-y-1/2 text-lg text-green-500';
+        input.classList.add('border-green-500');
+        input.classList.remove('border-red-500');
+    }
+}
+
 function selectType(type) {
     // Update radio button
     document.getElementById('type-' + type).checked = true;
