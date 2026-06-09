@@ -43,9 +43,15 @@ class PasswordResetLinkController extends Controller
                 ->withErrors(['email' => 'Terjadi kesalahan saat mengirim email. Silakan coba lagi nanti.']);
         }
 
+        $messages = [
+            Password::RESET_LINK_SENT => 'Link reset password telah dikirim ke email Anda. Silakan cek inbox atau folder spam.',
+            Password::INVALID_USER    => 'Email tidak ditemukan dalam sistem kami.',
+            'passwords.throttled'     => 'Terlalu banyak percobaan. Silakan tunggu beberapa menit sebelum mencoba lagi.',
+        ];
+
         return $status == Password::RESET_LINK_SENT
-                    ? back()->with('status', 'Link reset password telah dikirim ke email Anda. Silakan cek inbox atau folder spam.')
+                    ? back()->with('status', $messages[Password::RESET_LINK_SENT])
                     : back()->withInput($request->only('email'))
-                        ->withErrors(['email' => __($status)]);
+                        ->withErrors(['email' => $messages[$status] ?? __($status)]);
     }
 }
