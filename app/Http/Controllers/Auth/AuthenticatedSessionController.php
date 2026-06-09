@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Auth;
 
+use App\Helpers\ActivityLogger;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\LoginRequest;
 use App\Models\Setting;
@@ -37,7 +38,8 @@ class AuthenticatedSessionController extends Controller
 
         $request->session()->regenerate();
 
-        // Redirect admin langsung ke admin dashboard
+        try { ActivityLogger::logLogin(Auth::user()); } catch (\Exception $e) {}
+
         if (Auth::user()->role === 'admin') {
             return redirect()->intended(route('admin.dashboard', absolute: false));
         }
@@ -50,10 +52,13 @@ class AuthenticatedSessionController extends Controller
      */
     public function destroy(Request $request): RedirectResponse
     {
+        $user = Auth::user();
+
         Auth::guard('web')->logout();
 
-        $request->session()->invalidate();
+        try { if ($user) ActivityLogger::logLogout($user); } catch (\Exception $e) {}
 
+        $request->session()->invalidate();
         $request->session()->regenerateToken();
 
         return redirect('/');

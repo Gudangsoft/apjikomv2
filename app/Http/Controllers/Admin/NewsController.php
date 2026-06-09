@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Helpers\ActivityLogger;
 use App\Http\Controllers\Controller;
 use App\Models\News;
 use App\Models\Category;
@@ -105,7 +106,8 @@ class NewsController extends Controller
             $validated['published_at'] = now();
         }
 
-        News::create($validated);
+        $news = News::create($validated);
+        ActivityLogger::log('news', 'created', $news, "Tambah berita: {$news->title}");
 
         return redirect()->route('admin.news.index')
             ->with('success', 'Berita berhasil ditambahkan');
@@ -151,6 +153,7 @@ class NewsController extends Controller
         }
 
         $news->update($validated);
+        ActivityLogger::log('news', 'updated', $news, "Update berita: {$news->title}");
 
         return redirect()->route('admin.news.index')
             ->with('success', 'Berita berhasil diupdate');
@@ -163,7 +166,9 @@ class NewsController extends Controller
             Storage::disk('public')->delete($news->image);
         }
         
+        $title = $news->title;
         $news->delete();
+        ActivityLogger::log('news', 'deleted', null, "Hapus berita: {$title}");
 
         return redirect()->route('admin.news.index')
             ->with('success', 'Berita berhasil dihapus');

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Helpers\ActivityLogger;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -95,6 +96,7 @@ class UserController extends Controller
         }
 
         $user->save();
+        ActivityLogger::log('user', 'updated', $user, "Update user: {$user->name} ({$user->email})");
 
         return redirect()->route('admin.users.index')
             ->with('success', "Data user {$user->name} berhasil diperbarui.");
@@ -113,8 +115,10 @@ class UserController extends Controller
                 ->with('error', 'Tidak dapat menghapus akun yang sedang login!');
         }
         
+        $name = $user->name;
         $user->delete();
-        
+        ActivityLogger::log('user', 'deleted', null, "Hapus user: {$name}");
+
         return redirect()->route('admin.users.index')
             ->with('success', 'User berhasil dihapus!');
     }
@@ -145,6 +149,8 @@ class UserController extends Controller
             'action_text' => 'Ubah Password',
         ]);
         
+        ActivityLogger::log('user', 'reset_password', $user, "Reset password user: {$user->name} ({$user->email})");
+
         return redirect()->route('admin.users.index')
             ->with('success', "Password berhasil direset ke {$defaultPassword}. Email notifikasi telah dikirim.");
     }

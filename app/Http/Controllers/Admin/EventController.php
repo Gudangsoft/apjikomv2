@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Helpers\ActivityLogger;
 use App\Http\Controllers\Controller;
 use App\Models\Event;
 use App\Models\Category;
@@ -122,7 +123,8 @@ class EventController extends Controller
             $validated['certificate_template'] = $request->file('certificate_template')->store('certificates/templates', 'public');
         }
 
-        Event::create($validated);
+        $event = Event::create($validated);
+        ActivityLogger::log('event', 'created', $event, "Tambah kegiatan: {$event->title}");
 
         return redirect()->route('admin.events.index')
             ->with('success', 'Kegiatan berhasil ditambahkan');
@@ -183,6 +185,7 @@ class EventController extends Controller
         }
 
         $event->update($validated);
+        ActivityLogger::log('event', 'updated', $event, "Update kegiatan: {$event->title}");
 
         return redirect()->route('admin.events.index')
             ->with('success', 'Kegiatan berhasil diupdate');
@@ -200,7 +203,9 @@ class EventController extends Controller
             Storage::disk('public')->delete($event->certificate_template);
         }
         
+        $title = $event->title;
         $event->delete();
+        ActivityLogger::log('event', 'deleted', null, "Hapus kegiatan: {$title}");
 
         return redirect()->route('admin.events.index')
             ->with('success', 'Kegiatan berhasil dihapus');

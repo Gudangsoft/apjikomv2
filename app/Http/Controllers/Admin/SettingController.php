@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Helpers\ActivityLogger;
 use App\Http\Controllers\Controller;
 use App\Models\Setting;
 use Illuminate\Http\Request;
@@ -87,6 +88,8 @@ class SettingController extends Controller
 
             Setting::setValue($key, $value, $type, $group);
         }
+
+        ActivityLogger::log('settings', 'updated', null, 'Update pengaturan website');
 
         return redirect()->route('admin.settings.index')
             ->with('success', 'Pengaturan website berhasil diperbarui!');
