@@ -701,16 +701,40 @@ class MemberController extends Controller
                 }
 
                 if ($action === 'approve') {
-                    // Create user account
-                    $password = Str::random(12);
-                    $user = User::create([
-                        'name' => $registration->full_name,
-                        'email' => $registration->email,
-                        'password' => Hash::make($password),
-                        'role' => 'member',
-                    ]);
+                    // Reuse existing user or create new one
+                    $user = User::where('email', $registration->email)->first();
+
+                    if (!$user) {
+                        // Use the password hash stored during registration
+                        $storedPassword = \DB::table('registrations')
+                            ->where('id', $registration->id)
+                            ->value('password');
+
+                        $user = User::create([
+                            'name'               => $registration->full_name,
+                            'email'              => $registration->email,
+                            'password'           => $storedPassword ?? Hash::make('Apjikom@2026'),
+                            'role'               => 'member',
+                            'email_verified_at'  => now(),
+                        ]);
+                    } else {
+                        // Update role and verify email if needed
+                        if ($user->role === 'user' || !$user->email_verified_at) {
+                            $user->role = 'member';
+                            $user->email_verified_at = $user->email_verified_at ?? now();
+                            $user->save();
+                        }
+                    }
+
+                    // Skip if member record already exists
+                    if (Member::where('user_id', $user->id)->exists()) {
+                        $registration->update(['status' => 'approved']);
+                        $successCount++;
+                        continue;
+                    }
 
                     // Create member
+                    $memberType = $registration->type === 'prodi' ? 'institution' : 'individual';
                     $memberData = [
                         'user_id'          => $user->id,
                         'phone'            => $registration->phone,
@@ -718,9 +742,7 @@ class MemberController extends Controller
                         'city'             => $registration->city ?? null,
                         'province'         => $registration->province ?? null,
                         'institution_name' => $registration->institution ?? null,
-                        'position'         => $registration->position ?? null,
-                        'member_type'      => $registration->type,
-                        'photo'            => $registration->photo,
+                        'member_type'      => $memberType,
                         'status'           => 'active',
                         'is_verified'      => true,
                         'join_date'        => now(),
@@ -732,24 +754,20 @@ class MemberController extends Controller
 
                     // Link registration to member
                     $registration->update([
-                        'status' => 'approved',
-                        'member_id' => $member->id
+                        'status'    => 'approved',
+                        'member_id' => $member->id,
                     ]);
 
-                    // Send email notification (optional - comment out if no mail configured)
+                    // Send approval notification
                     try {
-                        \Mail::to($user->email)->send(new \App\Mail\MemberApproved($user, $password, $member));
+                        \Mail::to($user->email)->send(new \App\Mail\MemberApproved($user, null, $member));
                     } catch (\Exception $e) {
-                        // Log error but don't fail the whole process
                         \Log::warning('Failed to send approval email: ' . $e->getMessage());
                     }
 
-                    // Log activity
                     \App\Helpers\ActivityLogger::log(
-                        'approve_registration',
-                        'approved',
-                        'Registration',
-                        "Approved registration #{$registration->id} and created member #{$member->id} for {$registration->full_name}"
+                        'registration', 'approved', $registration,
+                        "Approve massal: {$registration->full_name} menjadi member #{$member->id}"
                     );
 
                     $successCount++;

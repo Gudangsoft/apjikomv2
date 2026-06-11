@@ -122,7 +122,12 @@
                 </div>
                 @endif
                 <div class="credential-item">
-                    <strong>Password:</strong> <code style="background: #fee2e2; padding: 4px 8px; border-radius: 4px; color: #dc2626;">{{ $password }}</code>
+                    <strong>Password:</strong>
+                    @if($password)
+                        <code style="background: #fee2e2; padding: 4px 8px; border-radius: 4px; color: #dc2626;">{{ $password }}</code>
+                    @else
+                        <span style="color: #6b7280; font-style: italic;">Password yang Anda daftarkan saat pendaftaran</span>
+                    @endif
                 </div>
                 <div class="credential-item">
                     <strong>Status:</strong> <span style="color: #10b981; font-weight: bold;">✓ Aktif</span>

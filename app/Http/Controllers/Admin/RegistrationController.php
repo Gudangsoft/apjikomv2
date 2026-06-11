@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Helpers\ActivityLogger;
 use App\Http\Controllers\Controller;
 use App\Models\Registration;
 use App\Models\Member;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
@@ -137,12 +139,31 @@ class RegistrationController extends Controller
             }
         }
 
+        if ($request->status === 'approved' && $isNewMember) {
+            // Kirim email notifikasi persetujuan
+            try {
+                $user = User::where('email', $registration->email)->first();
+                $member = $user ? Member::where('user_id', $user->id)->first() : null;
+                if ($user && $member) {
+                    \Mail::to($user->email)->send(new \App\Mail\MemberApproved($user, null, $member));
+                }
+            } catch (\Exception $e) {
+                \Log::warning('Approval email failed: ' . $e->getMessage());
+            }
+        }
+
+        ActivityLogger::log('registration',
+            $request->status === 'approved' ? 'approved' : ($request->status === 'rejected' ? 'rejected' : 'updated'),
+            $registration,
+            ucfirst($request->status) . " pendaftaran: {$registration->full_name}"
+        );
+
         $successMessage = 'Status pendaftaran berhasil diperbarui!';
         if ($request->status === 'approved') {
             if ($isNewMember) {
-                $successMessage .= ' Member baru telah dibuat dan kartu anggota telah di-generate otomatis.';
+                $successMessage .= ' Akun member dibuat, email notifikasi dikirim.';
             } else {
-                $successMessage .= ' Member sudah aktif sebelumnya, kartu anggota tetap berlaku.';
+                $successMessage .= ' Member sudah aktif sebelumnya.';
             }
         }
 
@@ -159,14 +180,17 @@ class RegistrationController extends Controller
         $user = User::where('email', $registration->email)->first();
         
         if (!$user) {
-            // Buat user baru
-            // Password dari registration sudah dalam bentuk hash, jadi langsung pakai
+            // Baca password hash langsung dari DB (bypass $hidden)
+            $storedPassword = DB::table('registrations')
+                ->where('id', $registration->id)
+                ->value('password');
+
             $user = User::create([
-                'name' => $registration->full_name,
-                'email' => $registration->email,
-                'password' => $registration->password ?? Hash::make('password123'), // Password sudah di-hash saat registrasi
+                'name'              => $registration->full_name,
+                'email'             => $registration->email,
+                'password'          => $storedPassword ?? Hash::make('Apjikom@2026'),
                 'email_verified_at' => now(),
-                'role' => 'member', // Set role sebagai member agar bisa akses dashboard member
+                'role'              => 'member',
             ]);
         } else {
             // Jika user sudah ada tapi role belum member, update role-nya
