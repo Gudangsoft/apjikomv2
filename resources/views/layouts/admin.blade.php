@@ -47,7 +47,67 @@
             flex-shrink: 0;
             z-index: 1000;
             transition: transform 0.3s ease-in-out;
-            background: linear-gradient(to bottom, var(--theme-footer), var(--theme-dark)) !important;
+            background: linear-gradient(165deg, var(--theme-footer) 0%, color-mix(in srgb, var(--theme-dark) 85%, black) 100%) !important;
+        }
+
+        /* =====================================================
+           SIDEBAR POLISH — nav item styles
+           ===================================================== */
+
+        /* Thin custom scrollbar */
+        .admin-sidebar nav::-webkit-scrollbar { width: 3px; }
+        .admin-sidebar nav::-webkit-scrollbar-track { background: transparent; }
+        .admin-sidebar nav::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.15); border-radius: 3px; }
+
+        /* Active nav item */
+        .sb-active {
+            background: rgba(255,255,255,0.15) !important;
+            box-shadow: inset 3px 0 0 rgba(255,255,255,0.75), 0 2px 10px rgba(0,0,0,0.2) !important;
+            border-radius: 0 8px 8px 0 !important;
+            color: #fff !important;
+            font-weight: 500;
+        }
+        .sb-active svg { opacity: 1 !important; }
+
+        /* Hover nav item */
+        .sb-hover:hover {
+            background: rgba(255,255,255,0.08) !important;
+            transform: translateX(2px);
+        }
+
+        /* Active group toggle */
+        .sb-group-open {
+            background: rgba(255,255,255,0.07) !important;
+        }
+
+        /* Sub-menu container */
+        .sb-submenu {
+            border-left: 1px solid rgba(255,255,255,0.18) !important;
+        }
+
+        /* Section label */
+        .sb-section-label {
+            font-size: 9.5px;
+            font-weight: 700;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: rgba(255,255,255,0.3);
+            padding: 10px 14px 3px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .sb-section-label::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: rgba(255,255,255,0.1);
+        }
+
+        /* Logo area shimmer */
+        .sb-header {
+            background: linear-gradient(90deg, rgba(255,255,255,0.06) 0%, rgba(255,255,255,0.02) 100%);
+            border-bottom: 1px solid rgba(255,255,255,0.1) !important;
         }
 
         .admin-main {
@@ -157,21 +217,25 @@
 
     <div class="admin-wrapper">
         <!-- Sidebar -->
-        <aside class="admin-sidebar bg-gradient-to-b from-purple-900 to-purple-800 text-white flex-shrink-0">
-            <div class="p-4 border-b border-purple-700">
-                <div class="flex items-center space-x-2">
-                    <div class="w-9 h-9 bg-white rounded-lg flex items-center justify-center">
+        <aside class="admin-sidebar text-white flex-shrink-0">
+            {{-- Logo / Header --}}
+            <div class="sb-header px-4 py-4">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 bg-white/15 border border-white/20 rounded-xl flex items-center justify-center flex-shrink-0 shadow-lg">
                         @if($globalSiteLogo)
-                            <img src="{{ asset('storage/' . $globalSiteLogo) }}" alt="{{ $globalSiteName }}" class="w-7 h-7 object-contain">
+                            <img src="{{ asset('storage/' . $globalSiteLogo) }}" alt="{{ $globalSiteName }}" class="w-7 h-7 object-contain rounded">
                         @else
-                            <svg class="w-5 h-5 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path>
                             </svg>
                         @endif
                     </div>
-                    <div>
-                        <h1 class="text-base font-bold">{{ $globalSiteName }}</h1>
-                        <p class="text-xs text-purple-200">Admin Panel</p>
+                    <div class="min-w-0">
+                        <h1 class="text-sm font-bold truncate leading-tight">{{ $globalSiteName }}</h1>
+                        <div class="flex items-center gap-1.5 mt-0.5">
+                            <span class="w-1.5 h-1.5 bg-green-400 rounded-full flex-shrink-0 animate-pulse"></span>
+                            <p class="text-[10px] text-white/50 font-medium tracking-wide uppercase">Admin Panel</p>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -179,34 +243,34 @@
             <nav class="p-3 pb-8 space-y-0.5 overflow-y-auto" style="max-height: calc(100vh - 100px);" x-data="{
                 openMenu: '{{ request()->routeIs("admin.dashboard") ? "" : (request()->routeIs("admin.news.*") || request()->routeIs("admin.events.*") || request()->routeIs("admin.categories.*") || request()->routeIs("admin.about-page.*") || request()->routeIs("admin.organizational-structure.*") || request()->routeIs("admin.services.*") || request()->routeIs("admin.faqs.*") || request()->routeIs("admin.testimonials.*") || request()->routeIs("admin.galleries.*") ? "konten" : (request()->routeIs("admin.journals.*") ? "publikasi" : (request()->routeIs("admin.members.*") || request()->routeIs("admin.card-templates.*") || request()->routeIs("admin.certificate-templates.*") || request()->routeIs("admin.registrations.*") || request()->routeIs("admin.institutions.*") ? "keanggotaan" : (request()->routeIs("admin.sliders.*") || request()->routeIs("admin.pages.*") || request()->routeIs("admin.menus.*") || request()->routeIs("admin.partners.*") || request()->routeIs("admin.section-labels.*") || request()->routeIs("admin.theme.*") ? "tampilan" : (request()->routeIs("admin.users.*") || request()->routeIs("admin.assignments.*") || request()->routeIs("admin.password-reset-requests.*") ? "users" : (request()->routeIs("admin.settings.*") || request()->routeIs("admin.about-settings.*") || request()->routeIs("admin.footer-settings.*") || request()->routeIs("admin.social-media.*") || request()->routeIs("admin.email-settings.*") || request()->routeIs("admin.login-url.*") || request()->routeIs("admin.activity-logs.*") ? "pengaturan" : ""))))))  }}'
             }"">
-                <!-- Dashboard -->
-                <a href="{{ route('admin.dashboard') }}" class="flex items-center space-x-3 px-3 py-2.5 rounded-lg text-sm transition-all {{ request()->routeIs('admin.dashboard') ? 'bg-white/10 shadow-lg' : 'hover:bg-white/5' }}">
-                    <div class="w-5 h-5 flex items-center justify-center">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                {{-- Dashboard --}}
+                <a href="{{ route('admin.dashboard') }}" class="sb-hover flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm transition-all duration-150 {{ request()->routeIs('admin.dashboard') ? 'sb-active' : 'text-white/75' }}">
+                    <div class="w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0 {{ request()->routeIs('admin.dashboard') ? 'bg-white/20' : 'bg-white/8' }}">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path>
                         </svg>
                     </div>
-                    <span class="font-medium">Dashboard</span>
+                    <span class="font-medium text-sm">Dashboard</span>
                 </a>
-                
-                <!-- KELOMPOK: Konten Website -->
+
+                {{-- SECTION: Konten --}}
                 <div class="mt-2">
-                    <button @click="openMenu = openMenu === 'konten' ? '' : 'konten'" class="w-full flex items-center justify-between px-3 py-2.5 rounded-lg text-sm hover:bg-white/5 transition-all" :class="openMenu === 'konten' ? 'bg-white/5' : ''">
+                    <button @click="openMenu = openMenu === 'konten' ? '' : 'konten'" class="sb-hover w-full flex items-center justify-between px-3 py-2.5 rounded-lg text-sm transition-all duration-150 text-white/75" :class="openMenu === 'konten' ? 'sb-group-open' : ''">
                         <div class="flex items-center space-x-3">
-                            <div class="w-5 h-5 flex items-center justify-center">
+                            <div class="w-7 h-7 rounded-lg bg-white/8 flex items-center justify-center">
                                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
                                 </svg>
                             </div>
-                            <span class="font-semibold">Konten Website</span>
+                            <span class="font-semibold text-[13px]">Konten Website</span>
                         </div>
-                        <svg class="w-4 h-4 transition-transform duration-200" :class="openMenu === 'konten' ? 'rotate-180' : ''" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <svg class="w-3 h-3 transition-transform duration-200 text-white/40" :class="openMenu === 'konten' ? 'rotate-180' : ''" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
                         </svg>
                     </button>
-                    <div x-show="openMenu === 'konten'" x-collapse class="ml-3 mt-1 space-y-0.5 border-l-2 border-white/10 pl-4">
-                        <a href="{{ route('admin.news.index') }}" class="flex items-center space-x-3 px-3 py-2 rounded-lg text-sm transition-all {{ request()->routeIs('admin.news.*') ? 'bg-white/10 shadow-lg' : 'hover:bg-white/5' }}">
-                            <div class="w-4 h-4 flex items-center justify-center">
+                    <div x-show="openMenu === 'konten'" x-collapse class="ml-4 mt-1 space-y-0.5 sb-submenu pl-3">
+                        <a href="{{ route('admin.news.index') }}" class="sb-hover flex items-center gap-2 px-3 py-2 rounded-lg text-sm transition-all duration-150 text-white/70 {{ request()->routeIs('admin.news.*') ? 'sb-active' : 'sb-hover hover:bg-transparent' }}">
+                            <div class="w-5 h-5 flex items-center justify-center flex-shrink-0 text-white/60">
                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z"></path>
                                 </svg>
@@ -214,8 +278,8 @@
                             <span>Berita</span>
                         </a>
                         
-                        <a href="{{ route('admin.events.index') }}" class="flex items-center space-x-3 px-3 py-2 rounded-lg text-sm transition-all {{ request()->routeIs('admin.events.*') ? 'bg-white/10 shadow-lg' : 'hover:bg-white/5' }}">
-                            <div class="w-4 h-4 flex items-center justify-center">
+                        <a href="{{ route('admin.events.index') }}" class="sb-hover flex items-center gap-2 px-3 py-2 rounded-lg text-sm transition-all duration-150 text-white/70 {{ request()->routeIs('admin.events.*') ? 'sb-active' : 'sb-hover hover:bg-transparent' }}">
+                            <div class="w-5 h-5 flex items-center justify-center flex-shrink-0 text-white/60">
                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
                                 </svg>
@@ -223,8 +287,8 @@
                             <span>Kegiatan</span>
                         </a>
                         
-                        <a href="{{ route('admin.categories.index') }}" class="flex items-center space-x-3 px-3 py-2 rounded-lg text-sm transition-all {{ request()->routeIs('admin.categories.*') ? 'bg-white/10 shadow-lg' : 'hover:bg-white/5' }}">
-                            <div class="w-4 h-4 flex items-center justify-center">
+                        <a href="{{ route('admin.categories.index') }}" class="sb-hover flex items-center gap-2 px-3 py-2 rounded-lg text-sm transition-all duration-150 text-white/70 {{ request()->routeIs('admin.categories.*') ? 'sb-active' : 'sb-hover hover:bg-transparent' }}">
+                            <div class="w-5 h-5 flex items-center justify-center flex-shrink-0 text-white/60">
                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"></path>
                                 </svg>
@@ -232,8 +296,8 @@
                             <span>Kategori</span>
                         </a>
                         
-                        <a href="{{ route('admin.about-page.index') }}" class="flex items-center space-x-3 px-3 py-2 rounded-lg text-sm transition-all {{ request()->routeIs('admin.about-page.*') ? 'bg-white/10 shadow-lg' : 'hover:bg-white/5' }}">
-                            <div class="w-4 h-4 flex items-center justify-center">
+                        <a href="{{ route('admin.about-page.index') }}" class="sb-hover flex items-center gap-2 px-3 py-2 rounded-lg text-sm transition-all duration-150 text-white/70 {{ request()->routeIs('admin.about-page.*') ? 'sb-active' : 'sb-hover hover:bg-transparent' }}">
+                            <div class="w-5 h-5 flex items-center justify-center flex-shrink-0 text-white/60">
                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                                 </svg>
@@ -241,8 +305,8 @@
                             <span>Halaman Tentang</span>
                         </a>
                         
-                        <a href="{{ route('admin.organizational-structure.index') }}" class="flex items-center space-x-3 px-3 py-2 rounded-lg text-sm transition-all {{ request()->routeIs('admin.organizational-structure.*') ? 'bg-white/10 shadow-lg' : 'hover:bg-white/5' }}">
-                            <div class="w-4 h-4 flex items-center justify-center">
+                        <a href="{{ route('admin.organizational-structure.index') }}" class="sb-hover flex items-center gap-2 px-3 py-2 rounded-lg text-sm transition-all duration-150 text-white/70 {{ request()->routeIs('admin.organizational-structure.*') ? 'sb-active' : 'sb-hover hover:bg-transparent' }}">
+                            <div class="w-5 h-5 flex items-center justify-center flex-shrink-0 text-white/60">
                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path>
                                 </svg>
@@ -250,8 +314,8 @@
                             <span>Struktur Organisasi</span>
                         </a>
                         
-                        <a href="{{ route('admin.services.index') }}" class="flex items-center space-x-3 px-3 py-2 rounded-lg text-sm transition-all {{ request()->routeIs('admin.services.*') ? 'bg-white/10 shadow-lg' : 'hover:bg-white/5' }}">
-                            <div class="w-4 h-4 flex items-center justify-center">
+                        <a href="{{ route('admin.services.index') }}" class="sb-hover flex items-center gap-2 px-3 py-2 rounded-lg text-sm transition-all duration-150 text-white/70 {{ request()->routeIs('admin.services.*') ? 'sb-active' : 'sb-hover hover:bg-transparent' }}">
+                            <div class="w-5 h-5 flex items-center justify-center flex-shrink-0 text-white/60">
                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
                                 </svg>
@@ -259,8 +323,8 @@
                             <span>Layanan & Program</span>
                         </a>
 
-                        <a href="{{ route('admin.faqs.index') }}" class="flex items-center space-x-3 px-3 py-2 rounded-lg text-sm transition-all {{ request()->routeIs('admin.faqs.*') ? 'bg-white/10 shadow-lg' : 'hover:bg-white/5' }}">
-                            <div class="w-4 h-4 flex items-center justify-center">
+                        <a href="{{ route('admin.faqs.index') }}" class="sb-hover flex items-center gap-2 px-3 py-2 rounded-lg text-sm transition-all duration-150 text-white/70 {{ request()->routeIs('admin.faqs.*') ? 'sb-active' : 'sb-hover hover:bg-transparent' }}">
+                            <div class="w-5 h-5 flex items-center justify-center flex-shrink-0 text-white/60">
                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                                 </svg>
@@ -268,8 +332,8 @@
                             <span>FAQ</span>
                         </a>
 
-                        <a href="{{ route('admin.testimonials.index') }}" class="flex items-center space-x-3 px-3 py-2 rounded-lg text-sm transition-all {{ request()->routeIs('admin.testimonials.*') ? 'bg-white/10 shadow-lg' : 'hover:bg-white/5' }}">
-                            <div class="w-4 h-4 flex items-center justify-center">
+                        <a href="{{ route('admin.testimonials.index') }}" class="sb-hover flex items-center gap-2 px-3 py-2 rounded-lg text-sm transition-all duration-150 text-white/70 {{ request()->routeIs('admin.testimonials.*') ? 'sb-active' : 'sb-hover hover:bg-transparent' }}">
+                            <div class="w-5 h-5 flex items-center justify-center flex-shrink-0 text-white/60">
                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M7 8h10M7 12h4m1 8l-4-4H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-3l-4 4z"></path>
                                 </svg>
@@ -277,8 +341,8 @@
                             <span>Testimoni</span>
                         </a>
 
-                        <a href="{{ route('admin.galleries.index') }}" class="flex items-center space-x-3 px-3 py-2 rounded-lg text-sm transition-all {{ request()->routeIs('admin.galleries.*') ? 'bg-white/10 shadow-lg' : 'hover:bg-white/5' }}">
-                            <div class="w-4 h-4 flex items-center justify-center">
+                        <a href="{{ route('admin.galleries.index') }}" class="sb-hover flex items-center gap-2 px-3 py-2 rounded-lg text-sm transition-all duration-150 text-white/70 {{ request()->routeIs('admin.galleries.*') ? 'sb-active' : 'sb-hover hover:bg-transparent' }}">
+                            <div class="w-5 h-5 flex items-center justify-center flex-shrink-0 text-white/60">
                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
                                 </svg>
@@ -288,24 +352,25 @@
                     </div>
                 </div>
 
-                <!-- KELOMPOK: Keanggotaan -->
-                <div class="mt-2">
-                    <button @click="openMenu = openMenu === 'keanggotaan' ? '' : 'keanggotaan'" class="w-full flex items-center justify-between px-3 py-2.5 rounded-lg text-sm hover:bg-white/5 transition-all" :class="openMenu === 'keanggotaan' ? 'bg-white/5' : ''">
+                
+                <div class="sb-section-label mt-3">Keanggotaan</div>
+                <div>
+                    <button @click="openMenu = openMenu === 'keanggotaan' ? '' : 'keanggotaan'" class="sb-hover w-full flex items-center justify-between px-3 py-2.5 rounded-lg text-sm transition-all duration-150 text-white/75" :class="openMenu === 'keanggotaan' ? 'sb-group-open' : ''">
                         <div class="flex items-center space-x-3">
-                            <div class="w-5 h-5 flex items-center justify-center">
+                            <div class="w-7 h-7 rounded-lg bg-white/8 flex items-center justify-center">
                                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path>
                                 </svg>
                             </div>
-                            <span class="font-semibold">Keanggotaan</span>
+                            <span class="font-semibold text-[13px]">Keanggotaan</span>
                         </div>
-                        <svg class="w-4 h-4 transition-transform duration-200" :class="openMenu === 'keanggotaan' ? 'rotate-180' : ''" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <svg class="w-3 h-3 transition-transform duration-200 text-white/40" :class="openMenu === 'keanggotaan' ? 'rotate-180' : ''" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
                         </svg>
                     </button>
-                    <div x-show="openMenu === 'keanggotaan'" x-collapse class="ml-3 mt-1 space-y-0.5 border-l-2 border-white/10 pl-4">
-                        <a href="{{ route('admin.institutions.index') }}" class="flex items-center space-x-3 px-3 py-2 rounded-lg text-sm transition-all {{ request()->routeIs('admin.institutions.*') ? 'bg-white/10 shadow-lg' : 'hover:bg-white/5' }}">
-                            <div class="w-4 h-4 flex items-center justify-center">
+                    <div x-show="openMenu === 'keanggotaan'" x-collapse class="ml-4 mt-1 space-y-0.5 sb-submenu pl-3">
+                        <a href="{{ route('admin.institutions.index') }}" class="sb-hover flex items-center gap-2 px-3 py-2 rounded-lg text-sm transition-all duration-150 text-white/70 {{ request()->routeIs('admin.institutions.*') ? 'sb-active' : 'sb-hover hover:bg-transparent' }}">
+                            <div class="w-5 h-5 flex items-center justify-center flex-shrink-0 text-white/60">
                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path>
                                 </svg>
@@ -313,9 +378,9 @@
                             <span>Data Instansi</span>
                         </a>
 
-                        <a href="{{ route('admin.members.index') }}" class="flex items-center justify-between px-3 py-2 rounded-lg text-sm transition-all {{ request()->routeIs('admin.members.*') && !request()->routeIs('admin.card-templates.*') ? 'bg-white/10 shadow-lg' : 'hover:bg-white/5' }}">
+                        <a href="{{ route('admin.members.index') }}" class="flex items-center justify-between px-3 py-2 rounded-lg text-sm transition-all {{ request()->routeIs('admin.members.*') && !request()->routeIs('admin.card-templates.*') ? 'sb-active' : 'sb-hover hover:bg-transparent' }}">
                             <div class="flex items-center space-x-3">
-                                <div class="w-4 h-4 flex items-center justify-center">
+                                <div class="w-5 h-5 flex items-center justify-center flex-shrink-0 text-white/60">
                                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path>
                                     </svg>
@@ -342,8 +407,8 @@
                             @endif
                         </a>
                         
-                        <a href="{{ route('admin.card-templates.index') }}" class="flex items-center space-x-3 px-3 py-2 rounded-lg text-sm transition-all {{ request()->routeIs('admin.card-templates.*') ? 'bg-white/10 shadow-lg' : 'hover:bg-white/5' }}">
-                            <div class="w-4 h-4 flex items-center justify-center">
+                        <a href="{{ route('admin.card-templates.index') }}" class="sb-hover flex items-center gap-2 px-3 py-2 rounded-lg text-sm transition-all duration-150 text-white/70 {{ request()->routeIs('admin.card-templates.*') ? 'sb-active' : 'sb-hover hover:bg-transparent' }}">
+                            <div class="w-5 h-5 flex items-center justify-center flex-shrink-0 text-white/60">
                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"></path>
                                 </svg>
@@ -351,8 +416,8 @@
                             <span>Template Kartu</span>
                         </a>
                         
-                        <a href="{{ route('admin.certificate-templates.index') }}" class="flex items-center space-x-3 px-3 py-2 rounded-lg text-sm transition-all {{ request()->routeIs('admin.certificate-templates.*') ? 'bg-white/10 shadow-lg' : 'hover:bg-white/5' }}">
-                            <div class="w-4 h-4 flex items-center justify-center">
+                        <a href="{{ route('admin.certificate-templates.index') }}" class="sb-hover flex items-center gap-2 px-3 py-2 rounded-lg text-sm transition-all duration-150 text-white/70 {{ request()->routeIs('admin.certificate-templates.*') ? 'sb-active' : 'sb-hover hover:bg-transparent' }}">
+                            <div class="w-5 h-5 flex items-center justify-center flex-shrink-0 text-white/60">
                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
                                 </svg>
@@ -362,50 +427,45 @@
                     </div>
                 </div>
                 
-                <!-- Bulk Email -->
-                <a href="{{ route('admin.bulk-email.index') }}" class="flex items-center justify-between px-3 py-2.5 rounded-lg text-sm transition-all {{ request()->routeIs('admin.bulk-email.*') ? 'bg-white/10 shadow-lg' : 'hover:bg-white/5' }}">
-                    <div class="flex items-center space-x-3">
-                        <div class="w-5 h-5 flex items-center justify-center {{ request()->routeIs('admin.bulk-email.*') ? 'text-blue-300' : 'text-white/70' }}">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
-                            </svg>
-                        </div>
-                        <span class="font-medium">Email Massal</span>
+                <div class="sb-section-label mt-3">Komunikasi</div>
+                <a href="{{ route('admin.bulk-email.index') }}" class="sb-hover flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm transition-all duration-150 {{ request()->routeIs('admin.bulk-email.*') ? 'sb-active' : 'text-white/75' }}">
+                    <div class="w-7 h-7 rounded-lg flex items-center justify-center flex-shrink-0 {{ request()->routeIs('admin.bulk-email.*') ? 'bg-blue-400/30' : 'bg-white/8' }}">
+                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
+                        </svg>
                     </div>
+                    <span class="font-medium text-[13px]">Email Massal</span>
+                </a>
+                <a href="{{ route('admin.wa-blaster.index') }}" class="sb-hover flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm transition-all duration-150 {{ request()->routeIs('admin.wa-blaster.*') ? 'sb-active' : 'text-white/75' }}">
+                    <div class="w-7 h-7 rounded-lg flex items-center justify-center flex-shrink-0 {{ request()->routeIs('admin.wa-blaster.*') ? 'bg-green-400/30' : 'bg-white/8' }}">
+                        <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+                        </svg>
+                    </div>
+                    <span class="font-medium text-[13px]">WA Blaster</span>
                 </a>
 
-                <!-- WA Blaster -->
-                <a href="{{ route('admin.wa-blaster.index') }}" class="flex items-center justify-between px-3 py-2.5 rounded-lg text-sm transition-all {{ request()->routeIs('admin.wa-blaster.*') ? 'bg-white/10 shadow-lg' : 'hover:bg-white/5' }}">
-                    <div class="flex items-center space-x-3">
-                        <div class="w-5 h-5 flex items-center justify-center {{ request()->routeIs('admin.wa-blaster.*') ? 'text-green-400' : 'text-white/70' }}">
-                            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
-                                <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
-                            </svg>
-                        </div>
-                        <span class="font-medium">WA Blaster</span>
-                    </div>
-                </a>
+                
 
-                <hr class="my-2 border-white/10">
-
-                <!-- KELOMPOK: Tampilan & UI -->
-                <div class="mt-2">
-                    <button @click="openMenu = openMenu === 'tampilan' ? '' : 'tampilan'" class="w-full flex items-center justify-between px-3 py-2.5 rounded-lg text-sm hover:bg-white/5 transition-all" :class="openMenu === 'tampilan' ? 'bg-white/5' : ''">
+                
+                <div class="sb-section-label mt-3">Tampilan & UI</div>
+                <div>
+                    <button @click="openMenu = openMenu === 'tampilan' ? '' : 'tampilan'" class="sb-hover w-full flex items-center justify-between px-3 py-2.5 rounded-lg text-sm transition-all duration-150 text-white/75" :class="openMenu === 'tampilan' ? 'sb-group-open' : ''">
                         <div class="flex items-center space-x-3">
-                            <div class="w-5 h-5 flex items-center justify-center">
+                            <div class="w-7 h-7 rounded-lg bg-white/8 flex items-center justify-center">
                                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 5a1 1 0 011-1h4a1 1 0 011 1v7a1 1 0 01-1 1H5a1 1 0 01-1-1V5zM14 5a1 1 0 011-1h4a1 1 0 011 1v7a1 1 0 01-1 1h-4a1 1 0 01-1-1V5zM4 16a1 1 0 011-1h4a1 1 0 011 1v3a1 1 0 01-1 1H5a1 1 0 01-1-1v-3zM14 16a1 1 0 011-1h4a1 1 0 011 1v3a1 1 0 01-1 1h-4a1 1 0 01-1-1v-3z"></path>
                                 </svg>
                             </div>
-                            <span class="font-semibold">Tampilan & UI</span>
+                            <span class="font-semibold text-[13px]">Tampilan & UI</span>
                         </div>
-                        <svg class="w-4 h-4 transition-transform duration-200" :class="openMenu === 'tampilan' ? 'rotate-180' : ''" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <svg class="w-3 h-3 transition-transform duration-200 text-white/40" :class="openMenu === 'tampilan' ? 'rotate-180' : ''" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
                         </svg>
                     </button>
-                    <div x-show="openMenu === 'tampilan'" x-collapse class="ml-3 mt-1 space-y-0.5 border-l-2 border-white/10 pl-4">
-                        <a href="{{ route('admin.sliders.index') }}" class="flex items-center space-x-3 px-3 py-2 rounded-lg text-sm transition-all {{ request()->routeIs('admin.sliders.*') ? 'bg-white/10 shadow-lg' : 'hover:bg-white/5' }}">
-                            <div class="w-4 h-4 flex items-center justify-center">
+                    <div x-show="openMenu === 'tampilan'" x-collapse class="ml-4 mt-1 space-y-0.5 sb-submenu pl-3">
+                        <a href="{{ route('admin.sliders.index') }}" class="sb-hover flex items-center gap-2 px-3 py-2 rounded-lg text-sm transition-all duration-150 text-white/70 {{ request()->routeIs('admin.sliders.*') ? 'sb-active' : 'sb-hover hover:bg-transparent' }}">
+                            <div class="w-5 h-5 flex items-center justify-center flex-shrink-0 text-white/60">
                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
                                 </svg>
@@ -413,8 +473,8 @@
                             <span>Slider</span>
                         </a>
                         
-                        <a href="{{ route('admin.pages.index') }}" class="flex items-center space-x-3 px-3 py-2 rounded-lg text-sm transition-all {{ request()->routeIs('admin.pages.*') ? 'bg-white/10 shadow-lg' : 'hover:bg-white/5' }}">
-                            <div class="w-4 h-4 flex items-center justify-center">
+                        <a href="{{ route('admin.pages.index') }}" class="sb-hover flex items-center gap-2 px-3 py-2 rounded-lg text-sm transition-all duration-150 text-white/70 {{ request()->routeIs('admin.pages.*') ? 'sb-active' : 'sb-hover hover:bg-transparent' }}">
+                            <div class="w-5 h-5 flex items-center justify-center flex-shrink-0 text-white/60">
                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"></path>
                                 </svg>
@@ -422,8 +482,8 @@
                             <span>Halaman</span>
                         </a>
                         
-                        <a href="{{ route('admin.menus.index') }}" class="flex items-center space-x-3 px-3 py-2 rounded-lg text-sm transition-all {{ request()->routeIs('admin.menus.*') ? 'bg-white/10 shadow-lg' : 'hover:bg-white/5' }}">
-                            <div class="w-4 h-4 flex items-center justify-center">
+                        <a href="{{ route('admin.menus.index') }}" class="sb-hover flex items-center gap-2 px-3 py-2 rounded-lg text-sm transition-all duration-150 text-white/70 {{ request()->routeIs('admin.menus.*') ? 'sb-active' : 'sb-hover hover:bg-transparent' }}">
+                            <div class="w-5 h-5 flex items-center justify-center flex-shrink-0 text-white/60">
                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 6h16M4 12h16M4 18h16"></path>
                                 </svg>
@@ -431,8 +491,8 @@
                             <span>Menu Dinamis</span>
                         </a>
                         
-                        <a href="{{ route('admin.partners.index') }}" class="flex items-center space-x-3 px-3 py-2 rounded-lg text-sm transition-all {{ request()->routeIs('admin.partners.*') ? 'bg-white/10 shadow-lg' : 'hover:bg-white/5' }}">
-                            <div class="w-4 h-4 flex items-center justify-center">
+                        <a href="{{ route('admin.partners.index') }}" class="sb-hover flex items-center gap-2 px-3 py-2 rounded-lg text-sm transition-all duration-150 text-white/70 {{ request()->routeIs('admin.partners.*') ? 'sb-active' : 'sb-hover hover:bg-transparent' }}">
+                            <div class="w-5 h-5 flex items-center justify-center flex-shrink-0 text-white/60">
                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path>
                                 </svg>
@@ -440,8 +500,8 @@
                             <span>Partner</span>
                         </a>
                         
-                        <a href="{{ route('admin.section-labels.index') }}" class="flex items-center space-x-3 px-3 py-2 rounded-lg text-sm transition-all {{ request()->routeIs('admin.section-labels.*') ? 'bg-white/10 shadow-lg' : 'hover:bg-white/5' }}">
-                            <div class="w-4 h-4 flex items-center justify-center">
+                        <a href="{{ route('admin.section-labels.index') }}" class="sb-hover flex items-center gap-2 px-3 py-2 rounded-lg text-sm transition-all duration-150 text-white/70 {{ request()->routeIs('admin.section-labels.*') ? 'sb-active' : 'sb-hover hover:bg-transparent' }}">
+                            <div class="w-5 h-5 flex items-center justify-center flex-shrink-0 text-white/60">
                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"></path>
                                 </svg>
@@ -449,8 +509,8 @@
                             <span>Label Section</span>
                         </a>
 
-                        <a href="{{ route('admin.theme.index') }}" class="flex items-center space-x-3 px-3 py-2 rounded-lg text-sm transition-all {{ request()->routeIs('admin.theme.*') ? 'bg-white/10 shadow-lg' : 'hover:bg-white/5' }}">
-                            <div class="w-4 h-4 flex items-center justify-center">
+                        <a href="{{ route('admin.theme.index') }}" class="sb-hover flex items-center gap-2 px-3 py-2 rounded-lg text-sm transition-all duration-150 text-white/70 {{ request()->routeIs('admin.theme.*') ? 'sb-active' : 'sb-hover hover:bg-transparent' }}">
+                            <div class="w-5 h-5 flex items-center justify-center flex-shrink-0 text-white/60">
                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h.01"></path>
                                 </svg>
@@ -460,26 +520,27 @@
                     </div>
                 </div>
                 
-                <hr class="my-2 border-white/10">
+                
 
-                <!-- KELOMPOK: Users -->
-                <div class="mt-2">
-                    <button @click="openMenu = openMenu === 'users' ? '' : 'users'" class="w-full flex items-center justify-between px-3 py-2.5 rounded-lg text-sm hover:bg-white/5 transition-all" :class="openMenu === 'users' ? 'bg-white/5' : ''">
+                
+                <div class="sb-section-label mt-3">Pengguna</div>
+                <div>
+                    <button @click="openMenu = openMenu === 'users' ? '' : 'users'" class="sb-hover w-full flex items-center justify-between px-3 py-2.5 rounded-lg text-sm transition-all duration-150 text-white/75" :class="openMenu === 'users' ? 'sb-group-open' : ''">
                         <div class="flex items-center space-x-3">
-                            <div class="w-5 h-5 flex items-center justify-center">
+                            <div class="w-7 h-7 rounded-lg bg-white/8 flex items-center justify-center">
                                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path>
                                 </svg>
                             </div>
-                            <span class="font-semibold">Manajemen User</span>
+                            <span class="font-semibold text-[13px]">Manajemen User</span>
                         </div>
-                        <svg class="w-4 h-4 transition-transform duration-200" :class="openMenu === 'users' ? 'rotate-180' : ''" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <svg class="w-3 h-3 transition-transform duration-200 text-white/40" :class="openMenu === 'users' ? 'rotate-180' : ''" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
                         </svg>
                     </button>
-                    <div x-show="openMenu === 'users'" x-collapse class="ml-3 mt-1 space-y-0.5 border-l-2 border-white/10 pl-4">
-                        <a href="{{ route('admin.users.index') }}" class="flex items-center space-x-3 px-3 py-2 rounded-lg text-sm transition-all {{ request()->routeIs('admin.users.*') ? 'bg-white/10 shadow-lg' : 'hover:bg-white/5' }}">
-                            <div class="w-4 h-4 flex items-center justify-center">
+                    <div x-show="openMenu === 'users'" x-collapse class="ml-4 mt-1 space-y-0.5 sb-submenu pl-3">
+                        <a href="{{ route('admin.users.index') }}" class="sb-hover flex items-center gap-2 px-3 py-2 rounded-lg text-sm transition-all duration-150 text-white/70 {{ request()->routeIs('admin.users.*') ? 'sb-active' : 'sb-hover hover:bg-transparent' }}">
+                            <div class="w-5 h-5 flex items-center justify-center flex-shrink-0 text-white/60">
                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path>
                                 </svg>
@@ -487,8 +548,8 @@
                             <span>Kelola User</span>
                         </a>
 
-                        <a href="{{ route('admin.assignments.index') }}" class="flex items-center space-x-3 px-3 py-2 rounded-lg text-sm transition-all {{ request()->routeIs('admin.assignments.*') ? 'bg-white/10 shadow-lg' : 'hover:bg-white/5' }}">
-                            <div class="w-4 h-4 flex items-center justify-center">
+                        <a href="{{ route('admin.assignments.index') }}" class="sb-hover flex items-center gap-2 px-3 py-2 rounded-lg text-sm transition-all duration-150 text-white/70 {{ request()->routeIs('admin.assignments.*') ? 'sb-active' : 'sb-hover hover:bg-transparent' }}">
+                            <div class="w-5 h-5 flex items-center justify-center flex-shrink-0 text-white/60">
                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
                                 </svg>
@@ -496,9 +557,9 @@
                             <span>Penugasan Editor</span>
                         </a>
 
-                        <a href="{{ route('admin.password-reset-requests.index') }}" class="flex items-center justify-between px-3 py-2 rounded-lg text-sm transition-all {{ request()->routeIs('admin.password-reset-requests.*') ? 'bg-white/10 shadow-lg' : 'hover:bg-white/5' }}">
+                        <a href="{{ route('admin.password-reset-requests.index') }}" class="flex items-center justify-between px-3 py-2 rounded-lg text-sm transition-all {{ request()->routeIs('admin.password-reset-requests.*') ? 'sb-active' : 'sb-hover hover:bg-transparent' }}">
                             <div class="flex items-center space-x-3">
-                                <div class="w-4 h-4 flex items-center justify-center">
+                                <div class="w-5 h-5 flex items-center justify-center flex-shrink-0 text-white/60">
                                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z"></path>
                                     </svg>
@@ -515,25 +576,26 @@
                     </div>
                 </div>
 
-                <!-- KELOMPOK: Pengaturan -->
-                <div class="mt-2">
-                    <button @click="openMenu = openMenu === 'pengaturan' ? '' : 'pengaturan'" class="w-full flex items-center justify-between px-3 py-2.5 rounded-lg text-sm hover:bg-white/5 transition-all" :class="openMenu === 'pengaturan' ? 'bg-white/5' : ''">
+                
+                <div class="sb-section-label mt-3">Pengaturan</div>
+                <div>
+                    <button @click="openMenu = openMenu === 'pengaturan' ? '' : 'pengaturan'" class="sb-hover w-full flex items-center justify-between px-3 py-2.5 rounded-lg text-sm transition-all duration-150 text-white/75" :class="openMenu === 'pengaturan' ? 'sb-group-open' : ''">
                         <div class="flex items-center space-x-3">
-                            <div class="w-5 h-5 flex items-center justify-center">
+                            <div class="w-7 h-7 rounded-lg bg-white/8 flex items-center justify-center">
                                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path>
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
                                 </svg>
                             </div>
-                            <span class="font-semibold">Pengaturan</span>
+                            <span class="font-semibold text-[13px]">Pengaturan</span>
                         </div>
-                        <svg class="w-4 h-4 transition-transform duration-200" :class="openMenu === 'pengaturan' ? 'rotate-180' : ''" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <svg class="w-3 h-3 transition-transform duration-200 text-white/40" :class="openMenu === 'pengaturan' ? 'rotate-180' : ''" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
                         </svg>
                     </button>
-                    <div x-show="openMenu === 'pengaturan'" x-collapse class="ml-3 mt-1 space-y-0.5 border-l-2 border-white/10 pl-4">
-                        <a href="{{ route('admin.settings.index') }}" class="flex items-center space-x-3 px-3 py-2 rounded-lg text-sm transition-all {{ request()->routeIs('admin.settings.*') ? 'bg-white/10 shadow-lg' : 'hover:bg-white/5' }}">
-                            <div class="w-4 h-4 flex items-center justify-center">
+                    <div x-show="openMenu === 'pengaturan'" x-collapse class="ml-4 mt-1 space-y-0.5 sb-submenu pl-3">
+                        <a href="{{ route('admin.settings.index') }}" class="sb-hover flex items-center gap-2 px-3 py-2 rounded-lg text-sm transition-all duration-150 text-white/70 {{ request()->routeIs('admin.settings.*') ? 'sb-active' : 'sb-hover hover:bg-transparent' }}">
+                            <div class="w-5 h-5 flex items-center justify-center flex-shrink-0 text-white/60">
                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path>
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
@@ -542,8 +604,8 @@
                             <span>Pengaturan Umum</span>
                         </a>
                         
-                        <a href="{{ route('admin.about-settings.index') }}" class="flex items-center space-x-3 px-3 py-2 rounded-lg text-sm transition-all {{ request()->routeIs('admin.about-settings.*') ? 'bg-white/10 shadow-lg' : 'hover:bg-white/5' }}">
-                            <div class="w-4 h-4 flex items-center justify-center">
+                        <a href="{{ route('admin.about-settings.index') }}" class="sb-hover flex items-center gap-2 px-3 py-2 rounded-lg text-sm transition-all duration-150 text-white/70 {{ request()->routeIs('admin.about-settings.*') ? 'sb-active' : 'sb-hover hover:bg-transparent' }}">
+                            <div class="w-5 h-5 flex items-center justify-center flex-shrink-0 text-white/60">
                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                                 </svg>
@@ -551,8 +613,8 @@
                             <span>Section Tentang</span>
                         </a>
                         
-                        <a href="{{ route('admin.footer-settings.index') }}" class="flex items-center space-x-3 px-3 py-2 rounded-lg text-sm transition-all {{ request()->routeIs('admin.footer-settings.*') ? 'bg-white/10 shadow-lg' : 'hover:bg-white/5' }}">
-                            <div class="w-4 h-4 flex items-center justify-center">
+                        <a href="{{ route('admin.footer-settings.index') }}" class="sb-hover flex items-center gap-2 px-3 py-2 rounded-lg text-sm transition-all duration-150 text-white/70 {{ request()->routeIs('admin.footer-settings.*') ? 'sb-active' : 'sb-hover hover:bg-transparent' }}">
+                            <div class="w-5 h-5 flex items-center justify-center flex-shrink-0 text-white/60">
                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 6h16M4 12h16M4 18h16"></path>
                                 </svg>
@@ -560,8 +622,8 @@
                             <span>Menu Footer</span>
                         </a>
                         
-                        <a href="{{ route('admin.social-media.index') }}" class="flex items-center space-x-3 px-3 py-2 rounded-lg text-sm transition-all {{ request()->routeIs('admin.social-media.*') ? 'bg-white/10 shadow-lg' : 'hover:bg-white/5' }}">
-                            <div class="w-4 h-4 flex items-center justify-center">
+                        <a href="{{ route('admin.social-media.index') }}" class="sb-hover flex items-center gap-2 px-3 py-2 rounded-lg text-sm transition-all duration-150 text-white/70 {{ request()->routeIs('admin.social-media.*') ? 'sb-active' : 'sb-hover hover:bg-transparent' }}">
+                            <div class="w-5 h-5 flex items-center justify-center flex-shrink-0 text-white/60">
                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z"></path>
                                 </svg>
@@ -569,8 +631,8 @@
                             <span>Media Sosial</span>
                         </a>
                         
-                        <a href="{{ route('admin.email-settings.index') }}" class="flex items-center space-x-3 px-3 py-2 rounded-lg text-sm transition-all {{ request()->routeIs('admin.email-settings.*') ? 'bg-white/10 shadow-lg' : 'hover:bg-white/5' }}">
-                            <div class="w-4 h-4 flex items-center justify-center">
+                        <a href="{{ route('admin.email-settings.index') }}" class="sb-hover flex items-center gap-2 px-3 py-2 rounded-lg text-sm transition-all duration-150 text-white/70 {{ request()->routeIs('admin.email-settings.*') ? 'sb-active' : 'sb-hover hover:bg-transparent' }}">
+                            <div class="w-5 h-5 flex items-center justify-center flex-shrink-0 text-white/60">
                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
                                 </svg>
@@ -578,8 +640,8 @@
                             <span>Email & Notifikasi</span>
                         </a>
 
-                        <a href="{{ route('admin.login-url.index') }}" class="flex items-center space-x-3 px-3 py-2 rounded-lg text-sm transition-all {{ request()->routeIs('admin.login-url.*') ? 'bg-white/10 shadow-lg' : 'hover:bg-white/5' }}">
-                            <div class="w-4 h-4 flex items-center justify-center">
+                        <a href="{{ route('admin.login-url.index') }}" class="sb-hover flex items-center gap-2 px-3 py-2 rounded-lg text-sm transition-all duration-150 text-white/70 {{ request()->routeIs('admin.login-url.*') ? 'sb-active' : 'sb-hover hover:bg-transparent' }}">
+                            <div class="w-5 h-5 flex items-center justify-center flex-shrink-0 text-white/60">
                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"></path>
                                 </svg>
@@ -587,8 +649,8 @@
                             <span>URL Halaman Login</span>
                         </a>
 
-                        <a href="{{ route('admin.activity-logs.index') }}" class="flex items-center space-x-3 px-3 py-2 rounded-lg text-sm transition-all {{ request()->routeIs('admin.activity-logs.*') ? 'bg-white/10 shadow-lg' : 'hover:bg-white/5' }}">
-                            <div class="w-4 h-4 flex items-center justify-center">
+                        <a href="{{ route('admin.activity-logs.index') }}" class="sb-hover flex items-center gap-2 px-3 py-2 rounded-lg text-sm transition-all duration-150 text-white/70 {{ request()->routeIs('admin.activity-logs.*') ? 'sb-active' : 'sb-hover hover:bg-transparent' }}">
+                            <div class="w-5 h-5 flex items-center justify-center flex-shrink-0 text-white/60">
                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
                                 </svg>
@@ -598,53 +660,49 @@
                     </div>
                 </div>
                 
-                <hr class="my-3 border-white/10">
+                
 
-                <!-- Changelog Menu -->
-                <a href="{{ route('admin.changelog.index') }}" class="flex items-center justify-between px-3 py-2.5 rounded-lg text-sm transition-all {{ request()->routeIs('admin.changelog.*') || request()->routeIs('admin.update-requests.*') ? 'bg-white/10 shadow-lg' : 'hover:bg-white/5' }}">
-                    <div class="flex items-center space-x-3">
-                        <div class="w-5 h-5 flex items-center justify-center {{ request()->routeIs('admin.changelog.*') || request()->routeIs('admin.update-requests.*') ? 'text-yellow-300' : 'text-white/60' }}">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <div class="sb-section-label mt-3">Lainnya</div>
+
+                <a href="{{ route('admin.changelog.index') }}" class="sb-hover flex items-center justify-between gap-3 px-3 py-2.5 rounded-lg text-sm transition-all duration-150 {{ request()->routeIs('admin.changelog.*') || request()->routeIs('admin.update-requests.*') ? 'sb-active' : 'text-white/75' }}">
+                    <div class="flex items-center gap-3">
+                        <div class="w-7 h-7 rounded-lg flex items-center justify-center flex-shrink-0 {{ request()->routeIs('admin.changelog.*') || request()->routeIs('admin.update-requests.*') ? 'bg-yellow-400/30' : 'bg-white/8' }}">
+                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
                             </svg>
                         </div>
-                        <span class="font-medium">Changelog & Updates</span>
+                        <span class="font-medium text-[13px]">Changelog & Updates</span>
                     </div>
                     @php
-                        try {
-                            $pendingRequests = \App\Models\UpdateRequest::where('status', 'pending')->count();
-                        } catch (\Exception $e) {
-                            $pendingRequests = 0;
-                        }
+                        try { $pendingRequests = \App\Models\UpdateRequest::where('status', 'pending')->count(); }
+                        catch (\Exception $e) { $pendingRequests = 0; }
                     @endphp
                     @if($pendingRequests > 0)
-                        <span class="bg-red-500 text-white text-xs font-bold px-2 py-0.5 rounded-full animate-pulse">
-                            {{ $pendingRequests }}
-                        </span>
+                        <span class="bg-red-500 text-white text-[10px] font-bold px-1.5 py-0.5 rounded-full animate-pulse">{{ $pendingRequests }}</span>
                     @endif
                 </a>
 
-                <!-- Tutorial / Panduan -->
-                <a href="/admin/tutorial" class="flex items-center space-x-3 px-3 py-2.5 rounded-lg text-sm transition-all {{ request()->is('admin/tutorial') ? 'bg-white/10 shadow-lg' : 'hover:bg-white/5' }}">
-                    <div class="w-5 h-5 flex items-center justify-center {{ request()->is('admin/tutorial') ? 'text-green-300' : 'text-white/60' }}">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <a href="/admin/tutorial" class="sb-hover flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm transition-all duration-150 {{ request()->is('admin/tutorial') ? 'sb-active' : 'text-white/75' }}">
+                    <div class="w-7 h-7 rounded-lg flex items-center justify-center flex-shrink-0 {{ request()->is('admin/tutorial') ? 'bg-green-400/30' : 'bg-white/8' }}">
+                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/>
                         </svg>
                     </div>
-                    <span class="font-medium">Panduan Admin</span>
+                    <span class="font-medium text-[13px]">Panduan Admin</span>
                 </a>
 
-                <hr class="my-3 border-white/10">
-
-                <!-- Lihat Website -->
-                <a href="{{ route('home') }}" target="_blank" class="flex items-center space-x-3 px-3 py-2.5 rounded-lg text-sm bg-gradient-to-r from-blue-600 to-blue-500 hover:from-blue-700 hover:to-blue-600 transition-all shadow-md">
-                    <div class="w-5 h-5 flex items-center justify-center">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <div class="mt-4 px-1">
+                    <a href="{{ route('home') }}" target="_blank"
+                       class="flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-semibold text-white
+                              bg-gradient-to-r from-blue-500 to-blue-600
+                              hover:from-blue-600 hover:to-blue-700
+                              shadow-lg shadow-blue-900/30 transition-all duration-150 hover:shadow-blue-900/50 hover:scale-[1.02]">
+                        <svg class="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path>
                         </svg>
-                    </div>
-                    <span class="font-medium">Lihat Website</span>
-                </a>
+                        <span>Lihat Website</span>
+                    </a>
+                </div>
             </nav>
         </aside>
         
