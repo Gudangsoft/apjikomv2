@@ -115,9 +115,22 @@ class AdminController extends Controller
         $cardsPending = Member::where('card_requested', true)
             ->whereNull('member_card')
             ->count();
-        
+
         // Satisfaction Rate from settings
         $satisfactionRate = Setting::getValue('satisfaction_rate', 98);
+
+        // Members expiring in next 30 days
+        $expiringMembers = Member::with('user')
+            ->where('status', 'active')
+            ->whereBetween('expiry_date', [Carbon::now(), Carbon::now()->addDays(30)])
+            ->orderBy('expiry_date', 'asc')
+            ->get();
+
+        // Pending registrations older than 7 days
+        $stalePendingRegistrations = Registration::where('status', 'pending')
+            ->where('created_at', '<=', Carbon::now()->subDays(7))
+            ->orderBy('created_at', 'asc')
+            ->get();
 
         return view('admin.dashboard', compact(
             'stats',
@@ -133,7 +146,9 @@ class AdminController extends Controller
             'pending_registrations',
             'recentMemberCount',
             'cardsPending',
-            'satisfactionRate'
+            'satisfactionRate',
+            'expiringMembers',
+            'stalePendingRegistrations'
         ));
     }
 }

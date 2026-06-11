@@ -362,6 +362,18 @@
                     </div>
                 </div>
                 
+                <!-- Bulk Email -->
+                <a href="{{ route('admin.bulk-email.index') }}" class="flex items-center justify-between px-3 py-2.5 rounded-lg text-sm transition-all {{ request()->routeIs('admin.bulk-email.*') ? 'bg-white/10 shadow-lg' : 'hover:bg-white/5' }}">
+                    <div class="flex items-center space-x-3">
+                        <div class="w-5 h-5 flex items-center justify-center {{ request()->routeIs('admin.bulk-email.*') ? 'text-blue-300' : 'text-white/70' }}">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
+                            </svg>
+                        </div>
+                        <span class="font-medium">Email Massal</span>
+                    </div>
+                </a>
+
                 <!-- WA Blaster -->
                 <a href="{{ route('admin.wa-blaster.index') }}" class="flex items-center justify-between px-3 py-2.5 rounded-lg text-sm transition-all {{ request()->routeIs('admin.wa-blaster.*') ? 'bg-white/10 shadow-lg' : 'hover:bg-white/5' }}">
                     <div class="flex items-center space-x-3">

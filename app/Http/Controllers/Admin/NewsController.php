@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Helpers\ActivityLogger;
+use App\Helpers\ImageHelper;
 use App\Http\Controllers\Controller;
 use App\Models\News;
 use App\Models\Category;
@@ -93,12 +94,11 @@ class NewsController extends Controller
         $validated['user_id'] = auth()->id();
         $validated['views'] = 0;
         
-        // Handle image upload
+        // Handle image upload with compression
         if ($request->hasFile('image')) {
-            $imagePath = $request->file('image')->store('news', 'public');
-            $validated['image'] = $imagePath;
+            $validated['image'] = ImageHelper::store($request->file('image'), 'news');
         }
-        
+
         // Set is_published default to false if not provided
         $validated['is_published'] = $request->has('is_published') ? true : false;
 
@@ -134,15 +134,12 @@ class NewsController extends Controller
 
         $validated['slug'] = Str::slug($validated['title']);
         
-        // Handle image upload
+        // Handle image upload with compression
         if ($request->hasFile('image')) {
-            // Delete old image if exists
             if ($news->image && Storage::disk('public')->exists($news->image)) {
                 Storage::disk('public')->delete($news->image);
             }
-            
-            $imagePath = $request->file('image')->store('news', 'public');
-            $validated['image'] = $imagePath;
+            $validated['image'] = ImageHelper::store($request->file('image'), 'news');
         }
         
         // Set is_published default to false if not provided

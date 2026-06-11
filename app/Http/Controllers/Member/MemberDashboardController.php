@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers\Member;
 
+use App\Helpers\ActivityLogger;
 use App\Http\Controllers\Controller;
+use App\Models\ActivityLog;
 use App\Models\Event;
 use App\Models\Journal;
 use App\Models\News;
@@ -89,17 +91,24 @@ class MemberDashboardController extends Controller
         // Try to login
         if (Auth::attempt($credentials, $remember)) {
             $request->session()->regenerate();
-            
+
             // Clear failed attempts on successful login
             $failedKey = 'login_failed_' . $request->email;
             session()->forget([$failedKey, 'show_reset_password']);
-            
+
             // Check if user has member record
             if (!Auth::user()->member) {
                 Auth::logout();
                 throw ValidationException::withMessages([
                     'email' => 'Akun Anda belum terdaftar sebagai member.',
                 ]);
+            }
+
+            // Log successful member login
+            try {
+                ActivityLogger::logLogin(Auth::user());
+            } catch (\Throwable $e) {
+                // Non-critical
             }
 
             // Check if this is first login (password is still default)
@@ -115,10 +124,25 @@ class MemberDashboardController extends Controller
         $failedKey = 'login_failed_' . $request->email;
         $attempts = (int) session($failedKey, 0) + 1;
         session([$failedKey => $attempts]);
-        
+
         // Set flag to show reset password option after 3 failed attempts
         if ($attempts >= 3) {
             session(['show_reset_password' => true]);
+        }
+
+        // Log failed login attempt for security monitoring
+        try {
+            ActivityLog::create([
+                'type'        => 'auth',
+                'action'      => 'login_failed',
+                'description' => "Login gagal untuk email: {$request->email}",
+                'user_id'     => null,
+                'model_type'  => null,
+                'model_id'    => null,
+                'properties'  => ['email' => $request->email, 'ip' => $request->ip()],
+            ]);
+        } catch (\Throwable $e) {
+            // Non-critical, don't block login response
         }
 
         // Email exists but password is wrong

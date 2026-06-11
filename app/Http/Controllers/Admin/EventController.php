@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Helpers\ActivityLogger;
+use App\Helpers\ImageHelper;
 use App\Http\Controllers\Controller;
 use App\Models\Event;
 use App\Models\Category;
@@ -112,13 +113,13 @@ class EventController extends Controller
         ]);
 
         $validated['slug'] = Str::slug($validated['title']);
-        
-        // Upload image
+
+        // Upload image with compression
         if ($request->hasFile('image')) {
-            $validated['image'] = $request->file('image')->store('events', 'public');
+            $validated['image'] = ImageHelper::store($request->file('image'), 'events');
         }
 
-        // Upload certificate template
+        // Upload certificate template (no compression, may need full quality)
         if ($request->hasFile('certificate_template')) {
             $validated['certificate_template'] = $request->file('certificate_template')->store('certificates/templates', 'public');
         }
@@ -165,14 +166,13 @@ class EventController extends Controller
         ]);
 
         $validated['slug'] = Str::slug($validated['title']);
-        
-        // Upload image baru jika ada
+
+        // Upload image baru jika ada (with compression)
         if ($request->hasFile('image')) {
-            // Hapus image lama
             if ($event->image && Storage::disk('public')->exists($event->image)) {
                 Storage::disk('public')->delete($event->image);
             }
-            $validated['image'] = $request->file('image')->store('events', 'public');
+            $validated['image'] = ImageHelper::store($request->file('image'), 'events');
         }
 
         // Upload certificate template baru jika ada

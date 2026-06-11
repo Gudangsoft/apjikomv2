@@ -253,10 +253,11 @@
                         @endif
                     @else
                         <a href="{{ route('member.login') }}" class="text-gray-700 hover:text-purple-600 font-medium text-sm {{ request()->routeIs('member.login') ? 'text-purple-600' : '' }}">Login Member</a>
+                        <a href="{{ route('registration.status') }}" class="text-gray-700 hover:text-purple-600 font-medium text-sm {{ request()->routeIs('registration.status*') ? 'text-purple-600' : '' }}">Cek Pendaftaran</a>
                         <a href="{{ route('registration.create') }}" class="apjikom-purple text-white px-5 py-2 rounded text-sm font-medium hover:bg-purple-700">Bergabung</a>
                     @endauth
                 </div>
-                
+
                 <div class="md:hidden flex items-center gap-2">
                     <button id="darkModeToggleMobile" class="dark-mode-toggle p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors text-gray-700 dark:text-gray-300" title="Toggle Dark Mode">
                         <svg class="w-5 h-5 hidden dark:block" fill="none" stroke="currentColor" viewBox="0 0 24 24">

@@ -87,6 +87,58 @@
 </div>
 @endif
 
+<!-- Alert: Expiring Members -->
+@if($expiringMembers->count() > 0)
+<div class="bg-orange-50 border-l-4 border-orange-400 p-4 mb-6 rounded-lg">
+    <div class="flex items-start justify-between">
+        <div class="flex items-start">
+            <svg class="w-5 h-5 text-orange-400 mr-3 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+            </svg>
+            <div>
+                <p class="text-sm font-semibold text-orange-800">{{ $expiringMembers->count() }} Anggota Akan Expired dalam 30 Hari</p>
+                <div class="mt-1 flex flex-wrap gap-1">
+                    @foreach($expiringMembers->take(5) as $m)
+                    <span class="text-xs bg-orange-100 text-orange-700 px-2 py-0.5 rounded">
+                        {{ $m->user->name ?? '-' }} ({{ $m->expiry_date?->format('d/m/Y') }})
+                    </span>
+                    @endforeach
+                    @if($expiringMembers->count() > 5)
+                    <span class="text-xs text-orange-600">+{{ $expiringMembers->count() - 5 }} lainnya</span>
+                    @endif
+                </div>
+            </div>
+        </div>
+        <a href="{{ route('admin.members.index', ['status' => 'active']) }}" class="text-xs text-orange-700 underline ml-4 whitespace-nowrap">Lihat Semua</a>
+    </div>
+</div>
+@endif
+
+<!-- Alert: Stale Pending Registrations -->
+@if($stalePendingRegistrations->count() > 0)
+<div class="bg-yellow-50 border-l-4 border-yellow-400 p-4 mb-6 rounded-lg">
+    <div class="flex items-start justify-between">
+        <div class="flex items-start">
+            <svg class="w-5 h-5 text-yellow-500 mr-3 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+            </svg>
+            <div>
+                <p class="text-sm font-semibold text-yellow-800">{{ $stalePendingRegistrations->count() }} Pendaftaran Pending Lebih dari 7 Hari</p>
+                <p class="text-xs text-yellow-700 mt-0.5">Pendaftaran berikut belum diproses sejak lebih dari 7 hari yang lalu.</p>
+                <div class="mt-1 flex flex-wrap gap-1">
+                    @foreach($stalePendingRegistrations->take(5) as $r)
+                    <span class="text-xs bg-yellow-100 text-yellow-700 px-2 py-0.5 rounded">
+                        {{ $r->full_name }} ({{ $r->created_at->diffForHumans() }})
+                    </span>
+                    @endforeach
+                </div>
+            </div>
+        </div>
+        <a href="{{ route('admin.members.index', ['tab' => 'registrations', 'status' => 'pending']) }}" class="text-xs text-yellow-700 underline ml-4 whitespace-nowrap">Proses Sekarang</a>
+    </div>
+</div>
+@endif
+
 <!-- Stats Grid -->
 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 lg:gap-6 mb-4 sm:mb-6 lg:mb-8">
     <!-- Total News -->

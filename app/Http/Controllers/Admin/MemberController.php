@@ -9,7 +9,9 @@ use App\Services\MemberCardGenerator;
 use App\Services\NotificationService;
 use App\Models\User;
 use App\Exports\MembersExport;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
@@ -182,8 +184,10 @@ class MemberController extends Controller
         $members = $queryMembers->get();
         
         $filename = 'members_export_' . date('Y-m-d_H-i-s');
-        
-        if ($format === 'excel') {
+
+        if ($format === 'pdf') {
+            return $this->exportPdf($members, $filename);
+        } elseif ($format === 'excel') {
             return $this->exportExcel($members, $filename);
         } else {
             return $this->exportCsv($members, $filename);
@@ -266,6 +270,17 @@ class MemberController extends Controller
         };
         
         return response()->stream($callback, 200, $headers);
+    }
+
+    /**
+     * Export members as PDF
+     */
+    private function exportPdf($members, $filename)
+    {
+        $siteName = \App\Models\Setting::getValue('site_name', 'APJIKOM');
+        $pdf = Pdf::loadView('admin.members.export-pdf', compact('members', 'siteName'))
+            ->setPaper('a4', 'landscape');
+        return $pdf->download($filename . '.pdf');
     }
 
     /**

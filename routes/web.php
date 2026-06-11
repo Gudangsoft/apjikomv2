@@ -70,6 +70,10 @@ Route::get('/anggota/{member}', [MemberDirectoryController::class, 'show'])->nam
 // Page Routes (Dynamic Pages)
 Route::get('/page/{slug}', [PageController::class, 'show'])->name('page.show');
 
+// Registration Status (Public)
+Route::get('/cek-pendaftaran', [\App\Http\Controllers\RegistrationStatusController::class, 'index'])->name('registration.status');
+Route::post('/cek-pendaftaran', [\App\Http\Controllers\RegistrationStatusController::class, 'check'])->name('registration.status.check')->middleware('throttle:10,1');
+
 // Registration Routes
 Route::get('/daftar-anggota', [RegistrationController::class, 'create'])->name('registration.create');
 Route::post('/daftar-anggota', [RegistrationController::class, 'store'])
@@ -352,6 +356,10 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'admin'])->group(fun
     Route::post('wa-blaster/settings', [\App\Http\Controllers\Admin\WaBlasterController::class, 'saveSettings'])->name('wa-blaster.save-settings');
     Route::get('wa-blaster/{waBlastLog}', [\App\Http\Controllers\Admin\WaBlasterController::class, 'show'])->name('wa-blaster.show');
     Route::delete('wa-blaster/{waBlastLog}', [\App\Http\Controllers\Admin\WaBlasterController::class, 'destroy'])->name('wa-blaster.destroy');
+
+    // Bulk Email
+    Route::get('bulk-email', [\App\Http\Controllers\Admin\BulkEmailController::class, 'index'])->name('bulk-email.index');
+    Route::post('bulk-email/send', [\App\Http\Controllers\Admin\BulkEmailController::class, 'send'])->name('bulk-email.send');
 
     // Audit Trail
     Route::get('activity-logs', [\App\Http\Controllers\Admin\ActivityLogController::class, 'index'])->name('activity-logs.index');
