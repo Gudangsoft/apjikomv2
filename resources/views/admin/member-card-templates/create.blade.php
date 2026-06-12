@@ -67,7 +67,11 @@
                 <p class="text-xs text-gray-500 mt-1">Jika dicentang, template ini akan langsung digunakan untuk generate kartu</p>
             </div>
 
-            <div class="flex justify-end space-x-3">
+            {{-- Font & Typography Settings --}}
+            @php $fontSettings = $defaultSettings; @endphp
+            @include('admin.member-card-templates.partials.font-settings')
+
+            <div class="mt-6 flex justify-end space-x-3">
                 <a href="{{ route('admin.card-templates.index') }}" 
                    class="px-6 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition">
                     Batal
