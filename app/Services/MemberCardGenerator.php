@@ -164,6 +164,94 @@ class MemberCardGenerator
         return $savePath;
     }
 
+    /**
+     * Generate a preview card image with sample data, returning base64 PNG.
+     */
+    public function generatePreview(MemberCardTemplate $template, array $fontSettingsOverride = []): string
+    {
+        ini_set('memory_limit', '512M');
+
+        $templatePath = storage_path('app/public/' . $template->template_image);
+        if (!file_exists($templatePath)) {
+            throw new \Exception('Template image not found.');
+        }
+
+        $this->fs = array_merge(
+            MemberCardTemplate::defaultFontSettings(),
+            $template->font_settings ?? [],
+            $fontSettingsOverride
+        );
+        $this->resolveFontPaths();
+
+        $manager = new ImageManager(new Driver());
+        $img = $manager->read($templatePath);
+
+        if ($img->width() > 1200) {
+            $img->scale(width: 1200);
+        }
+
+        $cardWidth  = $img->width();
+        $cardHeight = $img->height();
+
+        $lineSpacing = (int) $this->fs['line_spacing'];
+        $dataStartX  = (int) $this->fs['data_start_x'];
+        $dataStartY  = (int) $this->fs['data_start_y'];
+        $centerX     = $cardWidth / 2;
+
+        // Sample address
+        $address      = 'Jln. Tanjung Duren Barat II No. 1 Grogol, Jakarta Barat 11470';
+        $addressLines = $this->wrapText($address, 50, 3);
+        $addressCount = count($addressLines);
+
+        // Photo placeholder
+        $photoX      = 140;
+        $photoWidth  = 200;
+        $photoHeight = 240;
+        $totalHeight = (5 + $addressCount) * $lineSpacing;
+        $photoY = max(220, min(280, $dataStartY + ($totalHeight / 2) - ($photoHeight / 2)));
+
+        $img->drawRectangle($photoX, $photoY, function ($r) use ($photoWidth, $photoHeight) {
+            $r->size($photoWidth, $photoHeight);
+            $r->background('#d1d5db');
+        });
+        $img->text('FOTO', $photoX + ($photoWidth / 2), $photoY + ($photoHeight / 2) - 10, function ($f) {
+            $f->size(20);
+            $f->color('#6b7280');
+            $f->align('center');
+            $f->valign('middle');
+        });
+
+        // Header
+        $headerY        = (int) $this->fs['header_y'];
+        $headerFontSize = (int) $this->fs['header_font_size'];
+        $headerFont     = (bool) $this->fs['header_bold'] ? $this->fontBoldPath : $this->fontRegularPath;
+        $fontColor      = $this->fs['font_color'];
+
+        if ($headerFont) {
+            $img->text('KARTU TANDA ANGGOTA', $centerX, $headerY, fn($f) => $this->applyFont($f, $headerFont, $headerFontSize, $fontColor, 'center'));
+        } else {
+            $img->text('KARTU TANDA ANGGOTA', $centerX, $headerY, fn($f) => $this->applyFontFallback($f, $headerFontSize, $fontColor, 'center'));
+        }
+
+        // Data fields with sample data
+        $opts     = $this->buildRenderOpts();
+        $currentY = $dataStartY;
+
+        $this->addLabelValue($img, 'No.Anggota', 'APJIKOM.12062026.001',                    $dataStartX, $currentY, $opts); $currentY += $lineSpacing;
+        $this->addLabelValue($img, 'Nama',        'Dr. Ahmad Maulidizen, SE.Sy, M.Sh, MM',  $dataStartX, $currentY, $opts); $currentY += $lineSpacing;
+        $this->addLabelValue($img, 'Institusi',   'Universitas Dian Nusantara',              $dataStartX, $currentY, $opts); $currentY += $lineSpacing;
+        $this->addLabelValue($img, 'Kontak',      '087873170896',                            $dataStartX, $currentY, $opts); $currentY += $lineSpacing;
+        $this->addLabelValueMultiline($img, 'Alamat', $addressLines,                         $dataStartX, $currentY, $opts); $currentY += $lineSpacing * $addressCount;
+        $this->addLabelValue($img, 'Berlaku',     'Seumur Hidup',                            $dataStartX, $currentY, $opts);
+
+        // Disahkan
+        $disahkanX = $cardWidth - 280;
+        $disahkanY = $cardHeight - 150;
+        $this->addLabelValue($img, 'Disahkan', '11 Jun 2026', $disahkanX, $disahkanY, $opts);
+
+        return 'data:image/png;base64,' . base64_encode((string) $img->toPng());
+    }
+
     private function resolveFontPaths(): void
     {
         $dir = storage_path('fonts/');

@@ -141,6 +141,28 @@ class MemberCardTemplateController extends Controller
             ->with('success', 'Template kartu anggota berhasil dihapus!');
     }
 
+    public function preview(Request $request, MemberCardTemplate $cardTemplate)
+    {
+        try {
+            $fs = $request->input('font_settings', []);
+            $fs['header_bold'] = filter_var($fs['header_bold'] ?? false, FILTER_VALIDATE_BOOLEAN);
+            $fs['label_bold']  = filter_var($fs['label_bold']  ?? false, FILTER_VALIDATE_BOOLEAN);
+            $fs['value_bold']  = filter_var($fs['value_bold']  ?? false, FILTER_VALIDATE_BOOLEAN);
+
+            // Cast numeric fields
+            foreach (['header_font_size','header_y','label_font_size','value_font_size','line_spacing','label_width','label_gap','data_start_x','data_start_y'] as $key) {
+                if (isset($fs[$key])) $fs[$key] = (int) $fs[$key];
+            }
+
+            $generator = new \App\Services\MemberCardGenerator();
+            $dataUri   = $generator->generatePreview($cardTemplate, $fs);
+
+            return response()->json(['success' => true, 'image' => $dataUri]);
+        } catch (\Throwable $e) {
+            return response()->json(['success' => false, 'error' => $e->getMessage()], 422);
+        }
+    }
+
     public function activate(MemberCardTemplate $cardTemplate)
     {
         $cardTemplate->setAsActive();

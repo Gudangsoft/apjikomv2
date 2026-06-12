@@ -214,6 +214,7 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'admin'])->group(fun
     // Member Card Templates
     Route::resource('card-templates', AdminMemberCardTemplateController::class);
     Route::post('card-templates/{cardTemplate}/activate', [AdminMemberCardTemplateController::class, 'activate'])->name('card-templates.activate');
+    Route::post('card-templates/{cardTemplate}/preview', [AdminMemberCardTemplateController::class, 'preview'])->name('card-templates.preview');
     
     // Certificate Templates Management
     Route::resource('certificate-templates', AdminCertificateTemplateController::class);
