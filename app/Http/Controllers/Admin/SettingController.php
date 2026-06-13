@@ -19,16 +19,17 @@ class SettingController extends Controller
     public function update(Request $request)
     {
         $validated = $request->validate([
-            'satisfaction_rate' => 'required|numeric|min:0|max:100',
-            'site_name' => 'nullable|string|max:255',
-            'site_tagline' => 'nullable|string|max:255',
-            'site_description' => 'nullable|string',
-            'contact_email' => 'nullable|email',
-            'contact_phone' => 'nullable|string',
-            'contact_address' => 'nullable|string',
-            'meta_keywords' => 'nullable|string',
-            'meta_description' => 'nullable|string',
-            'google_analytics' => 'nullable|string',
+            'satisfaction_rate'     => 'required|numeric|min:0|max:100',
+            'site_name'             => 'nullable|string|max:255',
+            'site_tagline'          => 'nullable|string|max:255',
+            'site_description'      => 'nullable|string',
+            'contact_email'         => 'nullable|email',
+            'contact_phone'         => 'nullable|string',
+            'contact_address'       => 'nullable|string',
+            'meta_keywords'         => 'nullable|string',
+            'meta_description'      => 'nullable|string',
+            'google_analytics'      => 'nullable|string',
+            'member_number_prefix'  => 'nullable|string|max:30|alpha_dash',
         ]);
 
         // Handle logo upload
@@ -68,13 +69,16 @@ class SettingController extends Controller
         // Save all text settings
         foreach ($validated as $key => $value) {
             $group = 'general';
-            
+
             if (str_starts_with($key, 'contact_')) {
                 $group = 'contact';
             } elseif (in_array($key, ['meta_keywords', 'meta_description', 'google_analytics'])) {
                 $group = 'seo';
             } elseif ($key === 'satisfaction_rate') {
                 $group = 'statistics';
+            } elseif ($key === 'member_number_prefix') {
+                $group = 'membership';
+                $value = strtoupper(trim($value ?? 'APJIKOM'));
             }
 
             $type = 'text';

@@ -237,7 +237,8 @@ class MemberCardGenerator
         $opts     = $this->buildRenderOpts();
         $currentY = $dataStartY;
 
-        $this->addLabelValue($img, 'No.Anggota', 'APJIKOM.12062026.001',                    $dataStartX, $currentY, $opts); $currentY += $lineSpacing;
+        $prefix = strtoupper(trim(\App\Models\Setting::getValue('member_number_prefix', 'APJIKOM')));
+        $this->addLabelValue($img, 'No.Anggota', "{$prefix}.12062026.001",                  $dataStartX, $currentY, $opts); $currentY += $lineSpacing;
         $this->addLabelValue($img, 'Nama',        'Dr. Ahmad Maulidizen, SE.Sy, M.Sh, MM',  $dataStartX, $currentY, $opts); $currentY += $lineSpacing;
         $this->addLabelValue($img, 'Institusi',   'Universitas Dian Nusantara',              $dataStartX, $currentY, $opts); $currentY += $lineSpacing;
         $this->addLabelValue($img, 'Kontak',      '087873170896',                            $dataStartX, $currentY, $opts); $currentY += $lineSpacing;

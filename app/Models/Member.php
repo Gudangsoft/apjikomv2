@@ -83,24 +83,23 @@ class Member extends Model
     public function generateMemberNumber()
     {
         if ($this->member_number) {
-            return $this->member_number; // Already has number
+            return $this->member_number;
         }
 
-        $date = $this->created_at->format('dmY');
-        
-        // Get last member number for today
-        $lastMember = self::where('member_number', 'LIKE', "APJIKOM.{$date}.%")
+        $prefix = strtoupper(trim(Setting::getValue('member_number_prefix', 'APJIKOM')));
+        $date   = $this->created_at->format('dmY');
+
+        $lastMember = self::where('member_number', 'LIKE', "{$prefix}.{$date}.%")
             ->orderBy('member_number', 'desc')
             ->first();
 
-        if ($lastMember && preg_match('/APJIKOM\.\d{8}\.(\d{3})/', $lastMember->member_number, $matches)) {
-            $lastNumber = intval($matches[1]);
-            $newNumber = str_pad($lastNumber + 1, 3, '0', STR_PAD_LEFT);
+        if ($lastMember && preg_match('/\.(\d{3})$/', $lastMember->member_number, $matches)) {
+            $newNumber = str_pad((int) $matches[1] + 1, 3, '0', STR_PAD_LEFT);
         } else {
             $newNumber = '001';
         }
 
-        $memberNumber = "APJIKOM.{$date}.{$newNumber}";
+        $memberNumber = "{$prefix}.{$date}.{$newNumber}";
         $this->update(['member_number' => $memberNumber]);
 
         return $memberNumber;

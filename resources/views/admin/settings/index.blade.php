@@ -247,6 +247,55 @@
                 </div>
             </div>
 
+            <!-- Membership Settings -->
+            <div class="mb-8 border-t pt-8">
+                <h3 class="text-lg font-semibold text-gray-900 mb-1 flex items-center">
+                    <svg class="w-5 h-5 mr-2 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"/>
+                    </svg>
+                    Pengaturan Keanggotaan
+                </h3>
+                <p class="text-sm text-gray-500 mb-5">Konfigurasi format nomor anggota dan aturan keanggotaan</p>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">
+                            Awalan Nomor Anggota (Prefix)
+                        </label>
+                        <div class="flex items-center gap-2">
+                            <input type="text" name="member_number_prefix"
+                                   value="{{ old('member_number_prefix', $settings->get('membership')?->firstWhere('key', 'member_number_prefix')?->value ?? 'APJIKOM') }}"
+                                   class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 font-mono uppercase"
+                                   placeholder="APJIKOM"
+                                   oninput="updatePreviewNumber(this.value)">
+                        </div>
+                        <p class="text-xs text-gray-500 mt-1">
+                            Contoh format: <strong id="previewMemberNumber" class="text-purple-700 font-mono">{{ $settings->get('membership')?->firstWhere('key', 'member_number_prefix')?->value ?? 'APJIKOM' }}.11062026.001</strong>
+                        </p>
+                        @error('member_number_prefix')
+                            <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                        @enderror
+                    </div>
+
+                    <div class="bg-purple-50 p-4 rounded-lg border border-purple-200">
+                        <div class="flex items-start gap-2">
+                            <svg class="w-5 h-5 text-purple-600 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                            </svg>
+                            <div>
+                                <h4 class="font-semibold text-gray-900 mb-1 text-sm">Format Nomor Anggota</h4>
+                                <p class="text-xs text-gray-600">
+                                    Format: <code class="bg-purple-100 px-1 rounded font-mono">PREFIX.DDMMYYYY.XXX</code>
+                                </p>
+                                <p class="text-xs text-gray-600 mt-1">
+                                    Nomor anggota yang <strong>sudah ada tidak akan berubah</strong> — hanya berlaku untuk anggota baru yang di-approve setelah perubahan ini.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             <!-- Submit Button -->
             <div class="flex justify-end border-t pt-6">
                 <button type="submit" class="px-6 py-3 bg-gradient-to-r from-[#00629B] to-[#0077B6] text-white rounded-lg hover:from-[#004B7A] hover:to-[#005F8D] transition-all shadow-md hover:shadow-lg">
@@ -261,5 +310,13 @@
         </form>
     </div>
 </div>
+@push('scripts')
+<script>
+function updatePreviewNumber(prefix) {
+    const clean = prefix.trim().toUpperCase() || 'APJIKOM';
+    document.getElementById('previewMemberNumber').textContent = clean + '.11062026.001';
+}
+</script>
+@endpush
 @endsection
 
