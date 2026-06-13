@@ -61,7 +61,7 @@ class MemberCardGenerator
         $nameCount         = count($nameLines);
 
         $institutionRaw    = $member->institution_name ?: '-';
-        $institutionLines  = $this->wrapText($institutionRaw, 42, 2);
+        $institutionLines  = $this->wrapText($institutionRaw, 50, 2);
         $institutionCount  = count($institutionLines);
 
         // Total height using consistent spacing formula (lineHeight = 22 for inner multiline rows)
@@ -216,7 +216,7 @@ class MemberCardGenerator
 
         $nameLines        = $this->wrapText($sampleName,        42, 2);
         $nameCount        = count($nameLines);
-        $institutionLines = $this->wrapText($sampleInstitution, 42, 2);
+        $institutionLines = $this->wrapText($sampleInstitution, 50, 2);
         $institutionCount = count($institutionLines);
         $addressLines     = $this->wrapText($sampleAddress,     50, 3);
         $addressCount     = count($addressLines);
