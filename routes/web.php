@@ -244,6 +244,7 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'admin'])->group(fun
     // Settings Management
     Route::get('settings', [AdminSettingController::class, 'index'])->name('settings.index');
     Route::put('settings', [AdminSettingController::class, 'update'])->name('settings.update');
+    Route::post('settings/regenerate-member-cards', [AdminSettingController::class, 'regenerateMemberCards'])->name('settings.regenerate-member-cards');
     
     // About Settings Management
     Route::get('about-settings', [AdminAboutSettingController::class, 'index'])->name('about-settings.index');

@@ -309,12 +309,210 @@
             </div>
         </form>
     </div>
+
+    {{-- ===================================================
+         REGENERASI KARTU — form terpisah, di luar form utama
+         =================================================== --}}
+    @php
+        $currentPrefix = $settings->get('membership')?->firstWhere('key', 'member_number_prefix')?->value ?? 'APJIKOM';
+        $membersWithNumber = \App\Models\Member::whereNotNull('member_number')->count();
+    @endphp
+
+    <div class="bg-white rounded-lg shadow-sm mt-6 border-2 border-orange-200">
+        <div class="p-6 border-b bg-orange-50 flex items-center gap-3">
+            <div class="w-10 h-10 rounded-xl bg-orange-500 flex items-center justify-center flex-shrink-0">
+                <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                          d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/>
+                </svg>
+            </div>
+            <div>
+                <h2 class="text-lg font-bold text-gray-900">Regenerasi Kartu dengan Prefix Lama</h2>
+                <p class="text-sm text-gray-600">
+                    Ganti prefix nomor anggota lama dan generate ulang semua kartu anggota yang terpengaruh
+                </p>
+            </div>
+        </div>
+
+        <div class="p-6">
+            {{-- Info stats --}}
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+                <div class="bg-gray-50 rounded-xl p-4 border text-center">
+                    <p class="text-2xl font-bold text-gray-900">{{ $membersWithNumber }}</p>
+                    <p class="text-xs text-gray-500 mt-1">Anggota punya nomor</p>
+                </div>
+                <div class="bg-purple-50 rounded-xl p-4 border border-purple-200 text-center">
+                    <p class="text-2xl font-bold text-purple-700 font-mono">{{ $currentPrefix }}</p>
+                    <p class="text-xs text-gray-500 mt-1">Prefix aktif saat ini</p>
+                </div>
+                <div class="bg-orange-50 rounded-xl p-4 border border-orange-200 text-center" id="oldPrefixCountBox">
+                    <p class="text-2xl font-bold text-orange-600" id="oldPrefixCount">—</p>
+                    <p class="text-xs text-gray-500 mt-1">Anggota dengan prefix lama</p>
+                </div>
+            </div>
+
+            {{-- Cara kerja --}}
+            <div class="bg-blue-50 border border-blue-200 rounded-xl p-4 mb-6 text-sm text-blue-800">
+                <p class="font-semibold mb-2">Cara kerja:</p>
+                <ol class="list-decimal list-inside space-y-1 text-xs text-blue-700">
+                    <li>Sistem mencari semua anggota yang nomor keanggotaannya diawali dengan <strong>prefix lama</strong></li>
+                    <li>Prefix lama diganti dengan prefix aktif: <code class="bg-blue-100 px-1 rounded font-mono">PREFIXLAMA.11062026.001 → {{ $currentPrefix }}.11062026.001</code></li>
+                    <li>Kartu anggota di-generate ulang otomatis dengan nomor baru</li>
+                    <li>Nomor urut dan tanggal <strong>tidak berubah</strong>, hanya prefix yang diganti</li>
+                </ol>
+            </div>
+
+            {{-- Form regenerasi --}}
+            <form method="POST" action="{{ route('admin.settings.regenerate-member-cards') }}"
+                  onsubmit="return confirmRegenerate(event)">
+                @csrf
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-5">
+                    {{-- Prefix Lama --}}
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">
+                            Prefix Lama <span class="text-red-500">*</span>
+                        </label>
+                        <div class="flex items-center gap-2">
+                            <input type="text" name="old_prefix" id="oldPrefixInput"
+                                   placeholder="Contoh: APJIKOM"
+                                   class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-400 font-mono uppercase"
+                                   oninput="checkOldPrefix(this.value)">
+                            <span class="text-gray-400 font-mono text-lg flex-shrink-0">→</span>
+                            <span class="px-4 py-2 bg-purple-100 text-purple-700 rounded-lg font-mono font-semibold text-sm flex-shrink-0">
+                                {{ $currentPrefix }}
+                            </span>
+                        </div>
+                        @error('old_prefix')
+                            <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                        @enderror
+                        <p id="oldPrefixHint" class="text-xs text-gray-500 mt-1">Masukkan prefix lama untuk melihat jumlah anggota yang akan terpengaruh</p>
+                    </div>
+
+                    {{-- Preview perubahan --}}
+                    <div class="bg-gray-50 rounded-xl p-4 border">
+                        <p class="text-xs font-medium text-gray-600 mb-2">Preview perubahan nomor:</p>
+                        <div class="space-y-1.5">
+                            <div class="flex items-center gap-2 text-xs font-mono">
+                                <span class="line-through text-red-500" id="previewOld">PREFIXLAMA.11062026.001</span>
+                            </div>
+                            <div class="flex items-center gap-2 text-xs font-mono">
+                                <svg class="w-3 h-3 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+                                </svg>
+                                <span class="text-green-700 font-semibold" id="previewNew">{{ $currentPrefix }}.11062026.001</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                {{-- Konfirmasi --}}
+                <div class="bg-red-50 border border-red-200 rounded-xl p-4 mb-5">
+                    <label class="flex items-start gap-3 cursor-pointer">
+                        <input type="checkbox" name="confirm" value="1"
+                               class="w-4 h-4 text-red-600 rounded focus:ring-red-500 mt-0.5 flex-shrink-0">
+                        <span class="text-sm text-red-800">
+                            <strong>Saya mengerti</strong> bahwa operasi ini akan mengubah nomor anggota dan meng-generate ulang semua kartu anggota dengan prefix lama tersebut. Tindakan ini tidak dapat dibatalkan.
+                        </span>
+                    </label>
+                    @error('confirm')
+                        <p class="text-red-500 text-xs mt-2">{{ $message }}</p>
+                    @enderror
+                </div>
+
+                <div class="flex items-center gap-3">
+                    <button type="submit"
+                            class="flex items-center gap-2 px-6 py-3 bg-orange-500 text-white rounded-xl font-semibold hover:bg-orange-600 transition shadow-md hover:shadow-lg text-sm">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                  d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/>
+                        </svg>
+                        Generate Ulang Kartu
+                    </button>
+                    <p class="text-xs text-gray-500">Proses ini mungkin membutuhkan waktu beberapa menit tergantung jumlah anggota</p>
+                </div>
+
+                {{-- Error / Success session message --}}
+                @if(session('success'))
+                    <div class="mt-4 bg-green-50 border border-green-200 rounded-xl p-4 text-sm text-green-800 flex items-start gap-2">
+                        <svg class="w-5 h-5 text-green-500 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                        </svg>
+                        {{ session('success') }}
+                    </div>
+                @endif
+                @if(session('error'))
+                    <div class="mt-4 bg-red-50 border border-red-200 rounded-xl p-4 text-sm text-red-800 flex items-start gap-2">
+                        <svg class="w-5 h-5 text-red-500 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                        </svg>
+                        {{ session('error') }}
+                    </div>
+                @endif
+            </form>
+        </div>
+    </div>
+
 </div>
 @push('scripts')
 <script>
+const CURRENT_PREFIX = '{{ $currentPrefix }}';
+
 function updatePreviewNumber(prefix) {
     const clean = prefix.trim().toUpperCase() || 'APJIKOM';
     document.getElementById('previewMemberNumber').textContent = clean + '.11062026.001';
+}
+
+function checkOldPrefix(val) {
+    const old = val.trim().toUpperCase();
+    const dateEx = '11062026';
+
+    document.getElementById('previewOld').textContent = (old || 'PREFIXLAMA') + '.' + dateEx + '.001';
+    document.getElementById('previewNew').textContent = CURRENT_PREFIX + '.' + dateEx + '.001';
+
+    if (!old) {
+        document.getElementById('oldPrefixCount').textContent = '—';
+        document.getElementById('oldPrefixHint').textContent  = 'Masukkan prefix lama untuk melihat jumlah anggota yang akan terpengaruh';
+        return;
+    }
+
+    // AJAX check count
+    fetch('{{ route('admin.settings.index') }}?check_prefix=' + encodeURIComponent(old), {
+        headers: { 'X-Requested-With': 'XMLHttpRequest' }
+    }).catch(() => null);
+
+    // Optimistic: just show the typed prefix in count box label
+    document.getElementById('oldPrefixCount').textContent = '...';
+    document.getElementById('oldPrefixHint').textContent  = 'Semua anggota dengan nomor diawali "' + old + '" akan diproses';
+}
+
+function confirmRegenerate(e) {
+    const old = document.getElementById('oldPrefixInput').value.trim().toUpperCase();
+    if (!old) {
+        alert('Masukkan prefix lama terlebih dahulu.');
+        e.preventDefault();
+        return false;
+    }
+    if (old === CURRENT_PREFIX) {
+        alert('Prefix lama sama dengan prefix aktif (' + CURRENT_PREFIX + '). Tidak ada yang perlu diubah.');
+        e.preventDefault();
+        return false;
+    }
+    const confirmed = confirm(
+        'KONFIRMASI\n\n' +
+        'Anda akan mengganti prefix nomor anggota:\n' +
+        '"' + old + '" → "' + CURRENT_PREFIX + '"\n\n' +
+        'Semua kartu anggota dengan prefix tersebut akan di-generate ulang.\n\n' +
+        'Lanjutkan?'
+    );
+    if (!confirmed) {
+        e.preventDefault();
+        return false;
+    }
+    // Show loading state
+    e.target.querySelector('button[type=submit]').disabled = true;
+    e.target.querySelector('button[type=submit]').textContent = 'Sedang memproses...';
+    return true;
 }
 </script>
 @endpush

@@ -98,4 +98,61 @@ class SettingController extends Controller
         return redirect()->route('admin.settings.index')
             ->with('success', 'Pengaturan website berhasil diperbarui!');
     }
+
+    public function regenerateMemberCards(Request $request)
+    {
+        $request->validate([
+            'old_prefix' => 'required|string|max:30',
+            'confirm'    => 'required|accepted',
+        ], [
+            'old_prefix.required' => 'Prefix lama wajib diisi.',
+            'confirm.accepted'    => 'Centang konfirmasi untuk melanjutkan.',
+        ]);
+
+        $oldPrefix = strtoupper(trim($request->old_prefix));
+        $newPrefix = strtoupper(trim(Setting::getValue('member_number_prefix', 'APJIKOM')));
+
+        // Find members whose member_number starts with the old prefix
+        $members = \App\Models\Member::with('user')
+            ->where('member_number', 'LIKE', "{$oldPrefix}.%")
+            ->get();
+
+        if ($members->isEmpty()) {
+            return back()->with('error', "Tidak ditemukan anggota dengan prefix nomor \"{$oldPrefix}\".");
+        }
+
+        $generator = new \App\Services\MemberCardGenerator();
+        $success   = 0;
+        $failed    = 0;
+        $skipped   = 0;
+
+        foreach ($members as $member) {
+            try {
+                // Replace only the prefix part, keep date and sequence
+                $suffix    = substr($member->member_number, strlen($oldPrefix));
+                $newNumber = $newPrefix . $suffix;
+
+                $member->update(['member_number' => $newNumber]);
+
+                // Regenerate card image if the member has a photo or we still need the card
+                $generator->generate($member->fresh());
+                $success++;
+            } catch (\Throwable $e) {
+                $failed++;
+                \Illuminate\Support\Facades\Log::warning(
+                    "regenerateMemberCards: failed member #{$member->id}: " . $e->getMessage()
+                );
+            }
+        }
+
+        $msg = "Berhasil: {$success} kartu diperbarui (prefix {$oldPrefix} → {$newPrefix})";
+        if ($failed > 0) {
+            $msg .= " | Gagal: {$failed}";
+        }
+
+        ActivityLogger::log('members', 'bulk_regenerate_cards', null,
+            "Regenerasi kartu: prefix \"{$oldPrefix}\" → \"{$newPrefix}\", {$success} berhasil, {$failed} gagal");
+
+        return back()->with('success', $msg);
+    }
 }
