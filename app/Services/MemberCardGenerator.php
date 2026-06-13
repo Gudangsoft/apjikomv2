@@ -413,9 +413,10 @@ class MemberCardGenerator
 
     private function wrapLongLine($text, $maxCharsPerLine, $maxLines = 3)
     {
-        $words = explode(' ', $text);
-        $lines = [];
+        $words       = explode(' ', $text);
+        $lines       = [];
         $currentLine = '';
+        $hasOverflow = false; // true only when words couldn't fit in maxLines
 
         foreach ($words as $word) {
             $testLine = $currentLine . ($currentLine ? ' ' : '') . $word;
@@ -426,22 +427,34 @@ class MemberCardGenerator
                     $lines[] = $currentLine;
                     $currentLine = $word;
                 } else {
+                    // Single word longer than maxCharsPerLine — hard truncate
                     $lines[] = substr($word, 0, $maxCharsPerLine - 3) . '...';
                     $currentLine = '';
                 }
-                if (count($lines) >= $maxLines) break;
+
+                if (count($lines) >= $maxLines) {
+                    // Still have overflow word in $currentLine (or more words coming)
+                    $hasOverflow = true;
+                    $currentLine = '';
+                    break;
+                }
             }
         }
 
+        // Add the last line if there's still room
         if ($currentLine && count($lines) < $maxLines) {
             $lines[] = $currentLine;
+        } elseif ($currentLine) {
+            // currentLine couldn't be added — overflow
+            $hasOverflow = true;
         }
 
-        if (count($lines) >= $maxLines) {
-            $last = $lines[$maxLines - 1];
-            $lines[$maxLines - 1] = strlen($last) > $maxCharsPerLine - 3
+        // Only append "..." when text genuinely didn't fit
+        if ($hasOverflow && count($lines) > 0) {
+            $last = $lines[count($lines) - 1];
+            $lines[count($lines) - 1] = strlen($last) > $maxCharsPerLine - 3
                 ? substr($last, 0, $maxCharsPerLine - 3) . '...'
-                : $last . '...';
+                : rtrim($last) . '...';
         }
 
         return $lines;
