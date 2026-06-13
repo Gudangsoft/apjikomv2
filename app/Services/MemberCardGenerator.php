@@ -51,13 +51,25 @@ class MemberCardGenerator
         $dataStartX   = (int) $this->fs['data_start_x'];
         $dataStartY   = (int) $this->fs['data_start_y'];
 
-        // Address wrapping
-        $address      = $member->address ?: '-';
-        $addressLines = $this->wrapText($address, 50, 3);
-        $addressCount = count($addressLines);
+        // Pre-calculate multi-line fields so we can size the photo correctly
+        $address           = $member->address ?: '-';
+        $addressLines      = $this->wrapText($address, 50, 3);
+        $addressCount      = count($addressLines);
 
-        $totalDataLines  = 5 + $addressCount;
-        $totalDataHeight = $totalDataLines * $lineSpacing;
+        $nameRaw           = $member->user->name ?? 'N/A';
+        $nameLines         = $this->wrapText($nameRaw, 42, 2);
+        $nameCount         = count($nameLines);
+
+        $institutionRaw    = $member->institution_name ?: '-';
+        $institutionLines  = $this->wrapText($institutionRaw, 42, 2);
+        $institutionCount  = count($institutionLines);
+
+        // Total height using consistent spacing formula (lineHeight = 22 for inner multiline rows)
+        $innerLineH      = 22;
+        $totalDataHeight = (3 * $lineSpacing)                           // No.Anggota + Kontak + Berlaku
+                         + $lineSpacing + ($nameCount        - 1) * $innerLineH
+                         + $lineSpacing + ($institutionCount - 1) * $innerLineH
+                         + $lineSpacing + ($addressCount     - 1) * $innerLineH;
 
         // Photo placement
         $centerX    = $cardWidth / 2;
@@ -112,26 +124,25 @@ class MemberCardGenerator
         }
 
         // === DATA FIELDS ===
-        $opts = $this->buildRenderOpts();
+        $opts       = $this->buildRenderOpts();
+        $lineHeight = $opts['line_height']; // inner line height for multiline values
 
         $currentY = $dataStartY;
 
         $this->addLabelValue($img, 'No.Anggota', $member->member_number ?? 'N/A', $dataStartX, $currentY, $opts);
         $currentY += $lineSpacing;
 
-        $name = $this->truncateText($member->user->name ?? 'N/A', 100);
-        $this->addLabelValue($img, 'Nama', $name, $dataStartX, $currentY, $opts);
-        $currentY += $lineSpacing;
+        $this->addLabelValueMultiline($img, 'Nama', $nameLines, $dataStartX, $currentY, $opts);
+        $currentY += $lineSpacing + ($nameCount - 1) * $lineHeight;
 
-        $institution = $this->truncateText($member->institution_name ?: '-', 45);
-        $this->addLabelValue($img, 'Institusi', $institution, $dataStartX, $currentY, $opts);
-        $currentY += $lineSpacing;
+        $this->addLabelValueMultiline($img, 'Institusi', $institutionLines, $dataStartX, $currentY, $opts);
+        $currentY += $lineSpacing + ($institutionCount - 1) * $lineHeight;
 
         $this->addLabelValue($img, 'Kontak', $member->phone ?: '-', $dataStartX, $currentY, $opts);
         $currentY += $lineSpacing;
 
         $this->addLabelValueMultiline($img, 'Alamat', $addressLines, $dataStartX, $currentY, $opts);
-        $currentY += $lineSpacing * $addressCount;
+        $currentY += $lineSpacing + ($addressCount - 1) * $lineHeight;
 
         $this->addLabelValue($img, 'Berlaku', 'Seumur Hidup', $dataStartX, $currentY, $opts);
 
@@ -198,16 +209,28 @@ class MemberCardGenerator
         $dataStartY  = (int) $this->fs['data_start_y'];
         $centerX     = $cardWidth / 2;
 
-        // Sample address
-        $address      = 'Jln. Tanjung Duren Barat II No. 1 Grogol, Jakarta Barat 11470';
-        $addressLines = $this->wrapText($address, 50, 3);
-        $addressCount = count($addressLines);
+        // Sample data — pre-calculate multi-line fields
+        $sampleName        = 'Dr. Ahmad Maulidizen, SE.Sy, M.Sh, MM';
+        $sampleInstitution = 'Universitas Tunas Pembangunan Surakarta (UTP)';
+        $sampleAddress     = 'Jln. Tanjung Duren Barat II No. 1 Grogol, Jakarta Barat 11470';
+
+        $nameLines        = $this->wrapText($sampleName,        42, 2);
+        $nameCount        = count($nameLines);
+        $institutionLines = $this->wrapText($sampleInstitution, 42, 2);
+        $institutionCount = count($institutionLines);
+        $addressLines     = $this->wrapText($sampleAddress,     50, 3);
+        $addressCount     = count($addressLines);
 
         // Photo placeholder
         $photoX      = 140;
         $photoWidth  = 200;
         $photoHeight = 240;
-        $totalHeight = (5 + $addressCount) * $lineSpacing;
+        // Inner line height for multiline sub-rows
+        $innerLineH  = 22;
+        $totalHeight = (3 * $lineSpacing)
+                     + $lineSpacing + ($nameCount        - 1) * $innerLineH
+                     + $lineSpacing + ($institutionCount - 1) * $innerLineH
+                     + $lineSpacing + ($addressCount     - 1) * $innerLineH;
         $photoY = max(220, min(280, $dataStartY + ($totalHeight / 2) - ($photoHeight / 2)));
 
         $img->drawRectangle($photoX, $photoY, function ($r) use ($photoWidth, $photoHeight) {
@@ -237,13 +260,15 @@ class MemberCardGenerator
         $opts     = $this->buildRenderOpts();
         $currentY = $dataStartY;
 
-        $prefix = strtoupper(trim(\App\Models\Setting::getValue('member_number_prefix', 'APJIKOM')));
-        $this->addLabelValue($img, 'No.Anggota', "{$prefix}.12062026.001",                  $dataStartX, $currentY, $opts); $currentY += $lineSpacing;
-        $this->addLabelValue($img, 'Nama',        'Dr. Ahmad Maulidizen, SE.Sy, M.Sh, MM',  $dataStartX, $currentY, $opts); $currentY += $lineSpacing;
-        $this->addLabelValue($img, 'Institusi',   'Universitas Dian Nusantara',              $dataStartX, $currentY, $opts); $currentY += $lineSpacing;
-        $this->addLabelValue($img, 'Kontak',      '087873170896',                            $dataStartX, $currentY, $opts); $currentY += $lineSpacing;
-        $this->addLabelValueMultiline($img, 'Alamat', $addressLines,                         $dataStartX, $currentY, $opts); $currentY += $lineSpacing * $addressCount;
-        $this->addLabelValue($img, 'Berlaku',     'Seumur Hidup',                            $dataStartX, $currentY, $opts);
+        $lineHeight = $opts['line_height'];
+        $prefix     = strtoupper(trim(\App\Models\Setting::getValue('member_number_prefix', 'APJIKOM')));
+
+        $this->addLabelValue($img,          'No.Anggota', "{$prefix}.12062026.001", $dataStartX, $currentY, $opts); $currentY += $lineSpacing;
+        $this->addLabelValueMultiline($img, 'Nama',        $nameLines,              $dataStartX, $currentY, $opts); $currentY += $lineSpacing + ($nameCount        - 1) * $lineHeight;
+        $this->addLabelValueMultiline($img, 'Institusi',   $institutionLines,       $dataStartX, $currentY, $opts); $currentY += $lineSpacing + ($institutionCount  - 1) * $lineHeight;
+        $this->addLabelValue($img,          'Kontak',      '087873170896',          $dataStartX, $currentY, $opts); $currentY += $lineSpacing;
+        $this->addLabelValueMultiline($img, 'Alamat',      $addressLines,           $dataStartX, $currentY, $opts); $currentY += $lineSpacing + ($addressCount      - 1) * $lineHeight;
+        $this->addLabelValue($img,          'Berlaku',     'Seumur Hidup',          $dataStartX, $currentY, $opts);
 
         // Disahkan
         $disahkanX = $cardWidth - 280;
