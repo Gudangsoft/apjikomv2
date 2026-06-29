@@ -593,7 +593,16 @@ class MemberController extends Controller
      */
     public function showRegistration(Registration $registration)
     {
-        return view('admin.registrations.show', compact('registration'));
+        $existingMember = null;
+
+        if ($registration->status === 'approved') {
+            $user = User::where('email', $registration->email)->first();
+            if ($user) {
+                $existingMember = Member::where('user_id', $user->id)->first();
+            }
+        }
+
+        return view('admin.registrations.show', compact('registration', 'existingMember'));
     }
 
     /**

@@ -238,6 +238,7 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'admin'])->group(fun
     })->name('registrations.index');
     Route::post('registrations/bulk-action', [AdminMemberController::class, 'bulkActionRegistrations'])->name('registrations.bulk-action');
     Route::get('registrations/{registration}', [AdminMemberController::class, 'showRegistration'])->name('registrations.show');
+    Route::get('registrations/{registration}/status', [AdminMemberController::class, 'showRegistration'])->name('registrations.status');
     Route::put('registrations/{registration}/status', [AdminMemberController::class, 'updateRegistrationStatus'])->name('registrations.update-status');
     Route::delete('registrations/{registration}', [AdminMemberController::class, 'destroyRegistration'])->name('registrations.destroy');
     
