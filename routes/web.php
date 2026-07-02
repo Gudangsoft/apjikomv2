@@ -70,9 +70,9 @@ Route::get('/anggota/{member}', [MemberDirectoryController::class, 'show'])->nam
 // Page Routes (Dynamic Pages)
 Route::get('/page/{slug}', [PageController::class, 'show'])->name('page.show');
 
-// Registration Status (Public)
-Route::get('/cek-pendaftaran', [\App\Http\Controllers\RegistrationStatusController::class, 'index'])->name('registration.status');
-Route::post('/cek-pendaftaran', [\App\Http\Controllers\RegistrationStatusController::class, 'check'])->name('registration.status.check')->middleware('throttle:10,1');
+// Registration Status (Public) — redirect ke halaman daftar anggota
+Route::get('/cek-pendaftaran', fn() => redirect('/daftar-anggota', 301))->name('registration.status');
+Route::post('/cek-pendaftaran', fn() => redirect('/daftar-anggota', 301))->name('registration.status.check');
 
 // Registration Routes
 Route::get('/daftar-anggota', [RegistrationController::class, 'create'])->name('registration.create');
@@ -240,6 +240,7 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'admin'])->group(fun
     Route::get('registrations/{registration}', [AdminMemberController::class, 'showRegistration'])->name('registrations.show');
     Route::get('registrations/{registration}/status', [AdminMemberController::class, 'showRegistration'])->name('registrations.status');
     Route::put('registrations/{registration}/status', [AdminMemberController::class, 'updateRegistrationStatus'])->name('registrations.update-status');
+    Route::post('registrations/{registration}/retry-member', [AdminMemberController::class, 'retryMemberCreation'])->name('registrations.retry-member');
     Route::delete('registrations/{registration}', [AdminMemberController::class, 'destroyRegistration'])->name('registrations.destroy');
     
     // Settings Management

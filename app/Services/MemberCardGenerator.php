@@ -56,7 +56,7 @@ class MemberCardGenerator
         $addressLines      = $this->wrapText($address, 50, 3);
         $addressCount      = count($addressLines);
 
-        $nameRaw           = $member->user->name ?? 'N/A';
+        $nameRaw           = $member->user?->name ?? 'N/A';
         $nameLines         = $this->wrapText($nameRaw, 42, 2);
         $nameCount         = count($nameLines);
 

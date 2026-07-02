@@ -627,22 +627,108 @@ class MemberController extends Controller
             // Check if user already exists
             $existingUser = User::where('email', $registration->email)->first();
             
-            if (!$existingUser) {
-                // Create user with random password
-                $password = \Illuminate\Support\Str::random(12);
-                $user = User::create([
+            $memberType = $registration->type === 'prodi' ? 'institution' : 'individual';
+
+            try {
+                $password    = null;
+                $newAccount  = false;
+
+                if (!$existingUser) {
+                    $password   = \Illuminate\Support\Str::random(12);
+                    $existingUser = User::create([
+                        'name'     => $registration->full_name,
+                        'email'    => $registration->email,
+                        'password' => Hash::make($password),
+                        'role'     => 'member',
+                    ]);
+                    $newAccount = true;
+                }
+
+                // Only create member if one doesn't exist yet for this user
+                $existingMember = Member::where('user_id', $existingUser->id)->first();
+                if (!$existingMember) {
+                    $member = Member::create([
+                        'user_id'          => $existingUser->id,
+                        'institution_name' => $registration->institution ?? null,
+                        'position'         => $registration->position ?? null,
+                        'member_type'      => $memberType,
+                        'phone'            => $registration->phone,
+                        'address'          => $registration->address,
+                        'city'             => $registration->city ?? null,
+                        'province'         => $registration->province ?? null,
+                        'photo'            => $registration->photo ?? null,
+                        'status'           => 'active',
+                        'join_date'        => now(),
+                        'expiry_date'      => now()->addYear(),
+                    ]);
+                    $member->generateMemberNumber();
+                    $registration->update(['member_id' => $member->id]);
+
+                    if ($registration->photo) {
+                        try {
+                            $generator = new MemberCardGenerator();
+                            $cardPath  = $generator->generate($member->fresh());
+                            $member->update(['member_card' => $cardPath]);
+                        } catch (\Throwable $e) {
+                            \Log::error('Card generation failed: ' . $e->getMessage());
+                        }
+                    }
+
+                    if ($newAccount && $password) {
+                        try {
+                            \Mail::to($existingUser->email)->send(
+                                new \App\Mail\MemberApproved($existingUser, $password, $member)
+                            );
+                        } catch (\Throwable $e) {
+                            \Log::warning('Failed to send approval email: ' . $e->getMessage());
+                        }
+                    }
+                } else {
+                    $registration->update(['member_id' => $existingMember->id]);
+                }
+            } catch (\Throwable $e) {
+                \Log::error('Member creation failed for registration #' . $registration->id . ': ' . $e->getMessage());
+            }
+        }
+
+        return redirect()->route('admin.members.index', ['tab' => 'registrations'])
+            ->with('success', 'Status pendaftaran berhasil diperbarui!');
+    }
+
+    /**
+     * Re-process member creation for already-approved registrations
+     */
+    public function retryMemberCreation(Registration $registration)
+    {
+        if ($registration->status !== 'approved') {
+            return back()->with('error', 'Pendaftaran belum disetujui.');
+        }
+
+        $memberType = $registration->type === 'prodi' ? 'institution' : 'individual';
+
+        try {
+            $password   = null;
+            $newAccount = false;
+
+            $user = User::where('email', $registration->email)->first();
+            if (!$user) {
+                $password   = \Illuminate\Support\Str::random(12);
+                $user       = User::create([
                     'name'     => $registration->full_name,
                     'email'    => $registration->email,
                     'password' => Hash::make($password),
                     'role'     => 'member',
                 ]);
+                $newAccount = true;
+            }
 
-                // Create member (member_number generated after create)
+            $member = Member::where('user_id', $user->id)->first();
+            if (!$member) {
                 $member = Member::create([
                     'user_id'          => $user->id,
-                    'institution_name' => $registration->institution,
+                    'institution_name' => $registration->institution ?? null,
                     'position'         => $registration->position ?? null,
-                    'member_type'      => $registration->type,
+                    'member_type'      => $memberType,
                     'phone'            => $registration->phone,
                     'address'          => $registration->address,
                     'city'             => $registration->city ?? null,
@@ -653,32 +739,38 @@ class MemberController extends Controller
                     'expiry_date'      => now()->addYear(),
                 ]);
                 $member->generateMemberNumber();
+            }
 
-                // Update registration with member_id
-                $registration->update(['member_id' => $member->id]);
+            $registration->update(['member_id' => $member->id]);
 
-                // Generate member card if card generator available
-                if ($registration->photo) {
-                    try {
-                        $generator = new MemberCardGenerator();
-                        $cardPath = $generator->generate($member);
-                        $member->update(['member_card' => $cardPath]);
-                    } catch (\Exception $e) {
-                        \Log::error('Card generation failed: ' . $e->getMessage());
-                    }
-                }
-
-                // Send approval email with credentials
+            if ($registration->photo && !$member->member_card) {
                 try {
-                    \Mail::to($user->email)->send(new \App\Mail\MemberApproved($user, $password, $member));
-                } catch (\Exception $e) {
+                    $generator = new MemberCardGenerator();
+                    $cardPath  = $generator->generate($member->fresh());
+                    $member->update(['member_card' => $cardPath]);
+                } catch (\Throwable $e) {
+                    \Log::error('Card generation failed: ' . $e->getMessage());
+                }
+            }
+
+            if ($newAccount && $password) {
+                try {
+                    \Mail::to($user->email)->send(
+                        new \App\Mail\MemberApproved($user, $password, $member)
+                    );
+                } catch (\Throwable $e) {
                     \Log::warning('Failed to send approval email: ' . $e->getMessage());
                 }
             }
-        }
 
-        return redirect()->route('admin.members.index', ['tab' => 'registrations'])
-            ->with('success', 'Status pendaftaran berhasil diperbarui!');
+            return redirect()
+                ->route('admin.registrations.show', $registration->id)
+                ->with('success', 'Member berhasil dibuat! No. Anggota: ' . $member->member_number);
+
+        } catch (\Throwable $e) {
+            \Log::error('retryMemberCreation failed: ' . $e->getMessage());
+            return back()->with('error', 'Gagal membuat member: ' . $e->getMessage());
+        }
     }
 
     /**
