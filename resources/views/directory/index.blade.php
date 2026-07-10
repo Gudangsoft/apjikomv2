@@ -116,6 +116,88 @@
                         @endif
                     </form>
                 </div>
+
+                {{-- ── Sebaran Anggota Chart ── --}}
+                @if($institutionChart->count() > 0 || $provinceChart->count() > 0)
+                <div class="bg-white rounded-xl shadow-lg p-5 mt-4">
+
+                    {{-- Header --}}
+                    <div class="flex items-center gap-2 mb-3">
+                        <div class="w-6 h-6 rounded-md bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center flex-shrink-0">
+                            <svg class="w-3.5 h-3.5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
+                            </svg>
+                        </div>
+                        <span class="text-sm font-bold text-gray-900">Sebaran Anggota</span>
+                    </div>
+
+                    {{-- Tabs --}}
+                    @if($institutionChart->count() > 0 && $provinceChart->count() > 0)
+                    <div class="flex gap-1 mb-4 bg-gray-100 rounded-lg p-1">
+                        <button onclick="switchMemberChart('institution')" id="mctab-institution"
+                                class="flex-1 py-1 px-2 rounded-md text-xs font-semibold transition-all bg-white text-blue-600 shadow-sm">
+                            Institusi
+                        </button>
+                        <button onclick="switchMemberChart('province')" id="mctab-province"
+                                class="flex-1 py-1 px-2 rounded-md text-xs font-semibold transition-all text-gray-500 hover:text-gray-700">
+                            Provinsi
+                        </button>
+                    </div>
+                    @elseif($provinceChart->count() > 0)
+                    <p class="text-xs font-semibold text-gray-500 mb-3">Berdasarkan Provinsi</p>
+                    @else
+                    <p class="text-xs font-semibold text-gray-500 mb-3">Berdasarkan Institusi</p>
+                    @endif
+
+                    {{-- Institution Panel --}}
+                    @if($institutionChart->count() > 0)
+                    @php $maxInst = $institutionChart->max(); @endphp
+                    <div id="mc-panel-institution" class="space-y-2.5">
+                        @foreach($institutionChart as $instName => $instCount)
+                        @php $instPct = $maxInst > 0 ? round($instCount / $maxInst * 100) : 0; @endphp
+                        <div>
+                            <div class="flex items-baseline justify-between gap-1 mb-1">
+                                <span class="text-xs text-gray-700 leading-tight truncate" style="max-width:78%"
+                                      title="{{ $instName }}">
+                                    {{ \Illuminate\Support\Str::limit($instName, 28) }}
+                                </span>
+                                <span class="text-xs font-bold text-gray-900 flex-shrink-0">{{ $instCount }}</span>
+                            </div>
+                            <div class="h-1.5 bg-gray-100 rounded-full overflow-hidden">
+                                <div class="h-full rounded-full bg-gradient-to-r from-blue-500 to-indigo-500 chart-bar"
+                                     data-width="{{ $instPct }}" style="width:0%"></div>
+                            </div>
+                        </div>
+                        @endforeach
+                    </div>
+                    @endif
+
+                    {{-- Province Panel --}}
+                    @if($provinceChart->count() > 0)
+                    @php $maxProv = $provinceChart->max(); @endphp
+                    <div id="mc-panel-province" class="{{ $institutionChart->count() > 0 ? 'hidden' : '' }} space-y-2.5">
+                        @foreach($provinceChart as $provName => $provCount)
+                        @php $provPct = $maxProv > 0 ? round($provCount / $maxProv * 100) : 0; @endphp
+                        <div>
+                            <div class="flex items-baseline justify-between gap-1 mb-1">
+                                <span class="text-xs text-gray-700 leading-tight truncate" style="max-width:78%"
+                                      title="{{ $provName }}">
+                                    {{ \Illuminate\Support\Str::limit($provName, 28) }}
+                                </span>
+                                <span class="text-xs font-bold text-gray-900 flex-shrink-0">{{ $provCount }}</span>
+                            </div>
+                            <div class="h-1.5 bg-gray-100 rounded-full overflow-hidden">
+                                <div class="h-full rounded-full bg-gradient-to-r from-purple-500 to-pink-500 chart-bar"
+                                     data-width="{{ $provPct }}" style="width:0%"></div>
+                            </div>
+                        </div>
+                        @endforeach
+                    </div>
+                    @endif
+
+                    <p class="text-[10px] text-gray-400 mt-3 text-center">Hanya anggota terverifikasi</p>
+                </div>
+                @endif
             </div>
             
             <!-- Members Grid -->
@@ -265,4 +347,59 @@
         </div>
     </div>
 </div>
+@push('scripts')
+<script>
+// Animate bars on load using IntersectionObserver
+(function () {
+    const animateBars = (panel) => {
+        if (!panel) return;
+        panel.querySelectorAll('.chart-bar').forEach(bar => {
+            const target = bar.dataset.width || 0;
+            requestAnimationFrame(() => {
+                bar.style.transition = 'width 0.6s cubic-bezier(.4,0,.2,1)';
+                bar.style.width = target + '%';
+            });
+        });
+    };
+
+    const observer = new IntersectionObserver(entries => {
+        entries.forEach(e => {
+            if (e.isIntersecting) {
+                animateBars(e.target);
+                observer.unobserve(e.target);
+            }
+        });
+    }, { threshold: 0.2 });
+
+    document.querySelectorAll('#mc-panel-institution, #mc-panel-province').forEach(el => {
+        if (el) observer.observe(el);
+    });
+})();
+
+function switchMemberChart(tab) {
+    const panels  = { institution: document.getElementById('mc-panel-institution'), province: document.getElementById('mc-panel-province') };
+    const tabs    = { institution: document.getElementById('mctab-institution'),    province: document.getElementById('mctab-province') };
+    const active  = 'flex-1 py-1 px-2 rounded-md text-xs font-semibold transition-all bg-white text-blue-600 shadow-sm';
+    const passive = 'flex-1 py-1 px-2 rounded-md text-xs font-semibold transition-all text-gray-500 hover:text-gray-700';
+
+    Object.keys(panels).forEach(key => {
+        if (!panels[key]) return;
+        panels[key].classList.toggle('hidden', key !== tab);
+        if (tabs[key]) tabs[key].className = key === tab ? active : passive;
+    });
+
+    // Animate bars when tab is shown
+    if (panels[tab]) {
+        panels[tab].querySelectorAll('.chart-bar').forEach(bar => {
+            bar.style.width = '0%';
+            setTimeout(() => {
+                bar.style.transition = 'width 0.6s cubic-bezier(.4,0,.2,1)';
+                bar.style.width = (bar.dataset.width || 0) + '%';
+            }, 30);
+        });
+    }
+}
+</script>
+@endpush
+
 @endsection

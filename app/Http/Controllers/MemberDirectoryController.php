@@ -73,7 +73,31 @@ class MemberDirectoryController extends Controller
             'institution' => Member::where('show_in_directory', true)->where('status', 'active')->where('member_type', 'institution')->count(),
         ];
 
-        return view('directory.index', compact('members', 'institutions', 'statistics'));
+        // Institution distribution chart (top 8)
+        $institutionChart = Member::where('show_in_directory', true)
+            ->where('is_verified', true)
+            ->where('status', 'active')
+            ->whereNotNull('institution_name')
+            ->where('institution_name', '!=', '')
+            ->selectRaw('institution_name, COUNT(*) as count')
+            ->groupBy('institution_name')
+            ->orderByDesc('count')
+            ->limit(8)
+            ->pluck('count', 'institution_name');
+
+        // Province distribution chart (top 10)
+        $provinceChart = Member::where('show_in_directory', true)
+            ->where('is_verified', true)
+            ->where('status', 'active')
+            ->whereNotNull('province')
+            ->where('province', '!=', '')
+            ->selectRaw('province, COUNT(*) as count')
+            ->groupBy('province')
+            ->orderByDesc('count')
+            ->limit(10)
+            ->pluck('count', 'province');
+
+        return view('directory.index', compact('members', 'institutions', 'statistics', 'institutionChart', 'provinceChart'));
     }
 
     public function show(Member $member)
