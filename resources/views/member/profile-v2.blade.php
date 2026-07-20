@@ -599,19 +599,17 @@
                                 </div>
                             @endif
                             
-                            <!-- Upload Button - Lebih Terlihat -->
-                            <form action="{{ route('member.profile.upload-photo') }}" method="POST" enctype="multipart/form-data" id="photoForm">
-                                @csrf
-                                <input type="file" name="photo" id="photoInput" accept="image/*" class='hidden' onchange="document.getElementById('photoForm').submit()">
-                                <button type="button" onclick="document.getElementById('photoInput').click()" class='absolute bottom-4 right-4 p-4 rounded-full bg-yellow-500 hover:bg-yellow-600 text-white shadow-2xl transition transform hover:scale-125 border-4 border-white z-10'>
-                                    <svg class='w-7 h-7' fill='none' stroke='currentColor' viewBox='0 0 24 24' stroke-width='2.5'>
-                                        <path stroke-linecap='round' stroke-linejoin='round' d='M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z'/>
-                                        <path stroke-linecap='round' stroke-linejoin='round' d='M15 13a3 3 0 11-6 0 3 3 0 016 0z'/>
-                                    </svg>
-                                </button>
-                            </form>
+                            <!-- Upload Button -->
+                            <input type="file" name="photo" id="photoInput" accept="image/*" class='hidden' onchange="openCropModal(this)">
+                            <button type="button" onclick="document.getElementById('photoInput').click()"
+                                    class='absolute bottom-4 right-4 p-4 rounded-full bg-yellow-500 hover:bg-yellow-600 text-white shadow-2xl transition transform hover:scale-125 border-4 border-white z-10'>
+                                <svg class='w-7 h-7' fill='none' stroke='currentColor' viewBox='0 0 24 24' stroke-width='2.5'>
+                                    <path stroke-linecap='round' stroke-linejoin='round' d='M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z'/>
+                                    <path stroke-linecap='round' stroke-linejoin='round' d='M15 13a3 3 0 11-6 0 3 3 0 016 0z'/>
+                                </svg>
+                            </button>
                         </div>
-                        <p class='text-xs text-gray-500 mt-3 text-center'>Klik tombol kuning untuk upload foto (max 2MB)</p>
+                        <p class='text-xs text-gray-500 mt-3 text-center'>Klik tombol kuning untuk upload &amp; crop foto</p>
                         
                         @if($member->photo)
                         <form action="{{ route('member.profile.delete-photo') }}" method="POST" onsubmit="return confirm('Yakin ingin menghapus foto?')" class='mt-3'>
@@ -1310,4 +1308,169 @@ document.addEventListener('DOMContentLoaded', function() {
 
 <!-- Password Strength Meter Script -->
 <script src="{{ asset('js/password-strength-meter.js') }}"></script>
+
+{{-- ── Crop Modal ── --}}
+<div id="cropModal" class="fixed inset-0 z-[999] flex items-center justify-center bg-black/75 hidden p-4">
+    <div class="bg-white rounded-2xl shadow-2xl w-full max-w-md overflow-hidden flex flex-col max-h-[90vh]">
+
+        {{-- Header --}}
+        <div class="bg-gradient-to-r from-purple-600 to-purple-800 px-5 py-4 flex items-center justify-between flex-shrink-0">
+            <div class="flex items-center gap-2 text-white">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                </svg>
+                <h3 class="font-bold text-base">Sesuaikan Foto Profil</h3>
+            </div>
+            <button onclick="closeCropModal()" class="text-white/70 hover:text-white transition">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                </svg>
+            </button>
+        </div>
+
+        {{-- Crop Area --}}
+        <div class="p-4 overflow-auto flex-1">
+            <div class="bg-gray-900 rounded-xl overflow-hidden" style="max-height:340px">
+                <img id="cropImage" src="" alt="Crop" class="block max-w-full">
+            </div>
+
+            {{-- Info --}}
+            <p class="text-xs text-gray-500 mt-2 text-center">
+                Geser atau zoom untuk menyesuaikan area foto (rasio 3:4 untuk KTA)
+            </p>
+
+            {{-- Controls --}}
+            <div class="flex items-center justify-center gap-2 mt-3">
+                <button type="button" onclick="cropperAction('rotate', -90)"
+                        class="flex items-center gap-1.5 px-3 py-2 rounded-lg border border-gray-200 text-gray-600 hover:bg-gray-100 text-xs font-medium transition">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 15l-3-3m0 0l3-3m-3 3h8M3 12a9 9 0 1118 0 9 9 0 01-18 0z" transform="scale(-1,1) translate(-24,0)"/>
+                    </svg>
+                    Putar Kiri
+                </button>
+                <button type="button" onclick="cropperAction('rotate', 90)"
+                        class="flex items-center gap-1.5 px-3 py-2 rounded-lg border border-gray-200 text-gray-600 hover:bg-gray-100 text-xs font-medium transition">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 9l3 3m0 0l-3 3m3-3H8m13 0a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                    </svg>
+                    Putar Kanan
+                </button>
+                <button type="button" onclick="cropperAction('flipX')"
+                        class="flex items-center gap-1.5 px-3 py-2 rounded-lg border border-gray-200 text-gray-600 hover:bg-gray-100 text-xs font-medium transition">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"/>
+                    </svg>
+                    Balik
+                </button>
+            </div>
+        </div>
+
+        {{-- Actions --}}
+        <div class="px-4 pb-4 flex gap-3 flex-shrink-0 border-t border-gray-100 pt-3">
+            <button type="button" onclick="closeCropModal()"
+                    class="flex-1 py-2.5 border-2 border-gray-300 text-gray-700 rounded-xl font-semibold hover:bg-gray-50 transition text-sm">
+                Batal
+            </button>
+            <button type="button" onclick="saveCrop()" id="saveCropBtn"
+                    class="flex-1 py-2.5 bg-gradient-to-r from-purple-600 to-purple-700 text-white rounded-xl font-bold hover:from-purple-700 hover:to-purple-800 shadow-lg transition text-sm flex items-center justify-center gap-2">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                </svg>
+                Simpan Foto
+            </button>
+        </div>
+    </div>
+</div>
+
+@push('scripts')
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.2/cropper.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.2/cropper.min.js"></script>
+<script>
+let _cropper   = null;
+let _flipState = 1; // track horizontal flip
+
+function openCropModal(input) {
+    if (!input.files || !input.files[0]) return;
+    _flipState = 1;
+    const reader = new FileReader();
+    reader.onload = function (e) {
+        const img = document.getElementById('cropImage');
+        img.src = e.target.result;
+        document.getElementById('cropModal').classList.remove('hidden');
+        document.body.style.overflow = 'hidden';
+
+        if (_cropper) { _cropper.destroy(); _cropper = null; }
+
+        _cropper = new Cropper(img, {
+            aspectRatio: 3 / 4,
+            viewMode  : 1,
+            dragMode  : 'move',
+            autoCropArea: 0.9,
+            responsive: true,
+            checkOrientation: true,
+            guides    : true,
+            background: false,
+        });
+    };
+    reader.readAsDataURL(input.files[0]);
+}
+
+function cropperAction(action, value) {
+    if (!_cropper) return;
+    if (action === 'rotate') {
+        _cropper.rotate(value);
+    } else if (action === 'flipX') {
+        _flipState *= -1;
+        _cropper.scaleX(_flipState);
+    }
+}
+
+function closeCropModal() {
+    document.getElementById('cropModal').classList.add('hidden');
+    document.body.style.overflow = '';
+    if (_cropper) { _cropper.destroy(); _cropper = null; }
+    document.getElementById('photoInput').value = '';
+}
+
+function saveCrop() {
+    if (!_cropper) return;
+    const btn = document.getElementById('saveCropBtn');
+    btn.disabled = true;
+    btn.innerHTML = '<svg class="w-4 h-4 animate-spin" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg> Menyimpan...';
+
+    _cropper.getCroppedCanvas({ width: 600, height: 800, imageSmoothingQuality: 'high' })
+        .toBlob(function (blob) {
+            const form = new FormData();
+            form.append('_token', document.querySelector('meta[name="csrf-token"]')
+                ? document.querySelector('meta[name="csrf-token"]').content
+                : '{{ csrf_token() }}');
+            form.append('photo', blob, 'profile-photo.jpg');
+
+            fetch('{{ route("member.profile.upload-photo") }}', {
+                method : 'POST',
+                body   : form,
+                headers: { 'Accept': 'application/json, text/html, */*' },
+            })
+            .then(function (r) {
+                if (r.ok || r.redirected || r.status === 302) {
+                    window.location.reload();
+                } else {
+                    return r.text().then(function (t) { throw new Error(t); });
+                }
+            })
+            .catch(function (err) {
+                console.error(err);
+                btn.disabled = false;
+                btn.innerHTML = '<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg> Simpan Foto';
+                alert('Gagal menyimpan foto. Silakan coba lagi.');
+            });
+        }, 'image/jpeg', 0.92);
+}
+
+// Close modal when clicking backdrop
+document.getElementById('cropModal').addEventListener('click', function (e) {
+    if (e.target === this) closeCropModal();
+});
+</script>
+@endpush
 @endsection

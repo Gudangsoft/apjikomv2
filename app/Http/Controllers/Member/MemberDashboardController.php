@@ -463,12 +463,12 @@ class MemberDashboardController extends Controller
         }
 
         $request->validate([
-            'photo' => 'required|image|mimes:jpg,jpeg,png|max:2048',
+            'photo' => 'required|image|mimes:jpg,jpeg,png,webp|max:5120',
         ], [
             'photo.required' => 'Foto harus diunggah',
-            'photo.image' => 'File harus berupa gambar',
-            'photo.mimes' => 'Foto harus dalam format JPG atau PNG',
-            'photo.max' => 'Ukuran foto maksimal 2MB',
+            'photo.image'    => 'File harus berupa gambar',
+            'photo.mimes'    => 'Foto harus dalam format JPG, PNG, atau WebP',
+            'photo.max'      => 'Ukuran foto maksimal 5MB',
         ]);
 
         // Delete old photo if exists
