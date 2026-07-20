@@ -1309,167 +1309,381 @@ document.addEventListener('DOMContentLoaded', function() {
 <!-- Password Strength Meter Script -->
 <script src="{{ asset('js/password-strength-meter.js') }}"></script>
 
-{{-- ── Crop Modal ── --}}
-<div id="cropModal" class="fixed inset-0 z-[999] flex items-center justify-center bg-black/75 hidden p-4">
-    <div class="bg-white rounded-2xl shadow-2xl w-full max-w-md overflow-hidden flex flex-col max-h-[90vh]">
+{{-- ── Crop Modal (WA-style, no external library) ── --}}
+<div id="cropModal" class="fixed inset-0 z-[999] flex items-end sm:items-center justify-center bg-black/80 hidden">
+    <div class="bg-gray-900 rounded-t-2xl sm:rounded-2xl w-full max-w-sm overflow-hidden flex flex-col" style="max-height:96dvh">
 
-        {{-- Header --}}
-        <div class="bg-gradient-to-r from-purple-600 to-purple-800 px-5 py-4 flex items-center justify-between flex-shrink-0">
-            <div class="flex items-center gap-2 text-white">
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
-                </svg>
-                <h3 class="font-bold text-base">Sesuaikan Foto Profil</h3>
-            </div>
-            <button onclick="closeCropModal()" class="text-white/70 hover:text-white transition">
-                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
-                </svg>
-            </button>
-        </div>
-
-        {{-- Crop Area --}}
-        <div class="p-4 overflow-auto flex-1">
-            <div class="bg-gray-900 rounded-xl overflow-hidden" style="max-height:340px">
-                <img id="cropImage" src="" alt="Crop" class="block max-w-full">
-            </div>
-
-            {{-- Info --}}
-            <p class="text-xs text-gray-500 mt-2 text-center">
-                Geser atau zoom untuk menyesuaikan area foto (rasio 3:4 untuk KTA)
-            </p>
-
-            {{-- Controls --}}
-            <div class="flex items-center justify-center gap-2 mt-3">
-                <button type="button" onclick="cropperAction('rotate', -90)"
-                        class="flex items-center gap-1.5 px-3 py-2 rounded-lg border border-gray-200 text-gray-600 hover:bg-gray-100 text-xs font-medium transition">
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 15l-3-3m0 0l3-3m-3 3h8M3 12a9 9 0 1118 0 9 9 0 01-18 0z" transform="scale(-1,1) translate(-24,0)"/>
-                    </svg>
-                    Putar Kiri
-                </button>
-                <button type="button" onclick="cropperAction('rotate', 90)"
-                        class="flex items-center gap-1.5 px-3 py-2 rounded-lg border border-gray-200 text-gray-600 hover:bg-gray-100 text-xs font-medium transition">
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 9l3 3m0 0l-3 3m3-3H8m13 0a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                    </svg>
-                    Putar Kanan
-                </button>
-                <button type="button" onclick="cropperAction('flipX')"
-                        class="flex items-center gap-1.5 px-3 py-2 rounded-lg border border-gray-200 text-gray-600 hover:bg-gray-100 text-xs font-medium transition">
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"/>
-                    </svg>
-                    Balik
-                </button>
-            </div>
-        </div>
-
-        {{-- Actions --}}
-        <div class="px-4 pb-4 flex gap-3 flex-shrink-0 border-t border-gray-100 pt-3">
+        {{-- Title bar --}}
+        <div class="flex items-center justify-between px-5 py-3 bg-gray-800 flex-shrink-0">
             <button type="button" onclick="closeCropModal()"
-                    class="flex-1 py-2.5 border-2 border-gray-300 text-gray-700 rounded-xl font-semibold hover:bg-gray-50 transition text-sm">
-                Batal
-            </button>
+                    class="text-gray-300 hover:text-white text-sm font-medium px-1 py-1">Batal</button>
+            <span class="text-white font-semibold text-sm">Foto Profil</span>
             <button type="button" onclick="saveCrop()" id="saveCropBtn"
-                    class="flex-1 py-2.5 bg-gradient-to-r from-purple-600 to-purple-700 text-white rounded-xl font-bold hover:from-purple-700 hover:to-purple-800 shadow-lg transition text-sm flex items-center justify-center gap-2">
-                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                    class="text-purple-400 hover:text-purple-300 font-bold text-sm px-1 py-1">Simpan</button>
+        </div>
+
+        {{-- Canvas (crop stage) --}}
+        <div class="relative bg-black flex-shrink-0" style="height:340px;overflow:hidden">
+            <canvas id="cropCanvas" style="display:block;touch-action:none;cursor:grab;width:100%;height:340px"></canvas>
+        </div>
+
+        {{-- Zoom slider --}}
+        <div class="flex items-center gap-3 px-5 py-3 bg-gray-800 flex-shrink-0">
+            <svg class="w-4 h-4 text-gray-400 flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                <circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/><path d="M8 11h6"/>
+            </svg>
+            <input type="range" id="zoomSlider" min="0" max="100" value="0"
+                   oninput="CP.onSlider(this.value)"
+                   class="flex-1 cursor-pointer accent-purple-500"
+                   style="height:4px">
+            <svg class="w-5 h-5 text-gray-400 flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                <circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/><path d="M8 11h6M11 8v6"/>
+            </svg>
+        </div>
+
+        {{-- Rotate row --}}
+        <div class="flex justify-center gap-6 py-3 bg-gray-900 flex-shrink-0 border-t border-white/5">
+            <button type="button" onclick="CP.rotate(-90)"
+                    class="flex flex-col items-center gap-1 text-gray-400 hover:text-white transition text-xs">
+                <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/>
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M3 3v5h5"/>
                 </svg>
-                Simpan Foto
+                Kiri
+            </button>
+            <button type="button" onclick="CP.rotate(90)"
+                    class="flex flex-col items-center gap-1 text-gray-400 hover:text-white transition text-xs">
+                <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M21 12a9 9 0 1 1-9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"/>
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M21 3v5h-5"/>
+                </svg>
+                Kanan
+            </button>
+            <button type="button" onclick="CP.flip()"
+                    class="flex flex-col items-center gap-1 text-gray-400 hover:text-white transition text-xs">
+                <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M8 3H5a2 2 0 0 0-2 2v14c0 1.1.9 2 2 2h3M16 3h3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-3M12 3v18"/>
+                </svg>
+                Balik
             </button>
         </div>
     </div>
 </div>
 
 @push('scripts')
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.2/cropper.min.css">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.2/cropper.min.js"></script>
 <script>
-let _cropper   = null;
-let _flipState = 1; // track horizontal flip
+/* ─── Crop Processor (CP) ─── no external lib ─────────────────────── */
+const CP = (() => {
+    let canvas, ctx, img, W, H;
+    /* image state */
+    let ix = 0, iy = 0, isc = 1, minSc = 1, maxSc = 4, flipped = 1, angle = 0;
+    /* drag state */
+    let drag = false, lx = 0, ly = 0;
+    /* crop box (3:4 centred in canvas) */
+    let bx, by, bw, bh;
+
+    function init() {
+        canvas = document.getElementById('cropCanvas');
+        ctx    = canvas.getContext('2d');
+    }
+
+    function load(src) {
+        const i = new Image();
+        i.onload = () => { img = i; setup(); };
+        i.src = src;
+    }
+
+    function setup() {
+        /* size canvas to match CSS pixels */
+        W = canvas.offsetWidth  || 375;
+        H = canvas.offsetHeight || 340;
+        canvas.width  = W;
+        canvas.height = H;
+
+        /* crop box: 3:4, 78% of narrower dimension */
+        bw = Math.floor(Math.min(W, H) * 0.72);
+        bh = Math.floor(bw * 4 / 3);
+        bx = (W - bw) / 2;
+        by = (H - bh) / 2;
+
+        resetTransform();
+        bindEvents();
+        draw();
+    }
+
+    function resetTransform() {
+        flipped = 1; angle = 0;
+        minSc = Math.max(bw / img.naturalWidth, bh / img.naturalHeight);
+        maxSc = minSc * 4;
+        isc   = minSc;
+        centre();
+        document.getElementById('zoomSlider').value = 0;
+    }
+
+    function centre() {
+        ix = bx + (bw - img.naturalWidth  * isc) / 2;
+        iy = by + (bh - img.naturalHeight * isc) / 2;
+    }
+
+    /* ─ rendering ─ */
+    function draw() {
+        ctx.clearRect(0, 0, W, H);
+
+        /* draw image */
+        ctx.save();
+        ctx.translate(ix + img.naturalWidth  * isc / 2,
+                      iy + img.naturalHeight * isc / 2);
+        ctx.rotate(angle * Math.PI / 180);
+        ctx.scale(flipped, 1);
+        ctx.drawImage(img,
+            -img.naturalWidth  * isc / 2,
+            -img.naturalHeight * isc / 2,
+             img.naturalWidth  * isc,
+             img.naturalHeight * isc);
+        ctx.restore();
+
+        /* dark overlay */
+        ctx.fillStyle = 'rgba(0,0,0,0.58)';
+        ctx.fillRect(0, 0, W, H);
+
+        /* punch out crop box */
+        ctx.save();
+        ctx.globalCompositeOperation = 'destination-out';
+        ctx.fillStyle = '#000';
+        ctx.fillRect(bx, by, bw, bh);
+        ctx.restore();
+
+        /* redraw image inside crop box only */
+        ctx.save();
+        ctx.beginPath();
+        ctx.rect(bx, by, bw, bh);
+        ctx.clip();
+        ctx.translate(ix + img.naturalWidth  * isc / 2,
+                      iy + img.naturalHeight * isc / 2);
+        ctx.rotate(angle * Math.PI / 180);
+        ctx.scale(flipped, 1);
+        ctx.drawImage(img,
+            -img.naturalWidth  * isc / 2,
+            -img.naturalHeight * isc / 2,
+             img.naturalWidth  * isc,
+             img.naturalHeight * isc);
+        ctx.restore();
+
+        /* crop border + corners */
+        ctx.strokeStyle = 'rgba(255,255,255,0.85)';
+        ctx.lineWidth   = 1.5;
+        ctx.strokeRect(bx, by, bw, bh);
+
+        const c = 16;
+        ctx.strokeStyle = '#fff';
+        ctx.lineWidth   = 3;
+        [
+            [bx, by + c, bx, by, bx + c, by],
+            [bx + bw - c, by, bx + bw, by, bx + bw, by + c],
+            [bx, by + bh - c, bx, by + bh, bx + c, by + bh],
+            [bx + bw - c, by + bh, bx + bw, by + bh, bx + bw, by + bh - c],
+        ].forEach(([x1,y1,x2,y2,x3,y3]) => {
+            ctx.beginPath();
+            ctx.moveTo(x1, y1); ctx.lineTo(x2, y2); ctx.lineTo(x3, y3);
+            ctx.stroke();
+        });
+
+        /* thirds grid */
+        ctx.strokeStyle = 'rgba(255,255,255,0.2)';
+        ctx.lineWidth   = 0.5;
+        ctx.beginPath();
+        for (let i = 1; i < 3; i++) {
+            ctx.moveTo(bx + bw * i / 3, by); ctx.lineTo(bx + bw * i / 3, by + bh);
+            ctx.moveTo(bx, by + bh * i / 3); ctx.lineTo(bx + bw, by + bh * i / 3);
+        }
+        ctx.stroke();
+    }
+
+    /* ─ clamping ─ */
+    function clamp() {
+        const iw = img.naturalWidth  * isc;
+        const ih = img.naturalHeight * isc;
+        ix = Math.min(ix, bx);
+        ix = Math.max(ix, bx + bw - iw);
+        iy = Math.min(iy, by);
+        iy = Math.max(iy, by + bh - ih);
+    }
+
+    /* ─ zoom ─ */
+    function applyZoom(ns, px, py) {
+        ns = Math.max(minSc, Math.min(maxSc, ns));
+        const r = ns / isc;
+        ix  = px + (ix - px) * r;
+        iy  = py + (iy - py) * r;
+        isc = ns;
+        clamp();
+        const pct = (isc - minSc) / (maxSc - minSc) * 100;
+        document.getElementById('zoomSlider').value = pct;
+        draw();
+    }
+
+    /* ─ events ─ */
+    function bindEvents() {
+        /* mouse */
+        canvas.onmousedown = e => {
+            drag = true; lx = e.clientX; ly = e.clientY;
+            canvas.style.cursor = 'grabbing';
+        };
+        window.onmousemove = e => {
+            if (!drag) return;
+            ix += e.clientX - lx; iy += e.clientY - ly;
+            lx = e.clientX; ly = e.clientY;
+            clamp(); draw();
+        };
+        window.onmouseup = () => { drag = false; canvas.style.cursor = 'grab'; };
+
+        /* wheel zoom */
+        canvas.onwheel = e => {
+            e.preventDefault();
+            const rect = canvas.getBoundingClientRect();
+            applyZoom(isc * (e.deltaY < 0 ? 1.06 : 0.94),
+                      e.clientX - rect.left, e.clientY - rect.top);
+        };
+
+        /* touch */
+        let t0x, t0y, t0dist;
+        canvas.ontouchstart = e => {
+            e.preventDefault();
+            if (e.touches.length === 1) {
+                t0x = e.touches[0].clientX; t0y = e.touches[0].clientY; t0dist = null;
+            } else {
+                t0dist = Math.hypot(
+                    e.touches[0].clientX - e.touches[1].clientX,
+                    e.touches[0].clientY - e.touches[1].clientY);
+            }
+        };
+        canvas.ontouchmove = e => {
+            e.preventDefault();
+            if (e.touches.length === 1 && t0dist === null) {
+                ix += e.touches[0].clientX - t0x;
+                iy += e.touches[0].clientY - t0y;
+                t0x = e.touches[0].clientX; t0y = e.touches[0].clientY;
+                clamp(); draw();
+            } else if (e.touches.length === 2 && t0dist) {
+                const d = Math.hypot(
+                    e.touches[0].clientX - e.touches[1].clientX,
+                    e.touches[0].clientY - e.touches[1].clientY);
+                const rect = canvas.getBoundingClientRect();
+                const px = ((e.touches[0].clientX + e.touches[1].clientX) / 2) - rect.left;
+                const py = ((e.touches[0].clientY + e.touches[1].clientY) / 2) - rect.top;
+                applyZoom(isc * d / t0dist, px, py);
+                t0dist = d;
+            }
+        };
+    }
+
+    /* ─ public ─ */
+    return {
+        open(src) { init(); load(src); },
+
+        rotate(deg) {
+            angle = (angle + deg + 360) % 360;
+            /* swap natural dims for 90°/270° — recalc scale */
+            const sw = angle % 180 !== 0;
+            const natW = sw ? img.naturalHeight : img.naturalWidth;
+            const natH = sw ? img.naturalWidth  : img.naturalHeight;
+            minSc = Math.max(bw / natW, bh / natH);
+            if (isc < minSc) isc = minSc;
+            centre(); clamp(); draw();
+        },
+
+        flip() { flipped *= -1; clamp(); draw(); },
+
+        onSlider(v) {
+            const ns = minSc + (maxSc - minSc) * (v / 100);
+            applyZoom(ns, W / 2, H / 2);
+        },
+
+        crop(cb) {
+            /* work out source rect in image natural space */
+            const sw = angle % 180 !== 0;
+            const natW = sw ? img.naturalHeight : img.naturalWidth;
+            const natH = sw ? img.naturalWidth  : img.naturalHeight;
+
+            const srcX = (bx - ix) / isc;
+            const srcY = (by - iy) / isc;
+            const srcW = bw / isc;
+            const srcH = bh / isc;
+
+            const out = document.createElement('canvas');
+            out.width  = 600; out.height = 800;
+            const oc   = out.getContext('2d');
+
+            oc.save();
+            oc.translate(300, 400);
+            oc.rotate(angle * Math.PI / 180);
+            oc.scale(flipped, 1);
+            /* scale so srcW maps to 600 */
+            const sc = 600 / srcW;
+            oc.drawImage(img,
+                srcX - natW / 2, srcY - natH / 2,
+                srcW, srcH,
+                -300, -400,
+                600, 800);
+            oc.restore();
+
+            /* simpler direct approach — works for 0° (most common) */
+            const out2 = document.createElement('canvas');
+            out2.width  = 600; out2.height = 800;
+            const oc2   = out2.getContext('2d');
+            oc2.save();
+            oc2.translate(300, 400);
+            oc2.rotate(angle * Math.PI / 180);
+            oc2.scale(flipped, 1);
+            oc2.drawImage(img,
+                (bx - ix) / isc, (by - iy) / isc,
+                bw / isc, bh / isc,
+                -300, -400, 600, 800);
+            oc2.restore();
+            out2.toBlob(cb, 'image/jpeg', 0.92);
+        }
+    };
+})();
 
 function openCropModal(input) {
     if (!input.files || !input.files[0]) return;
-    _flipState = 1;
     const reader = new FileReader();
-    reader.onload = function (e) {
-        const img = document.getElementById('cropImage');
-        img.src = e.target.result;
+    reader.onload = e => {
         document.getElementById('cropModal').classList.remove('hidden');
         document.body.style.overflow = 'hidden';
-
-        if (_cropper) { _cropper.destroy(); _cropper = null; }
-
-        _cropper = new Cropper(img, {
-            aspectRatio: 3 / 4,
-            viewMode  : 1,
-            dragMode  : 'move',
-            autoCropArea: 0.9,
-            responsive: true,
-            checkOrientation: true,
-            guides    : true,
-            background: false,
-        });
+        CP.open(e.target.result);
     };
     reader.readAsDataURL(input.files[0]);
-}
-
-function cropperAction(action, value) {
-    if (!_cropper) return;
-    if (action === 'rotate') {
-        _cropper.rotate(value);
-    } else if (action === 'flipX') {
-        _flipState *= -1;
-        _cropper.scaleX(_flipState);
-    }
 }
 
 function closeCropModal() {
     document.getElementById('cropModal').classList.add('hidden');
     document.body.style.overflow = '';
-    if (_cropper) { _cropper.destroy(); _cropper = null; }
     document.getElementById('photoInput').value = '';
 }
 
 function saveCrop() {
-    if (!_cropper) return;
     const btn = document.getElementById('saveCropBtn');
-    btn.disabled = true;
-    btn.innerHTML = '<svg class="w-4 h-4 animate-spin" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg> Menyimpan...';
+    btn.textContent = '...';
+    btn.disabled    = true;
 
-    _cropper.getCroppedCanvas({ width: 600, height: 800, imageSmoothingQuality: 'high' })
-        .toBlob(function (blob) {
-            const form = new FormData();
-            form.append('_token', document.querySelector('meta[name="csrf-token"]')
-                ? document.querySelector('meta[name="csrf-token"]').content
-                : '{{ csrf_token() }}');
-            form.append('photo', blob, 'profile-photo.jpg');
+    CP.crop(blob => {
+        const fd = new FormData();
+        fd.append('_token', document.querySelector('meta[name="csrf-token"]').content);
+        fd.append('photo', blob, 'profile.jpg');
 
-            fetch('{{ route("member.profile.upload-photo") }}', {
-                method : 'POST',
-                body   : form,
-                headers: { 'Accept': 'application/json, text/html, */*' },
-            })
-            .then(function (r) {
-                if (r.ok || r.redirected || r.status === 302) {
-                    window.location.reload();
-                } else {
-                    return r.text().then(function (t) { throw new Error(t); });
-                }
-            })
-            .catch(function (err) {
-                console.error(err);
-                btn.disabled = false;
-                btn.innerHTML = '<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg> Simpan Foto';
-                alert('Gagal menyimpan foto. Silakan coba lagi.');
+        fetch('{{ route("member.profile.upload-photo") }}', { method: 'POST', body: fd })
+            .then(r => { if (r.ok || r.redirected) window.location.reload(); else throw r; })
+            .catch(() => {
+                btn.textContent = 'Simpan';
+                btn.disabled    = false;
+                alert('Gagal menyimpan. Coba lagi.');
             });
-        }, 'image/jpeg', 0.92);
+    });
 }
 
-// Close modal when clicking backdrop
-document.getElementById('cropModal').addEventListener('click', function (e) {
-    if (e.target === this) closeCropModal();
+document.getElementById('cropModal').addEventListener('click', e => {
+    if (e.target === document.getElementById('cropModal')) closeCropModal();
 });
 </script>
 @endpush
