@@ -164,24 +164,81 @@ document.addEventListener('DOMContentLoaded', () => {
 @endif
 
 <!-- Stats Section -->
-<section class="py-12 bg-white border-b">
-    <div class="container mx-auto px-4">
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-4xl mx-auto">
-            <div class="text-center p-6 stats-card">
-                <div class="text-3xl md:text-4xl font-bold text-purple-600 mb-2">{{ format_stat_number($totalIndividualMembers) }}</div>
-                <div class="text-gray-600 text-sm">Anggota Bergabung</div>
+<section class="bg-gradient-to-r from-purple-800 via-purple-700 to-indigo-700 relative overflow-hidden">
+    <!-- subtle background dots -->
+    <div class="absolute inset-0 opacity-10" style="background-image:radial-gradient(circle,#fff 1px,transparent 1px);background-size:24px 24px;"></div>
+    <div class="container mx-auto px-4 py-8 md:py-10 relative z-10">
+        <div class="grid grid-cols-3 max-w-3xl mx-auto">
+
+            <!-- Anggota Bergabung -->
+            <div class="text-center px-3 sm:px-6 md:px-10 py-2 border-r border-white/20">
+                <div class="flex justify-center mb-2 md:mb-3">
+                    <div class="w-9 h-9 md:w-12 md:h-12 bg-white/10 rounded-full flex items-center justify-center ring-1 ring-white/20">
+                        <svg class="w-4 h-4 md:w-6 md:h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/>
+                        </svg>
+                    </div>
+                </div>
+                <div class="text-xl sm:text-3xl md:text-4xl font-bold text-white leading-tight stat-number" data-target="{{ $totalIndividualMembers }}">{{ format_stat_number($totalIndividualMembers) }}</div>
+                <div class="text-white/65 text-[10px] sm:text-xs md:text-sm mt-1 leading-tight">Anggota<br class="sm:hidden"> Bergabung</div>
             </div>
-            <div class="text-center p-6 stats-card">
-                <div class="text-3xl md:text-4xl font-bold text-purple-600 mb-2">{{ format_stat_number($totalActiveMembers) }}</div>
-                <div class="text-gray-600 text-sm">Anggota Aktif</div>
+
+            <!-- Anggota Aktif -->
+            <div class="text-center px-3 sm:px-6 md:px-10 py-2 border-r border-white/20">
+                <div class="flex justify-center mb-2 md:mb-3">
+                    <div class="w-9 h-9 md:w-12 md:h-12 bg-white/10 rounded-full flex items-center justify-center ring-1 ring-white/20">
+                        <svg class="w-4 h-4 md:w-6 md:h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                        </svg>
+                    </div>
+                </div>
+                <div class="text-xl sm:text-3xl md:text-4xl font-bold text-white leading-tight stat-number" data-target="{{ $totalActiveMembers }}">{{ format_stat_number($totalActiveMembers) }}</div>
+                <div class="text-white/65 text-[10px] sm:text-xs md:text-sm mt-1 leading-tight">Anggota<br class="sm:hidden"> Aktif</div>
             </div>
-            <div class="text-center p-6 stats-card">
-                <div class="text-3xl md:text-4xl font-bold text-purple-600 mb-2">{{ number_format($satisfactionRate) }}%</div>
-                <div class="text-gray-600 text-sm">Tingkat Kepuasan</div>
+
+            <!-- Tingkat Kepuasan -->
+            <div class="text-center px-3 sm:px-6 md:px-10 py-2">
+                <div class="flex justify-center mb-2 md:mb-3">
+                    <div class="w-9 h-9 md:w-12 md:h-12 bg-white/10 rounded-full flex items-center justify-center ring-1 ring-white/20">
+                        <svg class="w-4 h-4 md:w-6 md:h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"/>
+                        </svg>
+                    </div>
+                </div>
+                <div class="text-xl sm:text-3xl md:text-4xl font-bold text-white leading-tight">{{ number_format($satisfactionRate) }}%</div>
+                <div class="text-white/65 text-[10px] sm:text-xs md:text-sm mt-1 leading-tight">Tingkat<br class="sm:hidden"> Kepuasan</div>
             </div>
+
         </div>
     </div>
 </section>
+
+@push('scripts')
+<script>
+(function(){
+    const els = document.querySelectorAll('.stat-number');
+    if (!els.length) return;
+    const fmt = n => n >= 1000 ? Math.round(n/100)*100/10 + 'rb+' : n + '+';
+    const observer = new IntersectionObserver(entries => {
+        entries.forEach(entry => {
+            if (!entry.isIntersecting) return;
+            observer.unobserve(entry.target);
+            const el = entry.target;
+            const target = parseInt(el.dataset.target, 10);
+            const dur = 1400, steps = 40, step = dur / steps;
+            let current = 0, i = 0;
+            const tick = setInterval(() => {
+                i++;
+                current = Math.round(target * (i / steps));
+                el.textContent = fmt(current >= target ? target : current);
+                if (i >= steps) { el.textContent = fmt(target); clearInterval(tick); }
+            }, step);
+        });
+    }, { threshold: 0.4 });
+    els.forEach(el => observer.observe(el));
+})();
+</script>
+@endpush
 
 <!-- About Section -->
 <section class="py-12 md:py-20 bg-gradient-to-br from-gray-50 via-purple-50 to-gray-50 relative overflow-hidden">

@@ -26,10 +26,9 @@ class HomeController extends Controller
         }
         
         $featuredNews = News::published()
-            ->featured()
             ->with(['category', 'user'])
             ->latest('published_at')
-            ->take(3)
+            ->take(9)
             ->get();
 
         $upcomingEvents = Event::published()
