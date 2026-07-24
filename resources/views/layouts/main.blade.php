@@ -8,12 +8,25 @@
     <title>{{ $globalSiteName }} - @yield('title', $globalSiteTagline)</title>
     <meta name="description" content="{{ $globalMetaDescription }}">
     <meta name="keywords" content="{{ $globalMetaKeywords }}">
-    <meta property="og:title" content="{{ $globalSiteName }} - @yield('title', $globalSiteTagline)">
-    <meta property="og:description" content="{{ $globalMetaDescription }}">
+    <meta property="og:type" content="@yield('og_type', 'website')">
+    <meta property="og:url" content="{{ url()->current() }}">
     <meta property="og:site_name" content="{{ $globalSiteName }}">
-    @if($globalSiteLogo)
+    <meta property="og:title" content="@yield('og_title', $globalSiteName . ' - ' . $globalSiteTagline)">
+    <meta property="og:description" content="@yield('og_description', $globalMetaDescription)">
+    @hasSection('og_image')
+    <meta property="og:image" content="@yield('og_image')">
+    @elseif($globalSiteLogo)
     <meta property="og:image" content="{{ asset('storage/' . $globalSiteLogo) }}">
     @endif
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:title" content="@yield('og_title', $globalSiteName . ' - ' . $globalSiteTagline)">
+    <meta property="twitter:description" content="@yield('og_description', $globalMetaDescription)">
+    @hasSection('og_image')
+    <meta property="twitter:image" content="@yield('og_image')">
+    @elseif($globalSiteLogo)
+    <meta property="twitter:image" content="{{ asset('storage/' . $globalSiteLogo) }}">
+    @endif
+    @stack('meta')
     @if(setting('site_favicon'))
     <link rel="icon" type="image/png" href="{{ asset('storage/' . setting('site_favicon')) }}">
     @endif

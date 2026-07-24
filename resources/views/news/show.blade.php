@@ -2,25 +2,12 @@
 
 @section('title', $news->title)
 
-@push('meta')
-    <!-- Open Graph / Facebook -->
-    <meta property="og:type" content="article">
-    <meta property="og:url" content="{{ url()->current() }}">
-    <meta property="og:title" content="{{ $news->title }}">
-    <meta property="og:description" content="{{ $news->excerpt ?? Str::limit(strip_tags($news->content), 160) }}">
-    @if($news->image)
-    <meta property="og:image" content="{{ asset('storage/' . $news->image) }}">
-    @endif
-
-    <!-- Twitter -->
-    <meta property="twitter:card" content="summary_large_image">
-    <meta property="twitter:url" content="{{ url()->current() }}">
-    <meta property="twitter:title" content="{{ $news->title }}">
-    <meta property="twitter:description" content="{{ $news->excerpt ?? Str::limit(strip_tags($news->content), 160) }}">
-    @if($news->image)
-    <meta property="twitter:image" content="{{ asset('storage/' . $news->image) }}">
-    @endif
-@endpush
+@section('og_type', 'article')
+@section('og_title', $news->title)
+@section('og_description', $news->excerpt ?? Str::limit(strip_tags($news->content), 160))
+@if($news->image)
+@section('og_image', asset('storage/' . $news->image))
+@endif
 
 @section('content')
 <!-- Article Header -->
