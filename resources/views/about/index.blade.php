@@ -65,37 +65,60 @@
 </section>
 
 <!-- Sejarah Section -->
-<section class="py-20 bg-gradient-to-br from-gray-50 to-gray-100">
-    <div class="container mx-auto px-4">
-        <div class="text-center mb-12">
-            <h2 class="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-800 mb-4">{{ setting('about_history_title', 'Sejarah ' . site_name()) }}</h2>
-            <div class="w-24 h-1 bg-gradient-to-r from-purple-600 to-indigo-600 mx-auto rounded"></div>
+<section class="py-20 bg-white relative overflow-hidden">
+    {{-- blobs --}}
+    <div class="absolute top-0 left-0 w-80 h-80 bg-purple-100 rounded-full blur-3xl opacity-50 -translate-x-1/2 -translate-y-1/2 pointer-events-none"></div>
+    <div class="absolute bottom-0 right-0 w-96 h-96 bg-indigo-100 rounded-full blur-3xl opacity-40 translate-x-1/3 translate-y-1/3 pointer-events-none"></div>
+
+    <div class="container mx-auto px-4 relative z-10">
+
+        {{-- Section label + title --}}
+        <div class="text-center mb-14">
+            <span class="inline-block bg-purple-100 text-purple-700 text-xs font-bold px-4 py-1.5 rounded-full uppercase tracking-widest mb-4">Perjalanan Kami</span>
+            <h2 class="text-3xl sm:text-4xl font-bold text-gray-900 mb-4">{{ setting('about_history_title', 'Sejarah ' . site_name()) }}</h2>
+            <div class="w-16 h-1 bg-gradient-to-r from-purple-600 to-indigo-600 mx-auto rounded-full"></div>
         </div>
 
+        {{-- History card with quote accent --}}
         <div class="max-w-4xl mx-auto">
-            <div class="bg-white rounded-2xl shadow-xl p-8 md:p-12">
-                <div class="prose prose-lg max-w-none">
-                    <p class="text-gray-700 leading-relaxed mb-6">
+            <div class="relative bg-gradient-to-br from-slate-50 to-gray-50 rounded-3xl shadow-lg border border-gray-100 overflow-hidden">
+                {{-- left gradient bar --}}
+                <div class="absolute left-0 top-0 bottom-0 w-1.5 bg-gradient-to-b from-purple-600 via-indigo-500 to-purple-400 rounded-l-3xl"></div>
+                {{-- decorative open-quote --}}
+                <div class="absolute top-4 left-8 text-purple-200 select-none pointer-events-none leading-none" style="font-size:9rem;font-family:Georgia,serif;line-height:0.75">&ldquo;</div>
+
+                <div class="px-10 md:px-16 py-10 md:py-12 relative z-10">
+                    <p class="text-gray-700 leading-8 text-base md:text-[1.05rem]">
                         {{ setting('about_history') ?? (site_name() . ' didirikan sebagai wadah bagi para pengelola jurnal ilmiah untuk saling berbagi pengalaman, pengetahuan, dan best practices dalam pengelolaan jurnal ilmiah.') }}
                     </p>
-                    
-                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-8">
-                        <div class="text-center p-6 bg-purple-50 rounded-xl">
-                            <div class="text-3xl sm:text-4xl font-bold text-purple-600 mb-2">{{ setting('about_founded_year', '2020') }}</div>
-                            <div class="text-gray-600">{{ setting('about_stat1_label', 'Tahun Berdiri') }}</div>
-                        </div>
-                        <div class="text-center p-6 bg-indigo-50 rounded-xl">
-                            <div class="text-3xl sm:text-4xl font-bold text-indigo-600 mb-2">{{ App\Models\Member::where('status', 'active')->count() }}+</div>
-                            <div class="text-gray-600">{{ setting('about_stat2_label', 'Anggota Aktif') }}</div>
-                        </div>
-                        <div class="text-center p-6 bg-blue-50 rounded-xl">
-                            <div class="text-3xl sm:text-4xl font-bold text-blue-600 mb-2">{{ App\Models\Event::count() }}+</div>
-                            <div class="text-gray-600">{{ setting('about_stat3_label', 'Kegiatan') }}</div>
-                        </div>
+                </div>
+
+                {{-- decorative close-quote --}}
+                <div class="absolute bottom-0 right-6 text-purple-100 select-none pointer-events-none leading-none" style="font-size:9rem;font-family:Georgia,serif;line-height:0.75">&rdquo;</div>
+            </div>
+        </div>
+
+        {{-- Stats banner --}}
+        <div class="max-w-3xl mx-auto mt-10">
+            <div class="bg-gradient-to-r from-purple-800 via-purple-700 to-indigo-700 rounded-2xl overflow-hidden relative">
+                <div class="absolute inset-0 opacity-10" style="background-image:radial-gradient(circle,#fff 1px,transparent 1px);background-size:22px 22px;"></div>
+                <div class="grid grid-cols-3 divide-x divide-white/20 relative z-10 py-8">
+                    <div class="text-center px-4 sm:px-8">
+                        <div class="text-2xl sm:text-3xl md:text-4xl font-bold text-white">{{ setting('about_founded_year', '2025') }}</div>
+                        <div class="text-white/65 text-xs sm:text-sm mt-1.5">{{ setting('about_stat1_label', 'Tahun Berkiprah') }}</div>
+                    </div>
+                    <div class="text-center px-4 sm:px-8">
+                        <div class="text-2xl sm:text-3xl md:text-4xl font-bold text-white">{{ App\Models\Member::where('status', 'active')->count() }}+</div>
+                        <div class="text-white/65 text-xs sm:text-sm mt-1.5">{{ setting('about_stat2_label', 'Anggota Aktif') }}</div>
+                    </div>
+                    <div class="text-center px-4 sm:px-8">
+                        <div class="text-2xl sm:text-3xl md:text-4xl font-bold text-white">{{ App\Models\Event::count() }}+</div>
+                        <div class="text-white/65 text-xs sm:text-sm mt-1.5">{{ setting('about_stat3_label', 'Kegiatan') }}</div>
                     </div>
                 </div>
             </div>
         </div>
+
     </div>
 </section>
 
