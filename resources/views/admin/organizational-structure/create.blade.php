@@ -1,135 +1,210 @@
 @extends('layouts.admin')
-
-@section('title', 'Tambah Pengurus')
+@section('page-title', 'Tambah Pengurus')
 
 @section('content')
-<div class="container mx-auto px-4 py-6">
-    <div class="mb-6">
-        <h1 class="text-2xl font-bold text-gray-800">Tambah Pengurus Baru</h1>
+<div class="mb-6 flex items-center justify-between">
+    <div>
+        <h1 class="text-2xl font-bold text-gray-800">Tambah Pengurus</h1>
+        <p class="text-gray-500 text-sm mt-1">Input banyak pengurus sekaligus. Klik "+ Tambah Baris" untuk menambah.</p>
     </div>
-
-    <div class="bg-white rounded-lg shadow-md p-6">
-        <form action="{{ route('admin.organizational-structure.store') }}" method="POST" enctype="multipart/form-data">
-            @csrf
-
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <!-- Type -->
-                <div class="md:col-span-2">
-                    <label class="block text-sm font-medium text-gray-700 mb-2">
-                        Tipe <span class="text-red-500">*</span>
-                    </label>
-                    <div class="flex gap-4">
-                        <label class="flex items-center">
-                            <input type="radio" name="type" value="leadership" {{ old('type', 'leadership') == 'leadership' ? 'checked' : '' }} 
-                                   class="text-purple-600" onchange="toggleDivisionField()">
-                            <span class="ml-2">Pengurus Inti</span>
-                        </label>
-                        <label class="flex items-center">
-                            <input type="radio" name="type" value="division" {{ old('type') == 'division' ? 'checked' : '' }} 
-                                   class="text-purple-600" onchange="toggleDivisionField()">
-                            <span class="ml-2">Divisi</span>
-                        </label>
-                    </div>
-                </div>
-
-                <!-- Position -->
-                <div>
-                    <label for="position" class="block text-sm font-medium text-gray-700 mb-2">
-                        Jabatan <span class="text-red-500">*</span>
-                    </label>
-                    <input type="text" id="position" name="position" value="{{ old('position') }}"
-                           placeholder="Contoh: Ketua Umum, Koordinator"
-                           class="w-full px-3 py-2 border rounded-lg @error('position') border-red-500 @enderror" required>
-                    @error('position')<p class="text-red-500 text-sm mt-1">{{ $message }}</p>@enderror
-                </div>
-
-                <!-- Name -->
-                <div>
-                    <label for="name" class="block text-sm font-medium text-gray-700 mb-2">
-                        Nama <span class="text-red-500">*</span>
-                    </label>
-                    <input type="text" id="name" name="name" value="{{ old('name') }}"
-                           class="w-full px-3 py-2 border rounded-lg @error('name') border-red-500 @enderror" required>
-                    @error('name')<p class="text-red-500 text-sm mt-1">{{ $message }}</p>@enderror
-                </div>
-
-                <!-- Division Name (only for division type) -->
-                <div id="division-field" class="hidden">
-                    <label for="division_name" class="block text-sm font-medium text-gray-700 mb-2">
-                        Nama Divisi <span class="text-red-500">*</span>
-                    </label>
-                    <input type="text" id="division_name" name="division_name" value="{{ old('division_name') }}"
-                           placeholder="Contoh: Divisi Publikasi"
-                           class="w-full px-3 py-2 border rounded-lg">
-                </div>
-
-                <!-- Order -->
-                <div>
-                    <label for="order" class="block text-sm font-medium text-gray-700 mb-2">
-                        Urutan <span class="text-red-500">*</span>
-                    </label>
-                    <input type="number" id="order" name="order" value="{{ old('order', 0) }}" min="0"
-                           class="w-32 px-3 py-2 border rounded-lg @error('order') border-red-500 @enderror" required>
-                    @error('order')<p class="text-red-500 text-sm mt-1">{{ $message }}</p>@enderror
-                </div>
-
-                <!-- Photo -->
-                <div class="md:col-span-2">
-                    <label for="photo" class="block text-sm font-medium text-gray-700 mb-2">
-                        Foto (Opsional)
-                    </label>
-                    <input type="file" id="photo" name="photo" accept="image/*"
-                           class="w-full px-3 py-2 border rounded-lg">
-                    <x-image-hint dimensions="400×400" ratio="1:1" max-size="2MB" formats="JPG, PNG" note="Foto persegi (1:1) direkomendasikan agar tampil rapi di kartu profil." />
-                </div>
-
-                <!-- Description -->
-                <div class="md:col-span-2">
-                    <label for="description" class="block text-sm font-medium text-gray-700 mb-2">
-                        Deskripsi (Opsional)
-                    </label>
-                    <textarea id="description" name="description" rows="3"
-                              class="w-full px-3 py-2 border rounded-lg">{{ old('description') }}</textarea>
-                </div>
-
-                <!-- Is Active -->
-                <div class="md:col-span-2">
-                    <label class="flex items-center">
-                        <input type="checkbox" name="is_active" value="1" {{ old('is_active', true) ? 'checked' : '' }}
-                               class="rounded border-gray-300 text-purple-600">
-                        <span class="ml-2 text-sm text-gray-700">Aktifkan pengurus ini</span>
-                    </label>
-                </div>
-            </div>
-
-            <div class="flex justify-end gap-3 mt-6">
-                <a href="{{ route('admin.organizational-structure.index') }}" class="px-6 py-2 border rounded-lg text-gray-700 hover:bg-gray-50">
-                    Batal
-                </a>
-                <button type="submit" class="px-6 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700">
-                    Simpan
-                </button>
-            </div>
-        </form>
+    <div class="flex gap-3">
+        <a href="{{ route('admin.organizational-divisions.index') }}"
+           class="px-4 py-2 border border-purple-200 text-purple-700 rounded-lg hover:bg-purple-50 text-sm flex items-center gap-2">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/>
+            </svg>
+            Kelola Bidang
+        </a>
+        <a href="{{ route('admin.organizational-structure.index') }}"
+           class="px-4 py-2 border rounded-lg text-gray-700 hover:bg-gray-50 text-sm">Batal</a>
     </div>
 </div>
 
+@if($errors->any())
+<div class="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg mb-4">
+    <ul class="list-disc list-inside text-sm space-y-1">
+        @foreach($errors->all() as $error)<li>{{ $error }}</li>@endforeach
+    </ul>
+</div>
+@endif
+
+<form action="{{ route('admin.organizational-structure.store') }}" method="POST" enctype="multipart/form-data" id="bulkForm">
+@csrf
+
+<div class="bg-white rounded-lg shadow-sm border overflow-hidden mb-4">
+    <div class="overflow-x-auto">
+        <table class="min-w-full" id="bulk-table">
+            <thead class="bg-gray-50 border-b">
+                <tr>
+                    <th class="px-3 py-3 text-left text-xs font-semibold text-gray-600 uppercase w-10">#</th>
+                    <th class="px-3 py-3 text-left text-xs font-semibold text-gray-600 uppercase w-28">Tipe</th>
+                    <th class="px-3 py-3 text-left text-xs font-semibold text-gray-600 uppercase w-44">Bidang/Divisi</th>
+                    <th class="px-3 py-3 text-left text-xs font-semibold text-gray-600 uppercase w-40">Jabatan *</th>
+                    <th class="px-3 py-3 text-left text-xs font-semibold text-gray-600 uppercase">Nama Lengkap *</th>
+                    <th class="px-3 py-3 text-left text-xs font-semibold text-gray-600 uppercase w-44">Institusi</th>
+                    <th class="px-3 py-3 text-left text-xs font-semibold text-gray-600 uppercase w-28">Foto</th>
+                    <th class="px-3 py-3 text-center text-xs font-semibold text-gray-600 uppercase w-16">Urut</th>
+                    <th class="px-3 py-3 text-center text-xs font-semibold text-gray-600 uppercase w-16">Aktif</th>
+                    <th class="px-3 py-3 w-10"></th>
+                </tr>
+            </thead>
+            <tbody id="rows-container">
+                {{-- rows injected by JS --}}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<div class="flex items-center justify-between">
+    <button type="button" onclick="addRow()"
+            class="flex items-center gap-2 px-4 py-2 border-2 border-dashed border-purple-300 text-purple-600 rounded-lg hover:bg-purple-50 text-sm font-medium">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+        </svg>
+        Tambah Baris
+    </button>
+    <button type="submit"
+            class="px-8 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 font-medium flex items-center gap-2">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+        </svg>
+        Simpan Semua
+    </button>
+</div>
+
+</form>
+
+{{-- Hidden division options for JS --}}
 <script>
-function toggleDivisionField() {
-    const type = document.querySelector('input[name="type"]:checked').value;
-    const divisionField = document.getElementById('division-field');
-    const divisionInput = document.getElementById('division_name');
-    
+const DIVISIONS = @json($divisions->map(fn($d) => ['id' => $d->id, 'name' => $d->name]));
+
+let rowCount = 0;
+
+function buildRow(index) {
+    const divisionOptions = DIVISIONS.map(d =>
+        `<option value="${d.name}">${d.name}</option>`
+    ).join('');
+
+    return `
+    <tr id="row-${index}" class="border-b hover:bg-gray-50/50 align-top">
+        <td class="px-3 py-2 text-sm text-gray-400 pt-3">${index + 1}</td>
+
+        <td class="px-3 py-2">
+            <select name="members[${index}][type]" onchange="toggleBidang(${index}, this.value)"
+                    class="w-full px-2 py-1.5 border rounded text-sm focus:ring-1 focus:ring-purple-400">
+                <option value="leadership">Pengurus Inti</option>
+                <option value="division">Divisi</option>
+            </select>
+        </td>
+
+        <td class="px-3 py-2" id="bidang-cell-${index}">
+            <div class="hidden" id="bidang-wrap-${index}">
+                <select name="members[${index}][division_name]"
+                        class="w-full px-2 py-1.5 border rounded text-sm focus:ring-1 focus:ring-purple-400 mb-1">
+                    <option value="">— Pilih Bidang —</option>
+                    ${divisionOptions}
+                </select>
+                <input type="text" placeholder="atau ketik manual..."
+                       class="w-full px-2 py-1.5 border rounded text-xs text-gray-500"
+                       oninput="manualDivision(${index}, this.value)">
+            </div>
+            <span id="bidang-empty-${index}" class="text-xs text-gray-300 italic">—</span>
+        </td>
+
+        <td class="px-3 py-2">
+            <input type="text" name="members[${index}][position]" required
+                   placeholder="Ketua Umum, Koordinator..."
+                   class="w-full px-2 py-1.5 border rounded text-sm focus:ring-1 focus:ring-purple-400">
+        </td>
+
+        <td class="px-3 py-2">
+            <input type="text" name="members[${index}][name]" required
+                   placeholder="Nama lengkap"
+                   class="w-full px-2 py-1.5 border rounded text-sm focus:ring-1 focus:ring-purple-400">
+        </td>
+
+        <td class="px-3 py-2">
+            <input type="text" name="members[${index}][institusi]"
+                   placeholder="Asal institusi"
+                   class="w-full px-2 py-1.5 border rounded text-sm focus:ring-1 focus:ring-purple-400">
+        </td>
+
+        <td class="px-3 py-2">
+            <label class="flex items-center gap-1 cursor-pointer">
+                <input type="file" name="photos[${index}]" accept="image/*"
+                       class="w-full text-xs text-gray-500 file:mr-2 file:py-1 file:px-2 file:rounded file:border-0 file:bg-purple-50 file:text-purple-700 file:text-xs">
+            </label>
+        </td>
+
+        <td class="px-3 py-2">
+            <input type="number" name="members[${index}][order]" value="${index}"
+                   min="0" class="w-14 px-2 py-1.5 border rounded text-sm text-center focus:ring-1 focus:ring-purple-400">
+        </td>
+
+        <td class="px-3 py-2 text-center">
+            <input type="checkbox" name="members[${index}][is_active]" value="1" checked
+                   class="w-4 h-4 rounded text-purple-600">
+        </td>
+
+        <td class="px-3 py-2 text-center">
+            <button type="button" onclick="removeRow(${index})"
+                    class="text-red-400 hover:text-red-600 text-lg leading-none font-bold" title="Hapus baris">×</button>
+        </td>
+    </tr>`;
+}
+
+function addRow() {
+    const index = rowCount++;
+    document.getElementById('rows-container').insertAdjacentHTML('beforeend', buildRow(index));
+    updateNumbers();
+}
+
+function removeRow(index) {
+    const row = document.getElementById('row-' + index);
+    if (row) row.remove();
+    updateNumbers();
+}
+
+function updateNumbers() {
+    document.querySelectorAll('#rows-container tr').forEach((tr, i) => {
+        tr.querySelector('td:first-child').textContent = i + 1;
+    });
+}
+
+function toggleBidang(index, type) {
+    const wrap = document.getElementById('bidang-wrap-' + index);
+    const empty = document.getElementById('bidang-empty-' + index);
     if (type === 'division') {
-        divisionField.classList.remove('hidden');
-        divisionInput.required = true;
+        wrap.classList.remove('hidden');
+        empty.classList.add('hidden');
     } else {
-        divisionField.classList.add('hidden');
-        divisionInput.required = false;
+        wrap.classList.add('hidden');
+        empty.classList.remove('hidden');
     }
 }
 
-// Initialize on page load
-toggleDivisionField();
+function manualDivision(index, val) {
+    const sel = document.querySelector(`select[name="members[${index}][division_name]"]`);
+    if (val) sel.value = '';
+    sel.setAttribute('data-manual', val);
+    // Use a hidden input to override
+    let hidden = document.getElementById('manual-div-' + index);
+    if (!hidden) {
+        hidden = document.createElement('input');
+        hidden.type = 'hidden';
+        hidden.id = 'manual-div-' + index;
+        hidden.name = `members[${index}][division_name]`;
+        sel.parentNode.appendChild(hidden);
+        sel.name = ''; // disable original select
+    }
+    hidden.value = val;
+    if (!val) {
+        hidden.remove();
+        sel.name = `members[${index}][division_name]`;
+    }
+}
+
+// Add initial row on load
+addRow();
 </script>
 @endsection

@@ -331,6 +331,7 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'admin'])->group(fun
     
     // Organizational Structure Management
     Route::resource('organizational-structure', App\Http\Controllers\Admin\OrganizationalStructureController::class);
+    Route::resource('organizational-divisions', App\Http\Controllers\Admin\OrganizationalDivisionController::class)->only(['index', 'store', 'update', 'destroy']);
     
     // Services Management
     Route::resource('services', App\Http\Controllers\Admin\ServiceManagementController::class);

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\OrganizationalDivision;
 use App\Models\OrganizationalStructure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
@@ -17,52 +18,69 @@ class OrganizationalStructureController extends Controller
 
     public function create()
     {
-        return view('admin.organizational-structure.create');
+        $divisions = OrganizationalDivision::active()->ordered()->get();
+        return view('admin.organizational-structure.create', compact('divisions'));
     }
 
     public function store(Request $request)
     {
-        $validated = $request->validate([
-            'position' => 'required|string|max:255',
-            'name' => 'required|string|max:255',
-            'photo' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
-            'description' => 'nullable|string',
-            'type' => 'required|in:leadership,division',
-            'division_name' => 'nullable|string|max:255',
-            'order' => 'required|integer|min:0',
-            'is_active' => 'boolean',
+        $request->validate([
+            'members'                  => 'required|array|min:1',
+            'members.*.type'           => 'required|in:leadership,division',
+            'members.*.position'       => 'required|string|max:255',
+            'members.*.name'           => 'required|string|max:255',
+            'members.*.institusi'      => 'nullable|string|max:255',
+            'members.*.division_name'  => 'nullable|string|max:255',
+            'members.*.order'          => 'required|integer|min:0',
+            'members.*.description'    => 'nullable|string',
         ]);
 
-        if ($request->hasFile('photo')) {
-            $validated['photo'] = $request->file('photo')->store('organizational-structure', 'public');
+        $saved = 0;
+        foreach ($request->input('members') as $i => $member) {
+            $data = [
+                'type'          => $member['type'],
+                'position'      => $member['position'],
+                'name'          => $member['name'],
+                'institusi'     => $member['institusi'] ?? null,
+                'division_name' => $member['division_name'] ?? null,
+                'order'         => (int) ($member['order'] ?? 0),
+                'description'   => $member['description'] ?? null,
+                'is_active'     => isset($member['is_active']),
+            ];
+
+            if ($request->hasFile("photos.$i")) {
+                $data['photo'] = $request->file("photos.$i")->store('organizational-structure', 'public');
+            }
+
+            OrganizationalStructure::create($data);
+            $saved++;
         }
 
-        OrganizationalStructure::create($validated);
-
         return redirect()->route('admin.organizational-structure.index')
-            ->with('success', 'Struktur organisasi berhasil ditambahkan!');
+            ->with('success', $saved . ' pengurus berhasil ditambahkan!');
     }
 
     public function edit(OrganizationalStructure $organizationalStructure)
     {
-        return view('admin.organizational-structure.edit', compact('organizationalStructure'));
+        $divisions = OrganizationalDivision::active()->ordered()->get();
+        return view('admin.organizational-structure.edit', compact('organizationalStructure', 'divisions'));
     }
 
     public function update(Request $request, OrganizationalStructure $organizationalStructure)
     {
         $validated = $request->validate([
-            'position' => 'required|string|max:255',
-            'name' => 'required|string|max:255',
-            'photo' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
-            'description' => 'nullable|string',
-            'type' => 'required|in:leadership,division',
+            'position'      => 'required|string|max:255',
+            'name'          => 'required|string|max:255',
+            'institusi'     => 'nullable|string|max:255',
+            'photo'         => 'nullable|image|mimes:jpeg,png,jpg,webp|max:5120',
+            'description'   => 'nullable|string',
+            'type'          => 'required|in:leadership,division',
             'division_name' => 'nullable|string|max:255',
-            'order' => 'required|integer|min:0',
-            'is_active' => 'boolean',
+            'order'         => 'required|integer|min:0',
         ]);
+        $validated['is_active'] = $request->boolean('is_active');
 
         if ($request->hasFile('photo')) {
-            // Delete old photo
             if ($organizationalStructure->photo && Storage::disk('public')->exists($organizationalStructure->photo)) {
                 Storage::disk('public')->delete($organizationalStructure->photo);
             }
@@ -72,12 +90,11 @@ class OrganizationalStructureController extends Controller
         $organizationalStructure->update($validated);
 
         return redirect()->route('admin.organizational-structure.index')
-            ->with('success', 'Struktur organisasi berhasil diperbarui!');
+            ->with('success', 'Pengurus berhasil diperbarui!');
     }
 
     public function destroy(OrganizationalStructure $organizationalStructure)
     {
-        // Delete photo
         if ($organizationalStructure->photo && Storage::disk('public')->exists($organizationalStructure->photo)) {
             Storage::disk('public')->delete($organizationalStructure->photo);
         }
@@ -85,6 +102,6 @@ class OrganizationalStructureController extends Controller
         $organizationalStructure->delete();
 
         return redirect()->route('admin.organizational-structure.index')
-            ->with('success', 'Struktur organisasi berhasil dihapus!');
+            ->with('success', 'Pengurus berhasil dihapus!');
     }
 }

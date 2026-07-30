@@ -9,12 +9,13 @@ class OrganizationalStructure extends Model
     protected $fillable = [
         'position',
         'name',
+        'institusi',
         'photo',
         'description',
         'type',
         'division_name',
         'order',
-        'is_active'
+        'is_active',
     ];
 
     protected $casts = [
