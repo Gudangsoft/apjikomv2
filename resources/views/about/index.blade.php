@@ -245,16 +245,6 @@
             ];
             @endphp
             <div>
-                <div class="flex items-center gap-3 mb-6">
-                    <div class="w-8 h-8 bg-indigo-600 rounded-lg flex items-center justify-center">
-                        <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/>
-                        </svg>
-                    </div>
-                    <h3 class="text-lg font-bold text-gray-800">Bidang</h3>
-                    <div class="flex-1 h-px bg-gray-200"></div>
-                </div>
-
                 <div class="space-y-5">
                 @foreach($divisionGroups as $bidangName => $members)
                 @php [$grad, $textColor, $bgColor] = $palettes[$loop->index % count($palettes)]; @endphp
