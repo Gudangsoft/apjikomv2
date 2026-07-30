@@ -233,8 +233,19 @@
 
             {{-- ── Divisions ── --}}
             @if($divisions->count() > 0)
+            @php
+            $divisionGroups = $divisions->groupBy('division_name');
+            $palettes = [
+                ['from-purple-600 to-purple-700', 'text-purple-600', 'bg-purple-50'],
+                ['from-indigo-600 to-indigo-700', 'text-indigo-600', 'bg-indigo-50'],
+                ['from-blue-600 to-blue-700',     'text-blue-600',   'bg-blue-50'],
+                ['from-cyan-600 to-cyan-700',     'text-cyan-600',   'bg-cyan-50'],
+                ['from-teal-600 to-teal-700',     'text-teal-600',   'bg-teal-50'],
+                ['from-violet-600 to-violet-700', 'text-violet-600', 'bg-violet-50'],
+            ];
+            @endphp
             <div>
-                <div class="flex items-center gap-3 mb-8">
+                <div class="flex items-center gap-3 mb-6">
                     <div class="w-8 h-8 bg-indigo-600 rounded-lg flex items-center justify-center">
                         <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/>
@@ -244,43 +255,48 @@
                     <div class="flex-1 h-px bg-gray-200"></div>
                 </div>
 
-                <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
-                    @foreach($divisions as $index => $division)
-                    @php
-                        $palettes = [
-                            ['from-purple-500 to-purple-600', 'text-purple-600', 'bg-purple-50', 'border-purple-100'],
-                            ['from-indigo-500 to-indigo-600', 'text-indigo-600', 'bg-indigo-50', 'border-indigo-100'],
-                            ['from-blue-500 to-blue-600',   'text-blue-600',   'bg-blue-50',   'border-blue-100'],
-                            ['from-cyan-500 to-cyan-600',   'text-cyan-600',   'bg-cyan-50',   'border-cyan-100'],
-                            ['from-teal-500 to-teal-600',   'text-teal-600',   'bg-teal-50',   'border-teal-100'],
-                            ['from-violet-500 to-violet-600','text-violet-600','bg-violet-50', 'border-violet-100'],
-                        ];
-                        [$grad, $textColor, $bgColor, $borderColor] = $palettes[$index % count($palettes)];
-                    @endphp
-                    <div class="group bg-white rounded-2xl overflow-hidden shadow-sm border border-gray-100 {{ $borderColor }} hover:shadow-md transition-all duration-300 flex">
-                        {{-- accent bar + icon --}}
-                        <div class="w-1.5 bg-gradient-to-b {{ $grad }} flex-shrink-0"></div>
-                        <div class="flex-1 p-5">
-                            <div class="flex items-start gap-4">
-                                @if($division->photo)
-                                    <img src="{{ asset('storage/' . $division->photo) }}" alt="{{ $division->name }}"
-                                         class="w-12 h-12 rounded-full object-cover flex-shrink-0 border-2 border-gray-100">
-                                @else
-                                    <div class="w-12 h-12 rounded-xl {{ $bgColor }} flex items-center justify-center flex-shrink-0">
-                                        <span class="{{ $textColor }} text-lg font-bold">{{ mb_substr($division->name, 0, 1) }}</span>
-                                    </div>
-                                @endif
-                                <div class="flex-1 min-w-0">
-                                    <h4 class="{{ $textColor }} text-sm font-bold uppercase tracking-wide mb-0.5">{{ $division->division_name }}</h4>
-                                    <p class="text-gray-800 text-sm font-semibold mb-1">{{ $division->position }}: <span class="font-normal text-gray-600">{{ $division->name }}</span></p>
-                                    @if($division->description)
-                                        <p class="text-xs text-gray-500 leading-relaxed">{{ $division->description }}</p>
-                                    @endif
+                <div class="space-y-5">
+                @foreach($divisionGroups as $bidangName => $members)
+                @php [$grad, $textColor, $bgColor] = $palettes[$loop->index % count($palettes)]; @endphp
+                <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+                    {{-- Bidang header --}}
+                    <div class="flex items-center gap-3 px-6 py-3 bg-gradient-to-r {{ $grad }}">
+                        <svg class="w-4 h-4 text-white/80 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                  d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"/>
+                        </svg>
+                        <h4 class="text-white font-bold tracking-wide text-sm uppercase">{{ $bidangName ?: 'Bidang Lainnya' }}</h4>
+                        <span class="ml-auto text-white/70 text-xs font-medium">{{ $members->count() }} anggota</span>
+                    </div>
+                    {{-- Member list: 2-column grid on desktop --}}
+                    <div class="grid grid-cols-1 sm:grid-cols-2 divide-y sm:divide-y-0 divide-gray-100">
+                        @foreach($members as $i => $member)
+                        <div class="flex items-center gap-4 px-5 py-4 border-b border-gray-100 last:border-b-0 sm:border-b
+                                    {{ $i % 2 === 0 && $members->count() > 1 ? 'sm:border-r' : '' }} hover:bg-gray-50 transition-colors">
+                            @if($member->photo)
+                                <img src="{{ asset('storage/' . $member->photo) }}" alt="{{ $member->name }}"
+                                     class="w-11 h-11 rounded-full object-cover flex-shrink-0 border-2 border-gray-100">
+                            @else
+                                <div class="w-11 h-11 rounded-full {{ $bgColor }} flex items-center justify-center flex-shrink-0">
+                                    <span class="{{ $textColor }} font-bold">{{ mb_substr($member->name, 0, 1) }}</span>
                                 </div>
+                            @endif
+                            <div class="min-w-0">
+                                <p class="{{ $textColor }} text-xs font-semibold uppercase tracking-wide">{{ $member->position }}</p>
+                                <p class="text-gray-800 text-sm font-medium leading-snug">{{ $member->name }}</p>
+                                @if($member->institusi)
+                                <p class="text-gray-400 text-xs truncate">{{ $member->institusi }}</p>
+                                @endif
                             </div>
                         </div>
+                        @endforeach
+                        {{-- pad to even if odd count --}}
+                        @if($members->count() % 2 !== 0)
+                        <div class="hidden sm:block"></div>
+                        @endif
                     </div>
-                    @endforeach
+                </div>
+                @endforeach
                 </div>
             </div>
             @else
