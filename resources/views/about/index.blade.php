@@ -84,53 +84,49 @@
 </section>
 
 {{-- ═══════════════════════════════════════════
-     SEJARAH — full-width split layout
+     SEJARAH — true full-bleed split
 ════════════════════════════════════════════ --}}
-<section class="bg-white overflow-hidden">
-    {{-- header band --}}
-    <div class="bg-gradient-to-r from-purple-900 via-purple-800 to-indigo-800 py-14 relative overflow-hidden">
-        <div class="absolute inset-0 opacity-10" style="background-image:radial-gradient(circle,#fff 1px,transparent 1px);background-size:24px 24px;"></div>
-        <div class="container mx-auto px-4 relative z-10 text-center">
-            <span class="inline-block bg-white/10 border border-white/20 text-white text-xs font-bold px-4 py-1.5 rounded-full uppercase tracking-widest mb-4">Perjalanan Kami</span>
-            <h2 class="text-3xl sm:text-4xl font-bold text-white mb-3">{{ setting('about_history_title', 'Sejarah ' . site_name()) }}</h2>
-            <div class="w-16 h-0.5 bg-white/40 mx-auto rounded-full"></div>
+<section class="overflow-hidden">
+    <div class="grid grid-cols-1 lg:grid-cols-5" style="min-height:600px">
+
+        {{-- left: dark panel full-height --}}
+        <div class="lg:col-span-2 relative flex flex-col">
+            @if(setting('about_history_image'))
+                <img src="{{ asset('storage/' . setting('about_history_image')) }}"
+                     alt="Sejarah {{ site_name() }}"
+                     class="absolute inset-0 w-full h-full object-cover">
+                <div class="absolute inset-0 bg-purple-900/60"></div>
+            @endif
+            {{-- always show overlay graphic (shows alone when no image) --}}
+            <div class="relative z-10 flex flex-col items-center justify-center flex-1 p-10
+                        {{ setting('about_history_image') ? '' : 'bg-gradient-to-br from-purple-900 via-indigo-800 to-purple-900' }}">
+                <div class="absolute inset-0 opacity-10 pointer-events-none" style="background-image:radial-gradient(circle,#fff 1.5px,transparent 1.5px);background-size:20px 20px;"></div>
+                {{-- rings --}}
+                <div class="absolute top-8 right-8 w-40 h-40 border border-white/10 rounded-full pointer-events-none"></div>
+                <div class="absolute top-14 right-14 w-24 h-24 border border-white/10 rounded-full pointer-events-none"></div>
+                <div class="absolute bottom-8 left-8 w-32 h-32 border border-white/10 rounded-full pointer-events-none"></div>
+                <div class="absolute bottom-14 left-14 w-16 h-16 border border-white/10 rounded-full pointer-events-none"></div>
+                <div class="relative z-10 text-center select-none">
+                    <div class="text-white/15 font-black leading-none" style="font-size:min(6rem,12vw);letter-spacing:-2px;">APJI<br>KOM</div>
+                    <div class="w-16 h-px bg-white/30 mx-auto my-5"></div>
+                    <span class="text-white/50 text-xs tracking-[0.3em] uppercase">Est. {{ setting('about_founded_year', '2025') }}</span>
+                </div>
+            </div>
         </div>
-    </div>
 
-    {{-- two-column content --}}
-    <div class="container mx-auto px-4">
-        <div class="grid grid-cols-1 lg:grid-cols-5 gap-0 max-w-7xl mx-auto">
+        {{-- right: title + text + stats stacked --}}
+        <div class="lg:col-span-3 flex flex-col">
 
-            {{-- left: image / graphic --}}
-            <div class="lg:col-span-2 relative">
-                @if(setting('about_history_image'))
-                    <img src="{{ asset('storage/' . setting('about_history_image')) }}"
-                         alt="Sejarah {{ site_name() }}"
-                         class="w-full h-full object-cover min-h-80 lg:min-h-full">
-                @else
-                    {{-- decorative fallback --}}
-                    <div class="w-full h-full min-h-80 lg:min-h-full bg-gradient-to-br from-purple-700 via-indigo-700 to-purple-900 flex flex-col items-center justify-center p-10 relative overflow-hidden">
-                        <div class="absolute inset-0 opacity-10" style="background-image:radial-gradient(circle,#fff 1.5px,transparent 1.5px);background-size:20px 20px;"></div>
-                        {{-- big year badge --}}
-                        <div class="relative z-10 text-center">
-                            <div class="text-white/20 font-bold leading-none mb-4" style="font-size:7rem;">APJI<br>KOM</div>
-                            <div class="w-20 h-0.5 bg-white/30 mx-auto mb-4"></div>
-                            <div class="text-white/60 text-sm tracking-widest uppercase">Est. {{ setting('about_founded_year', '2025') }}</div>
-                        </div>
-                        {{-- decorative rings --}}
-                        <div class="absolute top-6 right-6 w-32 h-32 border border-white/10 rounded-full"></div>
-                        <div class="absolute top-10 right-10 w-20 h-20 border border-white/10 rounded-full"></div>
-                        <div class="absolute bottom-6 left-6 w-24 h-24 border border-white/10 rounded-full"></div>
-                    </div>
-                @endif
+            {{-- title bar --}}
+            <div class="bg-gray-50 border-b border-gray-100 px-10 md:px-14 py-10">
+                <span class="inline-block bg-purple-100 text-purple-700 text-[10px] font-bold px-3 py-1 rounded-full uppercase tracking-widest mb-3">Perjalanan Kami</span>
+                <h2 class="text-2xl sm:text-3xl font-bold text-gray-900">{{ setting('about_history_title', 'Sejarah ' . site_name()) }}</h2>
             </div>
 
-            {{-- right: text --}}
-            <div class="lg:col-span-3 flex flex-col">
-                {{-- quote text --}}
-                <div class="flex-1 p-8 md:p-12 lg:p-14 bg-white relative">
-                    <div class="text-purple-100 select-none pointer-events-none absolute top-6 left-10 leading-none" style="font-size:8rem;font-family:Georgia,serif;line-height:0.7">&ldquo;</div>
-                    <div class="relative z-10">
+            {{-- quote text --}}
+            <div class="flex-1 px-10 md:px-14 py-10 bg-white relative overflow-hidden">
+                <div class="text-purple-100 select-none pointer-events-none absolute top-2 left-8 leading-none" style="font-size:8rem;font-family:Georgia,serif;line-height:0.7">&ldquo;</div>
+                <div class="relative z-10">
                         <p class="text-gray-700 leading-8 text-[1.02rem] md:text-[1.07rem]">
                             {{ setting('about_history') ?? (site_name() . ' didirikan sebagai wadah bagi para pengelola jurnal ilmiah untuk saling berbagi pengalaman, pengetahuan, dan best practices dalam pengelolaan jurnal ilmiah.') }}
                         </p>
@@ -173,7 +169,6 @@
                 </div>
             </div>
         </div>
-    </div>
 </section>
 
 {{-- ═══════════════════════════════════════════
