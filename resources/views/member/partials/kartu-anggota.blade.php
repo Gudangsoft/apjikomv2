@@ -44,27 +44,33 @@
         $tplSize = @getimagesize(storage_path('app/public/' . $tpl->template_image));
         if ($tplSize) { $tplW = (int) $tplSize[0]; $tplH = (int) $tplSize[1]; }
     }
-    // Overlay ditata seperti kartu contoh. Posisi tiap blok dalam PERSEN;
-    // geser semua sekaligus lewat card_ov_x_shift / card_ov_y_shift bila
-    // area kosong template berbeda posisi. Ukuran lain bisa disetel juga.
-    $ovn = fn ($k, $d) => (float) setting($k, $d);
+    // Overlay ditata seperti kartu contoh. Posisi tiap blok dalam PERSEN.
+    // Dibaca LANGSUNG dari tabel settings (tanpa cache) supaya perubahan
+    // langsung terlihat tanpa perlu `php artisan cache:clear`.
+    $ovRaw = fn ($k) => \App\Models\Setting::query()->where('key', $k)->value('value');
+    $ovn = function ($k, $d) use ($ovRaw) { $v = $ovRaw($k); return ($v === null || $v === '') ? (float) $d : (float) $v; };
+    $ovs = function ($k, $d) use ($ovRaw) { $v = $ovRaw($k); return ($v === null || $v === '') ? $d : $v; };
+
     $sx  = $ovn('card_ov_x_shift', 0);   // geser overlay ke kanan (%)
     $sy  = $ovn('card_ov_y_shift', 0);   // geser overlay ke bawah (%)
     $ov  = [
         'photo_w'  => $ovn('card_ov_photo_w', 22),
         'photo_top'=> $ovn('card_ov_photo_top', 25),
-        'photo_rt' => $ovn('card_ov_photo_right', 8.5),
+        // Titik-tengah foto diukur dari tepi KANAN kartu (%). Kecilkan = geser
+        // foto (dan QR) ke kanan; besarkan = ke kiri.
+        'photo_cx' => $ovn('card_ov_photo_cx', 18),
         'qr_w'     => $ovn('card_ov_qr_w', 12),
         'qr_top'   => $ovn('card_ov_qr_top', 65),
-        'qr_shift' => $ovn('card_ov_qr_shift', 1),   // + = geser blok QR ke kanan (%)
+        'qr_shift' => $ovn('card_ov_qr_shift', 0),   // + = geser blok QR ke kanan (%)
         'font'     => $ovn('card_ov_font_scale', 100),
     ];
-    // Blok QR+verifikasi dipusatkan tepat di bawah tengah foto.
-    $qrBlockW = 30;
-    $qrRight  = round(($ov['photo_rt'] + $ov['photo_w'] / 2) - $qrBlockW / 2 - $sx - $ov['qr_shift'], 3);
-    $ovText   = setting('card_ov_text_color', '#20232e');
-    $ovLabelC = setting('card_ov_label_color', '#5a2d8f');
-    $ovShowQr = setting('card_ov_show_qr', '1') !== '0';
+    // Foto & blok QR sama-sama dipusatkan pada titik photo_cx (jadi sejajar).
+    $photoRight = round($ov['photo_cx'] - $ov['photo_w'] / 2 - $sx, 3);
+    $qrBlockW   = 30;
+    $qrRight    = round($ov['photo_cx'] - $qrBlockW / 2 - $sx - $ov['qr_shift'], 3);
+    $ovText   = $ovs('card_ov_text_color', '#20232e');
+    $ovLabelC = $ovs('card_ov_label_color', '#5a2d8f');
+    $ovShowQr = $ovs('card_ov_show_qr', '1') !== '0';
     $pw = fn ($f) => round($tplW * $f, 2) . 'px';                          // geometri (px)
     $fw = fn ($f) => round($tplW * $f * ($ov['font'] / 100), 2) . 'px';   // font-size (px)
     $L  = fn ($p) => round($p + $sx, 3) . '%';                             // left  + shift
@@ -180,7 +186,7 @@
   </div>
 
   {{-- Foto (kanan atas) --}}
-  <div class="ktb" style="right:{{ round($ov['photo_rt'] - $sx, 3) }}%; top:{{ $T($ov['photo_top']) }}; width:{{ $ov['photo_w'] }}%;">
+  <div class="ktb" style="right:{{ $photoRight }}%; top:{{ $T($ov['photo_top']) }}; width:{{ $ov['photo_w'] }}%;">
     @if($fotoUrl)
       <img class="ktov-photo" src="{{ $fotoUrl }}" alt="Foto {{ $namaAnggota }}">
     @else
