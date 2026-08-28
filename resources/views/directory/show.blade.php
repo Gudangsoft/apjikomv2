@@ -152,7 +152,7 @@
                 @endif
                 
                 <!-- Academic Profile Links -->
-                @if($member->google_scholar_link || $member->sinta_link || $member->orcid_link || $member->scopus_link)
+                @if($member->google_scholar_link || $member->sinta_link || $member->orcid_link || $member->scopus_link || $member->scirep_id)
                 <div class="mt-8 max-w-4xl mx-auto">
                     <div class="bg-white/95 backdrop-blur-sm rounded-2xl shadow-xl p-6 border border-white/20">
                         <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
@@ -206,6 +206,18 @@
                                 <p class="text-sm font-bold text-gray-900 text-center">Scopus</p>
                                 <p class="text-xs text-gray-600 text-center mt-1">Database Elsevier</p>
                             </a>
+                            @endif
+
+                            @if($member->scirep_id)
+                            <div class="flex flex-col items-center justify-center p-4 bg-gradient-to-br from-purple-50 to-purple-100 rounded-xl border border-purple-200">
+                                <div class="w-12 h-12 bg-purple-500 rounded-xl flex items-center justify-center mb-3 shadow-md">
+                                    <svg class="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 20 20">
+                                        <path fill-rule="evenodd" d="M6 2a2 2 0 00-2 2v12a2 2 0 002 2h8a2 2 0 002-2V7.414A2 2 0 0015.414 6L12 2.586A2 2 0 0010.586 2H6zm2 10a1 1 0 100 2h4a1 1 0 100-2H8z" clip-rule="evenodd"/>
+                                    </svg>
+                                </div>
+                                <p class="text-sm font-bold text-gray-900 text-center">SciREP ID</p>
+                                <p class="text-xs text-gray-600 text-center mt-1 break-all">{{ $member->scirep_id }}</p>
+                            </div>
                             @endif
                         </div>
                     </div>

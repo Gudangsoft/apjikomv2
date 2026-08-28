@@ -340,6 +340,7 @@ class MemberDashboardController extends Controller
                 'sinta_link' => 'nullable|url|max:255',
                 'orcid_link' => 'nullable|url|max:255',
                 'scopus_link' => 'nullable|url|max:255',
+                'scirep_id' => 'nullable|string|max:255',
                 'cv_file' => 'sometimes|nullable|file|mimes:pdf,doc,docx|max:5120', // 5MB
                 'delete_cv' => 'nullable|in:0,1',
             ], [
@@ -423,6 +424,7 @@ class MemberDashboardController extends Controller
                 'sinta_link' => $request->sinta_link,
                 'orcid_link' => $request->orcid_link,
                 'scopus_link' => $request->scopus_link,
+                'scirep_id' => $request->input('scirep_id', $member->scirep_id),
                 'cv_file' => $member->cv_file,
             ]);
             \Log::info('Member updated successfully');

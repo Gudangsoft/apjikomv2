@@ -39,6 +39,7 @@ class Member extends Model
         'sinta_link',
         'orcid_link',
         'scopus_link',
+        'scirep_id',
         'is_verified',
         'verified_at',
         'verification_document',

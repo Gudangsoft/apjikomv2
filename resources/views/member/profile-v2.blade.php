@@ -574,6 +574,16 @@
                                 </div>
                                 <input type='url' name='scopus_link' value='{{ old("scopus_link", $member->scopus_link) }}' placeholder='https://www.scopus.com/...' class='flex-1 px-4 py-2 border-2 border-gray-200 rounded-lg focus:border-orange-500 focus:ring-2 focus:ring-orange-200 transition-all text-sm'>
                             </div>
+
+                            <!-- SciREP ID -->
+                            <div class='flex items-center gap-3'>
+                                <div class='flex items-center justify-center w-10 h-10 bg-purple-100 rounded-lg flex-shrink-0'>
+                                    <svg class='w-5 h-5 text-purple-600' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
+                                        <path stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M7 7h.01M7 3h5a1.99 1.99 0 011.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.99 1.99 0 013 12V7a4 4 0 014-4z'></path>
+                                    </svg>
+                                </div>
+                                <input type='text' name='scirep_id' value='{{ old("scirep_id", $member->scirep_id) }}' placeholder='SciREP ID (mis. 12345)' class='flex-1 px-4 py-2 border-2 border-gray-200 rounded-lg focus:border-purple-500 focus:ring-2 focus:ring-purple-200 transition-all text-sm'>
+                            </div>
                         </div>
                         <div class="flex justify-end mt-8">
                             <button type="submit" class="px-8 py-3 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-xl shadow transition-all duration-200 text-lg">
