@@ -52,9 +52,10 @@
     $sy  = $ovn('card_ov_y_shift', 0);   // geser overlay ke bawah (%)
     $ov  = [
         'photo_w'  => $ovn('card_ov_photo_w', 22),
-        'photo_top'=> $ovn('card_ov_photo_top', 18.5),
+        'photo_top'=> $ovn('card_ov_photo_top', 25),
         'photo_rt' => $ovn('card_ov_photo_right', 8.5),
         'qr_w'     => $ovn('card_ov_qr_w', 12),
+        'qr_top'   => $ovn('card_ov_qr_top', 65),
         'font'     => $ovn('card_ov_font_scale', 100),
     ];
     $ovText   = setting('card_ov_text_color', '#20232e');
@@ -130,7 +131,7 @@
     .ktov-v.sm { font-family: var(--ff-body); font-weight: 600; font-size: {{ $fw(0.0094) }}; }
     .ktov-clamp { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
     .ktov-body { color: #3a3742; line-height: 1.5; font-size: {{ $fw(0.0074) }}; }
-    .ktov-photo { width: 100%; aspect-ratio: 3 / 3.5; object-fit: cover; border-radius: {{ $pw(0.007) }}; border: {{ $pw(0.0022) }} solid {{ $ovLabelC }}; background: #e7e2ef; display: block; }
+    .ktov-photo { width: 100%; aspect-ratio: 3 / 3.3; object-fit: cover; border-radius: {{ $pw(0.007) }}; border: {{ $pw(0.0022) }} solid {{ $ovLabelC }}; background: #e7e2ef; display: block; }
     .ktov-ph { display: flex; align-items: center; justify-content: center; font-family: var(--ff-display); font-weight: 700; letter-spacing: 1px; color: #7a7091; font-size: {{ $fw(0.008) }}; }
     .ktov-qr { width: 100%; aspect-ratio: 1/1; background: #fff; padding: {{ $pw(0.004) }}; border-radius: {{ $pw(0.005) }}; border: {{ $pw(0.0022) }} solid {{ $ovLabelC }}; }
     .ktov-qr svg { display: block; width: 100%; height: 100%; }
@@ -184,9 +185,9 @@
   </div>
 
   @if($ovShowQr)
-  {{-- QR (kanan bawah) --}}
-  <div class="ktb" style="left:{{ $L(66) }}; top:{{ $T(64) }}; width:{{ $ov['qr_w'] }}%;">
-    <div class="ktov-qr">
+  {{-- QR + verifikasi — satu blok, dipusatkan di bawah foto --}}
+  <div class="ktb" style="left:{{ $L(63.5) }}; top:{{ $T($ov['qr_top']) }}; width:33%; display:flex; align-items:center; justify-content:center; gap:{{ $pw(0.016) }};">
+    <div class="ktov-qr" style="width:{{ $pw($ov['qr_w'] / 100) }}; flex:none;">
       @if($qrSvg)
         {!! $qrSvg !!}
       @else
@@ -198,14 +199,12 @@
         </svg>
       @endif
     </div>
-  </div>
-
-  {{-- Verifikasi (kanan bawah, sebelah QR) --}}
-  <div class="ktb ktcol" style="left:{{ $L(80) }}; top:{{ $T(67) }}; width:16%;">
-    <div style="font-family:var(--ff-display); font-weight:700; letter-spacing:1.2px; color:#2b2b33; font-size:{{ $fw(0.0088) }}; line-height:1.3;">VERIFIKASI<br>ANGGOTA</div>
-    <div style="display:flex; align-items:center; gap:{{ $pw(0.004) }}; margin-top:{{ $pw(0.006) }};">
-      <svg width="{{ $pw(0.016) }}" height="{{ $pw(0.016) }}" viewBox="0 0 24 24"><path d="M12 2l8 3v6c0 5.1-3.4 9.4-8 11-4.6-1.6-8-5.9-8-11V5z" fill="{{ $ovLabelC }}"/><path d="M8.3 12.2l2.6 2.6 4.8-5.4" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-      <span style="font-family:var(--ff-display); font-weight:700; color:{{ $ovLabelC }}; font-size:{{ $fw(0.0088) }};">TERDAFTAR RESMI</span>
+    <div class="ktcol" style="flex:none;">
+      <div style="font-family:var(--ff-display); font-weight:700; letter-spacing:1.2px; color:#2b2b33; font-size:{{ $fw(0.0088) }}; line-height:1.3;">VERIFIKASI<br>ANGGOTA</div>
+      <div style="display:flex; align-items:center; gap:{{ $pw(0.004) }}; margin-top:{{ $pw(0.006) }};">
+        <svg width="{{ $pw(0.016) }}" height="{{ $pw(0.016) }}" viewBox="0 0 24 24"><path d="M12 2l8 3v6c0 5.1-3.4 9.4-8 11-4.6-1.6-8-5.9-8-11V5z" fill="{{ $ovLabelC }}"/><path d="M8.3 12.2l2.6 2.6 4.8-5.4" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <span style="font-family:var(--ff-display); font-weight:700; color:{{ $ovLabelC }}; font-size:{{ $fw(0.0088) }};">TERDAFTAR RESMI</span>
+      </div>
     </div>
   </div>
   @endif
