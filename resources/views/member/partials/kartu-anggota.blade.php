@@ -60,14 +60,11 @@
         // foto (dan QR) ke kanan; besarkan = ke kiri.
         'photo_cx' => $ovn('card_ov_photo_cx', 16),
         'qr_w'     => $ovn('card_ov_qr_w', 12),
-        'qr_top'   => $ovn('card_ov_qr_top', 65),
-        'qr_shift' => $ovn('card_ov_qr_shift', 0),   // + = geser blok QR ke kanan (%)
+        'qr_left'  => $ovn('card_ov_qr_left', 14),   // QR di kiri, di bawah seal
+        'qr_top'   => $ovn('card_ov_qr_top', 31),
         'font'     => $ovn('card_ov_font_scale', 100),
     ];
-    // Foto & blok QR sama-sama dipusatkan pada titik photo_cx (jadi sejajar).
     $photoRight = round($ov['photo_cx'] - $ov['photo_w'] / 2 - $sx, 3);
-    $qrBlockW   = 28;
-    $qrRight    = round($ov['photo_cx'] - $qrBlockW / 2 - $sx - $ov['qr_shift'], 3);
     $ovText   = $ovs('card_ov_text_color', '#20232e');
     $ovLabelC = $ovs('card_ov_label_color', '#5a2d8f');
     $ovShowQr = $ovs('card_ov_show_qr', '1') !== '0';
@@ -132,10 +129,10 @@
     .ktcol { display: flex; flex-direction: column; }
     .ktov-h1 { font-family: var(--ff-display); font-weight: 800; letter-spacing: .5px; color: #20232e; font-size: {{ $fw(0.028) }}; white-space: nowrap; }
     .ktov-pill { display: inline-block; background: {{ $ovLabelC }}; color: #fff; font-family: var(--ff-display); font-weight: 700; letter-spacing: 1.4px; font-size: {{ $fw(0.0145) }}; padding: {{ $pw(0.0056) }} {{ $pw(0.02) }}; border-radius: 999px; }
-    .ktov-tag { font-style: italic; font-weight: 600; color: #4c4657; font-size: {{ $fw(0.0132) }}; }
-    .ktov-numbox { align-self: stretch; margin-top: {{ $pw(0.009) }}; padding: {{ $pw(0.0065) }} {{ $pw(0.014) }}; border-radius: {{ $pw(0.006) }}; background: #f4eff9; border: 1.5px solid #d6c9ea; }
-    .ktov-cap { font-family: var(--ff-display); font-weight: 700; letter-spacing: 2px; color: {{ $ovLabelC }}; font-size: {{ $fw(0.0072) }}; }
-    .ktov-num { font-family: var(--ff-display); font-weight: 800; letter-spacing: .5px; color: {{ $ovText }}; font-size: {{ $fw(0.024) }}; line-height: 1.1; margin-top: {{ $pw(0.002) }}; }
+    .ktov-tag { font-style: italic; font-weight: 600; color: #4c4657; font-size: {{ $fw(0.0132) }}; margin-top: {{ $pw(0.007) }}; }
+    .ktov-div { width: 100%; height: 1.5px; background: #d7cbe8; margin: {{ $pw(0.007) }} 0; }
+    .ktov-num { font-family: var(--ff-display); font-weight: 800; letter-spacing: .5px; color: {{ $ovText }}; font-size: {{ $fw(0.028) }}; text-align: left; }
+    .ktov-cap { font-family: var(--ff-display); font-weight: 700; letter-spacing: 2.5px; color: #6b6478; font-size: {{ $fw(0.0076) }}; margin-top: {{ $pw(0.003) }}; text-align: left; }
     .ktov-l { font-family: var(--ff-display); font-weight: 700; text-transform: uppercase; letter-spacing: 1.1px; color: {{ $ovLabelC }}; font-size: {{ $fw(0.0076) }}; }
     .ktov-v { font-family: var(--ff-display); font-weight: 700; color: {{ $ovText }}; font-size: {{ $fw(0.0112) }}; line-height: 1.22; }
     .ktov-v.sm { font-family: var(--ff-body); font-weight: 600; font-size: {{ $fw(0.0094) }}; }
@@ -160,13 +157,14 @@
   {{-- Judul — sejajar kiri dengan pill / nomor di bawahnya --}}
   <div class="ktb ktov-h1" style="left:{{ $L(29) }}; top:{{ $T(33) }};">KARTU TANDA ANGGOTA</div>
 
-  {{-- Blok tengah: pill, tagline, kotak nomor anggota --}}
-  <div class="ktb ktcol" style="left:{{ $L(29) }}; top:{{ $T(38.5) }}; width:40%; align-items:flex-start; gap:{{ $pw(0.006) }};">
+  {{-- Blok tengah: pill, tagline, garis, nomor anggota --}}
+  <div class="ktb ktcol" style="left:{{ $L(29) }}; top:{{ $T(39) }}; width:39%; align-items:flex-start;">
     <span class="ktov-pill">ANGGOTA APJIKOM</span>
     <div class="ktov-tag">Bersama Mengelola Jurnal, Membangun Bangsa</div>
-    <div class="ktov-numbox">
-      <div class="ktov-cap">NOMOR ANGGOTA</div>
+    <div class="ktov-div"></div>
+    <div style="width:100%;">
       <div class="ktov-num">{{ $nomorAnggota }}</div>
+      <div class="ktov-cap">NOMOR ANGGOTA</div>
     </div>
   </div>
 
@@ -208,9 +206,9 @@
   </div>
 
   @if($ovShowQr)
-  {{-- QR + verifikasi — satu blok, dipusatkan tepat di bawah foto --}}
-  <div class="ktb" style="right:{{ $qrRight }}%; top:{{ $T($ov['qr_top']) }}; width:{{ $qrBlockW }}%; display:flex; align-items:center; justify-content:center; gap:{{ $pw(0.014) }};">
-    <div class="ktov-qr" style="width:{{ $pw($ov['qr_w'] / 100) }}; flex:none;">
+  {{-- QR + verifikasi — kiri, di bawah seal --}}
+  <div class="ktb ktcol" style="left:{{ $L($ov['qr_left']) }}; top:{{ $T($ov['qr_top']) }}; align-items:flex-start; gap:{{ $pw(0.006) }};">
+    <div class="ktov-qr" style="width:{{ $pw($ov['qr_w'] / 100) }};">
       @if($qrSvg)
         {!! $qrSvg !!}
       @else
@@ -222,11 +220,11 @@
         </svg>
       @endif
     </div>
-    <div class="ktcol" style="flex:none;">
-      <div style="font-family:var(--ff-display); font-weight:700; letter-spacing:1.2px; color:#2b2b33; font-size:{{ $fw(0.0088) }}; line-height:1.3;">VERIFIKASI<br>ANGGOTA</div>
-      <div style="display:flex; align-items:center; gap:{{ $pw(0.004) }}; margin-top:{{ $pw(0.006) }};">
-        <svg width="{{ $pw(0.016) }}" height="{{ $pw(0.016) }}" viewBox="0 0 24 24"><path d="M12 2l8 3v6c0 5.1-3.4 9.4-8 11-4.6-1.6-8-5.9-8-11V5z" fill="{{ $ovLabelC }}"/><path d="M8.3 12.2l2.6 2.6 4.8-5.4" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        <span style="font-family:var(--ff-display); font-weight:700; color:{{ $ovLabelC }}; font-size:{{ $fw(0.0088) }};">TERDAFTAR RESMI</span>
+    <div>
+      <div style="font-family:var(--ff-display); font-weight:700; letter-spacing:1.2px; color:#2b2b33; font-size:{{ $fw(0.0082) }}; line-height:1.25;">VERIFIKASI ANGGOTA</div>
+      <div style="display:flex; align-items:center; gap:{{ $pw(0.004) }}; margin-top:{{ $pw(0.004) }};">
+        <svg width="{{ $pw(0.015) }}" height="{{ $pw(0.015) }}" viewBox="0 0 24 24"><path d="M12 2l8 3v6c0 5.1-3.4 9.4-8 11-4.6-1.6-8-5.9-8-11V5z" fill="{{ $ovLabelC }}"/><path d="M8.3 12.2l2.6 2.6 4.8-5.4" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <span style="font-family:var(--ff-display); font-weight:700; color:{{ $ovLabelC }}; font-size:{{ $fw(0.0082) }};">TERDAFTAR RESMI</span>
       </div>
     </div>
   </div>
