@@ -140,7 +140,12 @@
     .ktov-v { font-family: var(--ff-display); font-weight: 700; color: {{ $ovText }}; font-size: {{ $fw(0.0112) }}; line-height: 1.22; }
     .ktov-v.sm { font-family: var(--ff-body); font-weight: 600; font-size: {{ $fw(0.0094) }}; }
     .ktov-clamp { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
-    .ktov-body { color: #3a3742; line-height: 1.5; font-size: {{ $fw(0.0074) }}; }
+    .ktov-body { color: #2b2733; line-height: 1.55; font-size: {{ $fw(0.0082) }}; }
+    .ktov-ico { display: flex; align-items: flex-start; gap: {{ $pw(0.006) }}; color: #2b2733; line-height: 1.5; font-size: {{ $fw(0.0082) }}; margin-top: {{ $pw(0.0035) }}; }
+    .ktov-ico > svg { flex: none; width: {{ $pw(0.0118) }}; height: {{ $pw(0.0118) }}; margin-top: {{ $pw(0.0012) }}; }
+    .ktov-ico2 { display: flex; flex-wrap: wrap; align-items: center; gap: {{ $pw(0.004) }} {{ $pw(0.017) }}; color: #2b2733; font-size: {{ $fw(0.0082) }}; margin-top: {{ $pw(0.005) }}; }
+    .ktov-ico2 span.i { display: inline-flex; align-items: center; gap: {{ $pw(0.005) }}; }
+    .ktov-ico2 svg { flex: none; width: {{ $pw(0.0118) }}; height: {{ $pw(0.0118) }}; }
     .ktov-photo { width: 100%; aspect-ratio: 3 / 3.3; object-fit: cover; border-radius: {{ $pw(0.007) }}; border: {{ $pw(0.0022) }} solid {{ $ovLabelC }}; background: #e7e2ef; display: block; }
     .ktov-ph { display: flex; align-items: center; justify-content: center; font-family: var(--ff-display); font-weight: 700; letter-spacing: 1px; color: #7a7091; font-size: {{ $fw(0.008) }}; }
     .ktov-qr { width: 100%; aspect-ratio: 1/1; background: #fff; padding: {{ $pw(0.004) }}; border-radius: {{ $pw(0.005) }}; border: {{ $pw(0.0022) }} solid {{ $ovLabelC }}; }
@@ -176,12 +181,21 @@
   </div>
 
   {{-- Nomor AHU + Kantor Sekretariat (tengah bawah) --}}
-  <div class="ktb ktcol" style="left:{{ $L(33) }}; top:{{ $T(59) }}; width:33%; gap:{{ $pw(0.012) }};">
-    <div><div class="ktov-l">Nomor AHU</div><div class="ktov-body">{{ $ahu }}</div></div>
+  <div class="ktb ktcol" style="left:{{ $L(33) }}; top:{{ $T(59) }}; width:33%; gap:{{ $pw(0.013) }};">
     <div>
-      <div class="ktov-l">Kantor Sekretariat</div>
-      <div class="ktov-body">{{ $alamat }}</div>
-      <div class="ktov-body">{{ $telp }} &nbsp;&bull;&nbsp; {{ $email }}</div>
+      <div class="ktov-l">Nomor AHU</div>
+      <div class="ktov-body">{{ $ahu }}</div>
+    </div>
+    <div>
+      <div class="ktov-l">Kantor Sekretariat:</div>
+      <div class="ktov-ico">
+        <svg viewBox="0 0 24 24" fill="none" stroke="{{ $ovLabelC }}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s7-6.5 7-12A7 7 0 0 0 5 10c0 5.5 7 12 7 12z"/><circle cx="12" cy="10" r="2.5"/></svg>
+        <span>{{ $alamat }}</span>
+      </div>
+      <div class="ktov-ico2">
+        <span class="i"><svg viewBox="0 0 24 24" fill="{{ $ovLabelC }}"><path d="M6.6 10.8a15.5 15.5 0 0 0 6.6 6.6l2.2-2.2a1 1 0 0 1 1-.25 11.4 11.4 0 0 0 3.5.56 1 1 0 0 1 1 1V20a1 1 0 0 1-1 1A17 17 0 0 1 3 4a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1c0 1.2.2 2.4.56 3.5a1 1 0 0 1-.25 1z"/></svg><span>{{ $telp }}</span></span>
+        <span class="i"><svg viewBox="0 0 24 24" fill="none" stroke="{{ $ovLabelC }}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4.5" width="20" height="15" rx="2.5"/><path d="M3 7l9 6 9-6"/></svg><span>{{ $email }}</span></span>
+      </div>
     </div>
   </div>
 
