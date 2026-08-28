@@ -1,0 +1,279 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Kartu Anggota APJIKOM — Desain</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800&family=Open+Sans:wght@400;600;700&display=swap">
+<style>
+  /* ===== Ganti satu warna ini untuk menggeser seluruh tema kartu ===== */
+  :root {
+    --accent: #5a2d8f;
+    --accent-dark: #4c2678;
+    --accent-deep: #3b1d5d;
+    --accent-soft: #d6cbe3;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: #e9e4f1;
+    font-family: 'Open Sans', 'Segoe UI', system-ui, sans-serif;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    padding: 40px 24px;
+    overflow-x: auto;
+  }
+  a { color: var(--accent); text-decoration: none; }
+  a:hover { color: var(--accent-deep); }
+
+  .card {
+    position: relative;
+    width: 1200px;
+    height: 757px;
+    flex: none;
+    overflow: hidden;
+    border-radius: 30px;
+    background: linear-gradient(135deg, #fbf9fd 0%, #f2ecf8 52%, #e9dff5 100%);
+    box-shadow: 0 30px 70px -22px rgba(59, 29, 93, .5);
+    color: #23262f;
+  }
+  .layer { position: absolute; inset: 0; }
+  .main {
+    position: absolute; left: 0; top: 0; bottom: 46px; right: 372px; z-index: 3;
+    padding: 32px 0 20px 46px; display: flex; flex-direction: column; gap: 13px;
+  }
+  .side {
+    position: absolute; top: 32px; right: 40px; bottom: 60px; width: 320px; z-index: 3;
+    display: flex; flex-direction: column; align-items: flex-end; gap: 22px;
+  }
+  .footer {
+    position: absolute; left: 0; right: 0; bottom: 0; height: 46px; z-index: 4;
+    display: flex; align-items: center; justify-content: space-between; gap: 18px; padding: 0 54px;
+    background: linear-gradient(90deg, var(--accent-deep), var(--accent)); color: #fff;
+  }
+  .brand { display: flex; align-items: center; gap: 16px; }
+  .ico { display: inline-flex; flex: none; }
+  .fitem { display: flex; align-items: flex-start; gap: 9px; }
+  .fnav { display: flex; align-items: center; gap: 9px; font: 600 12px 'Open Sans', 'Segoe UI', sans-serif; letter-spacing: .3px; }
+  .label { font-weight: 700; font-size: 10px; letter-spacing: 1.3px; color: var(--accent); }
+  .value { font-weight: 700; font-size: 15px; color: #23262f; letter-spacing: .3px; }
+  .qr rect, .qr path { fill: #23262f; }
+</style>
+</head>
+<body>
+
+<div class="card">
+
+  <!-- decorative circuitry -->
+  <svg class="layer" width="100%" height="100%" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg" style="opacity:.5">
+    <defs>
+      <pattern id="circuit" width="94" height="94" patternUnits="userSpaceOnUse">
+        <g fill="none" stroke="#d9cee9" stroke-width="1">
+          <path d="M12 12 H44 V38 H70"/>
+          <path d="M74 6 V26 H58 V60"/>
+          <path d="M40 84 H62 V64 H88"/>
+          <path d="M6 60 H26 V78"/>
+        </g>
+        <g fill="#cdbfe4">
+          <circle cx="12" cy="12" r="2.3"/><circle cx="70" cy="38" r="2.3"/>
+          <circle cx="58" cy="60" r="2.3"/><circle cx="26" cy="78" r="2.3"/><circle cx="88" cy="64" r="2.3"/>
+        </g>
+      </pattern>
+    </defs>
+    <rect width="100%" height="100%" fill="url(#circuit)"/>
+  </svg>
+
+  <!-- top-left purple corner -->
+  <svg class="layer" style="width:300px;height:210px" viewBox="0 0 300 210" xmlns="http://www.w3.org/2000/svg">
+    <path d="M0 0 H236 C196 66 150 104 92 132 C44 156 16 182 0 210 Z" fill="var(--accent)"/>
+    <path d="M0 0 H150 C124 46 96 74 52 96 C24 110 8 140 0 166 Z" fill="var(--accent-deep)" opacity=".55"/>
+  </svg>
+  <!-- soft sweep -->
+  <svg class="layer" style="left:120px;top:-70px;width:760px;height:300px" viewBox="0 0 760 300" xmlns="http://www.w3.org/2000/svg">
+    <ellipse cx="380" cy="80" rx="420" ry="150" fill="var(--accent-soft)" opacity=".26"/>
+  </svg>
+  <!-- bottom-left wedge -->
+  <svg class="layer" style="top:auto;bottom:46px;left:0;width:210px;height:120px" viewBox="0 0 210 120" xmlns="http://www.w3.org/2000/svg">
+    <path d="M0 120 H190 C150 78 96 44 0 24 Z" fill="var(--accent)" opacity=".9"/>
+    <path d="M0 120 H120 C92 90 54 66 0 52 Z" fill="var(--accent-deep)" opacity=".5"/>
+  </svg>
+  <!-- bottom-right dot grid -->
+  <svg class="layer" style="left:auto;top:auto;right:30px;bottom:58px;width:78px;height:46px" viewBox="0 0 78 46" xmlns="http://www.w3.org/2000/svg">
+    <g fill="var(--accent)" opacity=".5">
+      <circle cx="6" cy="6" r="3"/><circle cx="24" cy="6" r="3"/><circle cx="42" cy="6" r="3"/><circle cx="60" cy="6" r="3"/><circle cx="73" cy="6" r="3"/>
+      <circle cx="6" cy="24" r="3"/><circle cx="24" cy="24" r="3"/><circle cx="42" cy="24" r="3"/><circle cx="60" cy="24" r="3"/><circle cx="73" cy="24" r="3"/>
+      <circle cx="6" cy="40" r="3"/><circle cx="24" cy="40" r="3"/><circle cx="42" cy="40" r="3"/><circle cx="60" cy="40" r="3"/><circle cx="73" cy="40" r="3"/>
+    </g>
+  </svg>
+
+  <!-- ================= MAIN COLUMN ================= -->
+  <div class="main">
+
+    <div class="brand">
+      <svg width="90" height="90" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" style="flex:none">
+        <defs><path id="sealArc" d="M50 50 m0 -37 a37 37 0 1 1 -0.01 0" fill="none"/></defs>
+        <circle cx="50" cy="50" r="49" fill="var(--accent)"/>
+        <circle cx="50" cy="50" r="41.5" fill="#ffffff"/>
+        <circle cx="50" cy="50" r="39.5" fill="none" stroke="var(--accent)" stroke-width="1"/>
+        <text font-family="Montserrat, sans-serif" font-size="5.1" font-weight="700" letter-spacing="0.32" fill="var(--accent-deep)">
+          <textPath href="#sealArc" xlink:href="#sealArc" startOffset="1%">ASOSIASI PENGELOLA JURNAL INFORMATIKA DAN KOMPUTER INDONESIA</textPath>
+        </text>
+        <g transform="translate(50 45)">
+          <g fill="var(--accent)">
+            <circle cx="-11" cy="-13" r="2.3"/><circle cx="0" cy="-17" r="2.3"/><circle cx="11" cy="-13" r="2.3"/>
+            <circle cx="-15" cy="-5" r="1.9"/><circle cx="15" cy="-5" r="1.9"/>
+          </g>
+          <g stroke="var(--accent)" stroke-width="1">
+            <line x1="-11" y1="-13" x2="0" y2="-17"/><line x1="0" y1="-17" x2="11" y2="-13"/>
+            <line x1="-11" y1="-13" x2="-15" y2="-5"/><line x1="11" y1="-13" x2="15" y2="-5"/>
+            <line x1="0" y1="-17" x2="0" y2="-7"/>
+          </g>
+          <path d="M-17 3 Q-9 -1 0 3 L0 15 Q-9 11 -17 15 Z" fill="var(--accent)"/>
+          <path d="M17 3 Q9 -1 0 3 L0 15 Q9 11 17 15 Z" fill="var(--accent-dark)"/>
+          <rect x="-4.5" y="-8" width="9" height="13" rx="4.5" fill="#fff" stroke="var(--accent)" stroke-width="1.2"/>
+          <line x1="0" y1="-8" x2="0" y2="-2.5" stroke="var(--accent)" stroke-width="1.2"/>
+        </g>
+        <text x="50" y="90" text-anchor="middle" font-family="Montserrat, sans-serif" font-size="8.5" font-weight="800" fill="var(--accent-deep)">APJIKOM</text>
+      </svg>
+      <div>
+        <div style="font-family:'Montserrat','Segoe UI',sans-serif; font-weight:800; font-size:40px; line-height:1; letter-spacing:.5px; color:var(--accent);">APJIKOM</div>
+        <div style="font-weight:700; font-size:11px; line-height:1.32; color:#3f3a48; letter-spacing:.2px; margin-top:5px;">Asosiasi Pengelola Jurnal<br>Informatika dan Komputer Indonesia</div>
+      </div>
+    </div>
+
+    <div style="font-family:'Montserrat','Segoe UI',sans-serif; font-weight:800; font-size:29px; letter-spacing:.5px; color:#20232e; margin-top:4px;">KARTU TANDA ANGGOTA</div>
+
+    <div>
+      <span style="display:inline-block; background:var(--accent); color:#fff; font-family:'Montserrat','Segoe UI',sans-serif; font-weight:700; font-size:15px; letter-spacing:1.5px; padding:9px 28px; border-radius:999px; box-shadow:0 8px 18px -6px rgba(59, 29, 93, .55);">ANGGOTA APJIKOM</span>
+    </div>
+
+    <div style="font-style:italic; font-weight:600; font-size:13.5px; color:#4c4657;">Bersama Mengelola Jurnal, Membangun Bangsa</div>
+
+    <div style="width:66%; height:1.5px; background:#d7cbe8; margin:3px 0;"></div>
+
+    <div style="width:80%; text-align:center;">
+      <div style="font-family:'Montserrat','Segoe UI',sans-serif; font-weight:700; font-size:29px; letter-spacing:3px; color:#23262f;">1234 1234 1234 1234 1234</div>
+      <div style="font-weight:700; font-size:11px; letter-spacing:2.5px; color:#6b6478; margin-top:4px;">NO. KARTU E-TOOL</div>
+    </div>
+
+    <div style="flex:1; min-height:8px;"></div>
+
+    <div style="display:flex; gap:40px;">
+      <div style="width:206px; display:flex; flex-direction:column; gap:12px;">
+        <div>
+          <div class="label">NOMOR ANGGOTA</div>
+          <div class="value">APJIKOM.2025.000123</div>
+        </div>
+        <div>
+          <div class="label">NAMA</div>
+          <div class="value">DANANG</div>
+        </div>
+        <div>
+          <div class="label">JABATAN / PROFESI</div>
+          <div class="value">DOKTOR ILMU KOMPUTER</div>
+        </div>
+        <div>
+          <div class="label">BERLAKU S/D</div>
+          <div class="value">04/2029</div>
+        </div>
+      </div>
+
+      <div style="flex:1; display:flex; flex-direction:column; gap:11px;">
+        <div>
+          <div class="label" style="margin-bottom:3px;">NOMOR AHU</div>
+          <div style="font-size:11px; line-height:1.5; color:#3a3742; max-width:390px;">AHU-0007794.AH.01.07.Tahun 2025 tentang Pengesahan Pendirian Perkumpulan Asosiasi Pengelola Jurnal Informatika dan Komputer Indonesia</div>
+        </div>
+        <div>
+          <div class="label" style="margin-bottom:5px;">KANTOR SEKRETARIAT</div>
+          <div class="fitem" style="font-size:11px; line-height:1.45; color:#3a3742; max-width:390px;">
+            <span class="ico"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s7-6.5 7-12A7 7 0 0 0 5 10c0 5.5 7 12 7 12z"/><circle cx="12" cy="10" r="2.5"/></svg></span>
+            <span>Jl. Watunganten I No.1, Batursari, Kec. Mranggen, Kabupaten Demak, Jawa Tengah 59567</span>
+          </div>
+          <div style="display:flex; gap:20px; margin-top:6px; font-size:11px; color:#3a3742;">
+            <span class="fitem" style="align-items:center;"><span class="ico"><svg width="13" height="13" viewBox="0 0 24 24" fill="var(--accent)"><path d="M6.6 10.8a15.5 15.5 0 0 0 6.6 6.6l2.2-2.2a1 1 0 0 1 1-.25 11.4 11.4 0 0 0 3.5.56 1 1 0 0 1 1 1V20a1 1 0 0 1-1 1A17 17 0 0 1 3 4a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1c0 1.2.2 2.4.56 3.5a1 1 0 0 1-.25 1z"/></svg></span><span>+62 822-2372-5276</span></span>
+            <span class="fitem" style="align-items:center;"><span class="ico"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4.5" width="20" height="15" rx="2.5"/><path d="M3 7l9 6 9-6"/></svg></span><span>sekretariat@apjikom.or.id</span></span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= SIDE COLUMN ================= -->
+  <div class="side">
+
+    <div style="text-align:right;">
+      <div style="font-family:'Montserrat','Segoe UI',sans-serif; font-weight:700; font-size:12.5px; letter-spacing:2px; color:#2b2b33;">BANK PARTNER</div>
+      <div style="display:flex; align-items:center; gap:10px; margin-top:7px; justify-content:flex-end;">
+        <span style="width:42px; height:42px; border:1.5px dashed #b7afc4; border-radius:8px; display:flex; align-items:center; justify-content:center; font-size:7.5px; font-weight:700; color:#9a92a6; letter-spacing:.5px;">LOGO</span>
+        <span style="font-family:'Montserrat','Segoe UI',sans-serif; font-weight:800; font-size:25px; color:#1f3a63; letter-spacing:.5px;">BNI</span>
+      </div>
+      <div style="font-size:8.5px; color:#6b6478; margin-top:4px;">Melayani Negeri, Kebanggaan Bangsa</div>
+    </div>
+
+    <div style="width:196px; height:242px; border-radius:14px; border:3px solid var(--accent); background:linear-gradient(160deg, #eee9f5, #ded4ec); overflow:hidden; box-shadow:0 12px 26px -12px rgba(59, 29, 93, .5); position:relative;">
+      <svg width="100%" height="100%" viewBox="0 0 120 148" preserveAspectRatio="xMidYMax meet" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="60" cy="52" r="24" fill="#b9aed6"/>
+        <path d="M18 150 C20 108 38 86 60 86 C82 86 100 108 102 150 Z" fill="#b9aed6"/>
+      </svg>
+      <span style="position:absolute; left:0; right:0; bottom:7px; text-align:center; font-size:8.5px; letter-spacing:1.5px; color:#7a7091; font-weight:700;">FOTO ANGGOTA</span>
+    </div>
+
+    <div style="display:flex; align-items:center; gap:14px;">
+      <div class="qr" style="width:90px; height:90px; border-radius:10px; border:3px solid var(--accent); background:#fff; padding:6px;">
+        <svg width="100%" height="100%" viewBox="0 0 21 21" shape-rendering="crispEdges" xmlns="http://www.w3.org/2000/svg">
+          <g><path d="M0 0h7v7h-7z M1 1v5h5v-5z" fill-rule="evenodd"/><rect x="2" y="2" width="3" height="3"/></g>
+          <g transform="translate(14 0)"><path d="M0 0h7v7h-7z M1 1v5h5v-5z" fill-rule="evenodd"/><rect x="2" y="2" width="3" height="3"/></g>
+          <g transform="translate(0 14)"><path d="M0 0h7v7h-7z M1 1v5h5v-5z" fill-rule="evenodd"/><rect x="2" y="2" width="3" height="3"/></g>
+          <g id="qrData"></g>
+        </svg>
+      </div>
+      <div style="text-align:left;">
+        <div style="font-family:'Montserrat','Segoe UI',sans-serif; font-weight:700; font-size:11.5px; letter-spacing:1.4px; color:#2b2b33; line-height:1.3; max-width:120px;">VERIFIKASI ANGGOTA</div>
+        <div style="display:flex; align-items:center; gap:6px; margin-top:8px;">
+          <span class="ico"><svg width="20" height="20" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 2l8 3v6c0 5.1-3.4 9.4-8 11-4.6-1.6-8-5.9-8-11V5z" fill="var(--accent)"/><path d="M8.3 12.2l2.6 2.6 4.8-5.4" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+          <span style="font-family:'Montserrat','Segoe UI',sans-serif; font-weight:700; font-size:12px; color:var(--accent);">TERDAFTAR RESMI</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= FOOTER ================= -->
+  <div class="footer">
+    <span class="fnav"><span class="ico"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M3 12h18"/><path d="M12 3c3 3.2 3 14.8 0 18M12 3c-3 3.2-3 14.8 0 18"/></svg></span><span>www.apjikom.or.id</span></span>
+    <span class="fnav"><span class="ico"><svg width="15" height="15" viewBox="0 0 24 24" fill="#fff"><path d="M13.5 21v-8h2.7l.4-3.1h-3.1V7.9c0-.9.25-1.5 1.55-1.5H17V3.6c-.3-.04-1.3-.13-2.5-.13-2.5 0-4.2 1.5-4.2 4.3v2.4H7.5V13h2.8v8z"/></svg></span><span>APJIKOM</span></span>
+    <span class="fnav"><span class="ico"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17" cy="7" r="1.2" fill="#fff" stroke="none"/></svg></span><span>apjikom_id</span></span>
+    <span class="fnav"><span class="ico"><svg width="15" height="15" viewBox="0 0 24 24"><rect x="2" y="5" width="20" height="14" rx="4.5" fill="#fff"/><path d="M10 8.5l6 3.5-6 3.5z" fill="var(--accent)"/></svg></span><span>APJIKOM Official</span></span>
+  </div>
+
+</div>
+
+<script>
+  // QR dekoratif (bukan kode yang bisa dipindai) — modul data di luar 3 finder pattern.
+  (function () {
+    var g = document.getElementById('qrData');
+    if (!g) return;
+    var N = 21, seed = 987654321;
+    function rnd() { seed = (seed * 1103515245 + 12345) & 0x7fffffff; return seed / 0x7fffffff; }
+    var svgNS = 'http://www.w3.org/2000/svg';
+    for (var y = 0; y < N; y++) {
+      for (var x = 0; x < N; x++) {
+        if (x < 8 && y < 8) continue;
+        if (x > N - 9 && y < 8) continue;
+        if (x < 8 && y > N - 9) continue;
+        var on;
+        if (x === 6 || y === 6) { on = ((x + y) % 2 === 0); }
+        else { on = (rnd() > 0.52); }
+        if (!on) continue;
+        var r = document.createElementNS(svgNS, 'rect');
+        r.setAttribute('x', x); r.setAttribute('y', y);
+        r.setAttribute('width', 1); r.setAttribute('height', 1);
+        g.appendChild(r);
+      }
+    }
+  })();
+</script>
+
+</body>
+</html>
