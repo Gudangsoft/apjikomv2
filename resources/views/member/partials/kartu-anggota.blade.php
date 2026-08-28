@@ -137,6 +137,7 @@
     .ktov-v { font-family: var(--ff-display); font-weight: 700; color: {{ $ovText }}; font-size: {{ $fw(0.0154) }}; line-height: 1.28; }
     .ktov-v.sm { font-family: var(--ff-body); font-weight: 600; font-size: {{ $fw(0.0128) }}; line-height: 1.35; }
     .ktov-clamp { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+    .ktov-clamp3 { display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
     .ktov-body { color: #201c28; font-weight: 500; line-height: 1.55; font-size: {{ $fw(0.0092) }}; }
     .ktov-ico { display: flex; align-items: flex-start; gap: {{ $pw(0.006) }}; color: #201c28; font-weight: 500; line-height: 1.5; font-size: {{ $fw(0.0092) }}; margin-top: {{ $pw(0.0035) }}; }
     .ktov-ico > svg { flex: none; width: {{ $pw(0.013) }}; height: {{ $pw(0.013) }}; margin-top: {{ $pw(0.0012) }}; }
@@ -170,11 +171,11 @@
   </div>
 
   {{-- Data member (kiri bawah) --}}
-  <div class="ktb ktcol" style="left:{{ $L(8.5) }}; top:{{ $T(56.5) }}; width:22%; gap:{{ $pw(0.0105) }};">
+  <div class="ktb ktcol" style="left:{{ $L(8.5) }}; top:{{ $T(54.5) }}; width:22%; gap:{{ $pw(0.0105) }};">
     <div><div class="ktov-l">Nama</div><div class="ktov-v">{{ $namaAnggota }}</div></div>
     <div><div class="ktov-l">Jabatan / Profesi</div><div class="ktov-v">{{ $jabatan }}</div></div>
     <div><div class="ktov-l">Institusi</div><div class="ktov-v ktov-clamp">{{ $institusi }}</div></div>
-    <div><div class="ktov-l">Alamat</div><div class="ktov-v sm ktov-clamp">{{ $alamatAnggota }}</div></div>
+    <div><div class="ktov-l">Alamat</div><div class="ktov-v sm ktov-clamp3">{{ $alamatAnggota }}</div></div>
   </div>
 
   {{-- Berlaku S/D — di bawah foto --}}
