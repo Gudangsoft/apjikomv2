@@ -134,8 +134,8 @@
     .ktov-pill { display: inline-block; background: {{ $ovLabelC }}; color: #fff; font-family: var(--ff-display); font-weight: 700; letter-spacing: 1.4px; font-size: {{ $fw(0.0145) }}; padding: {{ $pw(0.0056) }} {{ $pw(0.02) }}; border-radius: 999px; }
     .ktov-tag { font-style: italic; font-weight: 600; color: #4c4657; font-size: {{ $fw(0.0132) }}; margin-top: {{ $pw(0.007) }}; }
     .ktov-div { width: 100%; height: 1.5px; background: #d7cbe8; margin: {{ $pw(0.007) }} 0; }
-    .ktov-num { font-family: var(--ff-display); font-weight: 800; letter-spacing: .5px; color: {{ $ovText }}; font-size: {{ $fw(0.028) }}; text-align: center; }
-    .ktov-cap { font-family: var(--ff-display); font-weight: 700; letter-spacing: 2.5px; color: #6b6478; font-size: {{ $fw(0.0076) }}; margin-top: {{ $pw(0.003) }}; text-align: center; }
+    .ktov-num { font-family: var(--ff-display); font-weight: 800; letter-spacing: .5px; color: {{ $ovText }}; font-size: {{ $fw(0.028) }}; text-align: left; }
+    .ktov-cap { font-family: var(--ff-display); font-weight: 700; letter-spacing: 2.5px; color: #6b6478; font-size: {{ $fw(0.0076) }}; margin-top: {{ $pw(0.003) }}; text-align: left; }
     .ktov-l { font-family: var(--ff-display); font-weight: 700; text-transform: uppercase; letter-spacing: 1.1px; color: {{ $ovLabelC }}; font-size: {{ $fw(0.0076) }}; }
     .ktov-v { font-family: var(--ff-display); font-weight: 700; color: {{ $ovText }}; font-size: {{ $fw(0.0112) }}; line-height: 1.22; }
     .ktov-v.sm { font-family: var(--ff-body); font-weight: 600; font-size: {{ $fw(0.0094) }}; }
