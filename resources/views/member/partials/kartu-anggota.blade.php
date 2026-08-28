@@ -190,7 +190,7 @@
 
   {{-- Nomor AHU + Kantor Sekretariat (tengah bawah) --}}
   {{-- width & max-height dibatasi supaya teks panjang tetap wrap rapi, tidak menabrak foto / footer --}}
-  <div class="ktb ktcol" style="left:{{ $L(32) }}; top:{{ $T(62) }}; width:34%; max-height:28%; overflow:hidden; gap:{{ $pw(0.014) }};">
+  <div class="ktb ktcol" style="left:{{ $L(32) }}; top:{{ $T(62) }}; width:38%; max-height:28%; overflow:hidden; gap:{{ $pw(0.014) }};">
     <div>
       <div class="ktov-l">Nomor AHU</div>
       <div class="ktov-body">{{ $ahu }}</div>
