@@ -44,22 +44,26 @@
         $tplSize = @getimagesize(storage_path('app/public/' . $tpl->template_image));
         if ($tplSize) { $tplW = (int) $tplSize[0]; $tplH = (int) $tplSize[1]; }
     }
-    // Overlay diletakkan di dalam AREA KOSONG template (persen terhadap kartu).
+    // Overlay ditata seperti kartu contoh. Posisi tiap blok dalam PERSEN;
+    // geser semua sekaligus lewat card_ov_x_shift / card_ov_y_shift bila
+    // area kosong template berbeda posisi. Ukuran lain bisa disetel juga.
     $ovn = fn ($k, $d) => (float) setting($k, $d);
-    $ov = [
-        'top'     => $ovn('card_ov_area_top', 31),      // batas atas area kosong (%)
-        'bottom'  => $ovn('card_ov_area_bottom', 9),    // sisakan untuk footer (%)
-        'left'    => $ovn('card_ov_area_left', 5),
-        'right'   => $ovn('card_ov_area_right', 3.5),
-        'photo_w' => $ovn('card_ov_photo_w', 21),       // lebar foto (% lebar kartu)
-        'qr_w'    => $ovn('card_ov_qr_w', 12),          // lebar QR  (% lebar kartu)
-        'font'    => $ovn('card_ov_font_scale', 100),   // skala semua font overlay (%)
+    $sx  = $ovn('card_ov_x_shift', 0);   // geser overlay ke kanan (%)
+    $sy  = $ovn('card_ov_y_shift', 0);   // geser overlay ke bawah (%)
+    $ov  = [
+        'photo_w'  => $ovn('card_ov_photo_w', 22),
+        'photo_top'=> $ovn('card_ov_photo_top', 18.5),
+        'photo_rt' => $ovn('card_ov_photo_right', 8.5),
+        'qr_w'     => $ovn('card_ov_qr_w', 12),
+        'font'     => $ovn('card_ov_font_scale', 100),
     ];
     $ovText   = setting('card_ov_text_color', '#20232e');
     $ovLabelC = setting('card_ov_label_color', '#5a2d8f');
     $ovShowQr = setting('card_ov_show_qr', '1') !== '0';
-    $pw = fn ($f) => round($tplW * $f, 2) . 'px';                          // geometri
-    $fw = fn ($f) => round($tplW * $f * ($ov['font'] / 100), 2) . 'px';   // font-size
+    $pw = fn ($f) => round($tplW * $f, 2) . 'px';                          // geometri (px)
+    $fw = fn ($f) => round($tplW * $f * ($ov['font'] / 100), 2) . 'px';   // font-size (px)
+    $L  = fn ($p) => round($p + $sx, 3) . '%';                             // left  + shift
+    $T  = fn ($p) => round($p + $sy, 3) . '%';                             // top   + shift
 
     // QR asli menuju halaman verifikasi keanggotaan (URL literal, aman dari route cache).
     $verifikasiUrl = url('/verifikasi-anggota/' . $m->id);
@@ -113,27 +117,22 @@
       font-family: var(--ff-body); color: {{ $ovText }}; line-height: 1.3;
     }
     .ktapj-card--tpl * { box-sizing: border-box; margin: 0; }
-    .ktov-area { position: absolute; display: flex; gap: {{ $pw(0.02) }}; }
-    .ktov-main { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: {{ $pw(0.009) }}; }
-    .ktov-side { width: {{ $pw(0.36) }}; display: flex; flex-direction: column; align-items: flex-end; gap: {{ $pw(0.014) }}; }
-    .ktov-h1 { font-family: var(--ff-display); font-weight: 800; letter-spacing: .5px; color: #20232e; font-size: {{ $fw(0.029) }}; }
-    .ktov-pill { align-self: flex-start; background: {{ $ovLabelC }}; color: #fff; font-family: var(--ff-display); font-weight: 700; letter-spacing: 1.4px; font-size: {{ $fw(0.0135) }}; padding: {{ $pw(0.006) }} {{ $pw(0.019) }}; border-radius: 999px; }
-    .ktov-tag { font-style: italic; font-weight: 600; color: #4c4657; font-size: {{ $fw(0.0125) }}; }
-    .ktov-div { width: 60%; height: 1.5px; background: #d7cbe8; margin: {{ $pw(0.003) }} 0; }
-    .ktov-num { font-family: var(--ff-display); font-weight: 800; letter-spacing: .5px; color: {{ $ovText }}; font-size: {{ $fw(0.0255) }}; }
-    .ktov-cap { font-family: var(--ff-display); font-weight: 700; letter-spacing: 2px; color: #6b6478; font-size: {{ $fw(0.0072) }}; margin-top: {{ $pw(0.003) }}; }
-    .ktov-grid { display: flex; gap: {{ $pw(0.022) }}; margin-top: {{ $pw(0.007) }}; }
-    .ktov-c1 { width: 46%; display: flex; flex-direction: column; gap: {{ $pw(0.0085) }}; }
-    .ktov-c2 { flex: 1; display: flex; flex-direction: column; gap: {{ $pw(0.009) }}; }
-    .ktov-l { font-family: var(--ff-display); font-weight: 700; text-transform: uppercase; letter-spacing: 1.1px; color: {{ $ovLabelC }}; font-size: {{ $fw(0.0072) }}; }
-    .ktov-v { font-family: var(--ff-display); font-weight: 700; color: {{ $ovText }}; font-size: {{ $fw(0.0108) }}; line-height: 1.25; }
-    .ktov-v.sm { font-family: var(--ff-body); font-weight: 600; font-size: {{ $fw(0.0092) }}; }
+    .ktb { position: absolute; }
+    .ktcol { display: flex; flex-direction: column; }
+    .ktov-h1 { font-family: var(--ff-display); font-weight: 800; letter-spacing: .5px; color: #20232e; font-size: {{ $fw(0.03) }}; white-space: nowrap; }
+    .ktov-pill { display: inline-block; background: {{ $ovLabelC }}; color: #fff; font-family: var(--ff-display); font-weight: 700; letter-spacing: 1.4px; font-size: {{ $fw(0.0145) }}; padding: {{ $pw(0.0056) }} {{ $pw(0.02) }}; border-radius: 999px; }
+    .ktov-tag { font-style: italic; font-weight: 600; color: #4c4657; font-size: {{ $fw(0.0132) }}; margin-top: {{ $pw(0.007) }}; }
+    .ktov-div { width: 100%; height: 1.5px; background: #d7cbe8; margin: {{ $pw(0.007) }} 0; }
+    .ktov-num { font-family: var(--ff-display); font-weight: 800; letter-spacing: .5px; color: {{ $ovText }}; font-size: {{ $fw(0.028) }}; text-align: center; }
+    .ktov-cap { font-family: var(--ff-display); font-weight: 700; letter-spacing: 2.5px; color: #6b6478; font-size: {{ $fw(0.0076) }}; margin-top: {{ $pw(0.003) }}; text-align: center; }
+    .ktov-l { font-family: var(--ff-display); font-weight: 700; text-transform: uppercase; letter-spacing: 1.1px; color: {{ $ovLabelC }}; font-size: {{ $fw(0.0076) }}; }
+    .ktov-v { font-family: var(--ff-display); font-weight: 700; color: {{ $ovText }}; font-size: {{ $fw(0.0112) }}; line-height: 1.22; }
+    .ktov-v.sm { font-family: var(--ff-body); font-weight: 600; font-size: {{ $fw(0.0094) }}; }
     .ktov-clamp { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
-    .ktov-body { color: #3a3742; line-height: 1.5; font-size: {{ $fw(0.0072) }}; }
-    .ktov-photo { width: {{ $pw($ov['photo_w'] / 100) }}; aspect-ratio: 3 / 3.6; object-fit: cover; border-radius: {{ $pw(0.006) }}; border: 2px solid {{ $ovLabelC }}; background: #e7e2ef; }
+    .ktov-body { color: #3a3742; line-height: 1.5; font-size: {{ $fw(0.0074) }}; }
+    .ktov-photo { width: 100%; aspect-ratio: 3 / 3.5; object-fit: cover; border-radius: {{ $pw(0.007) }}; border: {{ $pw(0.0022) }} solid {{ $ovLabelC }}; background: #e7e2ef; display: block; }
     .ktov-ph { display: flex; align-items: center; justify-content: center; font-family: var(--ff-display); font-weight: 700; letter-spacing: 1px; color: #7a7091; font-size: {{ $fw(0.008) }}; }
-    .ktov-verify { display: flex; align-items: center; gap: {{ $pw(0.009) }}; }
-    .ktov-qr { width: {{ $pw($ov['qr_w'] / 100) }}; aspect-ratio: 1/1; flex: none; background: #fff; padding: {{ $pw(0.003) }}; border-radius: {{ $pw(0.004) }}; border: 2px solid {{ $ovLabelC }}; }
+    .ktov-qr { width: 100%; aspect-ratio: 1/1; background: #fff; padding: {{ $pw(0.004) }}; border-radius: {{ $pw(0.005) }}; border: {{ $pw(0.0022) }} solid {{ $ovLabelC }}; }
     .ktov-qr svg { display: block; width: 100%; height: 100%; }
     .ktapj-qr-fallback rect, .ktapj-qr-fallback path { fill: {{ $ovText }}; }
     @media print {
@@ -142,69 +141,74 @@
     }
   </style>
 
-  <div class="ktov-area" style="top:{{ $ov['top'] }}%; left:{{ $ov['left'] }}%; right:{{ $ov['right'] }}%; bottom:{{ $ov['bottom'] }}%;">
+  {{-- Judul --}}
+  <div class="ktb ktov-h1" style="left:{{ $L(10.5) }}; top:{{ $T(31.5) }};">KARTU TANDA ANGGOTA</div>
 
-    <div class="ktov-main">
-      <div class="ktov-h1">KARTU TANDA ANGGOTA</div>
-      <span class="ktov-pill">ANGGOTA APJIKOM</span>
-      <div class="ktov-tag">Bersama Mengelola Jurnal, Membangun Bangsa</div>
-      <div class="ktov-div"></div>
-      <div>
-        <div class="ktov-num">{{ $nomorAnggota }}</div>
-        <div class="ktov-cap">NOMOR ANGGOTA</div>
-      </div>
-
-      <div class="ktov-grid">
-        <div class="ktov-c1">
-          <div><div class="ktov-l">Nama</div><div class="ktov-v">{{ $namaAnggota }}</div></div>
-          <div><div class="ktov-l">Jabatan / Profesi</div><div class="ktov-v">{{ $jabatan }}</div></div>
-          <div><div class="ktov-l">Institusi</div><div class="ktov-v ktov-clamp">{{ $institusi }}</div></div>
-          <div><div class="ktov-l">Alamat</div><div class="ktov-v sm ktov-clamp">{{ $alamatAnggota }}</div></div>
-          <div><div class="ktov-l">Berlaku S/D</div><div class="ktov-v">{{ $berlaku }}</div></div>
-        </div>
-        <div class="ktov-c2">
-          <div><div class="ktov-l">Nomor AHU</div><div class="ktov-body">{{ $ahu }}</div></div>
-          <div>
-            <div class="ktov-l">Kantor Sekretariat</div>
-            <div class="ktov-body">{{ $alamat }}</div>
-            <div class="ktov-body">{{ $telp }} &nbsp;&bull;&nbsp; {{ $email }}</div>
-          </div>
-        </div>
-      </div>
+  {{-- Blok tengah: pill, tagline, garis, nomor anggota --}}
+  <div class="ktb ktcol" style="left:{{ $L(29) }}; top:{{ $T(38.5) }}; width:39%; align-items:flex-start;">
+    <span class="ktov-pill">ANGGOTA APJIKOM</span>
+    <div class="ktov-tag">Bersama Mengelola Jurnal, Membangun Bangsa</div>
+    <div class="ktov-div"></div>
+    <div style="width:100%;">
+      <div class="ktov-num">{{ $nomorAnggota }}</div>
+      <div class="ktov-cap">NOMOR ANGGOTA</div>
     </div>
+  </div>
 
-    <div class="ktov-side">
-      @if($fotoUrl)
-        <img class="ktov-photo" src="{{ $fotoUrl }}" alt="Foto {{ $namaAnggota }}">
+  {{-- Data member (kiri bawah) --}}
+  <div class="ktb ktcol" style="left:{{ $L(10.5) }}; top:{{ $T(57) }}; width:18.5%; gap:{{ $pw(0.009) }};">
+    <div><div class="ktov-l">Nama</div><div class="ktov-v">{{ $namaAnggota }}</div></div>
+    <div><div class="ktov-l">Jabatan / Profesi</div><div class="ktov-v">{{ $jabatan }}</div></div>
+    <div><div class="ktov-l">Institusi</div><div class="ktov-v ktov-clamp">{{ $institusi }}</div></div>
+    <div><div class="ktov-l">Alamat</div><div class="ktov-v sm ktov-clamp">{{ $alamatAnggota }}</div></div>
+    <div><div class="ktov-l">Berlaku S/D</div><div class="ktov-v">{{ $berlaku }}</div></div>
+  </div>
+
+  {{-- Nomor AHU + Kantor Sekretariat (tengah bawah) --}}
+  <div class="ktb ktcol" style="left:{{ $L(33) }}; top:{{ $T(59) }}; width:33%; gap:{{ $pw(0.012) }};">
+    <div><div class="ktov-l">Nomor AHU</div><div class="ktov-body">{{ $ahu }}</div></div>
+    <div>
+      <div class="ktov-l">Kantor Sekretariat</div>
+      <div class="ktov-body">{{ $alamat }}</div>
+      <div class="ktov-body">{{ $telp }} &nbsp;&bull;&nbsp; {{ $email }}</div>
+    </div>
+  </div>
+
+  {{-- Foto (kanan atas) --}}
+  <div class="ktb" style="right:{{ round($ov['photo_rt'] - $sx, 3) }}%; top:{{ $T($ov['photo_top']) }}; width:{{ $ov['photo_w'] }}%;">
+    @if($fotoUrl)
+      <img class="ktov-photo" src="{{ $fotoUrl }}" alt="Foto {{ $namaAnggota }}">
+    @else
+      <div class="ktov-photo ktov-ph">FOTO</div>
+    @endif
+  </div>
+
+  @if($ovShowQr)
+  {{-- QR (kanan bawah) --}}
+  <div class="ktb" style="left:{{ $L(66) }}; top:{{ $T(64) }}; width:{{ $ov['qr_w'] }}%;">
+    <div class="ktov-qr">
+      @if($qrSvg)
+        {!! $qrSvg !!}
       @else
-        <div class="ktov-photo ktov-ph">FOTO</div>
-      @endif
-
-      @if($ovShowQr)
-      <div class="ktov-verify">
-        <div class="ktov-qr">
-          @if($qrSvg)
-            {!! $qrSvg !!}
-          @else
-            <svg class="ktapj-qr-fallback" width="100%" height="100%" viewBox="0 0 21 21" shape-rendering="crispEdges" xmlns="http://www.w3.org/2000/svg">
-              <g><path d="M0 0h7v7h-7z M1 1v5h5v-5z" fill-rule="evenodd"/><rect x="2" y="2" width="3" height="3"/></g>
-              <g transform="translate(14 0)"><path d="M0 0h7v7h-7z M1 1v5h5v-5z" fill-rule="evenodd"/><rect x="2" y="2" width="3" height="3"/></g>
-              <g transform="translate(0 14)"><path d="M0 0h7v7h-7z M1 1v5h5v-5z" fill-rule="evenodd"/><rect x="2" y="2" width="3" height="3"/></g>
-              {!! $qrRects !!}
-            </svg>
-          @endif
-        </div>
-        <div style="text-align:left;">
-          <div style="font-family:var(--ff-display); font-weight:700; letter-spacing:1.2px; color:#2b2b33; font-size:{{ $fw(0.0082) }}; line-height:1.3;">VERIFIKASI<br>ANGGOTA</div>
-          <div style="display:flex; align-items:center; gap:{{ $pw(0.004) }}; margin-top:{{ $pw(0.005) }};">
-            <svg width="{{ $pw(0.014) }}" height="{{ $pw(0.014) }}" viewBox="0 0 24 24"><path d="M12 2l8 3v6c0 5.1-3.4 9.4-8 11-4.6-1.6-8-5.9-8-11V5z" fill="{{ $ovLabelC }}"/><path d="M8.3 12.2l2.6 2.6 4.8-5.4" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-            <span style="font-family:var(--ff-display); font-weight:700; color:{{ $ovLabelC }}; font-size:{{ $fw(0.0082) }};">TERDAFTAR RESMI</span>
-          </div>
-        </div>
-      </div>
+        <svg class="ktapj-qr-fallback" width="100%" height="100%" viewBox="0 0 21 21" shape-rendering="crispEdges" xmlns="http://www.w3.org/2000/svg">
+          <g><path d="M0 0h7v7h-7z M1 1v5h5v-5z" fill-rule="evenodd"/><rect x="2" y="2" width="3" height="3"/></g>
+          <g transform="translate(14 0)"><path d="M0 0h7v7h-7z M1 1v5h5v-5z" fill-rule="evenodd"/><rect x="2" y="2" width="3" height="3"/></g>
+          <g transform="translate(0 14)"><path d="M0 0h7v7h-7z M1 1v5h5v-5z" fill-rule="evenodd"/><rect x="2" y="2" width="3" height="3"/></g>
+          {!! $qrRects !!}
+        </svg>
       @endif
     </div>
   </div>
+
+  {{-- Verifikasi (kanan bawah, sebelah QR) --}}
+  <div class="ktb ktcol" style="left:{{ $L(80) }}; top:{{ $T(67) }}; width:16%;">
+    <div style="font-family:var(--ff-display); font-weight:700; letter-spacing:1.2px; color:#2b2b33; font-size:{{ $fw(0.0088) }}; line-height:1.3;">VERIFIKASI<br>ANGGOTA</div>
+    <div style="display:flex; align-items:center; gap:{{ $pw(0.004) }}; margin-top:{{ $pw(0.006) }};">
+      <svg width="{{ $pw(0.016) }}" height="{{ $pw(0.016) }}" viewBox="0 0 24 24"><path d="M12 2l8 3v6c0 5.1-3.4 9.4-8 11-4.6-1.6-8-5.9-8-11V5z" fill="{{ $ovLabelC }}"/><path d="M8.3 12.2l2.6 2.6 4.8-5.4" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <span style="font-family:var(--ff-display); font-weight:700; color:{{ $ovLabelC }}; font-size:{{ $fw(0.0088) }};">TERDAFTAR RESMI</span>
+    </div>
+  </div>
+  @endif
 </div>
 @else
 <div class="ktapj-card" data-ktapj-card data-w="1200" data-h="757">
