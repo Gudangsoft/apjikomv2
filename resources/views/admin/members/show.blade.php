@@ -420,17 +420,8 @@
                 </a>
             </div>
             @else
-            <div class="text-center">
-                <img src="{{ asset('storage/' . $member->member_card) }}" 
-                     alt="Member Card" 
-                     class="max-w-2xl mx-auto rounded-lg shadow-lg">
-                <div class="mt-4">
-                    <a href="{{ asset('storage/' . $member->member_card) }}" 
-                       target="_blank"
-                       class="text-purple-600 hover:text-purple-700 font-semibold">
-                        Lihat Full Size →
-                    </a>
-                </div>
+            <div>
+                @include('member.partials.kartu-anggota')
             </div>
             @endif
         </div>

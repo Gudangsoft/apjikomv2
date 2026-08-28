@@ -36,9 +36,29 @@ Canvas desain yang bisa diedit visual + ekspor PNG/PDF:
 Ubah nilai `--accent` (dan turunannya) di blok `:root` pada bagian atas
 `kartu-anggota-apjikom.html`.
 
-## Catatan integrasi
+## Status integrasi
 
-Ini baru mockup, **belum terhubung** ke `app/Services/MemberCardGenerator.php`
-(yang saat ini menempelkan teks di atas gambar template via GD). Untuk memakai
-desain ini dengan data member asli, langkah berikutnya adalah render HTML → PNG
-(mis. Browsershot) atau menjadikannya template background baru.
+Desain ini **sudah dipakai di aplikasi** sebagai kartu HTML (live), bukan lagi
+gambar PNG hasil `MemberCardGenerator`:
+
+| Lokasi | File |
+|--------|------|
+| Partial kartu (data member asli) | `resources/views/member/partials/kartu-anggota.blade.php` |
+| Halaman kartu member | `resources/views/member/card.blade.php` — `@include` partial |
+| Detail member (admin) | `resources/views/admin/members/show.blade.php` — `@include` partial |
+
+- Tanpa dependensi baru (tidak perlu `composer install` / Node / Chromium).
+- Unduh = tombol **Cetak / Simpan PDF** (`window.print()`), bukan download PNG.
+- Data diambil dari: `member_number`, `user->name`, `position` (Jabatan),
+  `expiry_date` (Berlaku, default "Seumur Hidup"), `photo`.
+- Teks tetap (AHU, alamat, telp, email, no. e-tool, label sosmed) bisa diatur
+  lewat `setting()` — key: `org_ahu_number`, `contact_address`, `contact_phone`,
+  `contact_email`, `card_etool_number`, `card_website_label`,
+  `card_facebook_label`, `card_instagram_label`, `card_youtube_label`.
+
+### Masih placeholder / belum
+
+- Logo BNI (kotak "LOGO"), seal APJIKOM (vektor), QR (pola dekoratif — belum
+  bisa dipindai; butuh paket QR bila mau QR asli).
+- Thumbnail kartu di `member/dashboard.blade.php` dan daftar member admin masih
+  memakai gambar lama; `MemberCardGenerator` (GD) juga masih ada.
