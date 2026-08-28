@@ -58,7 +58,7 @@
         // Titik-tengah foto diukur dari tepi KANAN kartu (%). Kecilkan = geser
         // foto (dan QR) ke kanan; besarkan = ke kiri.
         'photo_cx' => $ovn('card_ov_photo_cx', 16),
-        'qr_w'     => $ovn('card_ov_qr_w', 11),
+        'qr_w'     => $ovn('card_ov_qr_w', 9.5),
         'qr_left'  => $ovn('card_ov_qr_left', 14),   // QR di kiri, di bawah seal
         'qr_top'   => $ovn('card_ov_qr_top', 34),
         'berlaku_top' => $ovn('card_ov_berlaku_top', 65),  // "Berlaku S/D" di bawah foto
@@ -230,10 +230,10 @@
       @endif
     </div>
     <div>
-      <div style="font-family:var(--ff-display); font-weight:700; letter-spacing:1.2px; color:#2b2b33; font-size:{{ $fw(0.0082) }}; line-height:1.25;">VERIFIKASI ANGGOTA</div>
-      <div style="display:flex; align-items:center; gap:{{ $pw(0.004) }}; margin-top:{{ $pw(0.004) }};">
-        <svg width="{{ $pw(0.015) }}" height="{{ $pw(0.015) }}" viewBox="0 0 24 24"><path d="M12 2l8 3v6c0 5.1-3.4 9.4-8 11-4.6-1.6-8-5.9-8-11V5z" fill="{{ $ovLabelC }}"/><path d="M8.3 12.2l2.6 2.6 4.8-5.4" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        <span style="font-family:var(--ff-display); font-weight:700; color:{{ $ovLabelC }}; font-size:{{ $fw(0.0082) }};">TERDAFTAR RESMI</span>
+      <div style="font-family:var(--ff-display); font-weight:700; letter-spacing:1.1px; color:#2b2b33; font-size:{{ $fw(0.0076) }}; line-height:1.22;">VERIFIKASI ANGGOTA</div>
+      <div style="display:flex; align-items:center; gap:{{ $pw(0.0035) }}; margin-top:{{ $pw(0.003) }};">
+        <svg width="{{ $pw(0.0135) }}" height="{{ $pw(0.0135) }}" viewBox="0 0 24 24"><path d="M12 2l8 3v6c0 5.1-3.4 9.4-8 11-4.6-1.6-8-5.9-8-11V5z" fill="{{ $ovLabelC }}"/><path d="M8.3 12.2l2.6 2.6 4.8-5.4" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <span style="font-family:var(--ff-display); font-weight:700; color:{{ $ovLabelC }}; font-size:{{ $fw(0.0076) }};">TERDAFTAR RESMI</span>
       </div>
     </div>
   </div>
