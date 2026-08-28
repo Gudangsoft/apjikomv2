@@ -61,6 +61,7 @@
         'qr_w'     => $ovn('card_ov_qr_w', 11),
         'qr_left'  => $ovn('card_ov_qr_left', 14),   // QR di kiri, di bawah seal
         'qr_top'   => $ovn('card_ov_qr_top', 34),
+        'berlaku_top' => $ovn('card_ov_berlaku_top', 65),  // "Berlaku S/D" di bawah foto
         'font'     => $ovn('card_ov_font_scale', 100),
     ];
     $photoRight = round($ov['photo_cx'] - $ov['photo_w'] / 2 - $sx, 3);
@@ -132,9 +133,9 @@
     .ktov-div { width: 100%; height: 1.5px; background: #d7cbe8; margin: {{ $pw(0.007) }} 0; }
     .ktov-num { font-family: var(--ff-display); font-weight: 800; letter-spacing: .5px; color: {{ $ovText }}; font-size: {{ $fw(0.028) }}; text-align: left; }
     .ktov-cap { font-family: var(--ff-display); font-weight: 700; letter-spacing: 2.5px; color: #6b6478; font-size: {{ $fw(0.0076) }}; margin-top: {{ $pw(0.003) }}; text-align: left; }
-    .ktov-l { font-family: var(--ff-display); font-weight: 700; text-transform: uppercase; letter-spacing: 1.1px; color: {{ $ovLabelC }}; font-size: {{ $fw(0.0087) }}; }
-    .ktov-v { font-family: var(--ff-display); font-weight: 700; color: {{ $ovText }}; font-size: {{ $fw(0.0134) }}; line-height: 1.28; }
-    .ktov-v.sm { font-family: var(--ff-body); font-weight: 600; font-size: {{ $fw(0.0112) }}; line-height: 1.35; }
+    .ktov-l { font-family: var(--ff-display); font-weight: 700; text-transform: uppercase; letter-spacing: 1.1px; color: {{ $ovLabelC }}; font-size: {{ $fw(0.0099) }}; }
+    .ktov-v { font-family: var(--ff-display); font-weight: 700; color: {{ $ovText }}; font-size: {{ $fw(0.0154) }}; line-height: 1.28; }
+    .ktov-v.sm { font-family: var(--ff-body); font-weight: 600; font-size: {{ $fw(0.0128) }}; line-height: 1.35; }
     .ktov-clamp { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
     .ktov-body { color: #2b2733; line-height: 1.55; font-size: {{ $fw(0.0082) }}; }
     .ktov-ico { display: flex; align-items: flex-start; gap: {{ $pw(0.006) }}; color: #2b2733; line-height: 1.5; font-size: {{ $fw(0.0082) }}; margin-top: {{ $pw(0.0035) }}; }
@@ -168,12 +169,17 @@
   </div>
 
   {{-- Data member (kiri bawah) --}}
-  <div class="ktb ktcol" style="left:{{ $L(10.5) }}; top:{{ $T(58) }}; width:21%; gap:{{ $pw(0.0105) }};">
+  <div class="ktb ktcol" style="left:{{ $L(8.5) }}; top:{{ $T(56.5) }}; width:22%; gap:{{ $pw(0.0105) }};">
     <div><div class="ktov-l">Nama</div><div class="ktov-v">{{ $namaAnggota }}</div></div>
     <div><div class="ktov-l">Jabatan / Profesi</div><div class="ktov-v">{{ $jabatan }}</div></div>
     <div><div class="ktov-l">Institusi</div><div class="ktov-v ktov-clamp">{{ $institusi }}</div></div>
     <div><div class="ktov-l">Alamat</div><div class="ktov-v sm ktov-clamp">{{ $alamatAnggota }}</div></div>
-    <div><div class="ktov-l">Berlaku S/D</div><div class="ktov-v">{{ $berlaku }}</div></div>
+  </div>
+
+  {{-- Berlaku S/D — di bawah foto --}}
+  <div class="ktb ktcol" style="right:{{ $photoRight }}%; top:{{ $T($ov['berlaku_top']) }}; width:{{ $ov['photo_w'] }}%; align-items:flex-start;">
+    <div class="ktov-l">Berlaku S/D</div>
+    <div class="ktov-v">{{ $berlaku }}</div>
   </div>
 
   {{-- Nomor AHU + Kantor Sekretariat (tengah bawah) --}}
