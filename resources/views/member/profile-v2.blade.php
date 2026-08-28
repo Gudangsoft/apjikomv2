@@ -285,8 +285,8 @@
                         <div class='flex flex-col sm:flex-row sm:gap-6 border-b border-gray-100 pb-3'>
                             <p class='text-sm font-semibold text-gray-600 sm:w-40 flex-shrink-0'>Website</p>
                             <div>
-                                @if($member->website)
-                                <a href="{{ $member->website }}" target="_blank" class='text-blue-600 hover:text-blue-800 hover:underline break-all font-medium'>{{ $member->website }}</a>
+                                @if($web = clean_website_url($member->website))
+                                <a href="{{ $web }}" target="_blank" rel="noopener noreferrer" class='text-blue-600 hover:text-blue-800 hover:underline break-all font-medium'>{{ $web }}</a>
                                 @else
                                 <p class='text-gray-400 italic'>Belum diisi</p>
                                 @endif
@@ -357,7 +357,7 @@
                         <input type='hidden' name='phone' value='{{ $member->phone }}'>
                         <input type='hidden' name='institution_name' value='{{ $member->institution_name }}'>
                         <input type='hidden' name='position' value='{{ $member->position }}'>
-                        <input type='hidden' name='website' value='{{ $member->website }}'>
+                        <input type='hidden' name='website' value='{{ clean_website_url($member->website) }}'>
                         <input type='hidden' name='address' value='{{ $member->address }}'>
                         
                         <div class='mt-6 pt-6 border-t border-gray-200'>

@@ -410,7 +410,7 @@ class MemberDashboardController extends Controller
                 'phone' => $request->phone,
                 'institution_name' => $request->institution_name,
                 'position' => $request->position,
-                'website' => $request->website,
+                'website' => clean_website_url($request->website),
                 'address' => $request->address,
                 'show_in_directory' => $request->show_in_directory == '1' ? true : false,
                 'expertise' => $request->expertise,

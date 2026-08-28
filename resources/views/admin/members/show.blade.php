@@ -168,12 +168,12 @@
                     </dd>
                 </div>
                 @endif
-                @if($member->website)
+                @if($web = clean_website_url($member->website))
                 <div>
                     <dt class="text-sm text-gray-600">Website</dt>
                     <dd class="text-base font-medium">
-                        <a href="{{ $member->website }}" target="_blank" class="text-[#00629B] hover:underline">
-                            {{ $member->website }}
+                        <a href="{{ $web }}" target="_blank" rel="noopener noreferrer" class="text-[#00629B] hover:underline break-all">
+                            {{ $web }}
                         </a>
                     </dd>
                 </div>

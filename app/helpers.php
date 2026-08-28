@@ -53,6 +53,49 @@ if (!function_exists('site_tagline')) {
     }
 }
 
+if (!function_exists('clean_website_url')) {
+    /**
+     * Normalise a user-entered website value into a safe external URL,
+     * or return null when it is not a usable external website
+     * (empty, localhost / this app's own host, or a host without a dot).
+     *
+     * @param string|null $value
+     * @return string|null
+     */
+    function clean_website_url($value)
+    {
+        $value = trim((string) $value);
+        if ($value === '') {
+            return null;
+        }
+
+        if (!preg_match('~^https?://~i', $value)) {
+            $value = 'https://' . ltrim($value, '/');
+        }
+
+        $host = strtolower((string) parse_url($value, PHP_URL_HOST));
+        if ($host === '') {
+            return null;
+        }
+
+        $blocked = ['localhost', '127.0.0.1', '::1', '0.0.0.0'];
+        try {
+            $appHost = strtolower((string) parse_url(config('app.url'), PHP_URL_HOST));
+            if ($appHost !== '') {
+                $blocked[] = $appHost;
+            }
+        } catch (\Throwable $e) {
+            // ignore
+        }
+
+        if (in_array($host, $blocked, true) || !str_contains($host, '.')) {
+            return null;
+        }
+
+        return $value;
+    }
+}
+
 if (!function_exists('format_stat_number')) {
     /**
      * Format large numbers for statistics display

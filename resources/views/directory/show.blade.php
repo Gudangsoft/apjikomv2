@@ -384,7 +384,7 @@
                             @endif
                             
                             <!-- Website -->
-                            @if($member->website)
+                            @if($web = clean_website_url($member->website))
                             <div class="flex items-start">
                                 <div class="flex-shrink-0 w-10 h-10 bg-orange-100 rounded-lg flex items-center justify-center mr-3">
                                     <svg class="w-5 h-5 text-orange-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -393,9 +393,9 @@
                                 </div>
                                 <div>
                                     <p class="text-xs text-gray-500 font-medium">Website</p>
-                                    <a href="{{ $member->website }}" target="_blank" rel="noopener noreferrer" 
+                                    <a href="{{ $web }}" target="_blank" rel="noopener noreferrer"
                                        class="text-sm font-bold text-orange-600 hover:underline break-all">
-                                        {{ parse_url($member->website, PHP_URL_HOST) ?? $member->website }}
+                                        {{ parse_url($web, PHP_URL_HOST) ?? $web }}
                                     </a>
                                 </div>
                             </div>
