@@ -130,7 +130,7 @@
     .ktapj-card--tpl * { box-sizing: border-box; margin: 0; }
     .ktb { position: absolute; }
     .ktcol { display: flex; flex-direction: column; }
-    .ktov-h1 { font-family: var(--ff-display); font-weight: 800; letter-spacing: .5px; color: #20232e; font-size: {{ $fw(0.03) }}; white-space: nowrap; }
+    .ktov-h1 { font-family: var(--ff-display); font-weight: 800; letter-spacing: .5px; color: #20232e; font-size: {{ $fw(0.028) }}; white-space: nowrap; }
     .ktov-pill { display: inline-block; background: {{ $ovLabelC }}; color: #fff; font-family: var(--ff-display); font-weight: 700; letter-spacing: 1.4px; font-size: {{ $fw(0.0145) }}; padding: {{ $pw(0.0056) }} {{ $pw(0.02) }}; border-radius: 999px; }
     .ktov-tag { font-style: italic; font-weight: 600; color: #4c4657; font-size: {{ $fw(0.0132) }}; margin-top: {{ $pw(0.007) }}; }
     .ktov-div { width: 100%; height: 1.5px; background: #d7cbe8; margin: {{ $pw(0.007) }} 0; }
@@ -157,11 +157,11 @@
     }
   </style>
 
-  {{-- Judul --}}
-  <div class="ktb ktov-h1" style="left:{{ $L(10.5) }}; top:{{ $T(31.5) }};">KARTU TANDA ANGGOTA</div>
+  {{-- Judul — sejajar kiri dengan pill / nomor di bawahnya --}}
+  <div class="ktb ktov-h1" style="left:{{ $L(29) }}; top:{{ $T(33) }};">KARTU TANDA ANGGOTA</div>
 
   {{-- Blok tengah: pill, tagline, garis, nomor anggota --}}
-  <div class="ktb ktcol" style="left:{{ $L(29) }}; top:{{ $T(38.5) }}; width:39%; align-items:flex-start;">
+  <div class="ktb ktcol" style="left:{{ $L(29) }}; top:{{ $T(39) }}; width:39%; align-items:flex-start;">
     <span class="ktov-pill">ANGGOTA APJIKOM</span>
     <div class="ktov-tag">Bersama Mengelola Jurnal, Membangun Bangsa</div>
     <div class="ktov-div"></div>
@@ -172,7 +172,7 @@
   </div>
 
   {{-- Data member (kiri bawah) --}}
-  <div class="ktb ktcol" style="left:{{ $L(10.5) }}; top:{{ $T(57) }}; width:18.5%; gap:{{ $pw(0.009) }};">
+  <div class="ktb ktcol" style="left:{{ $L(10.5) }}; top:{{ $T(58.5) }}; width:18.5%; gap:{{ $pw(0.009) }};">
     <div><div class="ktov-l">Nama</div><div class="ktov-v">{{ $namaAnggota }}</div></div>
     <div><div class="ktov-l">Jabatan / Profesi</div><div class="ktov-v">{{ $jabatan }}</div></div>
     <div><div class="ktov-l">Institusi</div><div class="ktov-v ktov-clamp">{{ $institusi }}</div></div>
@@ -181,7 +181,7 @@
   </div>
 
   {{-- Nomor AHU + Kantor Sekretariat (tengah bawah) --}}
-  <div class="ktb ktcol" style="left:{{ $L(33) }}; top:{{ $T(59) }}; width:33%; gap:{{ $pw(0.013) }};">
+  <div class="ktb ktcol" style="left:{{ $L(33) }}; top:{{ $T(60) }}; width:33%; gap:{{ $pw(0.013) }};">
     <div>
       <div class="ktov-l">Nomor AHU</div>
       <div class="ktov-body">{{ $ahu }}</div>
