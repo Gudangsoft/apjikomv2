@@ -155,7 +155,7 @@
                 @if($member->google_scholar_link || $member->sinta_link || $member->orcid_link || $member->scopus_link || $member->scirep_id)
                 <div class="mt-8 max-w-4xl mx-auto">
                     <div class="bg-white/95 backdrop-blur-sm rounded-2xl shadow-xl p-6 border border-white/20">
-                        <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                        <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-3 md:gap-4">
                             @if($member->google_scholar_link)
                             <a href="{{ $member->google_scholar_link }}" target="_blank" rel="noopener noreferrer"
                                class="flex flex-col items-center justify-center p-4 bg-gradient-to-br from-blue-50 to-blue-100 hover:from-blue-100 hover:to-blue-200 rounded-xl transition-all duration-200 border border-blue-200 hover:shadow-lg group">
