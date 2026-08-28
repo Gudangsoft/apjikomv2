@@ -132,9 +132,9 @@
     .ktov-div { width: 100%; height: 1.5px; background: #d7cbe8; margin: {{ $pw(0.007) }} 0; }
     .ktov-num { font-family: var(--ff-display); font-weight: 800; letter-spacing: .5px; color: {{ $ovText }}; font-size: {{ $fw(0.028) }}; text-align: left; }
     .ktov-cap { font-family: var(--ff-display); font-weight: 700; letter-spacing: 2.5px; color: #6b6478; font-size: {{ $fw(0.0076) }}; margin-top: {{ $pw(0.003) }}; text-align: left; }
-    .ktov-l { font-family: var(--ff-display); font-weight: 700; text-transform: uppercase; letter-spacing: 1.1px; color: {{ $ovLabelC }}; font-size: {{ $fw(0.0076) }}; }
-    .ktov-v { font-family: var(--ff-display); font-weight: 700; color: {{ $ovText }}; font-size: {{ $fw(0.0112) }}; line-height: 1.22; }
-    .ktov-v.sm { font-family: var(--ff-body); font-weight: 600; font-size: {{ $fw(0.0094) }}; }
+    .ktov-l { font-family: var(--ff-display); font-weight: 700; text-transform: uppercase; letter-spacing: 1.1px; color: {{ $ovLabelC }}; font-size: {{ $fw(0.0087) }}; }
+    .ktov-v { font-family: var(--ff-display); font-weight: 700; color: {{ $ovText }}; font-size: {{ $fw(0.0134) }}; line-height: 1.28; }
+    .ktov-v.sm { font-family: var(--ff-body); font-weight: 600; font-size: {{ $fw(0.0112) }}; line-height: 1.35; }
     .ktov-clamp { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
     .ktov-body { color: #2b2733; line-height: 1.55; font-size: {{ $fw(0.0082) }}; }
     .ktov-ico { display: flex; align-items: flex-start; gap: {{ $pw(0.006) }}; color: #2b2733; line-height: 1.5; font-size: {{ $fw(0.0082) }}; margin-top: {{ $pw(0.0035) }}; }
@@ -168,7 +168,7 @@
   </div>
 
   {{-- Data member (kiri bawah) --}}
-  <div class="ktb ktcol" style="left:{{ $L(10.5) }}; top:{{ $T(58.5) }}; width:18.5%; gap:{{ $pw(0.009) }};">
+  <div class="ktb ktcol" style="left:{{ $L(10.5) }}; top:{{ $T(58) }}; width:21%; gap:{{ $pw(0.0105) }};">
     <div><div class="ktov-l">Nama</div><div class="ktov-v">{{ $namaAnggota }}</div></div>
     <div><div class="ktov-l">Jabatan / Profesi</div><div class="ktov-v">{{ $jabatan }}</div></div>
     <div><div class="ktov-l">Institusi</div><div class="ktov-v ktov-clamp">{{ $institusi }}</div></div>
