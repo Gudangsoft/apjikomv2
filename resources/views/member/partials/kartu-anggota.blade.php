@@ -14,7 +14,8 @@
     $institusi    = $m->institution_name ?: '-';
     $alamatAnggota = $m->address
         ?: (collect([$m->city, $m->province])->filter()->implode(', ') ?: '-');
-    $alamatAnggota = trim(str_replace(["\r\n", "\r", "\n"], ', ', $alamatAnggota));
+    // Pertahankan baris baru yang diinput member (textarea pakai Enter).
+    $alamatAnggota = trim(str_replace(["\r\n", "\r"], "\n", $alamatAnggota));
     // Keanggotaan APJIKOM berlaku seumur hidup (bisa diganti via setting).
     $berlaku = setting('card_berlaku_text', 'Seumur Hidup');
 
@@ -175,7 +176,7 @@
     <div><div class="ktov-l">Nama</div><div class="ktov-v">{{ $namaAnggota }}</div></div>
     <div><div class="ktov-l">Jabatan / Profesi</div><div class="ktov-v">{{ $jabatan }}</div></div>
     <div><div class="ktov-l">Institusi</div><div class="ktov-v ktov-clamp">{{ $institusi }}</div></div>
-    <div><div class="ktov-l">Alamat</div><div class="ktov-v sm ktov-clamp3">{{ $alamatAnggota }}</div></div>
+    <div><div class="ktov-l">Alamat</div><div class="ktov-v sm ktov-clamp3">{!! nl2br(e($alamatAnggota)) !!}</div></div>
   </div>
 
   {{-- Berlaku S/D — di bawah foto --}}
