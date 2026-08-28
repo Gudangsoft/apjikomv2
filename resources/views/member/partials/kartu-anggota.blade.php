@@ -15,9 +15,8 @@
     $alamatAnggota = $m->address
         ?: (collect([$m->city, $m->province])->filter()->implode(', ') ?: '-');
     $alamatAnggota = trim(str_replace(["\r\n", "\r", "\n"], ', ', $alamatAnggota));
-    $berlaku      = $m->expiry_date
-        ? \Carbon\Carbon::parse($m->expiry_date)->format('m/Y')
-        : 'Seumur Hidup';
+    // Keanggotaan APJIKOM berlaku seumur hidup (bisa diganti via setting).
+    $berlaku = setting('card_berlaku_text', 'Seumur Hidup');
 
     $fotoUrl = ($m->photo && Storage::disk('public')->exists($m->photo))
         ? Storage::url($m->photo)
@@ -59,9 +58,9 @@
         // Titik-tengah foto diukur dari tepi KANAN kartu (%). Kecilkan = geser
         // foto (dan QR) ke kanan; besarkan = ke kiri.
         'photo_cx' => $ovn('card_ov_photo_cx', 16),
-        'qr_w'     => $ovn('card_ov_qr_w', 12),
+        'qr_w'     => $ovn('card_ov_qr_w', 11),
         'qr_left'  => $ovn('card_ov_qr_left', 14),   // QR di kiri, di bawah seal
-        'qr_top'   => $ovn('card_ov_qr_top', 31),
+        'qr_top'   => $ovn('card_ov_qr_top', 34),
         'font'     => $ovn('card_ov_font_scale', 100),
     ];
     $photoRight = round($ov['photo_cx'] - $ov['photo_w'] / 2 - $sx, 3);
