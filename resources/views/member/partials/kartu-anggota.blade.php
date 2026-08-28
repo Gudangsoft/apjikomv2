@@ -137,12 +137,13 @@
     .ktov-v { font-family: var(--ff-display); font-weight: 700; color: {{ $ovText }}; font-size: {{ $fw(0.0154) }}; line-height: 1.28; }
     .ktov-v.sm { font-family: var(--ff-body); font-weight: 600; font-size: {{ $fw(0.0128) }}; line-height: 1.35; }
     .ktov-clamp { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
-    .ktov-body { color: #2b2733; line-height: 1.55; font-size: {{ $fw(0.0082) }}; }
-    .ktov-ico { display: flex; align-items: flex-start; gap: {{ $pw(0.006) }}; color: #2b2733; line-height: 1.5; font-size: {{ $fw(0.0082) }}; margin-top: {{ $pw(0.0035) }}; }
-    .ktov-ico > svg { flex: none; width: {{ $pw(0.0118) }}; height: {{ $pw(0.0118) }}; margin-top: {{ $pw(0.0012) }}; }
-    .ktov-ico2 { display: flex; flex-wrap: wrap; align-items: center; gap: {{ $pw(0.004) }} {{ $pw(0.017) }}; color: #2b2733; font-size: {{ $fw(0.0082) }}; margin-top: {{ $pw(0.005) }}; }
+    .ktov-body { color: #201c28; font-weight: 500; line-height: 1.55; font-size: {{ $fw(0.0092) }}; }
+    .ktov-ico { display: flex; align-items: flex-start; gap: {{ $pw(0.006) }}; color: #201c28; font-weight: 500; line-height: 1.5; font-size: {{ $fw(0.0092) }}; margin-top: {{ $pw(0.0035) }}; }
+    .ktov-ico > svg { flex: none; width: {{ $pw(0.013) }}; height: {{ $pw(0.013) }}; margin-top: {{ $pw(0.0012) }}; }
+    .ktov-ico2 { display: flex; flex-wrap: wrap; align-items: center; gap: {{ $pw(0.004) }} {{ $pw(0.017) }}; color: #201c28; font-weight: 500; font-size: {{ $fw(0.0092) }}; margin-top: {{ $pw(0.005) }}; }
     .ktov-ico2 span.i { display: inline-flex; align-items: center; gap: {{ $pw(0.005) }}; }
-    .ktov-ico2 svg { flex: none; width: {{ $pw(0.0118) }}; height: {{ $pw(0.0118) }}; }
+    .ktov-ico2 svg { flex: none; width: {{ $pw(0.013) }}; height: {{ $pw(0.013) }}; }
+    .ktov-sep { position: absolute; width: {{ $pw(0.0016) }}; background: linear-gradient(to bottom, transparent, #cdbce4 10%, #cdbce4 90%, transparent); }
     .ktov-photo { width: 100%; aspect-ratio: 3 / 3.3; object-fit: cover; border-radius: {{ $pw(0.007) }}; border: {{ $pw(0.0022) }} solid {{ $ovLabelC }}; background: #e7e2ef; display: block; }
     .ktov-ph { display: flex; align-items: center; justify-content: center; font-family: var(--ff-display); font-weight: 700; letter-spacing: 1px; color: #7a7091; font-size: {{ $fw(0.008) }}; }
     .ktov-qr { width: 100%; aspect-ratio: 1/1; background: #fff; padding: {{ $pw(0.004) }}; border-radius: {{ $pw(0.005) }}; border: {{ $pw(0.0022) }} solid {{ $ovLabelC }}; }
@@ -182,8 +183,11 @@
     <div class="ktov-v">{{ $berlaku }}</div>
   </div>
 
+  {{-- Garis pembatas: biodata (kiri) | bagian kanan --}}
+  <div class="ktov-sep" style="left:{{ $L(31.5) }}; top:{{ $T(57.5) }}; height:33%;"></div>
+
   {{-- Nomor AHU + Kantor Sekretariat (tengah bawah) --}}
-  <div class="ktb ktcol" style="left:{{ $L(33) }}; top:{{ $T(60) }}; width:33%; gap:{{ $pw(0.013) }};">
+  <div class="ktb ktcol" style="left:{{ $L(33.5) }}; top:{{ $T(62) }}; width:32%; gap:{{ $pw(0.014) }};">
     <div>
       <div class="ktov-l">Nomor AHU</div>
       <div class="ktov-body">{{ $ahu }}</div>
