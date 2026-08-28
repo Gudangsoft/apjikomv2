@@ -58,7 +58,7 @@
         'photo_top'=> $ovn('card_ov_photo_top', 25),
         // Titik-tengah foto diukur dari tepi KANAN kartu (%). Kecilkan = geser
         // foto (dan QR) ke kanan; besarkan = ke kiri.
-        'photo_cx' => $ovn('card_ov_photo_cx', 18),
+        'photo_cx' => $ovn('card_ov_photo_cx', 16),
         'qr_w'     => $ovn('card_ov_qr_w', 12),
         'qr_top'   => $ovn('card_ov_qr_top', 65),
         'qr_shift' => $ovn('card_ov_qr_shift', 0),   // + = geser blok QR ke kanan (%)
@@ -66,7 +66,7 @@
     ];
     // Foto & blok QR sama-sama dipusatkan pada titik photo_cx (jadi sejajar).
     $photoRight = round($ov['photo_cx'] - $ov['photo_w'] / 2 - $sx, 3);
-    $qrBlockW   = 30;
+    $qrBlockW   = 28;
     $qrRight    = round($ov['photo_cx'] - $qrBlockW / 2 - $sx - $ov['qr_shift'], 3);
     $ovText   = $ovs('card_ov_text_color', '#20232e');
     $ovLabelC = $ovs('card_ov_label_color', '#5a2d8f');
