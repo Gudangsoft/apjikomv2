@@ -31,7 +31,21 @@
     $igLabel  = setting('card_instagram_label', 'apjikom_id');
     $ytLabel  = setting('card_youtube_label', 'APJIKOM Official');
 
-    // QR dekoratif (bukan kode yang bisa dipindai) — dibangun di PHP, tanpa JS.
+    // QR asli menuju halaman verifikasi keanggotaan (URL literal, aman dari route cache).
+    $verifikasiUrl = url('/verifikasi-anggota/' . $m->id);
+    $qrSvg = null;
+    if (class_exists(\SimpleSoftwareIO\QrCode\Facades\QrCode::class)) {
+        try {
+            $qrSvg = (string) \SimpleSoftwareIO\QrCode\Facades\QrCode::format('svg')
+                ->size(240)->margin(1)->errorCorrection('M')->color(35, 38, 47)
+                ->generate($verifikasiUrl);
+            $qrSvg = preg_replace('/<\?xml.*?\?>\s*/', '', $qrSvg);
+        } catch (\Throwable $e) {
+            $qrSvg = null;
+        }
+    }
+
+    // QR dekoratif (fallback bila paket QR belum ter-install) — dibangun di PHP, tanpa JS.
     $qrSeed = 987654321;
     $qrRand = function () use (&$qrSeed) {
         $qrSeed = ($qrSeed * 1103515245 + 12345) & 0x7fffffff;
@@ -88,7 +102,8 @@
     .ktapj-fnav { display: flex; align-items: center; gap: 9px; font: 600 12px 'Open Sans', 'Segoe UI', sans-serif; letter-spacing: .3px; }
     .ktapj-label { font-weight: 700; font-size: 10.5px; letter-spacing: 1.3px; color: var(--accent); }
     .ktapj-value { font-weight: 700; font-size: 15px; color: #23262f; letter-spacing: .3px; }
-    .ktapj-qr rect, .ktapj-qr path { fill: #23262f; }
+    .ktapj-qr svg { display: block; width: 100%; height: 100%; }
+    .ktapj-qr-fallback rect, .ktapj-qr-fallback path { fill: #23262f; }
     @media print {
       .ktapj-stage { overflow: visible !important; height: auto !important; }
       .ktapj-card { transform: none !important; box-shadow: none; }
@@ -247,12 +262,16 @@
 
     <div style="display:flex; align-items:center; gap:14px;">
       <div class="ktapj-qr" style="width:90px; height:90px; border-radius:10px; border:3px solid var(--accent); background:#fff; padding:6px;">
-        <svg width="100%" height="100%" viewBox="0 0 21 21" shape-rendering="crispEdges" xmlns="http://www.w3.org/2000/svg">
-          <g><path d="M0 0h7v7h-7z M1 1v5h5v-5z" fill-rule="evenodd"/><rect x="2" y="2" width="3" height="3"/></g>
-          <g transform="translate(14 0)"><path d="M0 0h7v7h-7z M1 1v5h5v-5z" fill-rule="evenodd"/><rect x="2" y="2" width="3" height="3"/></g>
-          <g transform="translate(0 14)"><path d="M0 0h7v7h-7z M1 1v5h5v-5z" fill-rule="evenodd"/><rect x="2" y="2" width="3" height="3"/></g>
-          {!! $qrRects !!}
-        </svg>
+        @if($qrSvg)
+          {!! $qrSvg !!}
+        @else
+          <svg class="ktapj-qr-fallback" width="100%" height="100%" viewBox="0 0 21 21" shape-rendering="crispEdges" xmlns="http://www.w3.org/2000/svg">
+            <g><path d="M0 0h7v7h-7z M1 1v5h5v-5z" fill-rule="evenodd"/><rect x="2" y="2" width="3" height="3"/></g>
+            <g transform="translate(14 0)"><path d="M0 0h7v7h-7z M1 1v5h5v-5z" fill-rule="evenodd"/><rect x="2" y="2" width="3" height="3"/></g>
+            <g transform="translate(0 14)"><path d="M0 0h7v7h-7z M1 1v5h5v-5z" fill-rule="evenodd"/><rect x="2" y="2" width="3" height="3"/></g>
+            {!! $qrRects !!}
+          </svg>
+        @endif
       </div>
       <div style="text-align:left;">
         <div style="font-family:'Montserrat','Segoe UI',sans-serif; font-weight:700; font-size:11.5px; letter-spacing:1.4px; color:#2b2b33; line-height:1.3; max-width:120px;">VERIFIKASI ANGGOTA</div>

@@ -67,6 +67,9 @@ Route::get('/journal-divisions', [App\Http\Controllers\JournalDivisionController
 Route::get('/anggota', [MemberDirectoryController::class, 'index'])->name('directory.index');
 Route::get('/anggota/{member}', [MemberDirectoryController::class, 'show'])->name('directory.show');
 
+// Verifikasi keanggotaan (target QR kartu anggota) — publik, selalu bisa diakses
+Route::get('/verifikasi-anggota/{member}', [MemberDirectoryController::class, 'verify'])->name('members.verify');
+
 // Page Routes (Dynamic Pages)
 Route::get('/page/{slug}', [PageController::class, 'show'])->name('page.show');
 

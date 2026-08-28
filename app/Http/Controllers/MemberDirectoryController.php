@@ -111,4 +111,16 @@ class MemberDirectoryController extends Controller
 
         return view('directory.show', compact('member'));
     }
+
+    /**
+     * Halaman verifikasi keanggotaan — target QR code pada kartu anggota.
+     * Publik & selalu tersedia (tidak dibatasi show_in_directory) supaya
+     * QR kartu tidak pernah 404. Hanya 404 bila id member tidak ada.
+     */
+    public function verify(Member $member)
+    {
+        $member->load('user');
+
+        return view('directory.verify', compact('member'));
+    }
 }
