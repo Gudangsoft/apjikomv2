@@ -42,11 +42,11 @@
   .layer { position: absolute; inset: 0; }
   .main {
     position: absolute; left: 0; top: 0; bottom: 46px; right: 372px; z-index: 3;
-    padding: 32px 0 20px 46px; display: flex; flex-direction: column; gap: 13px;
+    padding: 34px 0 22px 46px; display: flex; flex-direction: column; gap: 15px;
   }
   .side {
-    position: absolute; top: 32px; right: 40px; bottom: 60px; width: 320px; z-index: 3;
-    display: flex; flex-direction: column; align-items: flex-end; gap: 22px;
+    position: absolute; top: 34px; right: 40px; bottom: 60px; width: 318px; z-index: 3;
+    display: flex; flex-direction: column; align-items: flex-end; gap: 26px;
   }
   .footer {
     position: absolute; left: 0; right: 0; bottom: 0; height: 46px; z-index: 4;
@@ -57,7 +57,7 @@
   .ico { display: inline-flex; flex: none; }
   .fitem { display: flex; align-items: flex-start; gap: 9px; }
   .fnav { display: flex; align-items: center; gap: 9px; font: 600 12px 'Open Sans', 'Segoe UI', sans-serif; letter-spacing: .3px; }
-  .label { font-weight: 700; font-size: 10px; letter-spacing: 1.3px; color: var(--accent); }
+  .label { font-weight: 700; font-size: 10.5px; letter-spacing: 1.3px; color: var(--accent); }
   .value { font-weight: 700; font-size: 15px; color: #23262f; letter-spacing: .3px; }
   .qr rect, .qr path { fill: #23262f; }
 </style>
@@ -94,10 +94,10 @@
   <svg class="layer" style="left:120px;top:-70px;width:760px;height:300px" viewBox="0 0 760 300" xmlns="http://www.w3.org/2000/svg">
     <ellipse cx="380" cy="80" rx="420" ry="150" fill="var(--accent-soft)" opacity=".26"/>
   </svg>
-  <!-- bottom-left wedge -->
-  <svg class="layer" style="top:auto;bottom:46px;left:0;width:210px;height:120px" viewBox="0 0 210 120" xmlns="http://www.w3.org/2000/svg">
-    <path d="M0 120 H190 C150 78 96 44 0 24 Z" fill="var(--accent)" opacity=".9"/>
-    <path d="M0 120 H120 C92 90 54 66 0 52 Z" fill="var(--accent-deep)" opacity=".5"/>
+  <!-- bottom-left wedge (small corner accent, kept clear of the data column) -->
+  <svg class="layer" style="top:auto;bottom:46px;left:0;width:140px;height:52px" viewBox="0 0 140 52" xmlns="http://www.w3.org/2000/svg">
+    <path d="M0 52 H132 C100 34 54 16 0 10 Z" fill="var(--accent)" opacity=".85"/>
+    <path d="M0 52 H86 C64 40 36 28 0 22 Z" fill="var(--accent-deep)" opacity=".5"/>
   </svg>
   <!-- bottom-right dot grid -->
   <svg class="layer" style="left:auto;top:auto;right:30px;bottom:58px;width:78px;height:46px" viewBox="0 0 78 46" xmlns="http://www.w3.org/2000/svg">
@@ -143,25 +143,23 @@
       </div>
     </div>
 
-    <div style="font-family:'Montserrat','Segoe UI',sans-serif; font-weight:800; font-size:29px; letter-spacing:.5px; color:#20232e; margin-top:4px;">KARTU TANDA ANGGOTA</div>
+    <div style="font-family:'Montserrat','Segoe UI',sans-serif; font-weight:800; font-size:30px; letter-spacing:.5px; color:#20232e; margin-top:2px;">KARTU TANDA ANGGOTA</div>
 
     <div>
       <span style="display:inline-block; background:var(--accent); color:#fff; font-family:'Montserrat','Segoe UI',sans-serif; font-weight:700; font-size:15px; letter-spacing:1.5px; padding:9px 28px; border-radius:999px; box-shadow:0 8px 18px -6px rgba(59, 29, 93, .55);">ANGGOTA APJIKOM</span>
     </div>
 
-    <div style="font-style:italic; font-weight:600; font-size:13.5px; color:#4c4657;">Bersama Mengelola Jurnal, Membangun Bangsa</div>
+    <div style="font-style:italic; font-weight:600; font-size:14px; color:#4c4657;">Bersama Mengelola Jurnal, Membangun Bangsa</div>
 
     <div style="width:66%; height:1.5px; background:#d7cbe8; margin:3px 0;"></div>
 
     <div style="width:80%; text-align:center;">
-      <div style="font-family:'Montserrat','Segoe UI',sans-serif; font-weight:700; font-size:29px; letter-spacing:3px; color:#23262f;">1234 1234 1234 1234 1234</div>
+      <div style="font-family:'Montserrat','Segoe UI',sans-serif; font-weight:700; font-size:30px; letter-spacing:3px; color:#23262f;">1234 1234 1234 1234 1234</div>
       <div style="font-weight:700; font-size:11px; letter-spacing:2.5px; color:#6b6478; margin-top:4px;">NO. KARTU E-TOOL</div>
     </div>
 
-    <div style="flex:1; min-height:8px;"></div>
-
-    <div style="display:flex; gap:40px;">
-      <div style="width:206px; display:flex; flex-direction:column; gap:12px;">
+    <div style="display:flex; gap:44px; margin-top:46px;">
+      <div style="width:210px; display:flex; flex-direction:column; gap:19px;">
         <div>
           <div class="label">NOMOR ANGGOTA</div>
           <div class="value">APJIKOM.2025.000123</div>
@@ -180,7 +178,7 @@
         </div>
       </div>
 
-      <div style="flex:1; display:flex; flex-direction:column; gap:11px;">
+      <div style="flex:1; display:flex; flex-direction:column; gap:14px;">
         <div>
           <div class="label" style="margin-bottom:3px;">NOMOR AHU</div>
           <div style="font-size:11px; line-height:1.5; color:#3a3742; max-width:390px;">AHU-0007794.AH.01.07.Tahun 2025 tentang Pengesahan Pendirian Perkumpulan Asosiasi Pengelola Jurnal Informatika dan Komputer Indonesia</div>
@@ -212,7 +210,7 @@
       <div style="font-size:8.5px; color:#6b6478; margin-top:4px;">Melayani Negeri, Kebanggaan Bangsa</div>
     </div>
 
-    <div style="width:196px; height:242px; border-radius:14px; border:3px solid var(--accent); background:linear-gradient(160deg, #eee9f5, #ded4ec); overflow:hidden; box-shadow:0 12px 26px -12px rgba(59, 29, 93, .5); position:relative;">
+    <div style="width:210px; height:262px; border-radius:14px; border:3px solid var(--accent); background:linear-gradient(160deg, #eee9f5, #ded4ec); overflow:hidden; box-shadow:0 12px 26px -12px rgba(59, 29, 93, .5); position:relative;">
       <svg width="100%" height="100%" viewBox="0 0 120 148" preserveAspectRatio="xMidYMax meet" xmlns="http://www.w3.org/2000/svg">
         <circle cx="60" cy="52" r="24" fill="#b9aed6"/>
         <path d="M18 150 C20 108 38 86 60 86 C82 86 100 108 102 150 Z" fill="#b9aed6"/>
