@@ -186,10 +186,11 @@
   </div>
 
   {{-- Garis pembatas: biodata (kiri) | bagian kanan --}}
-  <div class="ktov-sep" style="left:{{ $L(31.5) }}; top:{{ $T(57.5) }}; height:33%;"></div>
+  <div class="ktov-sep" style="left:{{ $L(31) }}; top:{{ $T(56) }}; height:34%;"></div>
 
   {{-- Nomor AHU + Kantor Sekretariat (tengah bawah) --}}
-  <div class="ktb ktcol" style="left:{{ $L(33.5) }}; top:{{ $T(62) }}; width:32%; gap:{{ $pw(0.014) }};">
+  {{-- width & max-height dibatasi supaya teks panjang tetap wrap rapi, tidak menabrak foto / footer --}}
+  <div class="ktb ktcol" style="left:{{ $L(32) }}; top:{{ $T(62) }}; width:34%; max-height:28%; overflow:hidden; gap:{{ $pw(0.014) }};">
     <div>
       <div class="ktov-l">Nomor AHU</div>
       <div class="ktov-body">{{ $ahu }}</div>
