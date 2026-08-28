@@ -34,6 +34,36 @@
     $igLabel  = setting('card_instagram_label', 'apjikom_id');
     $ytLabel  = setting('card_youtube_label', 'APJIKOM Official');
 
+    // ── Template kartu dari admin (bila sudah di-upload & diaktifkan) ──────
+    // Ada template  -> gambar itu jadi latar, hanya data member yang di-overlay.
+    // Tidak ada     -> pakai desain vektor HTML penuh (fallback di bawah).
+    $tpl = \App\Models\MemberCardTemplate::getActive();
+    $tplUrl = null; $tplW = 1200; $tplH = 757;
+    if ($tpl && $tpl->template_image && Storage::disk('public')->exists($tpl->template_image)) {
+        $tplUrl = Storage::url($tpl->template_image);
+        $tplSize = @getimagesize(storage_path('app/public/' . $tpl->template_image));
+        if ($tplSize) { $tplW = (int) $tplSize[0]; $tplH = (int) $tplSize[1]; }
+    }
+    // Posisi & ukuran overlay dalam PERSEN terhadap kartu — atur lewat setting().
+    $ovn = fn ($k, $d) => (float) setting($k, $d);
+    $ov = [
+        'data_top'    => $ovn('card_ov_data_top', 32),
+        'data_left'   => $ovn('card_ov_data_left', 7),
+        'data_w'      => $ovn('card_ov_data_w', 45),
+        'photo_top'   => $ovn('card_ov_photo_top', 30),
+        'photo_right' => $ovn('card_ov_photo_right', 7),
+        'photo_w'     => $ovn('card_ov_photo_w', 19),
+        'photo_h'     => $ovn('card_ov_photo_h', 44),
+        'qr_bottom'   => $ovn('card_ov_qr_bottom', 13),
+        'qr_left'     => $ovn('card_ov_qr_left', 7),
+        'qr_w'        => $ovn('card_ov_qr_w', 12),
+        'font'        => $ovn('card_ov_font_scale', 100),   // skala font overlay, %
+    ];
+    $ovText   = setting('card_ov_text_color', '#20232e');
+    $ovLabelC = setting('card_ov_label_color', '#5a2d8f');
+    $ovShowQr = setting('card_ov_show_qr', '1') !== '0';
+    $ovFs     = fn ($px) => round($px * $ov['font'] / 100, 2) . 'px';
+
     // QR asli menuju halaman verifikasi keanggotaan (URL literal, aman dari route cache).
     $verifikasiUrl = url('/verifikasi-anggota/' . $m->id);
     $qrSvg = null;
@@ -70,7 +100,67 @@
 @endphp
 
 <div class="ktapj-stage" data-ktapj-stage>
-<div class="ktapj-card" data-ktapj-card>
+@if($tplUrl)
+{{-- ═══ MODE TEMPLATE: gambar template = latar, hanya data member yang di-overlay ═══ --}}
+<div class="ktapj-card ktapj-card--tpl" data-ktapj-card data-w="{{ $tplW }}" data-h="{{ $tplH }}"
+     style="width:{{ $tplW }}px; height:{{ $tplH }}px; background:#ffffff url('{{ $tplUrl }}') center center / 100% 100% no-repeat;">
+
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800&family=Open+Sans:ital,wght@0,400;0,600;0,700;1,600&display=swap');
+    .ktapj-stage { width: 100%; overflow: hidden; }
+    .ktapj-card--tpl {
+      --accent: {{ $ovLabelC }};
+      --ff-display: 'Montserrat', 'Segoe UI', system-ui, sans-serif;
+      --ff-body: 'Open Sans', 'Segoe UI', system-ui, sans-serif;
+      position: relative; overflow: hidden; transform-origin: top left;
+      font-family: var(--ff-body); color: {{ $ovText }}; line-height: 1.3;
+    }
+    .ktapj-card--tpl * { box-sizing: border-box; }
+    .ktov { position: absolute; }
+    .ktov-label { font-family: var(--ff-display); font-weight: 700; letter-spacing: 1.1px;
+      text-transform: uppercase; color: {{ $ovLabelC }}; font-size: {{ $ovFs(12) }}; }
+    .ktov-value { font-family: var(--ff-display); font-weight: 700; color: {{ $ovText }};
+      font-size: {{ $ovFs(17) }}; line-height: 1.25; }
+    .ktov-value--sm { font-family: var(--ff-body); font-weight: 600; font-size: {{ $ovFs(14) }}; }
+    .ktapj-qr-fallback rect, .ktapj-qr-fallback path { fill: {{ $ovText }}; }
+    .ktov-qr svg { display: block; width: 100%; height: 100%; }
+    @media print {
+      .ktapj-stage { overflow: visible !important; height: auto !important; }
+      .ktapj-card--tpl { transform: none !important; }
+    }
+  </style>
+
+  @if($fotoUrl)
+  <img src="{{ $fotoUrl }}" alt="Foto {{ $namaAnggota }}" class="ktov"
+       style="top:{{ $ov['photo_top'] }}%; right:{{ $ov['photo_right'] }}%; width:{{ $ov['photo_w'] }}%; height:{{ $ov['photo_h'] }}%; object-fit:cover; border-radius:8px;">
+  @endif
+
+  <div class="ktov" style="top:{{ $ov['data_top'] }}%; left:{{ $ov['data_left'] }}%; width:{{ $ov['data_w'] }}%; display:flex; flex-direction:column; gap:{{ $ovFs(11) }};">
+    <div style="font-family:var(--ff-display); font-weight:800; font-size:{{ $ovFs(24) }}; letter-spacing:.5px; color:{{ $ovText }}; margin-bottom:{{ $ovFs(2) }};">{{ $nomorAnggota }}</div>
+    <div><div class="ktov-label">Nama</div><div class="ktov-value">{{ $namaAnggota }}</div></div>
+    <div><div class="ktov-label">Jabatan / Profesi</div><div class="ktov-value">{{ $jabatan }}</div></div>
+    <div><div class="ktov-label">Institusi</div><div class="ktov-value" style="display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;">{{ $institusi }}</div></div>
+    <div><div class="ktov-label">Alamat</div><div class="ktov-value ktov-value--sm" style="display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;">{{ $alamatAnggota }}</div></div>
+    <div><div class="ktov-label">Berlaku S/D</div><div class="ktov-value">{{ $berlaku }}</div></div>
+  </div>
+
+  @if($ovShowQr)
+  <div class="ktov ktov-qr" style="bottom:{{ $ov['qr_bottom'] }}%; left:{{ $ov['qr_left'] }}%; width:{{ $ov['qr_w'] }}%; aspect-ratio:1/1; background:#fff; padding:.5%; border-radius:6px; box-shadow:0 2px 10px -4px rgba(0,0,0,.25);">
+    @if($qrSvg)
+      {!! $qrSvg !!}
+    @else
+      <svg class="ktapj-qr-fallback" width="100%" height="100%" viewBox="0 0 21 21" shape-rendering="crispEdges" xmlns="http://www.w3.org/2000/svg">
+        <g><path d="M0 0h7v7h-7z M1 1v5h5v-5z" fill-rule="evenodd"/><rect x="2" y="2" width="3" height="3"/></g>
+        <g transform="translate(14 0)"><path d="M0 0h7v7h-7z M1 1v5h5v-5z" fill-rule="evenodd"/><rect x="2" y="2" width="3" height="3"/></g>
+        <g transform="translate(0 14)"><path d="M0 0h7v7h-7z M1 1v5h5v-5z" fill-rule="evenodd"/><rect x="2" y="2" width="3" height="3"/></g>
+        {!! $qrRects !!}
+      </svg>
+    @endif
+  </div>
+  @endif
+</div>
+@else
+<div class="ktapj-card" data-ktapj-card data-w="1200" data-h="757">
 
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800&family=Open+Sans:ital,wght@0,400;0,600;0,700;1,600&display=swap');
@@ -302,6 +392,7 @@
   </div>
 
 </div>
+@endif
 </div>
 
 <script>
@@ -310,9 +401,11 @@
     document.querySelectorAll('[data-ktapj-stage]').forEach(function (stage) {
       var card = stage.querySelector('[data-ktapj-card]');
       if (!card) return;
-      var scale = Math.min(1, stage.clientWidth / 1200);
+      var baseW = parseFloat(card.getAttribute('data-w')) || 1200;
+      var baseH = parseFloat(card.getAttribute('data-h')) || 757;
+      var scale = Math.min(1, stage.clientWidth / baseW);
       card.style.transform = 'scale(' + scale + ')';
-      stage.style.height = Math.round(757 * scale) + 'px';
+      stage.style.height = Math.round(baseH * scale) + 'px';
     });
   }
   fitKtapj();
