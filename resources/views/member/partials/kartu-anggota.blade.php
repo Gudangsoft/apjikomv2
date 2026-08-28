@@ -73,14 +73,17 @@
 <div class="ktapj-card" data-ktapj-card>
 
   <style>
+    @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800&family=Open+Sans:ital,wght@0,400;0,600;0,700;1,600&display=swap');
     .ktapj-stage { width: 100%; overflow: hidden; }
     .ktapj-card {
       --accent: #5a2d8f; --accent-dark: #4c2678; --accent-deep: #3b1d5d; --accent-soft: #d6cbe3;
+      --ff-display: 'Montserrat', 'Segoe UI', system-ui, sans-serif;
+      --ff-body: 'Open Sans', 'Segoe UI', system-ui, sans-serif;
       position: relative; width: 1200px; height: 757px; overflow: hidden; border-radius: 30px;
       transform-origin: top left;
       background: linear-gradient(135deg, #fbf9fd 0%, #f2ecf8 52%, #e9dff5 100%);
       box-shadow: 0 30px 70px -22px rgba(59, 29, 93, .5);
-      color: #23262f; font-family: 'Open Sans', 'Segoe UI', system-ui, sans-serif;
+      color: #23262f; font-family: var(--ff-body);
       line-height: 1.4;
     }
     .ktapj-card, .ktapj-card * { box-sizing: border-box; }
@@ -88,7 +91,7 @@
     .ktapj-layer { position: absolute; inset: 0; }
     .ktapj-main {
       position: absolute; left: 0; top: 0; bottom: 46px; right: 372px; z-index: 3;
-      padding: 34px 0 22px 46px; display: flex; flex-direction: column; gap: 12px;
+      padding: 32px 0 20px 46px; display: flex; flex-direction: column; gap: 10px;
     }
     .ktapj-side {
       position: absolute; top: 34px; right: 40px; bottom: 60px; width: 318px; z-index: 3;
@@ -102,9 +105,9 @@
     .ktapj-brand { display: flex; align-items: center; gap: 16px; }
     .ktapj-ico { display: inline-flex; flex: none; }
     .ktapj-fitem { display: flex; align-items: flex-start; gap: 9px; }
-    .ktapj-fnav { display: flex; align-items: center; gap: 9px; font: 600 12px 'Open Sans', 'Segoe UI', sans-serif; letter-spacing: .3px; }
-    .ktapj-label { font-weight: 700; font-size: 10.5px; letter-spacing: 1.3px; color: var(--accent); }
-    .ktapj-value { font-weight: 700; font-size: 15px; color: #23262f; letter-spacing: .3px; }
+    .ktapj-fnav { display: flex; align-items: center; gap: 9px; font: 600 12.5px var(--ff-body); letter-spacing: .3px; }
+    .ktapj-label { font-family: var(--ff-display); font-weight: 700; font-size: 11px; letter-spacing: 1.3px; color: var(--accent); }
+    .ktapj-value { font-weight: 700; font-size: 16px; color: #23262f; letter-spacing: .3px; }
     .ktapj-qr svg { display: block; width: 100%; height: 100%; }
     .ktapj-qr-fallback rect, .ktapj-qr-fallback path { fill: #23262f; }
     @media print {
@@ -179,27 +182,27 @@
         <text x="50" y="90" text-anchor="middle" font-family="Montserrat, sans-serif" font-size="8.5" font-weight="800" fill="var(--accent-deep)">APJIKOM</text>
       </svg>
       <div>
-        <div style="font-family:'Montserrat','Segoe UI',sans-serif; font-weight:800; font-size:40px; line-height:1; letter-spacing:.5px; color:var(--accent);">APJIKOM</div>
-        <div style="font-weight:700; font-size:11px; line-height:1.32; color:#3f3a48; letter-spacing:.2px; margin-top:5px;">Asosiasi Pengelola Jurnal<br>Informatika dan Komputer Indonesia</div>
+        <div style="font-family:var(--ff-display); font-weight:800; font-size:64px; line-height:1; letter-spacing:.5px; color:var(--accent);">APJIKOM</div>
+        <div style="font-weight:700; font-size:12px; line-height:1.3; color:#3f3a48; letter-spacing:.2px; margin-top:4px;">Asosiasi Pengelola Jurnal<br>Informatika dan Komputer Indonesia</div>
       </div>
     </div>
 
-    <div style="font-family:'Montserrat','Segoe UI',sans-serif; font-weight:800; font-size:30px; letter-spacing:.5px; color:#20232e; margin-top:2px;">KARTU TANDA ANGGOTA</div>
+    <div style="font-family:var(--ff-display); font-weight:800; font-size:33px; letter-spacing:.5px; color:#20232e; margin-top:2px;">KARTU TANDA ANGGOTA</div>
 
     <div>
-      <span style="display:inline-block; background:var(--accent); color:#fff; font-family:'Montserrat','Segoe UI',sans-serif; font-weight:700; font-size:15px; letter-spacing:1.5px; padding:9px 28px; border-radius:999px; box-shadow:0 8px 18px -6px rgba(59, 29, 93, .55);">ANGGOTA APJIKOM</span>
+      <span style="display:inline-block; background:var(--accent); color:#fff; font-family:var(--ff-display); font-weight:700; font-size:16px; letter-spacing:1.5px; padding:9px 30px; border-radius:999px; box-shadow:0 8px 18px -6px rgba(59, 29, 93, .55);">ANGGOTA APJIKOM</span>
     </div>
 
-    <div style="font-style:italic; font-weight:600; font-size:14px; color:#4c4657;">Bersama Mengelola Jurnal, Membangun Bangsa</div>
+    <div style="font-style:italic; font-weight:600; font-size:15px; color:#4c4657;">Bersama Mengelola Jurnal, Membangun Bangsa</div>
 
     <div style="width:66%; height:1.5px; background:#d7cbe8; margin:3px 0;"></div>
 
     <div style="width:86%; text-align:center;">
-      <div style="font-family:'Montserrat','Segoe UI',sans-serif; font-weight:700; font-size:27px; letter-spacing:1px; color:#23262f;">{{ $nomorAnggota }}</div>
+      <div style="font-family:var(--ff-display); font-weight:700; font-size:28px; letter-spacing:1px; color:#23262f;">{{ $nomorAnggota }}</div>
       <div style="font-weight:700; font-size:11px; letter-spacing:2.5px; color:#6b6478; margin-top:4px;">NOMOR ANGGOTA</div>
     </div>
 
-    <div style="display:flex; gap:26px; margin-top:16px;">
+    <div style="display:flex; gap:26px; margin-top:10px;">
       <div style="width:252px; display:flex; flex-direction:column; gap:12px;">
         <div>
           <div class="ktapj-label">NAMA</div>
@@ -215,7 +218,7 @@
         </div>
         <div>
           <div class="ktapj-label">ALAMAT</div>
-          <div class="ktapj-value" style="font-weight:600; font-size:12.5px; line-height:1.35; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden;">{{ $alamatAnggota }}</div>
+          <div class="ktapj-value" style="font-weight:600; font-size:13px; line-height:1.35; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden;">{{ $alamatAnggota }}</div>
         </div>
         <div>
           <div class="ktapj-label">BERLAKU S/D</div>
@@ -226,15 +229,15 @@
       <div style="flex:1; display:flex; flex-direction:column; gap:14px;">
         <div>
           <div class="ktapj-label" style="margin-bottom:3px;">NOMOR AHU</div>
-          <div style="font-size:11px; line-height:1.5; color:#3a3742; max-width:390px;">{{ $ahu }}</div>
+          <div style="font-size:11.5px; line-height:1.5; color:#3a3742; max-width:400px;">{{ $ahu }}</div>
         </div>
         <div>
           <div class="ktapj-label" style="margin-bottom:5px;">KANTOR SEKRETARIAT</div>
-          <div class="ktapj-fitem" style="font-size:11px; line-height:1.45; color:#3a3742; max-width:390px;">
+          <div class="ktapj-fitem" style="font-size:11.5px; line-height:1.45; color:#3a3742; max-width:400px;">
             <span class="ktapj-ico"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s7-6.5 7-12A7 7 0 0 0 5 10c0 5.5 7 12 7 12z"/><circle cx="12" cy="10" r="2.5"/></svg></span>
             <span>{{ $alamat }}</span>
           </div>
-          <div style="display:flex; gap:20px; margin-top:6px; font-size:11px; color:#3a3742; flex-wrap:wrap;">
+          <div style="display:flex; gap:20px; margin-top:6px; font-size:11.5px; color:#3a3742; flex-wrap:wrap;">
             <span class="ktapj-fitem" style="align-items:center;"><span class="ktapj-ico"><svg width="13" height="13" viewBox="0 0 24 24" fill="var(--accent)"><path d="M6.6 10.8a15.5 15.5 0 0 0 6.6 6.6l2.2-2.2a1 1 0 0 1 1-.25 11.4 11.4 0 0 0 3.5.56 1 1 0 0 1 1 1V20a1 1 0 0 1-1 1A17 17 0 0 1 3 4a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1c0 1.2.2 2.4.56 3.5a1 1 0 0 1-.25 1z"/></svg></span><span>{{ $telp }}</span></span>
             <span class="ktapj-fitem" style="align-items:center;"><span class="ktapj-ico"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4.5" width="20" height="15" rx="2.5"/><path d="M3 7l9 6 9-6"/></svg></span><span>{{ $email }}</span></span>
           </div>
@@ -247,12 +250,12 @@
   <div class="ktapj-side">
 
     <div style="text-align:right;">
-      <div style="font-family:'Montserrat','Segoe UI',sans-serif; font-weight:700; font-size:12.5px; letter-spacing:2px; color:#2b2b33;">BANK PARTNER</div>
+      <div style="font-family:var(--ff-display); font-weight:700; font-size:13px; letter-spacing:2px; color:#2b2b33;">BANK PARTNER</div>
       <div style="display:flex; align-items:center; gap:10px; margin-top:7px; justify-content:flex-end;">
-        <span style="width:42px; height:42px; border:1.5px dashed #b7afc4; border-radius:8px; display:flex; align-items:center; justify-content:center; font-size:7.5px; font-weight:700; color:#9a92a6; letter-spacing:.5px;">LOGO</span>
-        <span style="font-family:'Montserrat','Segoe UI',sans-serif; font-weight:800; font-size:25px; color:#1f3a63; letter-spacing:.5px;">BNI</span>
+        <span style="width:46px; height:46px; border:1.5px dashed #b7afc4; border-radius:8px; display:flex; align-items:center; justify-content:center; font-size:8px; font-weight:700; color:#9a92a6; letter-spacing:.5px;">LOGO</span>
+        <span style="font-family:var(--ff-display); font-weight:800; font-size:31px; color:#1f3a63; letter-spacing:.5px;">BNI</span>
       </div>
-      <div style="font-size:8.5px; color:#6b6478; margin-top:4px;">Melayani Negeri, Kebanggaan Bangsa</div>
+      <div style="font-size:9px; color:#6b6478; margin-top:4px;">Melayani Negeri, Kebanggaan Bangsa</div>
     </div>
 
     <div style="width:210px; height:262px; border-radius:14px; border:3px solid var(--accent); background:linear-gradient(160deg, #eee9f5, #ded4ec); overflow:hidden; box-shadow:0 12px 26px -12px rgba(59, 29, 93, .5); position:relative;">
@@ -281,10 +284,10 @@
         @endif
       </div>
       <div style="text-align:left;">
-        <div style="font-family:'Montserrat','Segoe UI',sans-serif; font-weight:700; font-size:11.5px; letter-spacing:1.4px; color:#2b2b33; line-height:1.3; max-width:120px;">VERIFIKASI ANGGOTA</div>
+        <div style="font-family:var(--ff-display); font-weight:700; font-size:12.5px; letter-spacing:1.4px; color:#2b2b33; line-height:1.3; max-width:132px;">VERIFIKASI ANGGOTA</div>
         <div style="display:flex; align-items:center; gap:6px; margin-top:8px;">
-          <span class="ktapj-ico"><svg width="20" height="20" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 2l8 3v6c0 5.1-3.4 9.4-8 11-4.6-1.6-8-5.9-8-11V5z" fill="var(--accent)"/><path d="M8.3 12.2l2.6 2.6 4.8-5.4" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
-          <span style="font-family:'Montserrat','Segoe UI',sans-serif; font-weight:700; font-size:12px; color:var(--accent);">TERDAFTAR RESMI</span>
+          <span class="ktapj-ico"><svg width="21" height="21" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 2l8 3v6c0 5.1-3.4 9.4-8 11-4.6-1.6-8-5.9-8-11V5z" fill="var(--accent)"/><path d="M8.3 12.2l2.6 2.6 4.8-5.4" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+          <span style="font-family:var(--ff-display); font-weight:700; font-size:12.5px; color:var(--accent);">TERDAFTAR RESMI</span>
         </div>
       </div>
     </div>
