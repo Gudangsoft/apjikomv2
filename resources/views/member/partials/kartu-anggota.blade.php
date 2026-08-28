@@ -10,7 +10,11 @@
     $m = $member;
     $namaAnggota  = $m->user->name ?? '-';
     $nomorAnggota = $m->member_number ?: '-';
-    $jabatan      = $m->position ?: ($m->institution_name ?: '-');
+    $jabatan      = $m->position ?: '-';
+    $institusi    = $m->institution_name ?: '-';
+    $alamatAnggota = $m->address
+        ?: (collect([$m->city, $m->province])->filter()->implode(', ') ?: '-');
+    $alamatAnggota = trim(str_replace(["\r\n", "\r", "\n"], ', ', $alamatAnggota));
     $berlaku      = $m->expiry_date
         ? \Carbon\Carbon::parse($m->expiry_date)->format('m/Y')
         : 'Seumur Hidup';
@@ -24,7 +28,6 @@
     $alamat = trim(str_replace(["\r\n", "\r", "\n"], ', ', $alamat));
     $telp   = setting('contact_phone', '+62 822-2372-5276');
     $email  = setting('contact_email', 'sekretariat@apjikom.or.id');
-    $etool  = setting('card_etool_number', '1234 1234 1234 1234 1234');
 
     $webLabel = setting('card_website_label', 'www.apjikom.or.id');
     $fbLabel  = setting('card_facebook_label', 'APJIKOM');
@@ -85,7 +88,7 @@
     .ktapj-layer { position: absolute; inset: 0; }
     .ktapj-main {
       position: absolute; left: 0; top: 0; bottom: 46px; right: 372px; z-index: 3;
-      padding: 34px 0 22px 46px; display: flex; flex-direction: column; gap: 15px;
+      padding: 34px 0 22px 46px; display: flex; flex-direction: column; gap: 12px;
     }
     .ktapj-side {
       position: absolute; top: 34px; right: 40px; bottom: 60px; width: 318px; z-index: 3;
@@ -191,17 +194,13 @@
 
     <div style="width:66%; height:1.5px; background:#d7cbe8; margin:3px 0;"></div>
 
-    <div style="width:80%; text-align:center;">
-      <div style="font-family:'Montserrat','Segoe UI',sans-serif; font-weight:700; font-size:30px; letter-spacing:3px; color:#23262f;">{{ $etool }}</div>
-      <div style="font-weight:700; font-size:11px; letter-spacing:2.5px; color:#6b6478; margin-top:4px;">NO. KARTU E-TOOL</div>
+    <div style="width:86%; text-align:center;">
+      <div style="font-family:'Montserrat','Segoe UI',sans-serif; font-weight:700; font-size:27px; letter-spacing:1px; color:#23262f;">{{ $nomorAnggota }}</div>
+      <div style="font-weight:700; font-size:11px; letter-spacing:2.5px; color:#6b6478; margin-top:4px;">NOMOR ANGGOTA</div>
     </div>
 
-    <div style="display:flex; gap:44px; margin-top:46px;">
-      <div style="width:210px; display:flex; flex-direction:column; gap:19px;">
-        <div>
-          <div class="ktapj-label">NOMOR ANGGOTA</div>
-          <div class="ktapj-value">{{ $nomorAnggota }}</div>
-        </div>
+    <div style="display:flex; gap:26px; margin-top:16px;">
+      <div style="width:252px; display:flex; flex-direction:column; gap:12px;">
         <div>
           <div class="ktapj-label">NAMA</div>
           <div class="ktapj-value">{{ $namaAnggota }}</div>
@@ -209,6 +208,14 @@
         <div>
           <div class="ktapj-label">JABATAN / PROFESI</div>
           <div class="ktapj-value">{{ $jabatan }}</div>
+        </div>
+        <div>
+          <div class="ktapj-label">INSTITUSI</div>
+          <div class="ktapj-value" style="line-height:1.3; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden;">{{ $institusi }}</div>
+        </div>
+        <div>
+          <div class="ktapj-label">ALAMAT</div>
+          <div class="ktapj-value" style="font-weight:600; font-size:12.5px; line-height:1.35; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden;">{{ $alamatAnggota }}</div>
         </div>
         <div>
           <div class="ktapj-label">BERLAKU S/D</div>

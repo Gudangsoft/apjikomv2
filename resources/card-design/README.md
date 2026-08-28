@@ -47,14 +47,18 @@ gambar PNG hasil `MemberCardGenerator`:
 | Halaman kartu member | `resources/views/member/card.blade.php` — `@include` partial |
 | Detail member (admin) | `resources/views/admin/members/show.blade.php` — `@include` partial |
 
-- Tanpa dependensi baru (tidak perlu `composer install` / Node / Chromium).
 - Unduh = tombol **Cetak / Simpan PDF** (`window.print()`), bukan download PNG.
-- Data diambil dari: `member_number`, `user->name`, `position` (Jabatan),
-  `expiry_date` (Berlaku, default "Seumur Hidup"), `photo`.
-- Teks tetap (AHU, alamat, telp, email, no. e-tool, label sosmed) bisa diatur
-  lewat `setting()` — key: `org_ahu_number`, `contact_address`, `contact_phone`,
-  `contact_email`, `card_etool_number`, `card_website_label`,
-  `card_facebook_label`, `card_instagram_label`, `card_youtube_label`.
+- Data member: `member_number` (nomor besar di tengah + tidak diulang di kolom),
+  `user->name`, `position` (Jabatan / Profesi), `institution_name` (Institusi),
+  `address` / fallback `city, province` (Alamat), `expiry_date` (Berlaku,
+  default "Seumur Hidup"), `photo`.
+- Teks tetap (AHU, alamat sekretariat, telp, email, label sosmed) via `setting()`
+  — key: `org_ahu_number`, `contact_address`, `contact_phone`, `contact_email`,
+  `card_website_label`, `card_facebook_label`, `card_instagram_label`,
+  `card_youtube_label`.
+- QR asli via paket `simplesoftwareio/simple-qrcode` → halaman
+  `/verifikasi-anggota/{id}`. **Server perlu `composer install`** setelah pull;
+  tanpa itu QR otomatis fallback ke pola hiasan (tidak error).
 
 ### Masih placeholder / belum
 
