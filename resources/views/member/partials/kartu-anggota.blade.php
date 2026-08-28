@@ -56,8 +56,12 @@
         'photo_rt' => $ovn('card_ov_photo_right', 8.5),
         'qr_w'     => $ovn('card_ov_qr_w', 12),
         'qr_top'   => $ovn('card_ov_qr_top', 65),
+        'qr_shift' => $ovn('card_ov_qr_shift', 1),   // + = geser blok QR ke kanan (%)
         'font'     => $ovn('card_ov_font_scale', 100),
     ];
+    // Blok QR+verifikasi dipusatkan tepat di bawah tengah foto.
+    $qrBlockW = 30;
+    $qrRight  = round(($ov['photo_rt'] + $ov['photo_w'] / 2) - $qrBlockW / 2 - $sx - $ov['qr_shift'], 3);
     $ovText   = setting('card_ov_text_color', '#20232e');
     $ovLabelC = setting('card_ov_label_color', '#5a2d8f');
     $ovShowQr = setting('card_ov_show_qr', '1') !== '0';
@@ -185,8 +189,8 @@
   </div>
 
   @if($ovShowQr)
-  {{-- QR + verifikasi — satu blok, dipusatkan di bawah foto --}}
-  <div class="ktb" style="left:{{ $L(63.5) }}; top:{{ $T($ov['qr_top']) }}; width:33%; display:flex; align-items:center; justify-content:center; gap:{{ $pw(0.016) }};">
+  {{-- QR + verifikasi — satu blok, dipusatkan tepat di bawah foto --}}
+  <div class="ktb" style="right:{{ $qrRight }}%; top:{{ $T($ov['qr_top']) }}; width:{{ $qrBlockW }}%; display:flex; align-items:center; justify-content:center; gap:{{ $pw(0.014) }};">
     <div class="ktov-qr" style="width:{{ $pw($ov['qr_w'] / 100) }}; flex:none;">
       @if($qrSvg)
         {!! $qrSvg !!}
