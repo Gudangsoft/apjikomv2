@@ -60,9 +60,29 @@ gambar PNG hasil `MemberCardGenerator`:
   `/verifikasi-anggota/{id}`. **Server perlu `composer install`** setelah pull;
   tanpa itu QR otomatis fallback ke pola hiasan (tidak error).
 
+### Mode template (gambar background dari admin)
+
+Kalau ada **MemberCardTemplate aktif**, kartu memakai gambar itu sebagai latar
+dan hanya menimpakan konten member di **area kosong** template: judul, pill,
+tagline, nomor anggota, data (nama/jabatan/institusi/alamat/berlaku), Nomor AHU,
+Kantor Sekretariat, foto, QR + "Terdaftar Resmi". Seal, wordmark, BANK PARTNER,
+footer, ornamen diambil dari gambar template.
+
+Atur posisi area lewat `setting()` (semua PERSEN terhadap kartu):
+
+| Key | Default | Fungsi |
+|-----|---------|--------|
+| `card_ov_area_top` | 31 | batas atas area kosong |
+| `card_ov_area_bottom` | 9 | ruang untuk footer template |
+| `card_ov_area_left` / `card_ov_area_right` | 5 / 3.5 | margin kiri / kanan |
+| `card_ov_photo_w` | 21 | lebar foto (% lebar kartu) |
+| `card_ov_qr_w` | 12 | lebar QR (% lebar kartu) |
+| `card_ov_font_scale` | 100 | skala semua font overlay (%) |
+| `card_ov_text_color` / `card_ov_label_color` | `#20232e` / `#5a2d8f` | warna nilai / label |
+| `card_ov_show_qr` | `1` | `0` untuk sembunyikan QR |
+
 ### Masih placeholder / belum
 
-- Logo BNI (kotak "LOGO"), seal APJIKOM (vektor), QR (pola dekoratif — belum
-  bisa dipindai; butuh paket QR bila mau QR asli).
-- Thumbnail kartu di `member/dashboard.blade.php` dan daftar member admin masih
-  memakai gambar lama; `MemberCardGenerator` (GD) juga masih ada.
+- QR pakai `simple-qrcode` (server perlu `composer install`); fallback pola hias.
+- Thumbnail kartu di `member/dashboard.blade.php` & daftar member admin masih
+  gambar lama; `MemberCardGenerator` (GD) juga masih ada.
