@@ -66,7 +66,7 @@
         'qr_top'   => $ovn('card_ov_qr_top', 34),
         'berlaku_top' => $ovn('card_ov_berlaku_top', 65),  // "Berlaku S/D" di bawah foto
         'nomor_left'  => $ovn('card_ov_nomor_left', 34),   // blok "Nomor Anggota"
-        'nomor_top'   => $ovn('card_ov_nomor_top', 52),
+        'nomor_top'   => $ovn('card_ov_nomor_top', 58),
         'ahu_bottom'  => $ovn('card_ov_ahu_bottom', 12),   // blok AHU/Sekretariat: jarak dari tepi bawah kartu (%)
         'font'     => $ovn('card_ov_font_scale', 100),
     ];
