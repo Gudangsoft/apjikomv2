@@ -1,6 +1,11 @@
 @php
     $cardName = $member->member_number ?: ($member->user->name ?? 'anggota');
     $cardFile = 'kartu-' . \Illuminate\Support\Str::slug($cardName) . '.png';
+    // Skala agar kartu muat 1 halaman A4 landscape (~1122x793 px @96dpi, margin 0).
+    $pScale = min(1122 / max($tplW, 1), 793 / max($tplH, 1), 1);
+    $pScale = round($pScale, 4);
+    $pStageW = (int) round($tplW * $pScale);
+    $pStageH = (int) round($tplH * $pScale);
 @endphp
 <!doctype html>
 <html lang="id">
@@ -25,13 +30,28 @@
   .b-back { background: transparent; color: #5a2d8f; }
   .wrap { padding: 28px; }
   #cap { width: 100%; }
+
   @media print {
+    @page { size: A4 landscape; margin: 0; }
+    html, body { margin: 0; padding: 0; background: #fff; }
     .bar { display: none !important; }
-    body { background: #fff; }
-    .wrap { padding: 0; }
-    #cap [data-ktapj-card] { transform: none !important; box-shadow: none !important; }
-    #cap [data-ktapj-stage] { height: auto !important; overflow: visible !important; }
-    @page { size: landscape; margin: 8mm; }
+    .wrap { padding: 0 !important; margin: 0 !important; }
+    #cap { width: auto !important; }
+    #cap [data-ktapj-stage] {
+      width: {{ $pStageW }}px !important;
+      height: {{ $pStageH }}px !important;
+      overflow: hidden !important;
+    }
+    #cap [data-ktapj-card] {
+      transform: scale({{ $pScale }}) !important;
+      transform-origin: top left !important;
+      box-shadow: none !important;
+      -webkit-print-color-adjust: exact !important;
+      print-color-adjust: exact !important;
+      color-adjust: exact !important;
+      page-break-inside: avoid !important;
+      break-inside: avoid !important;
+    }
   }
 </style>
 </head>
@@ -53,6 +73,19 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
   <script>
     var FILE = @json($cardFile);
+
+    // Muat html2canvas; kalau cdnjs diblokir, coba jsdelivr.
+    function loadH2C() {
+      return new Promise(function (resolve) {
+        if (typeof html2canvas !== 'undefined') return resolve(true);
+        var s = document.createElement('script');
+        s.src = 'https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js';
+        s.onload = function () { resolve(typeof html2canvas !== 'undefined'); };
+        s.onerror = function () { resolve(false); };
+        document.head.appendChild(s);
+      });
+    }
+
     function setStatus(msg, cls) {
       var el = document.getElementById('status');
       el.textContent = msg; el.className = 's' + (cls ? ' ' + cls : '');
@@ -62,12 +95,14 @@
       var card  = document.querySelector('#cap [data-ktapj-card]');
       var stage = document.querySelector('#cap [data-ktapj-stage]');
       if (!card) { setStatus('Kartu tidak ditemukan.', 'err'); return; }
-      if (typeof html2canvas === 'undefined') {
-        setStatus('Pustaka gambar gagal dimuat — pakai tombol "Cetak / Simpan PDF".', 'err');
-        return;
-      }
       if (btn) { btn.disabled = true; btn.textContent = 'Memproses…'; }
       setStatus('Membuat gambar kartu…');
+      var ok = await loadH2C();
+      if (!ok) {
+        setStatus('Pustaka gambar gagal dimuat — pakai tombol "Cetak / Simpan PDF".', 'err');
+        if (btn) { btn.disabled = false; btn.textContent = 'Unduh PNG'; }
+        return;
+      }
       try { if (document.fonts && document.fonts.ready) await document.fonts.ready; } catch (e) {}
 
       var sv = {
@@ -98,7 +133,7 @@
     }
 
     // Unduh otomatis begitu halaman & aset siap.
-    window.addEventListener('load', function () { setTimeout(function () { capture(document.getElementById('btnDl')); }, 500); });
+    window.addEventListener('load', function () { setTimeout(function () { capture(document.getElementById('btnDl')); }, 700); });
   </script>
 </body>
 </html>

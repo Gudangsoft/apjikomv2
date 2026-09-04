@@ -304,7 +304,20 @@ class MemberController extends Controller
     public function card(Member $member)
     {
         $member->load('user');
-        return view('admin.members.card', compact('member'));
+
+        // Dimensi gambar template aktif (untuk skala cetak 1 halaman).
+        $tplW = 1200;
+        $tplH = 757;
+        $tpl = \App\Models\MemberCardTemplate::getActive();
+        if ($tpl && $tpl->template_image && \Illuminate\Support\Facades\Storage::disk('public')->exists($tpl->template_image)) {
+            $size = @getimagesize(storage_path('app/public/' . $tpl->template_image));
+            if ($size) {
+                $tplW = (int) $size[0];
+                $tplH = (int) $size[1];
+            }
+        }
+
+        return view('admin.members.card', compact('member', 'tplW', 'tplH'));
     }
 
     public function approve(Member $member)
