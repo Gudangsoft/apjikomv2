@@ -199,6 +199,7 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'admin'])->group(fun
     Route::delete('members/{member}', [AdminMemberController::class, 'destroy'])->name('members.destroy');
     
     // Member Card Management
+    Route::get('members/{member}/card', [AdminMemberController::class, 'card'])->name('members.card');
     Route::get('members/{member}/upload-card', [AdminMemberController::class, 'showUploadCard'])->name('members.upload-card');
     Route::post('members/{member}/upload-card', [AdminMemberController::class, 'uploadCard'])->name('members.upload-card.store');
     Route::match(['get', 'post'], 'members/{member}/generate-card', [AdminMemberController::class, 'generateCard'])->name('members.generate-card');

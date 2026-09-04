@@ -298,6 +298,15 @@ class MemberController extends Controller
         return view('admin.members.show', compact('member'));
     }
 
+    /**
+     * Halaman kartu anggota (standalone) untuk di-download / cetak dari admin.
+     */
+    public function card(Member $member)
+    {
+        $member->load('user');
+        return view('admin.members.card', compact('member'));
+    }
+
     public function approve(Member $member)
     {
         $member->update([
