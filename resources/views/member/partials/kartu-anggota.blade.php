@@ -23,11 +23,17 @@
         ? Storage::url($m->photo)
         : null;
 
-    $ahu    = setting('org_ahu_number', 'AHU-0007794.AH.01.07.Tahun 2025 ;
-    $ahu    = tentang Pengesahan Pendirian Perkumpulan Asosiasi Pengelola Jurnal Informatika dan Komputer Indonesia');
-    $alamat = setting('contact_address', 'Jl. Watunganten I No.1, Batursari, ;
-    $alamat =Kec. Mranggen, Kabupaten Demak, Jawa Tengah 59567');
-    $alamat = trim(str_replace(["\r\n", "\r", "\n"], ', ', $alamat));
+    $ahu = trim(str_replace(["\r\n", "\r"], "\n", setting('org_ahu_number',
+        "AHU-0007794.AH.01.07.Tahun 2025\ntentang Pengesahan Pendirian Perkumpulan Asosiasi Pengelola Jurnal Informatika dan Komputer Indonesia")));
+    if (! str_contains($ahu, "\n")) {
+        $ahu = preg_replace('/\s+tentang\s+Pengesahan/u', "\ntentang Pengesahan", $ahu, 1);
+    }
+
+    $alamat = trim(str_replace(["\r\n", "\r"], "\n", setting('contact_address',
+        "Jl. Watunganten I No.1, Batursari,\nKec. Mranggen, Kabupaten Demak, Jawa Tengah 59567")));
+    if (! str_contains($alamat, "\n")) {
+        $alamat = preg_replace('/,\s*Kec\.\s*/u', ",\nKec. ", $alamat, 1);
+    }
     $telp   = setting('contact_phone', '+62 822-2372-5276');
     $email  = setting('contact_email', 'sekretariat@apjikom.or.id');
 
@@ -66,7 +72,7 @@
         'qr_top'   => $ovn('card_ov_qr_top', 34),
         'berlaku_top' => $ovn('card_ov_berlaku_top', 65),  // "Berlaku S/D" di bawah foto
         'nomor_left'  => $ovn('card_ov_nomor_left', 34),   // blok "Nomor Anggota"
-        'nomor_top'   => $ovn('card_ov_nomor_top', 58),
+        'nomor_top'   => $ovn('card_ov_nomor_top', 55),
         'ahu_bottom'  => $ovn('card_ov_ahu_bottom', 12),   // blok AHU/Sekretariat: jarak dari tepi bawah kartu (%)
         'font'     => $ovn('card_ov_font_scale', 100),
     ];
@@ -202,7 +208,7 @@
       <div class="ktov-l">Kantor Sekretariat:</div>
       <div class="ktov-ico">
         <svg viewBox="0 0 24 24" fill="none" stroke="{{ $ovLabelC }}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s7-6.5 7-12A7 7 0 0 0 5 10c0 5.5 7 12 7 12z"/><circle cx="12" cy="10" r="2.5"/></svg>
-        <span class="ktov-clamp">{{ $alamat }}</span>
+        <span class="ktov-clamp3">{!! nl2br(e($alamat)) !!}</span>
       </div>
       <div class="ktov-ico2">
         <span class="i"><svg viewBox="0 0 24 24" fill="{{ $ovLabelC }}"><path d="M6.6 10.8a15.5 15.5 0 0 0 6.6 6.6l2.2-2.2a1 1 0 0 1 1-.25 11.4 11.4 0 0 0 3.5.56 1 1 0 0 1 1 1V20a1 1 0 0 1-1 1A17 17 0 0 1 3 4a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1c0 1.2.2 2.4.56 3.5a1 1 0 0 1-.25 1z"/></svg><span>{{ $telp }}</span></span>
@@ -211,7 +217,7 @@
     </div>
     <div>
       <div class="ktov-l">Nomor AHU</div>
-      <div class="ktov-body ktov-clamp3">{{ $ahu }}</div>
+      <div class="ktov-body">{!! nl2br(e($ahu)) !!}</div>
     </div>
   </div>
 
@@ -409,13 +415,13 @@
       <div style="flex:1; display:flex; flex-direction:column; gap:14px;">
         <div>
           <div class="ktapj-label" style="margin-bottom:3px;">NOMOR AHU</div>
-          <div style="font-size:11.5px; line-height:1.5; color:#3a3742; max-width:400px;">{{ $ahu }}</div>
+          <div style="font-size:11.5px; line-height:1.5; color:#3a3742; max-width:400px;">{!! nl2br(e($ahu)) !!}</div>
         </div>
         <div>
           <div class="ktapj-label" style="margin-bottom:5px;">KANTOR SEKRETARIAT</div>
           <div class="ktapj-fitem" style="font-size:11.5px; line-height:1.45; color:#3a3742; max-width:400px;">
             <span class="ktapj-ico"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s7-6.5 7-12A7 7 0 0 0 5 10c0 5.5 7 12 7 12z"/><circle cx="12" cy="10" r="2.5"/></svg></span>
-            <span>{{ $alamat }}</span>
+            <span>{!! nl2br(e($alamat)) !!}</span>
           </div>
           <div style="display:flex; gap:20px; margin-top:6px; font-size:11.5px; color:#3a3742; flex-wrap:wrap;">
             <span class="ktapj-fitem" style="align-items:center;"><span class="ktapj-ico"><svg width="13" height="13" viewBox="0 0 24 24" fill="var(--accent)"><path d="M6.6 10.8a15.5 15.5 0 0 0 6.6 6.6l2.2-2.2a1 1 0 0 1 1-.25 11.4 11.4 0 0 0 3.5.56 1 1 0 0 1 1 1V20a1 1 0 0 1-1 1A17 17 0 0 1 3 4a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1c0 1.2.2 2.4.56 3.5a1 1 0 0 1-.25 1z"/></svg></span><span>{{ $telp }}</span></span>
