@@ -23,8 +23,10 @@
         ? Storage::url($m->photo)
         : null;
 
-    $ahu    = setting('org_ahu_number', 'AHU-0007794.AH.01.07.Tahun 2025 tentang Pengesahan Pendirian Perkumpulan Asosiasi Pengelola Jurnal Informatika dan Komputer Indonesia');
-    $alamat = setting('contact_address', 'Jl. Watunganten I No.1, Batursari, Kec. Mranggen, Kabupaten Demak, Jawa Tengah 59567');
+    $ahu    = setting('org_ahu_number', 'AHU-0007794.AH.01.07.Tahun 2025 ;
+    $ahu    = tentang Pengesahan Pendirian Perkumpulan Asosiasi Pengelola Jurnal Informatika dan Komputer Indonesia');
+    $alamat = setting('contact_address', 'Jl. Watunganten I No.1, Batursari, ;
+    $alamat =Kec. Mranggen, Kabupaten Demak, Jawa Tengah 59567');
     $alamat = trim(str_replace(["\r\n", "\r", "\n"], ', ', $alamat));
     $telp   = setting('contact_phone', '+62 822-2372-5276');
     $email  = setting('contact_email', 'sekretariat@apjikom.or.id');
@@ -63,6 +65,8 @@
         'qr_left'  => $ovn('card_ov_qr_left', 14),   // QR di kiri, di bawah seal
         'qr_top'   => $ovn('card_ov_qr_top', 34),
         'berlaku_top' => $ovn('card_ov_berlaku_top', 65),  // "Berlaku S/D" di bawah foto
+        'nomor_left'  => $ovn('card_ov_nomor_left', 34),   // blok "Nomor Anggota"
+        'nomor_top'   => $ovn('card_ov_nomor_top', 52),
         'ahu_bottom'  => $ovn('card_ov_ahu_bottom', 12),   // blok AHU/Sekretariat: jarak dari tepi bawah kartu (%)
         'font'     => $ovn('card_ov_font_scale', 100),
     ];
@@ -161,15 +165,17 @@
   {{-- Judul — sejajar kiri dengan pill / nomor di bawahnya --}}
   <div class="ktb ktov-h1" style="left:{{ $L(29) }}; top:{{ $T(33) }};">KARTU TANDA ANGGOTA</div>
 
-  {{-- Blok tengah: pill, tagline, garis, nomor anggota --}}
+  {{-- Blok tengah: pill, tagline, garis --}}
   <div class="ktb ktcol" style="left:{{ $L(29) }}; top:{{ $T(39) }}; width:39%; align-items:flex-start;">
     <span class="ktov-pill">ANGGOTA APJIKOM</span>
     <div class="ktov-tag">Bersama Mengelola Jurnal, Membangun Bangsa</div>
     <div class="ktov-div"></div>
-    <div style="width:100%;">
-      <div class="ktov-num">{{ $nomorAnggota }}</div>
-      <div class="ktov-cap">NOMOR ANGGOTA</div>
-    </div>
+  </div>
+
+  {{-- Nomor Anggota — di area kosong, sejajar dengan baris Nama --}}
+  <div class="ktb" style="left:{{ $L($ov['nomor_left']) }}; top:{{ $T($ov['nomor_top']) }};">
+    <div class="ktov-num">{{ $nomorAnggota }}</div>
+    <div class="ktov-cap">NOMOR ANGGOTA</div>
   </div>
 
   {{-- Data member (kiri bawah) — lebih ke kiri & lebih lebar; dibatasi supaya nama panjang tidak menabrak --}}
