@@ -1,11 +1,6 @@
 @php
     $cardName = $member->member_number ?: ($member->user->name ?? 'anggota');
     $cardFile = 'kartu-' . \Illuminate\Support\Str::slug($cardName) . '.png';
-    // Skala agar kartu muat 1 halaman A4 landscape (~1122x793 px @96dpi, margin 0).
-    $pScale = min(1122 / max($tplW, 1), 793 / max($tplH, 1), 1);
-    $pScale = round($pScale, 4);
-    $pStageW = (int) round($tplW * $pScale);
-    $pStageH = (int) round($tplH * $pScale);
 @endphp
 <!doctype html>
 <html lang="id">
@@ -32,19 +27,19 @@
   #cap { width: 100%; }
 
   @media print {
-    @page { size: A4 landscape; margin: 0; }
+    /* Ukuran halaman = ukuran kartu, tanpa margin -> tidak ada sisa putih */
+    @page { size: {{ $tplW }}px {{ $tplH }}px; margin: 0; }
     html, body { margin: 0; padding: 0; background: #fff; }
     .bar { display: none !important; }
     .wrap { padding: 0 !important; margin: 0 !important; }
     #cap { width: auto !important; }
     #cap [data-ktapj-stage] {
-      width: {{ $pStageW }}px !important;
-      height: {{ $pStageH }}px !important;
+      width: {{ $tplW }}px !important;
+      height: {{ $tplH }}px !important;
       overflow: hidden !important;
     }
     #cap [data-ktapj-card] {
-      transform: scale({{ $pScale }}) !important;
-      transform-origin: top left !important;
+      transform: none !important;
       box-shadow: none !important;
       -webkit-print-color-adjust: exact !important;
       print-color-adjust: exact !important;
