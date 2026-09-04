@@ -63,6 +63,7 @@
         'qr_left'  => $ovn('card_ov_qr_left', 14),   // QR di kiri, di bawah seal
         'qr_top'   => $ovn('card_ov_qr_top', 34),
         'berlaku_top' => $ovn('card_ov_berlaku_top', 65),  // "Berlaku S/D" di bawah foto
+        'ahu_bottom'  => $ovn('card_ov_ahu_bottom', 8.5),  // blok AHU/Sekretariat: jarak dari tepi bawah kartu (%)
         'font'     => $ovn('card_ov_font_scale', 100),
     ];
     $photoRight = round($ov['photo_cx'] - $ov['photo_w'] / 2 - $sx, 3);
@@ -188,9 +189,9 @@
   {{-- Garis pembatas: biodata (kiri) | bagian kanan --}}
   <div class="ktov-sep" style="left:{{ $L(33) }}; top:{{ $T(56) }}; height:34%;"></div>
 
-  {{-- Kantor Sekretariat (atas) + Nomor AHU (bawah) --}}
+  {{-- Kantor Sekretariat (atas) + Nomor AHU (bawah) — menempel ke bawah kartu --}}
   {{-- width & max-height dibatasi supaya teks panjang tetap wrap rapi, tidak menabrak foto / footer --}}
-  <div class="ktb ktcol" style="left:{{ $L(34) }}; top:{{ $T(62) }}; width:36%; max-height:28%; overflow:hidden; gap:{{ $pw(0.014) }};">
+  <div class="ktb ktcol" style="left:{{ $L(34) }}; bottom:{{ round($ov['ahu_bottom'] - $sy, 3) }}%; width:36%; max-height:33%; overflow:hidden; gap:{{ $pw(0.014) }};">
     <div>
       <div class="ktov-l">Kantor Sekretariat:</div>
       <div class="ktov-ico">
