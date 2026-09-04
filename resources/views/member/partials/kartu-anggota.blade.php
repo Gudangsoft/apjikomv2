@@ -171,10 +171,10 @@
     </div>
   </div>
 
-  {{-- Data member (kiri bawah) --}}
-  <div class="ktb ktcol" style="left:{{ $L(8.5) }}; top:{{ $T(54.5) }}; width:22%; gap:{{ $pw(0.0105) }};">
-    <div><div class="ktov-l">Nama</div><div class="ktov-v">{{ $namaAnggota }}</div></div>
-    <div><div class="ktov-l">Jabatan / Profesi</div><div class="ktov-v">{{ $jabatan }}</div></div>
+  {{-- Data member (kiri bawah) — lebih ke kiri & lebih lebar; dibatasi supaya nama panjang tidak menabrak --}}
+  <div class="ktb ktcol" style="left:{{ $L(6) }}; top:{{ $T(54.5) }}; width:26%; max-height:35%; overflow:hidden; gap:{{ $pw(0.0105) }};">
+    <div><div class="ktov-l">Nama</div><div class="ktov-v ktov-clamp">{{ $namaAnggota }}</div></div>
+    <div><div class="ktov-l">Jabatan / Profesi</div><div class="ktov-v ktov-clamp">{{ $jabatan }}</div></div>
     <div><div class="ktov-l">Institusi</div><div class="ktov-v ktov-clamp">{{ $institusi }}</div></div>
     <div><div class="ktov-l">Alamat</div><div class="ktov-v sm ktov-clamp3">{!! nl2br(e($alamatAnggota)) !!}</div></div>
   </div>
