@@ -186,25 +186,25 @@
   </div>
 
   {{-- Garis pembatas: biodata (kiri) | bagian kanan --}}
-  <div class="ktov-sep" style="left:{{ $L(31) }}; top:{{ $T(56) }}; height:34%;"></div>
+  <div class="ktov-sep" style="left:{{ $L(33) }}; top:{{ $T(56) }}; height:34%;"></div>
 
-  {{-- Nomor AHU + Kantor Sekretariat (tengah bawah) --}}
+  {{-- Kantor Sekretariat (atas) + Nomor AHU (bawah) --}}
   {{-- width & max-height dibatasi supaya teks panjang tetap wrap rapi, tidak menabrak foto / footer --}}
-  <div class="ktb ktcol" style="left:{{ $L(32) }}; top:{{ $T(62) }}; width:38%; max-height:28%; overflow:hidden; gap:{{ $pw(0.014) }};">
-    <div>
-      <div class="ktov-l">Nomor AHU</div>
-      <div class="ktov-body">{{ $ahu }}</div>
-    </div>
+  <div class="ktb ktcol" style="left:{{ $L(34) }}; top:{{ $T(62) }}; width:36%; max-height:28%; overflow:hidden; gap:{{ $pw(0.014) }};">
     <div>
       <div class="ktov-l">Kantor Sekretariat:</div>
       <div class="ktov-ico">
         <svg viewBox="0 0 24 24" fill="none" stroke="{{ $ovLabelC }}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s7-6.5 7-12A7 7 0 0 0 5 10c0 5.5 7 12 7 12z"/><circle cx="12" cy="10" r="2.5"/></svg>
-        <span>{{ $alamat }}</span>
+        <span class="ktov-clamp">{{ $alamat }}</span>
       </div>
       <div class="ktov-ico2">
         <span class="i"><svg viewBox="0 0 24 24" fill="{{ $ovLabelC }}"><path d="M6.6 10.8a15.5 15.5 0 0 0 6.6 6.6l2.2-2.2a1 1 0 0 1 1-.25 11.4 11.4 0 0 0 3.5.56 1 1 0 0 1 1 1V20a1 1 0 0 1-1 1A17 17 0 0 1 3 4a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1c0 1.2.2 2.4.56 3.5a1 1 0 0 1-.25 1z"/></svg><span>{{ $telp }}</span></span>
         <span class="i"><svg viewBox="0 0 24 24" fill="none" stroke="{{ $ovLabelC }}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4.5" width="20" height="15" rx="2.5"/><path d="M3 7l9 6 9-6"/></svg><span>{{ $email }}</span></span>
       </div>
+    </div>
+    <div>
+      <div class="ktov-l">Nomor AHU</div>
+      <div class="ktov-body ktov-clamp3">{{ $ahu }}</div>
     </div>
   </div>
 
