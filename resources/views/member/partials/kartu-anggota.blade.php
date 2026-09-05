@@ -73,7 +73,7 @@
         'berlaku_top' => $ovn('card_ov_berlaku_top', 65),  // "Berlaku S/D" di bawah foto
         'nomor_left'  => $ovn('card_ov_nomor_left', 34),   // blok "Nomor Anggota"
         'nomor_top'   => $ovn('card_ov_nomor_top', 55),
-        'ahu_bottom'  => $ovn('card_ov_ahu_bottom', 9),    // blok AHU/Sekretariat: jarak dari tepi bawah kartu (%)
+        'ahu_bottom'  => $ovn('card_ov_ahu_bottom', 13),   // blok AHU/Sekretariat: jarak dari tepi bawah kartu (%)
         'font'     => $ovn('card_ov_font_scale', 100),
     ];
     $photoRight = round($ov['photo_cx'] - $ov['photo_w'] / 2 - $sx, 3);
