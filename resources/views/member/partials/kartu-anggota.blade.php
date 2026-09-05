@@ -24,7 +24,7 @@
         : null;
 
     $ahu = trim(str_replace(["\r\n", "\r"], "\n", setting('org_ahu_number',
-        "Perkumpulan berbadan hukum berdasarkan Keputusan Menteri Hukum dan Hak Asasi Manusia Republik Indonesia Nomor AHU-0007794.AH.01.07.Tahun 2025 tentang Pengesahan Pendirian Perkumpulan Asosiasi Pengelola Jurnal Informatika dan Komputer Indonesia")));
+        "Nomor AHU-0007794.AH.01.07. Tahun 2025 tentang Pengesahan Pendirian Perkumpulan Asosiasi Pengelola Jurnal Informatika dan Komputer Indonesia.")));
     if (! str_contains($ahu, "\n")) {
         $ahu = preg_replace('/\s+tentang\s+Pengesahan/u', "\ntentang Pengesahan", $ahu, 1);
     }
@@ -157,7 +157,7 @@
     .ktov-ico2 span.i { display: inline-flex; align-items: center; gap: {{ $pw(0.005) }}; }
     .ktov-ico2 svg { flex: none; width: {{ $pw(0.013) }}; height: {{ $pw(0.013) }}; }
     .ktov-sep { position: absolute; width: {{ $pw(0.0016) }}; background: linear-gradient(to bottom, transparent, #cdbce4 10%, #cdbce4 90%, transparent); }
-    .ktov-photo { width: 100%; aspect-ratio: 3 / 3.3; object-fit: cover; border-radius: {{ $pw(0.007) }}; border: {{ $pw(0.0022) }} solid {{ $ovLabelC }}; background: #e7e2ef; display: block; }
+    .ktov-photo { width: 100%; aspect-ratio: 3 / 3.3; object-fit: cover; object-position: center 12%; border-radius: {{ $pw(0.007) }}; border: {{ $pw(0.0022) }} solid {{ $ovLabelC }}; background: #e7e2ef; display: block; }
     .ktov-ph { display: flex; align-items: center; justify-content: center; font-family: var(--ff-display); font-weight: 700; letter-spacing: 1px; color: #7a7091; font-size: {{ $fw(0.008) }}; }
     .ktov-qr { width: 100%; aspect-ratio: 1/1; background: #fff; padding: {{ $pw(0.004) }}; border-radius: {{ $pw(0.005) }}; border: {{ $pw(0.0022) }} solid {{ $ovLabelC }}; }
     .ktov-qr svg { display: block; width: 100%; height: 100%; }
@@ -201,23 +201,20 @@
   {{-- Garis pembatas: biodata (kiri) | bagian kanan --}}
   <div class="ktov-sep" style="left:{{ $L(33) }}; top:{{ $T(56) }}; height:34%;"></div>
 
-  {{-- Kantor Sekretariat (atas) + Nomor AHU (bawah) — menempel ke bawah kartu --}}
+  {{-- Kantor Sekretariat: alamat, lalu Nomor AHU, lalu telp/email — menempel ke bawah kartu --}}
   {{-- width & max-height dibatasi supaya teks panjang tetap wrap rapi, tidak menabrak foto / footer --}}
-  <div class="ktb ktcol" style="left:{{ $L(34) }}; bottom:{{ round($ov['ahu_bottom'] - $sy, 3) }}%; width:37%; max-height:48%; overflow:hidden; gap:{{ $pw(0.02) }};">
+  <div class="ktb ktcol" style="left:{{ $L(34) }}; bottom:{{ round($ov['ahu_bottom'] - $sy, 3) }}%; width:37%; max-height:48%; overflow:hidden;">
     <div>
       <div class="ktov-l">Kantor Sekretariat:</div>
       <div class="ktov-ico">
         <svg viewBox="0 0 24 24" fill="none" stroke="{{ $ovLabelC }}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s7-6.5 7-12A7 7 0 0 0 5 10c0 5.5 7 12 7 12z"/><circle cx="12" cy="10" r="2.5"/></svg>
         <span class="ktov-clamp3">{!! nl2br(e($alamat)) !!}</span>
       </div>
+      <div class="ktov-body" style="margin-top:{{ $pw(0.006) }};">{!! nl2br(e($ahu)) !!}</div>
       <div class="ktov-ico2">
         <span class="i"><svg viewBox="0 0 24 24" fill="{{ $ovLabelC }}"><path d="M6.6 10.8a15.5 15.5 0 0 0 6.6 6.6l2.2-2.2a1 1 0 0 1 1-.25 11.4 11.4 0 0 0 3.5.56 1 1 0 0 1 1 1V20a1 1 0 0 1-1 1A17 17 0 0 1 3 4a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1c0 1.2.2 2.4.56 3.5a1 1 0 0 1-.25 1z"/></svg><span>{{ $telp }}</span></span>
         <span class="i"><svg viewBox="0 0 24 24" fill="none" stroke="{{ $ovLabelC }}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4.5" width="20" height="15" rx="2.5"/><path d="M3 7l9 6 9-6"/></svg><span>{{ $email }}</span></span>
       </div>
-    </div>
-    <div>
-      <div class="ktov-l">Nomor AHU</div>
-      <div class="ktov-body">{!! nl2br(e($ahu)) !!}</div>
     </div>
   </div>
 
