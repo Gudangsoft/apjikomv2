@@ -24,7 +24,7 @@
         : null;
 
     $ahu = trim(str_replace(["\r\n", "\r"], "\n", setting('org_ahu_number',
-        "AHU-0007794.AH.01.07.Tahun 2025\ntentang Pengesahan Pendirian Perkumpulan Asosiasi Pengelola Jurnal Informatika dan Komputer Indonesia")));
+        "Perkumpulan berbadan hukum berdasarkan Keputusan Menteri Hukum dan Hak Asasi Manusia Republik Indonesia Nomor AHU-0007794.AH.01.07.Tahun 2025 tentang Pengesahan Pendirian Perkumpulan Asosiasi Pengelola Jurnal Informatika dan Komputer Indonesia")));
     if (! str_contains($ahu, "\n")) {
         $ahu = preg_replace('/\s+tentang\s+Pengesahan/u', "\ntentang Pengesahan", $ahu, 1);
     }
@@ -150,7 +150,7 @@
     .ktov-v.sm { font-family: var(--ff-body); font-weight: 600; font-size: {{ $fw(0.0128) }}; line-height: 1.35; }
     .ktov-clamp { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
     .ktov-clamp3 { display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
-    .ktov-body { color: #201c28; font-weight: 500; line-height: 1.55; font-size: {{ $fw(0.0092) }}; }
+    .ktov-body { color: #201c28; font-weight: 500; line-height: 1.48; font-size: {{ $fw(0.0086) }}; }
     .ktov-ico { display: flex; align-items: flex-start; gap: {{ $pw(0.006) }}; color: #201c28; font-weight: 500; line-height: 1.5; font-size: {{ $fw(0.0092) }}; margin-top: {{ $pw(0.0035) }}; }
     .ktov-ico > svg { flex: none; width: {{ $pw(0.013) }}; height: {{ $pw(0.013) }}; margin-top: {{ $pw(0.0012) }}; }
     .ktov-ico2 { display: flex; flex-wrap: wrap; align-items: center; gap: {{ $pw(0.004) }} {{ $pw(0.017) }}; color: #201c28; font-weight: 500; font-size: {{ $fw(0.0092) }}; margin-top: {{ $pw(0.005) }}; }
@@ -203,7 +203,7 @@
 
   {{-- Kantor Sekretariat (atas) + Nomor AHU (bawah) — menempel ke bawah kartu --}}
   {{-- width & max-height dibatasi supaya teks panjang tetap wrap rapi, tidak menabrak foto / footer --}}
-  <div class="ktb ktcol" style="left:{{ $L(34) }}; bottom:{{ round($ov['ahu_bottom'] - $sy, 3) }}%; width:36%; max-height:46%; overflow:hidden; gap:{{ $pw(0.014) }};">
+  <div class="ktb ktcol" style="left:{{ $L(34) }}; bottom:{{ round($ov['ahu_bottom'] - $sy, 3) }}%; width:37%; max-height:48%; overflow:hidden; gap:{{ $pw(0.02) }};">
     <div>
       <div class="ktov-l">Kantor Sekretariat:</div>
       <div class="ktov-ico">
