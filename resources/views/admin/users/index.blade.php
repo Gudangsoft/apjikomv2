@@ -165,6 +165,18 @@
                         </td>
                         <td class="px-6 py-4 whitespace-nowrap text-center text-sm font-medium">
                             <div class="flex items-center justify-center space-x-2">
+                                <!-- Login as User (buka tab baru) -->
+                                @if($user->id !== auth()->id())
+                                <form action="{{ route('admin.users.login-as', $user->id) }}" method="POST" target="_blank" class="inline-block">
+                                    @csrf
+                                    <button type="submit" class="text-green-600 hover:text-green-900 transition-colors" title="Login sebagai {{ $user->name }} (tab baru)">
+                                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 16l-4-4m0 0l4-4m-4 4h11m-4 6v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h5a3 3 0 013 3v1"/>
+                                        </svg>
+                                    </button>
+                                </form>
+                                @endif
+
                                 <!-- Edit Button -->
                                 <a href="{{ route('admin.users.edit', $user->id) }}"
                                    class="text-blue-600 hover:text-blue-900 transition-colors" title="Edit User">

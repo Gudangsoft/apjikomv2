@@ -96,6 +96,12 @@ use App\Http\Controllers\Member\MemberDashboardController;
 use App\Http\Controllers\Member\NotificationController;
 use App\Http\Controllers\Member\EventRegistrationController;
 
+// Kembali dari "Login as" (impersonasi) — perlu auth saja, bukan admin,
+// karena saat impersonasi role user aktif bisa jadi member.
+Route::post('/berhenti-login-as', [App\Http\Controllers\Admin\UserController::class, 'stopImpersonating'])
+    ->middleware('auth')
+    ->name('impersonate.stop');
+
 Route::get('/member/login', [MemberDashboardController::class, 'showLogin'])->name('member.login')->middleware('guest');
 Route::post('/member/login', [MemberDashboardController::class, 'login'])
     ->middleware(['throttle:10,1', 'antibot'])
@@ -273,6 +279,7 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'admin'])->group(fun
     Route::resource('users', App\Http\Controllers\Admin\UserController::class)->only(['index', 'edit', 'update', 'destroy']);
     Route::post('users/{user}/reset-password', [App\Http\Controllers\Admin\UserController::class, 'resetPassword'])->name('users.reset-password');
     Route::post('users/bulk-delete', [App\Http\Controllers\Admin\UserController::class, 'bulkDelete'])->name('users.bulk-delete');
+    Route::post('users/{user}/login-as', [App\Http\Controllers\Admin\UserController::class, 'loginAs'])->name('users.login-as');
     
     // Sliders Management
     Route::resource('sliders', AdminSliderController::class)->except(['show']);

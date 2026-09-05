@@ -156,6 +156,50 @@ class UserController extends Controller
     }
     
     /**
+     * Login sebagai user lain (impersonasi). Dibuka di tab baru dari daftar user;
+     * tab admin yang lama tetap di /admin/users.
+     */
+    public function loginAs(User $user)
+    {
+        $admin = auth()->user();
+
+        abort_if($user->id === $admin->id, 403, 'Tidak bisa login sebagai akun sendiri.');
+
+        // Simpan id admin ASLI hanya sekali, supaya "Kembali ke Admin" tetap
+        // mengarah ke admin yang pertama kali membuka sesi ini.
+        if (! session()->has('impersonator_id')) {
+            session(['impersonator_id' => $admin->id]);
+        }
+
+        ActivityLogger::log('user', 'login_as', $user, "Admin {$admin->name} login sebagai {$user->name} ({$user->email})");
+
+        auth()->login($user);
+        request()->session()->regenerate();
+
+        return $user->role === 'admin'
+            ? redirect()->route('admin.dashboard')
+            : redirect()->route('dashboard');
+    }
+
+    /**
+     * Kembali ke akun admin asli setelah "Login as".
+     */
+    public function stopImpersonating(Request $request)
+    {
+        $originalId = $request->session()->pull('impersonator_id');
+        $original = $originalId ? User::find($originalId) : null;
+
+        if (! $original) {
+            return redirect()->route('home')->with('error', 'Tidak sedang login sebagai user lain.');
+        }
+
+        auth()->login($original);
+        $request->session()->regenerate();
+
+        return redirect()->route('admin.users.index')->with('success', 'Kembali sebagai ' . $original->name . '.');
+    }
+
+    /**
      * Bulk delete users
      */
     public function bulkDelete(Request $request)

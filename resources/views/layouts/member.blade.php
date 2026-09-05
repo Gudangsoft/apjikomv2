@@ -123,6 +123,7 @@
     </script>
 </head>
 <body class="bg-gray-50 dark:bg-gray-900">
+    @include('partials.impersonation-banner')
     <!-- Mobile Overlay -->
     <div data-member-overlay
          onclick="closeMemberMenu(event); return false;"

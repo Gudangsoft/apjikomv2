@@ -188,6 +188,7 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css">
 </head>
 <body class="antialiased bg-gray-50 dark:bg-dark-900 text-gray-900 dark:text-gray-100">
+    @include('partials.impersonation-banner')
     <!-- Top Bar (hidden on mobile) -->
     @if(setting('contact_email') || setting('contact_phone'))
     <div class="hidden sm:block apjikom-dark-purple text-white text-xs dark:bg-dark-800">

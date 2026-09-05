@@ -209,6 +209,7 @@
     </style>
 </head>
 <body class="antialiased bg-gray-100">
+    @include('partials.impersonation-banner')
     <!-- Mobile Overlay -->
     <div data-mobile-overlay
          onclick="closeMobileMenu(event); return false;"
