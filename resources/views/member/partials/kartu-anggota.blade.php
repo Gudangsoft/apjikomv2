@@ -66,7 +66,7 @@
         'photo_top'=> $ovn('card_ov_photo_top', 25),
         // Titik-tengah foto diukur dari tepi KANAN kartu (%). Kecilkan = geser
         // foto (dan QR) ke kanan; besarkan = ke kiri.
-        'photo_cx' => $ovn('card_ov_photo_cx', 16),
+        'photo_cx' => $ovn('card_ov_photo_cx', 19),   // besarkan = foto geser KIRI (mendekat ke tumpukan data)
         'qr_w'     => $ovn('card_ov_qr_w', 15),
         'qr_left'  => $ovn('card_ov_qr_left', 4),    // QR sejajar kiri dengan seal APJIKOM
         'qr_top'   => $ovn('card_ov_qr_top', 40),
@@ -174,7 +174,7 @@
   <div class="ktb ktov-tag" style="left:{{ $L($ov['nomor_left']) }}; top:{{ $T($ov['nomor_top'] - 6) }}; margin-top:0;">Bersama Mengelola Jurnal, Membangun Bangsa</div>
 
   {{-- Data anggota — satu tumpukan ringkas (nomor, pill, nama, jabatan, institusi) --}}
-  <div class="ktb ktcol" style="left:{{ $L($ov['nomor_left']) }}; top:{{ $T($ov['nomor_top']) }}; width:44%; align-items:flex-start; gap:{{ $pw(0.008) }};">
+  <div class="ktb ktcol" style="left:{{ $L($ov['nomor_left']) }}; top:{{ $T($ov['nomor_top']) }}; width:41%; align-items:flex-start; gap:{{ $pw(0.008) }};">
     <div class="ktov-num">{{ $nomorAnggota }}</div>
     <span class="ktov-pill">ANGGOTA APJIKOM</span>
     <div class="ktov-name">{{ $namaAnggota }}</div>
