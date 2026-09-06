@@ -103,13 +103,7 @@
                                     Pendaftaran
                                 </div>
                             </div>
-                            <p class="text-4xl sm:text-5xl font-bold text-green-600 mb-2">🎉 GRATIS</p>
-                            <p class="text-base text-gray-700 font-medium flex items-center justify-center mt-3">
-                                <svg class="w-5 h-5 mr-2 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
-                                </svg>
-                                Masa keanggotaan 1 tahun
-                            </p>
+                            <p class="text-4xl sm:text-5xl font-bold text-green-600">🎉 GRATIS</p>
                         </div>
                     </div>
 
@@ -125,7 +119,6 @@
                         <div class="bg-green-50 rounded p-4 mt-4">
                             <p class="text-sm font-semibold text-green-900 mb-2">Pendaftaran:</p>
                             <p class="text-2xl font-bold text-green-600">🆓 GRATIS</p>
-                            <p class="text-xs text-gray-600 mt-1">Masa keanggotaan 1 tahun</p>
                         </div>
                     </div>
                 </div>
