@@ -67,11 +67,11 @@
         // Titik-tengah foto diukur dari tepi KANAN kartu (%). Kecilkan = geser
         // foto (dan QR) ke kanan; besarkan = ke kiri.
         'photo_cx' => $ovn('card_ov_photo_cx', 16),
-        'qr_w'     => $ovn('card_ov_qr_w', 13),
-        'qr_left'  => $ovn('card_ov_qr_left', 14),   // QR di kiri, di bawah seal
-        'qr_top'   => $ovn('card_ov_qr_top', 32),
-        'berlaku_top' => $ovn('card_ov_berlaku_top', 65),  // "Berlaku S/D" di bawah foto
-        'nomor_left'  => $ovn('card_ov_nomor_left', 28),   // tumpukan data anggota (nomor/pill/nama/jabatan/institusi)
+        'qr_w'     => $ovn('card_ov_qr_w', 15),
+        'qr_left'  => $ovn('card_ov_qr_left', 4),    // QR sejajar kiri dengan seal APJIKOM
+        'qr_top'   => $ovn('card_ov_qr_top', 40),
+        'berlaku_top' => $ovn('card_ov_berlaku_top', 65),  // (tidak dipakai lagi di mode template)
+        'nomor_left'  => $ovn('card_ov_nomor_left', 24),   // tumpukan data anggota (nomor/pill/nama/jabatan/institusi)
         'nomor_top'   => $ovn('card_ov_nomor_top', 45),
         'ahu_bottom'  => $ovn('card_ov_ahu_bottom', 13),   // blok AHU/Sekretariat: jarak dari tepi bawah kartu (%)
         'font'     => $ovn('card_ov_font_scale', 100),
@@ -151,8 +151,8 @@
     .ktov-clamp { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
     .ktov-clamp3 { display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
     .ktov-body { color: #201c28; font-weight: 500; line-height: 1.48; font-size: {{ $fw(0.0086) }}; }
-    .ktov-name { font-family: var(--ff-display); font-weight: 800; color: {{ $ovText }}; font-size: {{ $fw(0.0198) }}; line-height: 1.2; margin-top: {{ $pw(0.006) }}; }
-    .ktov-sub { font-family: var(--ff-body); font-weight: 500; color: #4a4658; font-size: {{ $fw(0.0132) }}; line-height: 1.34; }
+    .ktov-name { font-family: var(--ff-display); font-weight: 800; color: {{ $ovText }}; font-size: {{ $fw(0.023) }}; line-height: 1.2; margin-top: {{ $pw(0.007) }}; }
+    .ktov-sub { font-family: var(--ff-body); font-weight: 600; color: #45414f; font-size: {{ $fw(0.015) }}; line-height: 1.34; }
     .ktov-ico { display: flex; align-items: flex-start; gap: {{ $pw(0.006) }}; color: #201c28; font-weight: 500; line-height: 1.5; font-size: {{ $fw(0.0092) }}; margin-top: {{ $pw(0.0035) }}; }
     .ktov-ico > svg { flex: none; width: {{ $pw(0.013) }}; height: {{ $pw(0.013) }}; margin-top: {{ $pw(0.0012) }}; }
     .ktov-ico2 { display: flex; flex-wrap: wrap; align-items: center; gap: {{ $pw(0.004) }} {{ $pw(0.017) }}; color: #201c28; font-weight: 500; font-size: {{ $fw(0.0092) }}; margin-top: {{ $pw(0.005) }}; }
@@ -175,18 +175,12 @@
   <div class="ktb ktov-tag" style="left:{{ $L(28) }}; top:{{ $T(39) }}; margin-top:0;">Bersama Mengelola Jurnal, Membangun Bangsa</div>
 
   {{-- Data anggota — satu tumpukan ringkas (nomor, pill, nama, jabatan, institusi) --}}
-  <div class="ktb ktcol" style="left:{{ $L($ov['nomor_left']) }}; top:{{ $T($ov['nomor_top']) }}; width:40%; align-items:flex-start; gap:{{ $pw(0.008) }};">
+  <div class="ktb ktcol" style="left:{{ $L($ov['nomor_left']) }}; top:{{ $T($ov['nomor_top']) }}; width:44%; align-items:flex-start; gap:{{ $pw(0.008) }};">
     <div class="ktov-num">{{ $nomorAnggota }}</div>
     <span class="ktov-pill">ANGGOTA APJIKOM</span>
     <div class="ktov-name">{{ $namaAnggota }}</div>
     <div class="ktov-sub">{{ $jabatan }}</div>
     <div class="ktov-sub ktov-clamp">{{ $institusi }}</div>
-  </div>
-
-  {{-- Berlaku S/D — di bawah foto --}}
-  <div class="ktb ktcol" style="right:{{ $photoRight }}%; top:{{ $T($ov['berlaku_top']) }}; width:{{ $ov['photo_w'] }}%; align-items:flex-start;">
-    <div class="ktov-l">Berlaku S/D</div>
-    <div class="ktov-v">{{ $berlaku }}</div>
   </div>
 
   {{-- Foto (kanan atas) --}}
