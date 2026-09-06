@@ -71,8 +71,8 @@
         'qr_left'  => $ovn('card_ov_qr_left', 14),   // QR di kiri, di bawah seal
         'qr_top'   => $ovn('card_ov_qr_top', 34),
         'berlaku_top' => $ovn('card_ov_berlaku_top', 65),  // "Berlaku S/D" di bawah foto
-        'nomor_left'  => $ovn('card_ov_nomor_left', 34),   // blok "Nomor Anggota"
-        'nomor_top'   => $ovn('card_ov_nomor_top', 55),
+        'nomor_left'  => $ovn('card_ov_nomor_left', 28),   // tumpukan data anggota (nomor/pill/nama/jabatan/institusi)
+        'nomor_top'   => $ovn('card_ov_nomor_top', 45),
         'ahu_bottom'  => $ovn('card_ov_ahu_bottom', 13),   // blok AHU/Sekretariat: jarak dari tepi bawah kartu (%)
         'font'     => $ovn('card_ov_font_scale', 100),
     ];
@@ -151,6 +151,8 @@
     .ktov-clamp { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
     .ktov-clamp3 { display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
     .ktov-body { color: #201c28; font-weight: 500; line-height: 1.48; font-size: {{ $fw(0.0086) }}; }
+    .ktov-name { font-family: var(--ff-display); font-weight: 800; color: {{ $ovText }}; font-size: {{ $fw(0.017) }}; line-height: 1.2; margin-top: {{ $pw(0.005) }}; }
+    .ktov-sub { font-family: var(--ff-body); font-weight: 500; color: #4a4658; font-size: {{ $fw(0.0115) }}; line-height: 1.32; }
     .ktov-ico { display: flex; align-items: flex-start; gap: {{ $pw(0.006) }}; color: #201c28; font-weight: 500; line-height: 1.5; font-size: {{ $fw(0.0092) }}; margin-top: {{ $pw(0.0035) }}; }
     .ktov-ico > svg { flex: none; width: {{ $pw(0.013) }}; height: {{ $pw(0.013) }}; margin-top: {{ $pw(0.0012) }}; }
     .ktov-ico2 { display: flex; flex-wrap: wrap; align-items: center; gap: {{ $pw(0.004) }} {{ $pw(0.017) }}; color: #201c28; font-weight: 500; font-size: {{ $fw(0.0092) }}; margin-top: {{ $pw(0.005) }}; }
@@ -168,54 +170,23 @@
     }
   </style>
 
-  {{-- Judul — sejajar kiri dengan pill / nomor di bawahnya --}}
-  <div class="ktb ktov-h1" style="left:{{ $L(29) }}; top:{{ $T(33) }};">KARTU TANDA ANGGOTA</div>
+  {{-- Judul + tagline --}}
+  <div class="ktb ktov-h1" style="left:{{ $L(28) }}; top:{{ $T(33) }};">KARTU TANDA ANGGOTA</div>
+  <div class="ktb ktov-tag" style="left:{{ $L(28) }}; top:{{ $T(39) }}; margin-top:0;">Bersama Mengelola Jurnal, Membangun Bangsa</div>
 
-  {{-- Blok tengah: pill, tagline, garis --}}
-  <div class="ktb ktcol" style="left:{{ $L(29) }}; top:{{ $T(39) }}; width:39%; align-items:flex-start;">
-    <span class="ktov-pill">ANGGOTA APJIKOM</span>
-    <div class="ktov-tag">Bersama Mengelola Jurnal, Membangun Bangsa</div>
-    <div class="ktov-div"></div>
-  </div>
-
-  {{-- Nomor Anggota — di area kosong, sejajar dengan baris Nama --}}
-  <div class="ktb" style="left:{{ $L($ov['nomor_left']) }}; top:{{ $T($ov['nomor_top']) }};">
+  {{-- Data anggota — satu tumpukan ringkas (nomor, pill, nama, jabatan, institusi) --}}
+  <div class="ktb ktcol" style="left:{{ $L($ov['nomor_left']) }}; top:{{ $T($ov['nomor_top']) }}; width:46%; align-items:flex-start; gap:{{ $pw(0.008) }};">
     <div class="ktov-num">{{ $nomorAnggota }}</div>
-    <div class="ktov-cap">NOMOR ANGGOTA</div>
-  </div>
-
-  {{-- Data member (kiri bawah) — lebih ke kiri & lebih lebar; dibatasi supaya nama panjang tidak menabrak --}}
-  <div class="ktb ktcol" style="left:{{ $L(6) }}; top:{{ $T(54.5) }}; width:26%; max-height:35%; overflow:hidden; gap:{{ $pw(0.0105) }};">
-    <div><div class="ktov-l">Nama</div><div class="ktov-v ktov-clamp">{{ $namaAnggota }}</div></div>
-    <div><div class="ktov-l">Jabatan / Profesi</div><div class="ktov-v ktov-clamp">{{ $jabatan }}</div></div>
-    <div><div class="ktov-l">Institusi</div><div class="ktov-v ktov-clamp">{{ $institusi }}</div></div>
-    <div><div class="ktov-l">Alamat</div><div class="ktov-v sm ktov-clamp3">{!! nl2br(e($alamatAnggota)) !!}</div></div>
+    <span class="ktov-pill">ANGGOTA APJIKOM</span>
+    <div class="ktov-name">{{ $namaAnggota }}</div>
+    <div class="ktov-sub">{{ $jabatan }}</div>
+    <div class="ktov-sub ktov-clamp">{{ $institusi }}</div>
   </div>
 
   {{-- Berlaku S/D — di bawah foto --}}
   <div class="ktb ktcol" style="right:{{ $photoRight }}%; top:{{ $T($ov['berlaku_top']) }}; width:{{ $ov['photo_w'] }}%; align-items:flex-start;">
     <div class="ktov-l">Berlaku S/D</div>
     <div class="ktov-v">{{ $berlaku }}</div>
-  </div>
-
-  {{-- Garis pembatas: biodata (kiri) | bagian kanan --}}
-  <div class="ktov-sep" style="left:{{ $L(33) }}; top:{{ $T(56) }}; height:34%;"></div>
-
-  {{-- Kantor Sekretariat: alamat, lalu Nomor AHU, lalu telp/email — menempel ke bawah kartu --}}
-  {{-- width & max-height dibatasi supaya teks panjang tetap wrap rapi, tidak menabrak foto / footer --}}
-  <div class="ktb ktcol" style="left:{{ $L(34) }}; bottom:{{ round($ov['ahu_bottom'] - $sy, 3) }}%; width:37%; max-height:48%; overflow:hidden;">
-    <div>
-      <div class="ktov-l">Kantor Sekretariat:</div>
-      <div class="ktov-ico">
-        <svg viewBox="0 0 24 24" fill="none" stroke="{{ $ovLabelC }}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s7-6.5 7-12A7 7 0 0 0 5 10c0 5.5 7 12 7 12z"/><circle cx="12" cy="10" r="2.5"/></svg>
-        <span class="ktov-clamp3">{!! nl2br(e($alamat)) !!}</span>
-      </div>
-      <div class="ktov-body" style="margin-top:{{ $pw(0.006) }};">{!! nl2br(e($ahu)) !!}</div>
-      <div class="ktov-ico2">
-        <span class="i"><svg viewBox="0 0 24 24" fill="{{ $ovLabelC }}"><path d="M6.6 10.8a15.5 15.5 0 0 0 6.6 6.6l2.2-2.2a1 1 0 0 1 1-.25 11.4 11.4 0 0 0 3.5.56 1 1 0 0 1 1 1V20a1 1 0 0 1-1 1A17 17 0 0 1 3 4a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1c0 1.2.2 2.4.56 3.5a1 1 0 0 1-.25 1z"/></svg><span>{{ $telp }}</span></span>
-        <span class="i"><svg viewBox="0 0 24 24" fill="none" stroke="{{ $ovLabelC }}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4.5" width="20" height="15" rx="2.5"/><path d="M3 7l9 6 9-6"/></svg><span>{{ $email }}</span></span>
-      </div>
-    </div>
   </div>
 
   {{-- Foto (kanan atas) --}}
