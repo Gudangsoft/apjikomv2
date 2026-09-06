@@ -18,8 +18,8 @@
         <div class="max-w-4xl mx-auto">
             
             @if(session('success'))
-            <div class="bg-green-50 border border-green-200 text-green-800 px-6 py-4 rounded-lg mb-6">
-                <div class="flex items-start justify-between">
+            <div class="bg-green-50 border border-green-200 text-green-800 px-4 sm:px-6 py-4 rounded-lg mb-6">
+                <div class="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3">
                     <div class="flex items-start flex-1">
                         <svg class="w-6 h-6 mr-3 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
@@ -29,7 +29,7 @@
                             <p class="text-sm">{{ session('success') }}</p>
                         </div>
                     </div>
-                    <a href="{{ route('member.login') }}" class="ml-4 bg-green-600 hover:bg-green-700 text-white px-6 py-2 rounded-lg text-sm font-medium transition-colors whitespace-nowrap">
+                    <a href="{{ route('member.login') }}" class="sm:ml-4 bg-green-600 hover:bg-green-700 text-white px-6 py-2 rounded-lg text-sm font-medium transition-colors whitespace-nowrap text-center">
                         Login Member
                     </a>
                 </div>
@@ -37,37 +37,37 @@
             @endif
 
             <!-- Membership Type Selection -->
-            <div class="bg-white rounded-xl shadow-lg border-2 border-gray-100 p-8 mb-8">
-                <div class="text-center mb-8">
-                    <h2 class="text-3xl font-bold text-gray-900 mb-3">Daftar Sebagai Member {{ site_name() }}</h2>
-                    <p class="text-gray-600">Wujudkan komitmen Anda dalam memajukan ekosistem publikasi ilmiah Indonesia</p>
+            <div class="bg-white rounded-xl shadow-lg border-2 border-gray-100 p-5 sm:p-8 mb-6 sm:mb-8">
+                <div class="text-center mb-6 sm:mb-8">
+                    <h2 class="text-2xl sm:text-3xl font-bold text-gray-900 mb-3">Daftar Sebagai Member {{ site_name() }}</h2>
+                    <p class="text-sm sm:text-base text-gray-600">Wujudkan komitmen Anda dalam memajukan ekosistem publikasi ilmiah Indonesia</p>
                 </div>
-                
-                <div class="max-w-2xl mx-auto mb-8">
+
+                <div class="max-w-2xl mx-auto mb-6 sm:mb-8">
                     <!-- Individu Card -->
-                    <div class="relative border-3 border-purple-300 rounded-2xl p-8 cursor-pointer hover:border-purple-500 hover:shadow-2xl transition-all duration-300 bg-gradient-to-br from-purple-50 to-white" id="card-individu" onclick="selectType('individu')">
+                    <div class="relative border-3 border-purple-300 rounded-2xl p-5 sm:p-8 cursor-pointer hover:border-purple-500 hover:shadow-2xl transition-all duration-300 bg-gradient-to-br from-purple-50 to-white" id="card-individu" onclick="selectType('individu')">
                         <!-- Featured Badge -->
-                        <div class="absolute -top-4 left-1/2 transform -translate-x-1/2">
-                            <span class="bg-gradient-to-r from-purple-600 to-indigo-600 text-white px-6 py-2 rounded-full text-sm font-bold shadow-lg">
+                        <div class="absolute -top-3 sm:-top-4 left-1/2 transform -translate-x-1/2 w-max max-w-[calc(100%-1.5rem)]">
+                            <span class="block bg-gradient-to-r from-purple-600 to-indigo-600 text-white px-4 sm:px-6 py-1.5 sm:py-2 rounded-full text-xs sm:text-sm font-bold shadow-lg whitespace-nowrap">
                                 ⭐ Bergabung Sekarang
                             </span>
                         </div>
-                        
-                        <div class="text-center mb-6 mt-4">
+
+                        <div class="text-center mb-6 mt-3 sm:mt-4">
                             <div class="flex justify-center mb-4">
                                 <input type="radio" name="membership_type" value="individu" id="type-individu" class="hidden" checked>
-                                <div class="w-20 h-20 bg-gradient-to-br from-purple-500 to-indigo-600 rounded-full flex items-center justify-center shadow-xl">
-                                    <svg class="w-10 h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <div class="w-16 h-16 sm:w-20 sm:h-20 bg-gradient-to-br from-purple-500 to-indigo-600 rounded-full flex items-center justify-center shadow-xl">
+                                    <svg class="w-8 h-8 sm:w-10 sm:h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
                                     </svg>
                                 </div>
                             </div>
-                            <label for="type-individu" class="text-2xl font-bold text-gray-900 cursor-pointer">Member {{ site_name() }}</label>
-                            <p class="text-gray-600 mt-3 text-base leading-relaxed">Jadilah bagian dari komunitas pengelola jurnal informatika dan komputer terdepan di Indonesia</p>
+                            <label for="type-individu" class="text-xl sm:text-2xl font-bold text-gray-900 cursor-pointer">Member {{ site_name() }}</label>
+                            <p class="text-gray-600 mt-3 text-sm sm:text-base leading-relaxed">Jadilah bagian dari komunitas pengelola jurnal informatika dan komputer terdepan di Indonesia</p>
                         </div>
 
                         <!-- Benefits -->
-                        <div class="bg-white rounded-xl p-6 mb-6 shadow-sm">
+                        <div class="bg-white rounded-xl p-4 sm:p-6 mb-6 shadow-sm">
                             <h4 class="font-bold text-gray-900 mb-4 flex items-center">
                                 <svg class="w-5 h-5 text-purple-600 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
@@ -131,16 +131,16 @@
                 </div>
 
                 <!-- Free Registration Info -->
-                <div class="max-w-2xl mx-auto bg-gradient-to-r from-green-50 to-emerald-50 border-2 border-green-300 rounded-xl p-6 shadow-md">
-                    <h3 class="font-bold text-green-900 mb-3 flex items-center justify-center text-lg">
-                        <div class="w-10 h-10 bg-green-500 rounded-full flex items-center justify-center mr-3">
-                            <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <div class="max-w-2xl mx-auto bg-gradient-to-r from-green-50 to-emerald-50 border-2 border-green-300 rounded-xl p-5 sm:p-6 shadow-md">
+                    <h3 class="font-bold text-green-900 mb-3 flex items-center justify-center text-base sm:text-lg text-center">
+                        <div class="w-9 h-9 sm:w-10 sm:h-10 bg-green-500 rounded-full flex items-center justify-center mr-3 flex-shrink-0">
+                            <svg class="w-5 h-5 sm:w-6 sm:h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                             </svg>
                         </div>
                         Pendaftaran Gratis - Tanpa Biaya!
                     </h3>
-                    <p class="text-center text-gray-700 leading-relaxed">Pendaftaran saat ini tidak dikenakan biaya. Silakan lengkapi formulir pendaftaran di bawah ini untuk bergabung dengan komunitas kami.</p>
+                    <p class="text-center text-sm sm:text-base text-gray-700 leading-relaxed">Pendaftaran saat ini tidak dikenakan biaya. Silakan lengkapi formulir pendaftaran di bawah ini untuk bergabung dengan komunitas kami.</p>
                 </div>
             </div>
 
@@ -148,8 +148,8 @@
             <form method="POST" action="{{ route('registration.store') }}" enctype="multipart/form-data" id="registration-form" style="display: none;">
                 @csrf
                 <x-honeypot />
-                <div class="bg-white rounded-lg shadow-sm border p-8">
-                    <h2 class="text-2xl font-bold mb-6 text-gray-900">Form Pendaftaran</h2>
+                <div class="bg-white rounded-lg shadow-sm border p-5 sm:p-8">
+                    <h2 class="text-xl sm:text-2xl font-bold mb-6 text-gray-900">Form Pendaftaran</h2>
                     
                     <input type="hidden" name="type" id="form-type">
                     
@@ -410,7 +410,7 @@
                     <!-- CAPTCHA -->
                     <div class="mt-6">
                         <label class="block text-sm font-medium text-gray-700 mb-1">Verifikasi CAPTCHA <span class="text-red-500">*</span></label>
-                        <div class="flex items-center gap-3">
+                        <div class="flex flex-wrap items-center gap-3">
                             <span class="inline-flex items-center justify-center bg-purple-100 text-purple-800 font-bold text-lg px-5 py-3 rounded-lg border border-purple-300 select-none tracking-widest">
                                 {{ session('captcha_question') }} = ?
                             </span>
@@ -418,7 +418,7 @@
                                    name="captcha_answer"
                                    placeholder="Jawaban"
                                    autocomplete="off"
-                                   class="w-32 px-4 py-3 border rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500 @error('captcha_answer') border-red-500 @enderror">
+                                   class="w-full sm:w-32 flex-1 sm:flex-none min-w-[8rem] px-4 py-3 border rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500 @error('captcha_answer') border-red-500 @enderror">
                         </div>
                         @error('captcha_answer')
                             <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
@@ -426,8 +426,8 @@
                     </div>
 
                     <!-- Submit Button -->
-                    <div class="mt-8 flex gap-4">
-                        <button type="button" onclick="resetForm()" class="px-6 py-3 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition">
+                    <div class="mt-8 flex gap-3 sm:gap-4">
+                        <button type="button" onclick="resetForm()" class="px-4 sm:px-6 py-3 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition whitespace-nowrap">
                             Kembali
                         </button>
                         <button type="submit" class="flex-1 apjikom-purple text-white px-6 py-3 rounded-lg font-semibold hover:bg-purple-700 transition">
