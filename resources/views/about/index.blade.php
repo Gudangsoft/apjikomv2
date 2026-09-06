@@ -127,7 +127,7 @@
             <div class="flex-1 px-10 md:px-14 py-10 bg-white relative overflow-hidden">
                 <div class="text-purple-100 select-none pointer-events-none absolute top-2 left-8 leading-none" style="font-size:8rem;font-family:Georgia,serif;line-height:0.7">&ldquo;</div>
                 <div class="relative z-10">
-                        <p class="text-gray-700 leading-8 text-[1.02rem] md:text-[1.07rem]">
+                        <p class="text-gray-700 leading-8 text-[1.02rem] md:text-[1.07rem] text-justify hyphens-auto [text-align-last:left]" lang="id">
                             {{ setting('about_history') ?? (site_name() . ' didirikan sebagai wadah bagi para pengelola jurnal ilmiah untuk saling berbagi pengalaman, pengetahuan, dan best practices dalam pengelolaan jurnal ilmiah.') }}
                         </p>
 
