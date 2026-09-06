@@ -4,16 +4,16 @@
 
 @section('content')
 <!-- Page Header -->
-<section class="bg-purple-600 text-white py-12">
+<section class="bg-purple-600 text-white py-8 sm:py-12">
     <div class="container mx-auto px-4">
-        <h1 class="text-3xl font-bold mb-2">Pendaftaran Anggota {{ site_name() }}</h1>
-        <p class="text-xl text-purple-100 mb-1">{{ $globalSiteTagline }}</p>
-        <p class="text-lg text-purple-100">Bergabunglah bersama kami untuk memajukan publikasi ilmiah Indonesia</p>
+        <h1 class="text-2xl sm:text-3xl font-bold mb-2">Pendaftaran Anggota {{ site_name() }}</h1>
+        <p class="text-base sm:text-xl text-purple-100 mb-1">{{ $globalSiteTagline }}</p>
+        <p class="text-sm sm:text-lg text-purple-100">Bergabunglah bersama kami untuk memajukan publikasi ilmiah Indonesia</p>
     </div>
 </section>
 
 <!-- Registration Form -->
-<section class="py-12 bg-gray-50">
+<section class="py-8 sm:py-12 bg-gray-50">
     <div class="container mx-auto px-4">
         <div class="max-w-4xl mx-auto">
             
@@ -97,13 +97,13 @@
                         </div>
 
                         <!-- Free Registration -->
-                        <div class="bg-gradient-to-r from-green-50 to-emerald-50 rounded-xl p-8 text-center border-2 border-green-200 shadow-sm">
+                        <div class="bg-gradient-to-r from-green-50 to-emerald-50 rounded-xl p-6 sm:p-8 text-center border-2 border-green-200 shadow-sm">
                             <div class="inline-block mb-4">
                                 <div class="bg-green-500 text-white px-4 py-2 rounded-full text-sm font-bold uppercase tracking-wide">
                                     Pendaftaran
                                 </div>
                             </div>
-                            <p class="text-5xl font-bold text-green-600 mb-2">🎉 GRATIS</p>
+                            <p class="text-4xl sm:text-5xl font-bold text-green-600 mb-2">🎉 GRATIS</p>
                             <p class="text-base text-gray-700 font-medium flex items-center justify-center mt-3">
                                 <svg class="w-5 h-5 mr-2 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>

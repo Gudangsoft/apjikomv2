@@ -162,8 +162,14 @@
         main {
             display: block;
             width: 100%;
-            overflow-x: hidden;
+            overflow-x: clip;
         }
+
+        /* Global mobile safety net — cegah geser horizontal & elemen melebihi layar */
+        html, body { max-width: 100%; overflow-x: clip; }
+        img, video, iframe, canvas { max-width: 100%; }
+        table { max-width: 100%; }
+        pre, code { white-space: pre-wrap; word-break: break-word; }
         
         /* Dark mode toggle animation */
         .dark-mode-toggle {

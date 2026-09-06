@@ -11,9 +11,9 @@
     
     <div class="container mx-auto px-4 relative z-10">
         <div class="max-w-4xl mx-auto text-center">
-            <div class="text-6xl mb-4">👥</div>
-            <h1 class="text-4xl md:text-5xl font-bold mb-4">Direktori Anggota</h1>
-            <p class="text-xl text-blue-100 mb-8">Temukan dan terhubung dengan anggota {{ site_name() }}</p>
+            <div class="text-5xl sm:text-6xl mb-4">👥</div>
+            <h1 class="text-3xl sm:text-4xl md:text-5xl font-bold mb-4">Direktori Anggota</h1>
+            <p class="text-base sm:text-xl text-blue-100 mb-8">Temukan dan terhubung dengan anggota {{ site_name() }}</p>
             
             <!-- Search Bar -->
             <form method="GET" action="{{ route('directory.index') }}" class="max-w-2xl mx-auto">
@@ -37,18 +37,18 @@
 <!-- Statistics Bar -->
 <div class="bg-white shadow-md border-b">
     <div class="container mx-auto px-4 py-6">
-        <div class="grid grid-cols-3 gap-6 max-w-3xl mx-auto text-center">
+        <div class="grid grid-cols-3 gap-3 sm:gap-6 max-w-3xl mx-auto text-center">
             <div>
-                <div class="text-3xl font-bold text-blue-600">{{ $statistics['total'] }}</div>
-                <div class="text-sm text-gray-600 mt-1">Total Anggota</div>
+                <div class="text-2xl sm:text-3xl font-bold text-blue-600">{{ $statistics['total'] }}</div>
+                <div class="text-xs sm:text-sm text-gray-600 mt-1">Total Anggota</div>
             </div>
             <div>
-                <div class="text-3xl font-bold text-indigo-600">{{ $statistics['individual'] }}</div>
-                <div class="text-sm text-gray-600 mt-1">Anggota Perorangan</div>
+                <div class="text-2xl sm:text-3xl font-bold text-indigo-600">{{ $statistics['individual'] }}</div>
+                <div class="text-xs sm:text-sm text-gray-600 mt-1">Anggota Perorangan</div>
             </div>
             <div>
-                <div class="text-3xl font-bold text-purple-600">{{ $statistics['institution'] }}</div>
-                <div class="text-sm text-gray-600 mt-1">Institusi</div>
+                <div class="text-2xl sm:text-3xl font-bold text-purple-600">{{ $statistics['institution'] }}</div>
+                <div class="text-xs sm:text-sm text-gray-600 mt-1">Institusi</div>
             </div>
         </div>
     </div>

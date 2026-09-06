@@ -4,11 +4,11 @@
 
 @section('content')
 <!-- Hero Section -->
-<div class="bg-gradient-to-r from-teal-600 to-cyan-700 text-white py-20">
+<div class="bg-gradient-to-r from-teal-600 to-cyan-700 text-white py-12 sm:py-20">
     <div class="container mx-auto px-4">
         <div class="text-center max-w-4xl mx-auto">
-            <h1 class="text-5xl md:text-6xl font-bold mb-6">Layanan & Program</h1>
-            <p class="text-xl text-teal-100">Berbagai layanan profesional untuk mendukung pengembangan jurnal ilmiah Anda</p>
+            <h1 class="text-3xl sm:text-5xl md:text-6xl font-bold mb-4 sm:mb-6">Layanan & Program</h1>
+            <p class="text-base sm:text-xl text-teal-100">Berbagai layanan profesional untuk mendukung pengembangan jurnal ilmiah Anda</p>
         </div>
     </div>
 </div>

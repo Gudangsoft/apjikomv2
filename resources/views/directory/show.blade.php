@@ -21,7 +21,7 @@
 </div>
 
 <!-- Profile Hero -->
-<div class="bg-gradient-to-br from-blue-600 via-indigo-600 to-purple-700 text-white py-12 relative overflow-hidden">
+<div class="bg-gradient-to-br from-blue-600 via-indigo-600 to-purple-700 text-white py-8 sm:py-12 relative overflow-hidden">
     <!-- Decorative Elements -->
     <div class="absolute top-0 right-0 w-96 h-96 bg-white rounded-full mix-blend-overlay opacity-10 blur-3xl"></div>
     <div class="absolute bottom-0 left-0 w-64 h-64 bg-blue-300 rounded-full mix-blend-overlay opacity-10 blur-3xl"></div>
@@ -30,7 +30,7 @@
         <div class="flex flex-col items-center text-center gap-6">
             <!-- Profile Photo -->
             <div class="flex-shrink-0">
-                <div class="w-48 h-48 rounded-full border-8 border-white shadow-2xl overflow-hidden bg-white">
+                <div class="w-32 h-32 sm:w-48 sm:h-48 rounded-full border-4 sm:border-8 border-white shadow-2xl overflow-hidden bg-white">
                     @php
                         $photoUrl = null;
                         $photoPath = $member->user->photo ?? $member->photo;

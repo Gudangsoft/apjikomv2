@@ -11,10 +11,10 @@
     
     <div class="container mx-auto px-4 relative z-10">
         <div class="flex items-center mb-4">
-            <div class="text-5xl mr-4">📅</div>
+            <div class="text-3xl sm:text-5xl mr-3 sm:mr-4">📅</div>
             <div>
-                <h1 class="text-2xl sm:text-3xl md:text-4xl font-bold mb-2">Agenda Kegiatan</h1>
-                <p class="text-lg text-purple-100">{{ setting('events_page_subtitle', 'Ikuti berbagai kegiatan dan acara ' . $globalSiteName) }}</p>
+                <h1 class="text-2xl sm:text-3xl md:text-4xl font-bold mb-1 sm:mb-2">Agenda Kegiatan</h1>
+                <p class="text-sm sm:text-lg text-purple-100">{{ setting('events_page_subtitle', 'Ikuti berbagai kegiatan dan acara ' . $globalSiteName) }}</p>
             </div>
         </div>
         

@@ -7,14 +7,14 @@
 <section class="bg-purple-600 text-white py-8 md:py-12">
     <div class="container mx-auto px-4">
         <h1 class="text-2xl sm:text-3xl font-bold mb-2">{{ setting('news_page_title', 'Berita ' . $globalSiteName) }}</h1>
-        <p class="text-lg text-purple-100">Informasi terkini seputar informatika dan komputer</p>
+        <p class="text-sm sm:text-lg text-purple-100">Informasi terkini seputar informatika dan komputer</p>
     </div>
 </section>
 
 <!-- News List -->
-<section class="py-16 bg-gray-50">
+<section class="py-10 sm:py-16 bg-gray-50">
     <div class="container mx-auto px-4">
-        <div class="flex flex-col md:flex-row gap-8">
+        <div class="flex flex-col md:flex-row gap-6 md:gap-8">
             <!-- Main Content -->
             <div class="flex-1">
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">

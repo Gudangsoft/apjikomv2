@@ -14,8 +14,8 @@
     <div class="container mx-auto px-4 relative z-10">
         <div class="text-center max-w-4xl mx-auto">
             <span class="inline-block bg-white/10 border border-white/20 text-white text-xs font-semibold px-4 py-1.5 rounded-full uppercase tracking-widest mb-6">Profil Organisasi</span>
-            <h1 class="text-4xl sm:text-5xl md:text-6xl font-bold mb-6 leading-tight">{{ setting('about_page_title', 'Tentang ' . site_name()) }}</h1>
-            <p class="text-lg sm:text-xl text-purple-200 max-w-2xl mx-auto">{{ setting('about_page_subtitle', $globalSiteTagline) }}</p>
+            <h1 class="text-3xl sm:text-5xl md:text-6xl font-bold mb-4 sm:mb-6 leading-tight">{{ setting('about_page_title', 'Tentang ' . site_name()) }}</h1>
+            <p class="text-base sm:text-xl text-purple-200 max-w-2xl mx-auto">{{ setting('about_page_subtitle', $globalSiteTagline) }}</p>
         </div>
     </div>
 </div>
@@ -87,10 +87,10 @@
      SEJARAH — true full-bleed split
 ════════════════════════════════════════════ --}}
 <section class="overflow-hidden">
-    <div class="grid grid-cols-1 lg:grid-cols-5" style="min-height:600px">
+    <div class="grid grid-cols-1 lg:grid-cols-5 lg:min-h-[600px]">
 
         {{-- left: dark panel full-height --}}
-        <div class="lg:col-span-2 relative flex flex-col">
+        <div class="lg:col-span-2 relative flex flex-col min-h-[220px] sm:min-h-[300px]">
             @if(setting('about_history_image'))
                 <img src="{{ asset('storage/' . setting('about_history_image')) }}"
                      alt="Sejarah {{ site_name() }}"
