@@ -10,6 +10,14 @@
             Menambah pengurus untuk bidang
             <span class="font-semibold text-indigo-700">{{ request('division') }}</span>.
         </p>
+        @elseif(request('type') == 'executive')
+        <p class="text-gray-500 text-sm mt-1">
+            Menambah anggota <span class="font-semibold text-amber-700">Dewan Eksekutif</span>.
+        </p>
+        @elseif(request('type') == 'leadership')
+        <p class="text-gray-500 text-sm mt-1">
+            Menambah anggota <span class="font-semibold text-purple-700">Pengurus Inti</span>.
+        </p>
         @else
         <p class="text-gray-500 text-sm mt-1">Kelompokkan per bidang, lalu tambahkan anggota di dalamnya.</p>
         @endif
@@ -155,6 +163,7 @@
 <script>
 const DIVISIONS = @json($divisions->map(fn($d) => ['id' => $d->id, 'name' => $d->name]));
 const PRESET_DIVISION = @json(request('division'));
+const PRESET_TYPE     = @json(request('type'));
 
 let globalIdx  = 0; // unique index for each member row (used for form names)
 let blockCount = 0; // unique index for each division block
@@ -376,10 +385,14 @@ function updateRowNumbers(tbodyId) {
     });
 }
 
-// Opened from a specific bidang → jump straight to that division block.
+// Opened from a specific section → jump straight to just that one.
 // Otherwise start with 1 executive row, 1 leadership row and 1 division block.
 if (PRESET_DIVISION) {
     addDivisionBlock(PRESET_DIVISION);
+} else if (PRESET_TYPE === 'executive') {
+    addExecutiveRow();
+} else if (PRESET_TYPE === 'leadership') {
+    addLeadershipRow();
 } else {
     addExecutiveRow();
     addLeadershipRow();

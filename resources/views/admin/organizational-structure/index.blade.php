@@ -31,10 +31,19 @@
 
 {{-- DEWAN EKSEKUTIF --}}
 <div class="mb-8">
-    <h2 class="text-base font-semibold text-gray-700 mb-3 flex items-center gap-2">
-        <span class="w-2 h-2 rounded-full bg-amber-500 inline-block"></span>
-        Dewan Eksekutif
-    </h2>
+    <div class="flex items-center justify-between mb-3">
+        <h2 class="text-base font-semibold text-gray-700 flex items-center gap-2">
+            <span class="w-2 h-2 rounded-full bg-amber-500 inline-block"></span>
+            Dewan Eksekutif
+        </h2>
+        <a href="{{ route('admin.organizational-structure.create', ['type' => 'executive']) }}"
+           class="inline-flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium text-amber-700 bg-white border border-amber-200 rounded-lg hover:bg-amber-50">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+            </svg>
+            Tambah
+        </a>
+    </div>
     <div class="bg-white rounded-lg shadow-sm border overflow-hidden">
         @php $executives = $structures->where('type', 'executive'); @endphp
         @if($executives->count())
@@ -106,10 +115,19 @@
 
 {{-- PENGURUS INTI --}}
 <div class="mb-8">
-    <h2 class="text-base font-semibold text-gray-700 mb-3 flex items-center gap-2">
-        <span class="w-2 h-2 rounded-full bg-purple-500 inline-block"></span>
-        Pengurus Inti
-    </h2>
+    <div class="flex items-center justify-between mb-3">
+        <h2 class="text-base font-semibold text-gray-700 flex items-center gap-2">
+            <span class="w-2 h-2 rounded-full bg-purple-500 inline-block"></span>
+            Pengurus Inti
+        </h2>
+        <a href="{{ route('admin.organizational-structure.create', ['type' => 'leadership']) }}"
+           class="inline-flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium text-purple-700 bg-white border border-purple-200 rounded-lg hover:bg-purple-50">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+            </svg>
+            Tambah
+        </a>
+    </div>
     <div class="bg-white rounded-lg shadow-sm border overflow-hidden">
         @php $leadership = $structures->where('type', 'leadership'); @endphp
         @if($leadership->count())
