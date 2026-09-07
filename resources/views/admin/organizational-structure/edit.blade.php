@@ -31,6 +31,12 @@
                 <label class="block text-sm font-medium text-gray-700 mb-2">Tipe <span class="text-red-500">*</span></label>
                 <div class="flex gap-6">
                     <label class="flex items-center gap-2 cursor-pointer">
+                        <input type="radio" name="type" value="executive"
+                               {{ old('type', $organizationalStructure->type) == 'executive' ? 'checked' : '' }}
+                               class="text-purple-600" onchange="toggleDivisionField()">
+                        <span class="text-sm">Dewan Eksekutif</span>
+                    </label>
+                    <label class="flex items-center gap-2 cursor-pointer">
                         <input type="radio" name="type" value="leadership"
                                {{ old('type', $organizationalStructure->type) == 'leadership' ? 'checked' : '' }}
                                class="text-purple-600" onchange="toggleDivisionField()">

@@ -26,7 +26,7 @@ class OrganizationalStructureController extends Controller
     {
         $request->validate([
             'members'                  => 'required|array|min:1',
-            'members.*.type'           => 'required|in:leadership,division',
+            'members.*.type'           => 'required|in:executive,leadership,division',
             'members.*.position'       => 'required|string|max:255',
             'members.*.name'           => 'required|string|max:255',
             'members.*.institusi'      => 'nullable|string|max:255',
@@ -74,7 +74,7 @@ class OrganizationalStructureController extends Controller
             'institusi'     => 'nullable|string|max:255',
             'photo'         => 'nullable|image|mimes:jpeg,png,jpg,webp|max:5120',
             'description'   => 'nullable|string',
-            'type'          => 'required|in:leadership,division',
+            'type'          => 'required|in:executive,leadership,division',
             'division_name' => 'nullable|string|max:255',
             'order'         => 'required|integer|min:0',
         ]);

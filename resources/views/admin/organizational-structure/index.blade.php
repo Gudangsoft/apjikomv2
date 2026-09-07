@@ -29,6 +29,81 @@
 <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded-lg mb-4">{{ session('success') }}</div>
 @endif
 
+{{-- DEWAN EKSEKUTIF --}}
+<div class="mb-8">
+    <h2 class="text-base font-semibold text-gray-700 mb-3 flex items-center gap-2">
+        <span class="w-2 h-2 rounded-full bg-amber-500 inline-block"></span>
+        Dewan Eksekutif
+    </h2>
+    <div class="bg-white rounded-lg shadow-sm border overflow-hidden">
+        @php $executives = $structures->where('type', 'executive'); @endphp
+        @if($executives->count())
+        <div class="overflow-x-auto">
+            <table class="min-w-full divide-y divide-gray-100">
+                <thead class="bg-gray-50">
+                    <tr>
+                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase w-12">Urut</th>
+                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase w-12">Foto</th>
+                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Jabatan</th>
+                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Nama</th>
+                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Institusi</th>
+                        <th class="px-4 py-3 text-center text-xs font-medium text-gray-500 uppercase w-20">Status</th>
+                        <th class="px-4 py-3 text-right text-xs font-medium text-gray-500 uppercase w-24">Aksi</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-gray-100">
+                    @foreach($executives as $person)
+                    <tr class="hover:bg-gray-50">
+                        <td class="px-4 py-3 text-sm text-gray-500">{{ $person->order }}</td>
+                        <td class="px-4 py-3">
+                            @if($person->photo)
+                                <img src="{{ asset('storage/' . $person->photo) }}" alt="{{ $person->name }}"
+                                     class="w-9 h-9 rounded-full object-cover">
+                            @else
+                                <div class="w-9 h-9 rounded-full bg-amber-100 flex items-center justify-center">
+                                    <svg class="w-5 h-5 text-amber-400" fill="currentColor" viewBox="0 0 20 20">
+                                        <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd"/>
+                                    </svg>
+                                </div>
+                            @endif
+                        </td>
+                        <td class="px-4 py-3 text-sm font-medium text-gray-900">{{ $person->position }}</td>
+                        <td class="px-4 py-3">
+                            <div class="text-sm font-medium text-gray-900">{{ $person->name }}</div>
+                            @if($person->description)
+                                <div class="text-xs text-gray-400">{{ Str::limit($person->description, 50) }}</div>
+                            @endif
+                        </td>
+                        <td class="px-4 py-3 text-sm text-gray-500">{{ $person->institusi ?? '—' }}</td>
+                        <td class="px-4 py-3 text-center">
+                            @if($person->is_active)
+                                <span class="px-2 py-0.5 text-xs rounded-full bg-green-100 text-green-700">Aktif</span>
+                            @else
+                                <span class="px-2 py-0.5 text-xs rounded-full bg-gray-100 text-gray-500">Nonaktif</span>
+                            @endif
+                        </td>
+                        <td class="px-4 py-3 text-right">
+                            <div class="flex justify-end gap-3">
+                                <a href="{{ route('admin.organizational-structure.edit', $person) }}"
+                                   class="text-purple-600 hover:text-purple-900 text-sm">Edit</a>
+                                <form action="{{ route('admin.organizational-structure.destroy', $person) }}" method="POST"
+                                      onsubmit="return confirm('Hapus {{ addslashes($person->name) }}?')">
+                                    @csrf @method('DELETE')
+                                    <button type="submit" class="text-red-600 hover:text-red-900 text-sm">Hapus</button>
+                                </form>
+                            </div>
+                        </td>
+                    </tr>
+                    @endforeach
+                </tbody>
+            </table>
+        </div>
+        @else
+        <div class="py-8 text-center text-gray-400 text-sm">Belum ada dewan eksekutif.</div>
+        @endif
+    </div>
+</div>
+
 {{-- PENGURUS INTI --}}
 <div class="mb-8">
     <h2 class="text-base font-semibold text-gray-700 mb-3 flex items-center gap-2">

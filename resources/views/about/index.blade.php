@@ -185,6 +185,49 @@
 
         <div class="max-w-6xl mx-auto">
 
+            {{-- ── Dewan Eksekutif ── --}}
+            @if($executives->count() > 0)
+            <div class="mb-12">
+                <div class="flex items-center gap-3 mb-8">
+                    <div class="w-8 h-8 bg-amber-500 rounded-lg flex items-center justify-center">
+                        <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                  d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z"/>
+                        </svg>
+                    </div>
+                    <h3 class="text-lg font-bold text-gray-800">Dewan Eksekutif</h3>
+                    <div class="flex-1 h-px bg-gray-200"></div>
+                </div>
+
+                <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-{{ min($executives->count(), 3) }} gap-5">
+                    @foreach($executives as $person)
+                    <div class="group bg-white rounded-2xl overflow-hidden shadow-sm border border-gray-100 hover:shadow-md hover:-translate-y-0.5 transition-all duration-300 flex flex-col">
+                        {{-- photo area --}}
+                        <div class="relative bg-gradient-to-br from-amber-500 to-orange-600 pt-8 pb-4 flex flex-col items-center">
+                            <div class="absolute inset-0 opacity-10" style="background-image:radial-gradient(circle,#fff 1px,transparent 1px);background-size:16px 16px;"></div>
+                            @if($person->photo)
+                                <img src="{{ asset('storage/' . $person->photo) }}" alt="{{ $person->name }}"
+                                     class="relative z-10 w-24 h-24 rounded-full object-cover border-4 border-white shadow-lg">
+                            @else
+                                <div class="relative z-10 w-24 h-24 rounded-full border-4 border-white shadow-lg bg-white/20 flex items-center justify-center text-white text-3xl font-bold">
+                                    {{ mb_substr($person->name, 0, 1) }}
+                                </div>
+                            @endif
+                        </div>
+                        {{-- info --}}
+                        <div class="flex-1 p-5 flex flex-col text-center">
+                            <p class="text-xs font-semibold text-amber-600 uppercase tracking-wide mb-1">{{ $person->position }}</p>
+                            <h4 class="text-sm md:text-base font-bold text-gray-900 leading-snug mb-2">{{ $person->name }}</h4>
+                            @if($person->description)
+                                <p class="text-xs text-gray-500 leading-relaxed mt-auto">{{ $person->description }}</p>
+                            @endif
+                        </div>
+                    </div>
+                    @endforeach
+                </div>
+            </div>
+            @endif
+
             {{-- ── Leadership ── --}}
             @if($leadership->count() > 0)
             <div class="mb-12">

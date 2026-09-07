@@ -27,6 +27,11 @@ class OrganizationalStructure extends Model
         return $query->where('is_active', true);
     }
 
+    public function scopeExecutive($query)
+    {
+        return $query->where('type', 'executive');
+    }
+
     public function scopeLeadership($query)
     {
         return $query->where('type', 'leadership');

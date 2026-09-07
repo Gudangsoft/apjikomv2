@@ -32,6 +32,51 @@
       enctype="multipart/form-data" id="mainForm">
 @csrf
 
+{{-- ─── DEWAN EKSEKUTIF ───────────────────────────────────────── --}}
+<div class="bg-white rounded-xl shadow-sm border mb-5" id="section-executive">
+    <div class="flex items-center justify-between px-5 py-4 border-b bg-amber-50 rounded-t-xl">
+        <div class="flex items-center gap-3">
+            <div class="w-8 h-8 rounded-lg bg-amber-500 flex items-center justify-center">
+                <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                          d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z"/>
+                </svg>
+            </div>
+            <div>
+                <h3 class="font-semibold text-gray-800">Dewan Eksekutif</h3>
+                <p class="text-xs text-gray-500">Direktur Eksekutif, Wakil Direktur, dll.</p>
+            </div>
+        </div>
+        <button type="button" onclick="addExecutiveRow()"
+                class="flex items-center gap-1.5 px-3 py-1.5 text-amber-700 border border-amber-300 rounded-lg hover:bg-amber-100 text-sm">
+            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+            </svg>
+            Tambah Anggota
+        </button>
+    </div>
+    <div class="overflow-x-auto">
+        <table class="min-w-full">
+            <thead class="bg-gray-50 border-b">
+                <tr>
+                    <th class="px-4 py-2 text-left text-xs font-semibold text-gray-500 uppercase w-8">#</th>
+                    <th class="px-4 py-2 text-left text-xs font-semibold text-gray-500 uppercase w-44">Jabatan *</th>
+                    <th class="px-4 py-2 text-left text-xs font-semibold text-gray-500 uppercase">Nama Lengkap *</th>
+                    <th class="px-4 py-2 text-left text-xs font-semibold text-gray-500 uppercase w-44">Institusi</th>
+                    <th class="px-4 py-2 text-left text-xs font-semibold text-gray-500 uppercase w-32">Foto</th>
+                    <th class="px-4 py-2 text-center text-xs font-semibold text-gray-500 uppercase w-14">Urut</th>
+                    <th class="px-4 py-2 text-center text-xs font-semibold text-gray-500 uppercase w-14">Aktif</th>
+                    <th class="px-4 py-2 w-8"></th>
+                </tr>
+            </thead>
+            <tbody id="executive-rows"></tbody>
+        </table>
+    </div>
+    <div id="executive-empty" class="py-6 text-center text-sm text-gray-400">
+        Klik "Tambah Anggota" untuk menambah dewan eksekutif.
+    </div>
+</div>
+
 {{-- ─── PENGURUS INTI ─────────────────────────────────────────── --}}
 <div class="bg-white rounded-xl shadow-sm border mb-5" id="section-leadership">
     <div class="flex items-center justify-between px-5 py-4 border-b bg-purple-50 rounded-t-xl">
@@ -113,7 +158,11 @@ const ACCENT_COLORS = [
 
 // ── Build a single member row ────────────────────────────────────
 function buildMemberRow(rowIdx, type, divisionName) {
-    const isLeader = type === 'leadership';
+    const positionPlaceholder = {
+        executive:  'Direktur Eksekutif, Wakil Direktur…',
+        leadership: 'Ketua Umum, Sekretaris…',
+        division:   'Koordinator, Anggota…',
+    }[type] || 'Jabatan…';
     return `
     <tr id="member-${rowIdx}" class="border-b last:border-0 hover:bg-gray-50 align-middle">
         <input type="hidden" name="members[${rowIdx}][type]" value="${type}">
@@ -124,7 +173,7 @@ function buildMemberRow(rowIdx, type, divisionName) {
         </td>
         <td class="px-4 py-2">
             <input type="text" name="members[${rowIdx}][position]" required
-                   placeholder="${isLeader ? 'Ketua Umum, Sekretaris…' : 'Koordinator, Anggota…'}"
+                   placeholder="${positionPlaceholder}"
                    class="w-full px-2 py-1.5 border rounded text-sm focus:ring-1 focus:ring-purple-400">
         </td>
         <td class="px-4 py-2">
@@ -228,6 +277,14 @@ function buildDivisionBlock(blockIdx) {
 }
 
 // ── Event handlers ───────────────────────────────────────────────
+function addExecutiveRow() {
+    const idx = globalIdx++;
+    const tbody = document.getElementById('executive-rows');
+    tbody.insertAdjacentHTML('beforeend', buildMemberRow(idx, 'executive', ''));
+    document.getElementById('executive-empty').classList.add('hidden');
+    updateRowNumbers('executive-rows');
+}
+
 function addLeadershipRow() {
     const idx = globalIdx++;
     const tbody = document.getElementById('leadership-rows');
@@ -301,7 +358,8 @@ function updateRowNumbers(tbodyId) {
     });
 }
 
-// Start with 1 leadership row and 1 division block
+// Start with 1 executive row, 1 leadership row and 1 division block
+addExecutiveRow();
 addLeadershipRow();
 addDivisionBlock();
 </script>
