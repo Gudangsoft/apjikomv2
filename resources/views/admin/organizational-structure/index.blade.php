@@ -186,7 +186,10 @@
         Divisi
     </h2>
     <div class="bg-white rounded-lg shadow-sm border overflow-hidden">
-        @php $divisions = $structures->where('type', 'division'); @endphp
+        @php
+            $divisions = $structures->where('type', 'division');
+            $divisionGroups = $divisions->groupBy('division_name');
+        @endphp
         @if($divisions->count())
         <div class="overflow-x-auto">
             <table class="min-w-full divide-y divide-gray-100">
@@ -194,15 +197,23 @@
                     <tr>
                         <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase w-12">Urut</th>
                         <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase w-12">Foto</th>
-                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase w-36">Bidang/Divisi</th>
                         <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Jabatan & Nama</th>
                         <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Institusi</th>
                         <th class="px-4 py-3 text-center text-xs font-medium text-gray-500 uppercase w-20">Status</th>
                         <th class="px-4 py-3 text-right text-xs font-medium text-gray-500 uppercase w-24">Aksi</th>
                     </tr>
                 </thead>
-                <tbody class="divide-y divide-gray-100">
-                    @foreach($divisions as $person)
+                @foreach($divisionGroups as $bidangName => $members)
+                <tbody class="divide-y divide-gray-100 border-t-4 border-indigo-200">
+                    <tr class="bg-indigo-50">
+                        <td colspan="6" class="px-4 py-2.5">
+                            <span class="text-xs font-semibold text-indigo-700 uppercase tracking-wide">
+                                {{ $bidangName ?: 'Tanpa Bidang' }}
+                            </span>
+                            <span class="ml-2 text-xs text-indigo-500">{{ $members->count() }} anggota</span>
+                        </td>
+                    </tr>
+                    @foreach($members as $person)
                     <tr class="hover:bg-gray-50">
                         <td class="px-4 py-3 text-sm text-gray-500">{{ $person->order }}</td>
                         <td class="px-4 py-3">
@@ -215,15 +226,6 @@
                                         <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd"/>
                                     </svg>
                                 </div>
-                            @endif
-                        </td>
-                        <td class="px-4 py-3">
-                            @if($person->division_name)
-                                <span class="inline-block px-2 py-0.5 text-xs rounded bg-indigo-50 text-indigo-700 font-medium">
-                                    {{ $person->division_name }}
-                                </span>
-                            @else
-                                <span class="text-gray-300 text-xs">—</span>
                             @endif
                         </td>
                         <td class="px-4 py-3">
@@ -252,6 +254,7 @@
                     </tr>
                     @endforeach
                 </tbody>
+                @endforeach
             </table>
         </div>
         @else
