@@ -5,7 +5,14 @@
 <div class="mb-6 flex items-center justify-between">
     <div>
         <h1 class="text-2xl font-bold text-gray-800">Tambah Pengurus</h1>
+        @if(request('division'))
+        <p class="text-gray-500 text-sm mt-1">
+            Menambah pengurus untuk bidang
+            <span class="font-semibold text-indigo-700">{{ request('division') }}</span>.
+        </p>
+        @else
         <p class="text-gray-500 text-sm mt-1">Kelompokkan per bidang, lalu tambahkan anggota di dalamnya.</p>
+        @endif
     </div>
     <div class="flex gap-3">
         <a href="{{ route('admin.organizational-divisions.index') }}"
@@ -147,6 +154,7 @@
 
 <script>
 const DIVISIONS = @json($divisions->map(fn($d) => ['id' => $d->id, 'name' => $d->name]));
+const PRESET_DIVISION = @json(request('division'));
 
 let globalIdx  = 0; // unique index for each member row (used for form names)
 let blockCount = 0; // unique index for each division block
@@ -293,9 +301,19 @@ function addLeadershipRow() {
     updateRowNumbers('leadership-rows');
 }
 
-function addDivisionBlock() {
+function addDivisionBlock(presetName) {
     const bIdx = blockCount++;
     document.getElementById('division-blocks').insertAdjacentHTML('beforeend', buildDivisionBlock(bIdx));
+    // pre-fill the bidang name when opened from a specific division
+    if (presetName) {
+        if (DIVISIONS.some(d => d.name === presetName)) {
+            document.getElementById(`block-div-${bIdx}`).value = presetName;
+            onDivisionChange(bIdx, presetName);
+        } else {
+            document.getElementById(`block-manual-${bIdx}`).value = presetName;
+            onManualDivision(bIdx, presetName);
+        }
+    }
     // auto add one empty row
     addRowToBlock(bIdx);
 }
@@ -358,9 +376,14 @@ function updateRowNumbers(tbodyId) {
     });
 }
 
-// Start with 1 executive row, 1 leadership row and 1 division block
-addExecutiveRow();
-addLeadershipRow();
-addDivisionBlock();
+// Opened from a specific bidang → jump straight to that division block.
+// Otherwise start with 1 executive row, 1 leadership row and 1 division block.
+if (PRESET_DIVISION) {
+    addDivisionBlock(PRESET_DIVISION);
+} else {
+    addExecutiveRow();
+    addLeadershipRow();
+    addDivisionBlock();
+}
 </script>
 @endsection

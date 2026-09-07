@@ -207,10 +207,23 @@
                 <tbody class="divide-y divide-gray-100 border-t-4 border-indigo-200">
                     <tr class="bg-indigo-50">
                         <td colspan="6" class="px-4 py-2.5">
-                            <span class="text-xs font-semibold text-indigo-700 uppercase tracking-wide">
-                                {{ $bidangName ?: 'Tanpa Bidang' }}
-                            </span>
-                            <span class="ml-2 text-xs text-indigo-500">{{ $members->count() }} anggota</span>
+                            <div class="flex items-center justify-between gap-3">
+                                <div>
+                                    <span class="text-xs font-semibold text-indigo-700 uppercase tracking-wide">
+                                        {{ $bidangName ?: 'Tanpa Bidang' }}
+                                    </span>
+                                    <span class="ml-2 text-xs text-indigo-500">{{ $members->count() }} anggota</span>
+                                </div>
+                                @if($bidangName)
+                                <a href="{{ route('admin.organizational-structure.create', ['division' => $bidangName]) }}"
+                                   class="inline-flex items-center gap-1 px-2.5 py-1 text-xs font-medium text-indigo-700 bg-white border border-indigo-200 rounded-md hover:bg-indigo-50">
+                                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+                                    </svg>
+                                    Tambah
+                                </a>
+                                @endif
+                            </div>
                         </td>
                     </tr>
                     @foreach($members as $person)
