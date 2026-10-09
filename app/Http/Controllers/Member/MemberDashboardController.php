@@ -71,17 +71,35 @@ class MemberDashboardController extends Controller
         $user = \App\Models\User::where('email', $request->email)->first();
         
         if (!$user) {
-            // Check if email exists in pending registrations
+            // Cek riwayat pendaftaran untuk email ini (ambil yang terbaru kalau pernah daftar berkali-kali)
             $registration = \App\Models\Registration::where('email', $request->email)
-                ->where('status', 'pending')
+                ->latest()
                 ->first();
-            
+
             if ($registration) {
-                throw ValidationException::withMessages([
-                    'email' => 'Akun Anda sudah terdaftar tetapi belum divalidasi oleh admin. Silakan tunggu proses validasi.',
-                ]);
+                if ($registration->status === 'pending') {
+                    throw ValidationException::withMessages([
+                        'email' => 'Akun Anda sudah terdaftar tetapi belum divalidasi oleh admin. Silakan tunggu proses validasi.',
+                    ]);
+                }
+
+                if ($registration->status === 'approved') {
+                    // Pendaftaran disetujui tapi akun user belum berhasil terbentuk
+                    // (mis. gagal saat proses approve) — jangan suruh daftar ulang,
+                    // karena email ini sudah terkunci di tabel registrations dan akan
+                    // selalu gagal. Arahkan ke admin untuk diaktifkan ulang.
+                    throw ValidationException::withMessages([
+                        'email' => 'Pendaftaran Anda sudah disetujui, namun akun login belum berhasil dibuat sistem. Silakan hubungi Admin untuk mengaktifkan akun Anda.',
+                    ]);
+                }
+
+                if ($registration->status === 'rejected') {
+                    throw ValidationException::withMessages([
+                        'email' => 'Pendaftaran Anda sebelumnya ditolak. Silakan hubungi Admin, atau lakukan pendaftaran ulang.',
+                    ]);
+                }
             }
-            
+
             // Email not found anywhere
             throw ValidationException::withMessages([
                 'email' => 'Akun belum terdaftar. Silakan lakukan pendaftaran terlebih dahulu. Silahkan hubungi Admin untuk informasi lebih lanjut.',

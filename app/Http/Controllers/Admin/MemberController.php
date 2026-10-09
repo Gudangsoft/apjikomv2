@@ -656,11 +656,22 @@ class MemberController extends Controller
                 $newAccount  = false;
 
                 if (!$existingUser) {
-                    $password   = \Illuminate\Support\Str::random(12);
+                    // Pakai password yang dibuat member sendiri saat mendaftar (sudah ter-hash)
+                    // supaya mereka bisa langsung login dengan password itu, tanpa perlu reset.
+                    // Password acak hanya dipakai sebagai fallback kalau data pendaftaran lama
+                    // ternyata tidak menyimpan password.
+                    if ($registration->password) {
+                        $hashedPassword = $registration->password;
+                        $password = null; // plaintext tidak diketahui -> email cukup arahkan pakai password saat daftar
+                    } else {
+                        $password = Str::random(12);
+                        $hashedPassword = Hash::make($password);
+                    }
+
                     $existingUser = User::create([
                         'name'     => $registration->full_name,
                         'email'    => $registration->email,
-                        'password' => Hash::make($password),
+                        'password' => $hashedPassword,
                         'role'     => 'member',
                     ]);
                     $newAccount = true;
@@ -696,7 +707,7 @@ class MemberController extends Controller
                         }
                     }
 
-                    if ($newAccount && $password) {
+                    if ($newAccount) {
                         try {
                             \Mail::to($existingUser->email)->send(
                                 new \App\Mail\MemberApproved($existingUser, $password, $member)
@@ -734,11 +745,20 @@ class MemberController extends Controller
 
             $user = User::where('email', $registration->email)->first();
             if (!$user) {
-                $password   = \Illuminate\Support\Str::random(12);
+                // Pakai password yang dibuat member sendiri saat mendaftar (sudah ter-hash)
+                // supaya mereka bisa langsung login dengan password itu, tanpa perlu reset.
+                if ($registration->password) {
+                    $hashedPassword = $registration->password;
+                    $password = null;
+                } else {
+                    $password = Str::random(12);
+                    $hashedPassword = Hash::make($password);
+                }
+
                 $user       = User::create([
                     'name'     => $registration->full_name,
                     'email'    => $registration->email,
-                    'password' => Hash::make($password),
+                    'password' => $hashedPassword,
                     'role'     => 'member',
                 ]);
                 $newAccount = true;
@@ -775,7 +795,7 @@ class MemberController extends Controller
                 }
             }
 
-            if ($newAccount && $password) {
+            if ($newAccount) {
                 try {
                     \Mail::to($user->email)->send(
                         new \App\Mail\MemberApproved($user, $password, $member)

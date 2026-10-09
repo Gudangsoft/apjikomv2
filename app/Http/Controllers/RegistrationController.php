@@ -9,6 +9,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Validation\Rule;
 
 class RegistrationController extends Controller
 {
@@ -36,7 +37,14 @@ class RegistrationController extends Controller
 
         $rules = [
             'type' => 'required|in:individu,prodi',
-            'email' => 'required|email:rfc|unique:registrations,email|unique:users,email',
+            'email' => [
+                'required',
+                'email:rfc',
+                // Pendaftaran yang sudah ditolak tidak boleh mengunci email itu selamanya —
+                // orangnya tetap harus bisa mendaftar ulang.
+                Rule::unique('registrations', 'email')->where(fn ($query) => $query->where('status', '!=', 'rejected')),
+                'unique:users,email',
+            ],
             'phone' => 'required|string|max:13',
             'password' => 'required|string|min:8|confirmed',
             'full_name' => 'required|string|max:255',
