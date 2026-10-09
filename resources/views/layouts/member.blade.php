@@ -319,6 +319,74 @@
         </main>
     </div>
 
+    <!-- Floating WhatsApp Button (Kontak & Grup WA) -->
+    @php
+        $fabWaGroups = member_wa_groups();
+        $fabWaContacts = member_wa_contacts();
+        $fabWaItems = array_merge(
+            array_map(fn ($g) => ['kind' => 'group', 'label' => $g['label'] ?: 'Grup WhatsApp', 'sub' => 'Gabung Grup', 'url' => $g['url']], $fabWaGroups),
+            array_map(fn ($c) => ['kind' => 'contact', 'label' => $c['label'] ?: 'Tim APJIKOM', 'sub' => $c['number'], 'url' => 'https://wa.me/' . wa_number($c['number'])], $fabWaContacts)
+        );
+    @endphp
+    @if(count($fabWaItems))
+    <div class="fixed bottom-5 right-5 z-50" x-data="{ open: false }">
+        <!-- Expandable panel -->
+        <div x-show="open" @click.away="open = false"
+             x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0 translate-y-2 scale-95" x-transition:enter-end="opacity-100 translate-y-0 scale-100"
+             x-transition:leave="transition ease-in duration-150" x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0"
+             class="absolute bottom-[4.5rem] right-0 w-72 max-w-[85vw] bg-white rounded-2xl shadow-2xl border border-gray-100 overflow-hidden"
+             style="display: none;">
+            <div class="bg-gradient-to-r from-green-600 to-emerald-600 px-4 py-3">
+                <p class="font-semibold text-white text-sm">Hubungi Kami via WhatsApp</p>
+                <p class="text-green-100 text-xs mt-0.5">{{ $globalSiteName }}</p>
+            </div>
+            <div class="p-2 max-h-80 overflow-y-auto">
+                @foreach($fabWaItems as $item)
+                <a href="{{ $item['url'] }}" target="_blank" rel="noopener noreferrer"
+                   class="flex items-center gap-3 p-2.5 rounded-xl hover:bg-green-50 transition">
+                    <div class="w-10 h-10 rounded-full bg-green-100 flex items-center justify-center flex-shrink-0">
+                        @if($item['kind'] === 'group')
+                        <svg class="w-5 h-5 text-green-600" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347M12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893A11.821 11.821 0 0012.05 0"/>
+                        </svg>
+                        @else
+                        <svg class="w-5 h-5 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"></path>
+                        </svg>
+                        @endif
+                    </div>
+                    <div class="min-w-0 flex-1">
+                        <p class="text-sm font-medium text-gray-800 truncate">{{ $item['label'] }}</p>
+                        <p class="text-xs text-gray-400 truncate">{{ $item['sub'] }}</p>
+                    </div>
+                    <svg class="w-4 h-4 text-gray-300 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path>
+                    </svg>
+                </a>
+                @endforeach
+            </div>
+        </div>
+
+        <!-- FAB -->
+        <button type="button" @click="open = !open"
+                class="relative w-14 h-14 rounded-full bg-green-500 hover:bg-green-600 shadow-xl hover:shadow-2xl flex items-center justify-center text-white transition-all duration-300 hover:scale-110"
+                aria-label="Hubungi via WhatsApp">
+            <span class="absolute inset-0 rounded-full bg-green-400 animate-ping opacity-75" x-show="!open" style="display: block;"></span>
+            <svg class="w-7 h-7 relative z-10" fill="currentColor" viewBox="0 0 24 24" x-show="!open" style="display: block;">
+                <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347M12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893A11.821 11.821 0 0012.05 0"/>
+            </svg>
+            <svg class="w-6 h-6 relative z-10" fill="none" stroke="currentColor" viewBox="0 0 24 24" x-show="open" style="display: none;">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+            </svg>
+            @if(count($fabWaItems) > 1)
+            <span class="absolute -top-1 -right-1 w-5 h-5 bg-white text-green-700 text-[10px] font-bold rounded-full flex items-center justify-center shadow" x-show="!open" style="display: flex;">
+                {{ count($fabWaItems) }}
+            </span>
+            @endif
+        </button>
+    </div>
+    @endif
+
     <script src="//unpkg.com/alpinejs" defer></script>
     
     <!-- Dark Mode Toggle Script -->
