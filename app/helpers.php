@@ -96,6 +96,80 @@ if (!function_exists('clean_website_url')) {
     }
 }
 
+if (!function_exists('wa_number')) {
+    /**
+     * Normalise a phone number into a bare 62-prefixed digit string
+     * suitable for a wa.me link.
+     *
+     * @param string|null $phone
+     * @return string
+     */
+    function wa_number($phone)
+    {
+        $phone = preg_replace('/[^0-9]/', '', (string) $phone);
+
+        if ($phone === '') {
+            return '';
+        }
+
+        if (str_starts_with($phone, '0')) {
+            $phone = '62' . substr($phone, 1);
+        } elseif (!str_starts_with($phone, '62')) {
+            $phone = '62' . $phone;
+        }
+
+        return $phone;
+    }
+}
+
+if (!function_exists('member_wa_groups')) {
+    /**
+     * Admin-configured WhatsApp group invite links for members.
+     * Each item: ['label' => string, 'url' => string]. Optional, 0..n.
+     *
+     * @return array<int, array{label: string, url: string}>
+     */
+    function member_wa_groups()
+    {
+        $items = json_decode((string) setting('member_wa_groups', '[]'), true) ?: [];
+
+        return array_values(array_filter($items, fn ($item) => !empty($item['url'] ?? null)));
+    }
+}
+
+if (!function_exists('member_wa_contacts')) {
+    /**
+     * Admin-configured WhatsApp numbers for contacting the APJIKOM team.
+     * Each item: ['label' => string, 'number' => string]. Optional, 0..n.
+     *
+     * @return array<int, array{label: string, number: string}>
+     */
+    function member_wa_contacts()
+    {
+        $items = json_decode((string) setting('member_wa_contacts', '[]'), true) ?: [];
+
+        return array_values(array_filter($items, fn ($item) => !empty($item['number'] ?? null)));
+    }
+}
+
+if (!function_exists('member_card_bank_accounts')) {
+    /**
+     * Admin-configured bank accounts for the member-card printing fee.
+     * Each item: ['bank' => string, 'number' => string, 'holder' => string]. Optional, 0..n.
+     *
+     * @return array<int, array{bank: string, number: string, holder: string}>
+     */
+    function member_card_bank_accounts()
+    {
+        $items = json_decode((string) setting('member_card_bank_accounts', '[]'), true) ?: [];
+
+        return array_values(array_filter(
+            $items,
+            fn ($item) => !empty($item['bank'] ?? null) || !empty($item['number'] ?? null)
+        ));
+    }
+}
+
 if (!function_exists('format_stat_number')) {
     /**
      * Format large numbers for statistics display

@@ -39,6 +39,7 @@ use App\Http\Controllers\Admin\ChangelogController as AdminChangelogController;
 use App\Http\Controllers\Admin\CertificateTemplateController as AdminCertificateTemplateController;
 use App\Http\Controllers\Admin\EventCertificateController as AdminEventCertificateController;
 use App\Http\Controllers\Admin\LoginUrlController as AdminLoginUrlController;
+use App\Http\Controllers\Admin\MemberContactSettingController as AdminMemberContactSettingController;
 
 // Public Routes
 Route::get('/', [HomeController::class, 'index'])->name('home');
@@ -265,6 +266,10 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'admin'])->group(fun
     // Payment Settings Management
     Route::get('payment-settings', [AdminPaymentSettingController::class, 'index'])->name('payment-settings.index');
     Route::put('payment-settings', [AdminPaymentSettingController::class, 'update'])->name('payment-settings.update');
+
+    // Member Contact & Card Payment Settings (WA grup, WA tim, rekening cetak kartu)
+    Route::get('member-contact-settings', [AdminMemberContactSettingController::class, 'index'])->name('member-contact-settings.index');
+    Route::put('member-contact-settings', [AdminMemberContactSettingController::class, 'update'])->name('member-contact-settings.update');
     
     // Footer Settings Management
     Route::get('footer-settings', [AdminFooterSettingController::class, 'index'])->name('footer-settings.index');

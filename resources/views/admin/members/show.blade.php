@@ -449,6 +449,28 @@
             @endif
         </div>
         @endif
+
+        @if($member->card_payment_proof)
+        <div class="mt-4 bg-blue-50 border border-blue-200 rounded-lg p-4">
+            <p class="text-sm font-semibold text-blue-800 mb-2">
+                Bukti Pembayaran Cetak Kartu
+                @if($member->card_payment_proof_uploaded_at)
+                <span class="font-normal text-blue-600">— diunggah {{ $member->card_payment_proof_uploaded_at->format('d F Y H:i') }}</span>
+                @endif
+            </p>
+            @if(Str::endsWith($member->card_payment_proof, '.pdf'))
+            <a href="{{ asset('storage/' . $member->card_payment_proof) }}" target="_blank"
+               class="inline-flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition text-sm">
+                Lihat Bukti Pembayaran (PDF)
+            </a>
+            @else
+            <a href="{{ asset('storage/' . $member->card_payment_proof) }}" target="_blank">
+                <img src="{{ asset('storage/' . $member->card_payment_proof) }}" alt="Bukti Pembayaran"
+                     class="max-w-xs rounded-lg border shadow-sm hover:shadow-md transition">
+            </a>
+            @endif
+        </div>
+        @endif
     </div>
 
     @if($member->status == 'pending')

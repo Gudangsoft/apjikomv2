@@ -270,6 +270,152 @@
         @endif
     </div>
 
+    <!-- Komunitas & Kontak (WA Grup / WA Tim APJIKOM) -->
+    @php
+        $memberWaGroups = member_wa_groups();
+        $memberWaContacts = member_wa_contacts();
+    @endphp
+    @if(count($memberWaGroups) || count($memberWaContacts))
+    <div class="bg-white rounded-xl card-shadow p-6">
+        <div class="flex items-center mb-5">
+            <div class="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center mr-4">
+                <svg class="w-6 h-6 text-green-600" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347M12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893A11.821 11.821 0 0012.05 0"/>
+                </svg>
+            </div>
+            <div>
+                <h3 class="text-xl font-bold text-gray-800">Komunitas & Bantuan</h3>
+                <p class="text-sm text-gray-500 mt-0.5">Gabung grup diskusi atau hubungi tim {{ $globalSiteName }} langsung via WhatsApp</p>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-1 {{ count($memberWaGroups) && count($memberWaContacts) ? 'md:grid-cols-2' : '' }} gap-6">
+            @if(count($memberWaGroups))
+            <div>
+                <h4 class="text-xs font-semibold text-gray-400 uppercase tracking-wide mb-3">Grup WhatsApp</h4>
+                <div class="space-y-2">
+                    @foreach($memberWaGroups as $group)
+                    <a href="{{ $group['url'] }}" target="_blank" rel="noopener noreferrer"
+                       class="flex items-center justify-between p-3 bg-green-50 hover:bg-green-100 border border-green-200 rounded-lg transition">
+                        <div class="flex items-center gap-3 min-w-0">
+                            <div class="w-9 h-9 rounded-full bg-green-500 flex items-center justify-center flex-shrink-0">
+                                <svg class="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 24 24">
+                                    <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347M12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893A11.821 11.821 0 0012.05 0"/>
+                                </svg>
+                            </div>
+                            <span class="font-medium text-gray-800 text-sm truncate">{{ $group['label'] ?: 'Gabung Grup WA' }}</span>
+                        </div>
+                        <svg class="w-4 h-4 text-gray-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path>
+                        </svg>
+                    </a>
+                    @endforeach
+                </div>
+            </div>
+            @endif
+
+            @if(count($memberWaContacts))
+            <div>
+                <h4 class="text-xs font-semibold text-gray-400 uppercase tracking-wide mb-3">Hubungi Tim APJIKOM</h4>
+                <div class="space-y-2">
+                    @foreach($memberWaContacts as $contact)
+                    <a href="https://wa.me/{{ wa_number($contact['number']) }}" target="_blank" rel="noopener noreferrer"
+                       class="flex items-center justify-between p-3 bg-teal-50 hover:bg-teal-100 border border-teal-100 rounded-lg transition">
+                        <div class="flex items-center gap-3 min-w-0">
+                            <div class="w-9 h-9 rounded-full bg-teal-500 flex items-center justify-center flex-shrink-0">
+                                <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"></path>
+                                </svg>
+                            </div>
+                            <div class="min-w-0">
+                                <p class="font-medium text-gray-800 text-sm truncate">{{ $contact['label'] ?: 'Tim APJIKOM' }}</p>
+                                <p class="text-xs text-gray-500">{{ $contact['number'] }}</p>
+                            </div>
+                        </div>
+                        <svg class="w-4 h-4 text-gray-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path>
+                        </svg>
+                    </a>
+                    @endforeach
+                </div>
+            </div>
+            @endif
+        </div>
+    </div>
+    @endif
+
+    <!-- Kartu Tanda Anggota: Request Cetak / Update -->
+    @php
+        $profileCompleteForCard = $member->photo && $member->address && strlen((string) $member->address) >= 10 && $member->phone;
+    @endphp
+    <div class="bg-white rounded-xl card-shadow p-6">
+        <div class="flex items-center justify-between mb-4">
+            <div>
+                <h3 class="text-xl font-bold text-gray-800">Kartu Tanda Anggota (KTA)</h3>
+                <p class="text-sm text-gray-500 mt-0.5">Ajukan permintaan cetak atau pembaruan kartu anggota Anda.</p>
+            </div>
+            <div class="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center flex-shrink-0">
+                <svg class="w-6 h-6 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"></path>
+                </svg>
+            </div>
+        </div>
+
+        @if(!$profileCompleteForCard)
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-4 bg-orange-50 border border-orange-200 rounded-lg">
+                <p class="text-sm text-orange-700">Lengkapi foto, alamat, dan nomor telepon di profil Anda terlebih dahulu.</p>
+                <a href="{{ route('member.profile') }}"
+                   class="flex-shrink-0 inline-flex justify-center px-4 py-2 bg-orange-600 hover:bg-orange-700 text-white text-sm font-medium rounded-lg transition">
+                    Lengkapi Profil
+                </a>
+            </div>
+        @elseif(!$member->member_card)
+            @if(!$member->card_requested)
+                <button type="button" onclick="openCardRequestModal('new')"
+                        class="w-full flex items-center justify-center gap-2 px-5 py-3 bg-green-600 hover:bg-green-700 text-white font-semibold rounded-lg transition">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"></path>
+                    </svg>
+                    Request Cetak Kartu Anggota
+                </button>
+            @else
+                <div class="flex items-center gap-3 p-4 bg-blue-50 border border-blue-200 rounded-lg">
+                    <svg class="w-6 h-6 text-blue-600 animate-spin flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
+                    </svg>
+                    <div>
+                        <p class="text-sm font-semibold text-blue-800">Permintaan sedang diproses</p>
+                        <p class="text-xs text-blue-600">Admin akan segera memproses kartu Anda.</p>
+                    </div>
+                </div>
+            @endif
+        @else
+            @if(!$member->card_update_requested)
+                <button type="button" onclick="openCardRequestModal('update')"
+                        class="w-full flex items-center justify-center gap-2 px-5 py-3 bg-orange-600 hover:bg-orange-700 text-white font-semibold rounded-lg transition">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
+                    </svg>
+                    Request Update Kartu Anggota
+                </button>
+            @else
+                <div class="flex items-center gap-3 p-4 bg-amber-50 border border-amber-200 rounded-lg">
+                    <svg class="w-6 h-6 text-amber-600 animate-spin flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
+                    </svg>
+                    <div>
+                        <p class="text-sm font-semibold text-amber-800">Permintaan update sedang diproses</p>
+                        <p class="text-xs text-amber-600">Admin akan segera memproses pembaruan kartu Anda.</p>
+                    </div>
+                </div>
+            @endif
+        @endif
+
+        @if($member->card_payment_proof)
+        <p class="text-xs text-gray-400 mt-3">✓ Bukti pembayaran terlampir pada permintaan terakhir Anda.</p>
+        @endif
+    </div>
+
     <!-- Member Card Preview -->
     @if($member->member_card)
     <div class="bg-white rounded-xl card-shadow p-6">
@@ -678,5 +824,85 @@
             cutout: '65%'
         }
     });
+</script>
+
+<!-- Modal: Request Cetak / Update Kartu Anggota -->
+<div id="cardRequestModal" class="fixed inset-0 z-50 hidden items-center justify-center p-4 bg-black/50">
+    <div class="bg-white rounded-2xl shadow-xl w-full max-w-lg max-h-[90vh] overflow-y-auto">
+        <div class="flex items-center justify-between px-6 py-4 border-b">
+            <h3 id="cardRequestModalTitle" class="text-lg font-bold text-gray-800">Request Cetak Kartu Anggota</h3>
+            <button type="button" onclick="closeCardRequestModal()" class="text-gray-400 hover:text-gray-600">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                </svg>
+            </button>
+        </div>
+        <form id="cardRequestForm" method="POST" enctype="multipart/form-data" class="p-6 space-y-5">
+            @csrf
+            <input type="hidden" name="from" value="dashboard">
+
+            @php
+                $cardBankAccounts = member_card_bank_accounts();
+                $cardFeeNote = setting('member_card_fee_note');
+            @endphp
+
+            @if(count($cardBankAccounts))
+            <div class="bg-blue-50 border border-blue-200 rounded-lg p-4">
+                <p class="text-sm font-semibold text-blue-800 mb-2">Rekening Pembayaran Biaya Cetak Kartu</p>
+                <div class="space-y-1.5">
+                    @foreach($cardBankAccounts as $bank)
+                    <p class="text-sm text-blue-900">
+                        <span class="font-semibold">{{ $bank['bank'] ?? '' }}</span>
+                        @if(!empty($bank['number'])) — {{ $bank['number'] }} @endif
+                        @if(!empty($bank['holder']))
+                            <span class="text-blue-700">a.n. {{ $bank['holder'] }}</span>
+                        @endif
+                    </p>
+                    @endforeach
+                </div>
+                @if($cardFeeNote)
+                <p class="text-xs text-blue-700 mt-2">{{ $cardFeeNote }}</p>
+                @endif
+            </div>
+            @endif
+
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-2">
+                    Lampiran Bukti Pembayaran <span class="text-gray-400 font-normal">(opsional)</span>
+                </label>
+                <input type="file" name="payment_proof" accept="image/*,.pdf"
+                       class="w-full text-sm text-gray-600 file:mr-3 file:py-2 file:px-4 file:rounded-lg file:border-0 file:bg-purple-50 file:text-purple-700 file:text-sm border border-gray-300 rounded-lg">
+                <p class="text-xs text-gray-400 mt-1">JPG, PNG, WebP, atau PDF — maksimal 5MB.</p>
+            </div>
+
+            <div class="flex justify-end gap-3 pt-2 border-t">
+                <button type="button" onclick="closeCardRequestModal()"
+                        class="px-5 py-2.5 border rounded-lg text-gray-700 hover:bg-gray-50">Batal</button>
+                <button type="submit"
+                        class="px-5 py-2.5 bg-purple-600 hover:bg-purple-700 text-white font-medium rounded-lg transition">
+                    Kirim Permintaan
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+function openCardRequestModal(mode) {
+    const modal = document.getElementById('cardRequestModal');
+    const form = document.getElementById('cardRequestForm');
+    const title = document.getElementById('cardRequestModalTitle');
+    form.action = mode === 'update'
+        ? "{{ route('member.request-card-update') }}"
+        : "{{ route('member.request-card') }}";
+    title.textContent = mode === 'update' ? 'Request Update Kartu Anggota' : 'Request Cetak Kartu Anggota';
+    modal.classList.remove('hidden');
+    modal.classList.add('flex');
+}
+function closeCardRequestModal() {
+    const modal = document.getElementById('cardRequestModal');
+    modal.classList.add('hidden');
+    modal.classList.remove('flex');
+}
 </script>
 @endsection

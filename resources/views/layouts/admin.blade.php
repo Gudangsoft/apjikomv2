@@ -242,7 +242,7 @@
             </div>
             
             <nav class="p-3 pb-8 space-y-0.5 overflow-y-auto" style="max-height: calc(100vh - 100px);" x-data="{
-                openMenu: '{{ request()->routeIs("admin.dashboard") ? "" : (request()->routeIs("admin.news.*") || request()->routeIs("admin.events.*") || request()->routeIs("admin.categories.*") || request()->routeIs("admin.about-page.*") || request()->routeIs("admin.organizational-structure.*") || request()->routeIs("admin.services.*") || request()->routeIs("admin.faqs.*") || request()->routeIs("admin.testimonials.*") || request()->routeIs("admin.galleries.*") ? "konten" : (request()->routeIs("admin.journals.*") ? "publikasi" : (request()->routeIs("admin.members.*") || request()->routeIs("admin.card-templates.*") || request()->routeIs("admin.certificate-templates.*") || request()->routeIs("admin.registrations.*") || request()->routeIs("admin.institutions.*") ? "keanggotaan" : (request()->routeIs("admin.sliders.*") || request()->routeIs("admin.pages.*") || request()->routeIs("admin.menus.*") || request()->routeIs("admin.partners.*") || request()->routeIs("admin.section-labels.*") || request()->routeIs("admin.theme.*") ? "tampilan" : (request()->routeIs("admin.users.*") || request()->routeIs("admin.assignments.*") || request()->routeIs("admin.password-reset-requests.*") ? "users" : (request()->routeIs("admin.settings.*") || request()->routeIs("admin.about-settings.*") || request()->routeIs("admin.footer-settings.*") || request()->routeIs("admin.social-media.*") || request()->routeIs("admin.email-settings.*") || request()->routeIs("admin.login-url.*") || request()->routeIs("admin.activity-logs.*") ? "pengaturan" : ""))))))  }}'
+                openMenu: '{{ request()->routeIs("admin.dashboard") ? "" : (request()->routeIs("admin.news.*") || request()->routeIs("admin.events.*") || request()->routeIs("admin.categories.*") || request()->routeIs("admin.about-page.*") || request()->routeIs("admin.organizational-structure.*") || request()->routeIs("admin.services.*") || request()->routeIs("admin.faqs.*") || request()->routeIs("admin.testimonials.*") || request()->routeIs("admin.galleries.*") ? "konten" : (request()->routeIs("admin.journals.*") ? "publikasi" : (request()->routeIs("admin.members.*") || request()->routeIs("admin.card-templates.*") || request()->routeIs("admin.certificate-templates.*") || request()->routeIs("admin.registrations.*") || request()->routeIs("admin.institutions.*") ? "keanggotaan" : (request()->routeIs("admin.sliders.*") || request()->routeIs("admin.pages.*") || request()->routeIs("admin.menus.*") || request()->routeIs("admin.partners.*") || request()->routeIs("admin.section-labels.*") || request()->routeIs("admin.theme.*") ? "tampilan" : (request()->routeIs("admin.users.*") || request()->routeIs("admin.assignments.*") || request()->routeIs("admin.password-reset-requests.*") ? "users" : (request()->routeIs("admin.settings.*") || request()->routeIs("admin.about-settings.*") || request()->routeIs("admin.footer-settings.*") || request()->routeIs("admin.social-media.*") || request()->routeIs("admin.email-settings.*") || request()->routeIs("admin.login-url.*") || request()->routeIs("admin.activity-logs.*") || request()->routeIs("admin.payment-settings.*") || request()->routeIs("admin.member-contact-settings.*") ? "pengaturan" : ""))))))  }}'
             }"">
                 {{-- Dashboard --}}
                 <a href="{{ route('admin.dashboard') }}" class="sb-hover flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm transition-all duration-150 {{ request()->routeIs('admin.dashboard') ? 'sb-active' : 'text-white/75' }}">
@@ -604,7 +604,25 @@
                             </div>
                             <span>Pengaturan Umum</span>
                         </a>
-                        
+
+                        <a href="{{ route('admin.payment-settings.index') }}" class="sb-hover flex items-center gap-2 px-3 py-2 rounded-lg text-sm transition-all duration-150 text-white/70 {{ request()->routeIs('admin.payment-settings.*') ? 'sb-active' : 'sb-hover hover:bg-transparent' }}">
+                            <div class="w-5 h-5 flex items-center justify-center flex-shrink-0 text-white/60">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"></path>
+                                </svg>
+                            </div>
+                            <span>Pembayaran & Keanggotaan</span>
+                        </a>
+
+                        <a href="{{ route('admin.member-contact-settings.index') }}" class="sb-hover flex items-center gap-2 px-3 py-2 rounded-lg text-sm transition-all duration-150 text-white/70 {{ request()->routeIs('admin.member-contact-settings.*') ? 'sb-active' : 'sb-hover hover:bg-transparent' }}">
+                            <div class="w-5 h-5 flex items-center justify-center flex-shrink-0 text-white/60">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path>
+                                </svg>
+                            </div>
+                            <span>Kontak Member & Rekening Kartu</span>
+                        </a>
+
                         <a href="{{ route('admin.about-settings.index') }}" class="sb-hover flex items-center gap-2 px-3 py-2 rounded-lg text-sm transition-all duration-150 text-white/70 {{ request()->routeIs('admin.about-settings.*') ? 'sb-active' : 'sb-hover hover:bg-transparent' }}">
                             <div class="w-5 h-5 flex items-center justify-center flex-shrink-0 text-white/60">
                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">

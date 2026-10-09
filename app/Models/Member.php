@@ -27,6 +27,8 @@ class Member extends Model
         'card_requested_at',
         'card_update_requested',
         'card_update_requested_at',
+        'card_payment_proof',
+        'card_payment_proof_uploaded_at',
         'show_in_directory',
         'expertise',
         'bio',
@@ -54,6 +56,7 @@ class Member extends Model
         'card_generated_at' => 'datetime',
         'card_requested_at' => 'datetime',
         'card_update_requested_at' => 'datetime',
+        'card_payment_proof_uploaded_at' => 'datetime',
         'verified_at' => 'datetime',
         'is_verified' => 'boolean',
     ];

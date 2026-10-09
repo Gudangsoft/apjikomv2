@@ -593,10 +593,10 @@ class MemberDashboardController extends Controller
     /**
      * Request member card generation
      */
-    public function requestCard()
+    public function requestCard(Request $request)
     {
         $member = Auth::user()->member;
-        
+
         if (!$member) {
             return redirect()->route('home')
                 ->with('error', 'Anda belum terdaftar sebagai member.');
@@ -620,17 +620,33 @@ class MemberDashboardController extends Controller
                 ->with('info', 'Permintaan kartu Anda sedang diproses oleh admin.');
         }
 
-        // Mark as requested
-        $member->update([
+        $request->validate([
+            'payment_proof' => 'nullable|file|mimes:jpg,jpeg,png,webp,pdf|max:5120',
+        ], [
+            'payment_proof.mimes' => 'Bukti pembayaran harus berupa JPG, PNG, WebP, atau PDF.',
+            'payment_proof.max' => 'Ukuran bukti pembayaran maksimal 5MB.',
+        ]);
+
+        $data = [
             'card_requested' => true,
             'card_requested_at' => now(),
-        ]);
+        ];
+
+        if ($request->hasFile('payment_proof')) {
+            $data['card_payment_proof'] = $request->file('payment_proof')->store('card-payment-proofs', 'public');
+            $data['card_payment_proof_uploaded_at'] = now();
+        }
+
+        $member->update($data);
 
         // Notify admins
         \App\Services\NotificationService::memberRequestedCard(Auth::user());
 
-        return redirect()->route('member.profile')
-            ->with('success', 'Permintaan kartu anggota berhasil dikirim! Admin akan segera memproses.');
+        $redirectTo = $request->input('from') === 'dashboard'
+            ? redirect()->route('member.dashboard')
+            : redirect()->route('member.profile');
+
+        return $redirectTo->with('success', 'Permintaan kartu anggota berhasil dikirim! Admin akan segera memproses.');
     }
 
     public function requestCardUpdate(Request $request)
@@ -656,11 +672,24 @@ class MemberDashboardController extends Controller
             return redirect()->back()->with('error', 'Mohon lengkapi data profil Anda (foto, alamat, dan telepon) sebelum request update kartu.');
         }
 
-        // Update status request
-        $member->update([
+        $request->validate([
+            'payment_proof' => 'nullable|file|mimes:jpg,jpeg,png,webp,pdf|max:5120',
+        ], [
+            'payment_proof.mimes' => 'Bukti pembayaran harus berupa JPG, PNG, WebP, atau PDF.',
+            'payment_proof.max' => 'Ukuran bukti pembayaran maksimal 5MB.',
+        ]);
+
+        $data = [
             'card_update_requested' => true,
             'card_update_requested_at' => now(),
-        ]);
+        ];
+
+        if ($request->hasFile('payment_proof')) {
+            $data['card_payment_proof'] = $request->file('payment_proof')->store('card-payment-proofs', 'public');
+            $data['card_payment_proof_uploaded_at'] = now();
+        }
+
+        $member->update($data);
 
         // Notify admins
         \App\Services\NotificationService::memberRequestedCardUpdate(Auth::user());
