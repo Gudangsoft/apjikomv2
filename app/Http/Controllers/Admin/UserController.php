@@ -133,10 +133,13 @@ class UserController extends Controller
         $defaultPassword = '@apjikom.oke';
         $user->password = Hash::make($defaultPassword);
         $user->save();
-        
+
         // Send email notification
         $this->sendPasswordResetEmail($user, $defaultPassword);
-        
+
+        // Send WhatsApp notification (best-effort — no-op if gateway/phone not set)
+        $waSent = \App\Services\WhatsAppService::sendPasswordReset($user, $defaultPassword);
+
         // Create in-app notification
         \App\Models\Notification::create([
             'user_id' => $user->id,
@@ -148,11 +151,13 @@ class UserController extends Controller
             'action_url' => route('member.profile'),
             'action_text' => 'Ubah Password',
         ]);
-        
+
         ActivityLogger::log('user', 'reset_password', $user, "Reset password user: {$user->name} ({$user->email})");
 
+        $notifNote = $waSent ? ' Notifikasi WhatsApp telah dikirim.' : '';
+
         return redirect()->route('admin.users.index')
-            ->with('success', "Password berhasil direset ke {$defaultPassword}. Email notifikasi telah dikirim.");
+            ->with('success', "Password berhasil direset ke {$defaultPassword}. Email notifikasi telah dikirim.{$notifNote}");
     }
     
     /**
