@@ -171,39 +171,53 @@ class NotificationService
     }
 
     /**
-     * Notify admins when member requests card
+     * Notify admins when member requests card.
+     * $hasPaymentProof lets the message tell admins straight away whether
+     * there's a payment proof to verify, instead of a generic "ada permintaan".
      */
-    public static function memberRequestedCard(User $member)
+    public static function memberRequestedCard(User $member, bool $hasPaymentProof = false)
     {
         $memberId = optional($member->member)->id;
+        $anchor = $hasPaymentProof ? '#card-payment-proof' : '#kartu-anggota';
+        $message = $hasPaymentProof
+            ? "{$member->name} mengajukan permintaan cetak Kartu Anggota (KTA) beserta bukti pembayaran. Mohon cek data member dan verifikasi bukti pembayarannya."
+            : "{$member->name} mengajukan permintaan cetak Kartu Anggota (KTA) (belum melampirkan bukti pembayaran). Mohon cek data member dan konfirmasi pembayarannya.";
+
         return self::notifyAdmins(
             'member_card_request',
             'Permintaan Kartu Anggota Baru',
-            $member->name . ' telah mengajukan permintaan untuk mendapatkan Kartu Anggota (KTA).',
+            $message,
             [
                 'icon' => 'id-card',
                 'color' => 'blue',
-                'action_url' => $memberId ? route('admin.members.show', $memberId) : route('admin.members.index'),
-                'action_text' => 'Lihat Detail Member'
+                'action_url' => $memberId ? route('admin.members.show', $memberId) . $anchor : route('admin.members.index'),
+                'action_text' => 'Cek Data & Bukti Bayar'
             ]
         );
     }
 
     /**
-     * Notify admins when member requests card update
+     * Notify admins when member requests card update.
+     * $hasPaymentProof lets the message tell admins straight away whether
+     * there's a payment proof to verify, instead of a generic "ada permintaan".
      */
-    public static function memberRequestedCardUpdate(User $member)
+    public static function memberRequestedCardUpdate(User $member, bool $hasPaymentProof = false)
     {
         $memberId = optional($member->member)->id;
+        $anchor = $hasPaymentProof ? '#card-payment-proof' : '#kartu-anggota';
+        $message = $hasPaymentProof
+            ? "{$member->name} mengajukan permintaan update Kartu Anggota (KTA) beserta bukti pembayaran. Mohon cek data member dan verifikasi bukti pembayarannya."
+            : "{$member->name} mengajukan permintaan update Kartu Anggota (KTA) (belum melampirkan bukti pembayaran). Mohon cek data member dan konfirmasi pembayarannya.";
+
         return self::notifyAdmins(
             'member_card_update_request',
             'Permintaan Update Kartu Anggota',
-            $member->name . ' telah mengajukan permintaan untuk memperbarui Kartu Anggota (KTA).',
+            $message,
             [
                 'icon' => 'refresh',
                 'color' => 'orange',
-                'action_url' => $memberId ? route('admin.members.show', $memberId) : route('admin.members.index'),
-                'action_text' => 'Lihat Detail Member'
+                'action_url' => $memberId ? route('admin.members.show', $memberId) . $anchor : route('admin.members.index'),
+                'action_text' => 'Cek Data & Bukti Bayar'
             ]
         );
     }

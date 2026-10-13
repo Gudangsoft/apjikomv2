@@ -660,7 +660,7 @@ class MemberDashboardController extends Controller
         $member->update($data);
 
         // Notify admins
-        \App\Services\NotificationService::memberRequestedCard(Auth::user());
+        \App\Services\NotificationService::memberRequestedCard(Auth::user(), !empty($data['card_payment_proof']));
 
         return redirect()->route($redirectRoute)
             ->with('success', 'Permintaan kartu anggota berhasil dikirim! Admin akan segera memproses.');
@@ -709,7 +709,7 @@ class MemberDashboardController extends Controller
         $member->update($data);
 
         // Notify admins
-        \App\Services\NotificationService::memberRequestedCardUpdate(Auth::user());
+        \App\Services\NotificationService::memberRequestedCardUpdate(Auth::user(), !empty($data['card_payment_proof']));
 
         return redirect()->back()->with('success', 'Permintaan update kartu anggota berhasil diajukan! Admin akan segera memproses.');
     }

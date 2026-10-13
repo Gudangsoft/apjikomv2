@@ -374,7 +374,7 @@
     </div>
 
     <!-- Member Card Section -->
-    <div class="mt-8 pt-6 border-t">
+    <div class="mt-8 pt-6 border-t" id="kartu-anggota">
         <div class="flex justify-between items-center mb-4">
             <h4 class="text-lg font-semibold text-gray-900">Kartu Anggota</h4>
             <div class="flex space-x-2">
@@ -451,7 +451,7 @@
         @endif
 
         @if($member->card_payment_proof)
-        <div class="mt-4 bg-blue-50 border border-blue-200 rounded-lg p-4">
+        <div class="mt-4 bg-blue-50 border border-blue-200 rounded-lg p-4" id="card-payment-proof">
             <p class="text-sm font-semibold text-blue-800 mb-2">
                 Bukti Pembayaran Cetak Kartu
                 @if($member->card_payment_proof_uploaded_at)
