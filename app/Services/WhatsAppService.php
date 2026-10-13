@@ -11,7 +11,8 @@ class WhatsAppService
 {
     /**
      * Send a plain WhatsApp message through the configured gateway
-     * (same Fonnte-compatible gateway used by the WA Blaster feature).
+     * (same WhaCenter gateway used by the WA Blaster feature —
+     * https://app.whacenter.com/api/send, authenticated by device_id).
      *
      * Silently returns false (and logs) when the gateway isn't configured or
      * the send fails — callers should treat this as best-effort, the same
@@ -24,24 +25,21 @@ class WhatsAppService
             return false;
         }
 
-        $token  = Setting::getValue('wa_gateway_token', '');
-        $url    = Setting::getValue('wa_gateway_url', 'https://api.fonnte.com/send');
+        $url    = Setting::getValue('wa_gateway_url', 'https://app.whacenter.com/api/send');
         $device = Setting::getValue('wa_gateway_device', '');
 
-        if (empty($token)) {
-            Log::info('WhatsAppService: gateway WA belum dikonfigurasi (Pengaturan > WA Blaster), pesan tidak dikirim.', [
+        // WhaCenter's device_id IS the credential — tidak ada token/Authorization header.
+        if (empty($device)) {
+            Log::info('WhatsAppService: Device ID WhaCenter belum diatur (Admin > WA Blaster), pesan tidak dikirim.', [
                 'phone' => $phone,
             ]);
             return false;
         }
 
         try {
-            $payload = ['target' => wa_number($phone), 'message' => $message];
-            if ($device) {
-                $payload['device'] = $device;
-            }
+            $payload = ['device_id' => $device, 'number' => wa_number($phone), 'message' => $message];
 
-            $response = Http::withHeaders(['Authorization' => $token])
+            $response = Http::asForm()
                 ->timeout(15)
                 ->post($url, $payload);
 

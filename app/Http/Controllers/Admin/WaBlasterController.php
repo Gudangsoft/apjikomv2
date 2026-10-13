@@ -29,7 +29,7 @@ class WaBlasterController extends Controller
         $totalBlast = WaBlastLog::where('status', 'completed')->count();
 
         $gatewayToken  = Setting::getValue('wa_gateway_token', '');
-        $gatewayUrl    = Setting::getValue('wa_gateway_url', 'https://api.fonnte.com/send');
+        $gatewayUrl    = Setting::getValue('wa_gateway_url', 'https://app.whacenter.com/api/send');
         $gatewayDevice = Setting::getValue('wa_gateway_device', '');
 
         return view('admin.wa-blaster.index', compact(
@@ -71,7 +71,7 @@ class WaBlasterController extends Controller
             'title'   => 'required|string|max:200',
             'message' => 'required|string|max:4000',
             'filter'  => 'required|in:all,active,inactive,individu,prodi',
-            'gateway' => 'required|in:fonnte,manual',
+            'gateway' => 'required|in:whacenter,manual',
         ]);
 
         $members = $this->buildRecipientQuery($validated['filter'])
@@ -198,11 +198,11 @@ class WaBlasterController extends Controller
 
     private function sendViaGateway($members, string $messageTemplate): array
     {
-        $token  = Setting::getValue('wa_gateway_token', '');
-        $url    = Setting::getValue('wa_gateway_url', 'https://api.fonnte.com/send');
+        $url    = Setting::getValue('wa_gateway_url', 'https://app.whacenter.com/api/send');
         $device = Setting::getValue('wa_gateway_device', '');
 
-        if (empty($token)) {
+        // WhaCenter's device_id IS the credential — tidak ada token/Authorization header.
+        if (empty($device)) {
             return [0, $members->count(), $members->pluck('phone')->toArray()];
         }
 
@@ -215,10 +215,9 @@ class WaBlasterController extends Controller
             $message = $this->replaceVariables($messageTemplate, $member);
 
             try {
-                $payload = ['target' => $phone, 'message' => $message];
-                if ($device) $payload['device'] = $device;
+                $payload = ['device_id' => $device, 'number' => $phone, 'message' => $message];
 
-                $response = Http::withHeaders(['Authorization' => $token])
+                $response = Http::asForm()
                     ->timeout(15)
                     ->post($url, $payload);
 

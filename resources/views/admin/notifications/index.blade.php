@@ -34,8 +34,6 @@
                                 </div>
                                 <p class="text-gray-700 text-sm mb-2">{{ $notification->message }}</p>
                                 <div class="flex items-center space-x-4 text-xs text-gray-500">
-                                    <span>User: {{ $notification->user->name }}</span>
-                                    <span>•</span>
                                     <span>{{ $notification->created_at->diffForHumans() }}</span>
                                     @if($notification->read_at)
                                         <span>•</span>

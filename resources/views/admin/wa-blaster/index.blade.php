@@ -125,10 +125,10 @@
                             <label class="block text-sm font-semibold text-gray-700 mb-1.5">Metode Pengiriman</label>
                             <div class="flex gap-3">
                                 <label class="flex-1 flex items-center gap-3 p-3 border-2 rounded-xl cursor-pointer transition-all hover:border-green-400 has-[:checked]:border-green-500 has-[:checked]:bg-green-50">
-                                    <input type="radio" name="gateway" value="fonnte" checked class="text-green-600">
+                                    <input type="radio" name="gateway" value="whacenter" checked class="text-green-600">
                                     <div>
-                                        <p class="text-sm font-semibold text-gray-800">API Gateway (Fonnte)</p>
-                                        <p class="text-xs text-gray-500">Kirim otomatis via Fonnte API</p>
+                                        <p class="text-sm font-semibold text-gray-800">API Gateway (WhaCenter)</p>
+                                        <p class="text-xs text-gray-500">Kirim otomatis via WhaCenter API</p>
                                     </div>
                                 </label>
                                 <label class="flex-1 flex items-center gap-3 p-3 border-2 rounded-xl cursor-pointer transition-all hover:border-blue-400 has-[:checked]:border-blue-500 has-[:checked]:bg-blue-50">
@@ -160,30 +160,31 @@
             <div class="bg-white rounded-xl shadow-sm">
                 <div class="p-4 border-b flex items-center justify-between">
                     <h3 class="font-semibold text-gray-900">Konfigurasi Gateway</h3>
-                    <span class="text-xs px-2 py-0.5 rounded-full {{ $gatewayToken ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-600' }}">
-                        {{ $gatewayToken ? 'Terkonfigurasi' : 'Belum diatur' }}
+                    <span class="text-xs px-2 py-0.5 rounded-full {{ $gatewayDevice ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-600' }}">
+                        {{ $gatewayDevice ? 'Terkonfigurasi' : 'Belum diatur' }}
                     </span>
                 </div>
                 <div class="p-4">
                     <form action="{{ route('admin.wa-blaster.save-settings') }}" method="POST" class="space-y-3">
                         @csrf
                         <div>
-                            <label class="block text-xs font-semibold text-gray-600 mb-1">API Token <span class="text-red-500">*</span></label>
-                            <input type="text" name="wa_gateway_token" value="{{ $gatewayToken }}"
-                                   placeholder="Token dari Fonnte / gateway lain"
+                            <label class="block text-xs font-semibold text-gray-600 mb-1">Device ID <span class="text-red-500">*</span></label>
+                            <input type="text" name="wa_gateway_device" value="{{ $gatewayDevice }}"
+                                   placeholder="Device ID dari dashboard WhaCenter"
                                    class="w-full text-xs border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-green-500 focus:outline-none font-mono">
+                            <p class="text-xs text-gray-400 mt-0.5">Ini kredensial utamanya — wajib diisi.</p>
                         </div>
                         <div>
                             <label class="block text-xs font-semibold text-gray-600 mb-1">Endpoint URL</label>
                             <input type="url" name="wa_gateway_url" value="{{ $gatewayUrl }}"
-                                   placeholder="https://api.fonnte.com/send"
+                                   placeholder="https://app.whacenter.com/api/send"
                                    class="w-full text-xs border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-green-500 focus:outline-none font-mono">
-                            <p class="text-xs text-gray-400 mt-0.5">Default: api.fonnte.com</p>
+                            <p class="text-xs text-gray-400 mt-0.5">Default: app.whacenter.com</p>
                         </div>
                         <div>
-                            <label class="block text-xs font-semibold text-gray-600 mb-1">Device ID <span class="text-gray-400">(opsional)</span></label>
-                            <input type="text" name="wa_gateway_device" value="{{ $gatewayDevice }}"
-                                   placeholder="ID device jika multi-device"
+                            <label class="block text-xs font-semibold text-gray-600 mb-1">API Token <span class="text-gray-400">(tidak dipakai WhaCenter)</span></label>
+                            <input type="text" name="wa_gateway_token" value="{{ $gatewayToken }}"
+                                   placeholder="Kosongkan — WhaCenter cukup pakai Device ID"
                                    class="w-full text-xs border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-green-500 focus:outline-none font-mono">
                         </div>
                         <button type="submit" class="w-full py-2 bg-gray-800 hover:bg-gray-700 text-white text-sm font-semibold rounded-lg transition-colors">
@@ -195,15 +196,15 @@
 
             {{-- Panduan --}}
             <div class="bg-amber-50 border border-amber-200 rounded-xl p-4">
-                <p class="text-xs font-bold text-amber-800 mb-2">📱 Cara Setup Fonnte</p>
+                <p class="text-xs font-bold text-amber-800 mb-2">📱 Cara Setup WhaCenter</p>
                 <ol class="text-xs text-amber-700 space-y-1 list-decimal list-inside">
-                    <li>Daftar di <strong>fonnte.com</strong></li>
-                    <li>Scan QR dengan WA yang akan dipakai</li>
-                    <li>Copy API Token dari dashboard</li>
-                    <li>Paste di kolom API Token di atas</li>
+                    <li>Login di <strong>app.whacenter.com</strong></li>
+                    <li>Hubungkan device (scan QR) dengan WA yang akan dipakai</li>
+                    <li>Copy <strong>Device ID</strong> dari dashboard</li>
+                    <li>Paste di kolom Device ID di atas</li>
                     <li>Simpan & langsung bisa digunakan</li>
                 </ol>
-                <p class="text-xs text-amber-600 mt-2 font-medium">⚠️ Pastikan WA gateway aktif & terkoneksi sebelum blast.</p>
+                <p class="text-xs text-amber-600 mt-2 font-medium">⚠️ Pastikan device WhaCenter aktif & terkoneksi sebelum blast.</p>
             </div>
 
             {{-- Tips Pesan --}}

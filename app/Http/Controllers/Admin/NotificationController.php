@@ -4,39 +4,40 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Notification;
-use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class NotificationController extends Controller
 {
+    // Tipe notifikasi yang relevan untuk admin (request/permintaan dari member).
+    private const REQUEST_TYPES = [
+        'member_card_request',
+        'member_card_update_request',
+        'password_reset_request',
+        'new_registration',
+    ];
+
     /**
      * Display a listing of notifications for admin.
      */
     public function index(Request $request)
     {
-        // Admin hanya melihat notifikasi untuk admin (bukan notifikasi member)
-        // Dan hanya notifikasi yang berkaitan dengan request/permintaan
-        $adminIds = User::where('role', 'admin')->pluck('id');
-        
-        $requestTypes = [
-            'member_card_request',
-            'member_card_update_request',
-            'password_reset_request',
-            'new_registration',
-        ];
-        
-        $notifications = Notification::with('user')
-            ->whereIn('user_id', $adminIds)
-            ->whereIn('type', $requestTypes)
+        // Tiap event (mis. 1 member request update KTA) dibuat satu baris Notification
+        // PER admin, supaya tiap admin punya status baca sendiri-sendiri. Jadi daftar ini
+        // HARUS di-scope ke admin yang sedang login saja — kalau di-pool ke semua admin
+        // ("whereIn user_id $adminIds"), satu event yang sama akan tampil berkali-kali
+        // (satu baris untuk tiap admin lain yang juga menerimanya).
+        $adminId = Auth::id();
+
+        $notifications = Notification::where('user_id', $adminId)
+            ->whereIn('type', self::REQUEST_TYPES)
             ->orderBy('created_at', 'desc')
             ->paginate(20);
 
         // If AJAX request, return JSON
         if ($request->ajax() || $request->has('ajax')) {
-            $recentNotifications = Notification::with('user')
-                ->whereIn('user_id', $adminIds)
-                ->whereIn('type', $requestTypes)
+            $recentNotifications = Notification::where('user_id', $adminId)
+                ->whereIn('type', self::REQUEST_TYPES)
                 ->orderBy('created_at', 'desc')
                 ->limit(10)
                 ->get()
@@ -51,7 +52,6 @@ class NotificationController extends Controller
                         'action_text' => $notification->action_text,
                         'read_at' => $notification->read_at,
                         'time_ago' => $notification->created_at->diffForHumans(),
-                        'user_name' => $notification->user->name ?? 'System',
                     ];
                 });
 
@@ -66,19 +66,8 @@ class NotificationController extends Controller
      */
     public function getUnreadCount()
     {
-        // Admin hanya melihat notifikasi untuk admin yang belum dibaca
-        // Dan hanya notifikasi yang berkaitan dengan request/permintaan
-        $adminIds = User::where('role', 'admin')->pluck('id');
-        
-        $requestTypes = [
-            'member_card_request',
-            'member_card_update_request',
-            'password_reset_request',
-            'new_registration',
-        ];
-        
-        $count = Notification::whereIn('user_id', $adminIds)
-            ->whereIn('type', $requestTypes)
+        $count = Notification::where('user_id', Auth::id())
+            ->whereIn('type', self::REQUEST_TYPES)
             ->whereNull('read_at')
             ->count();
 
@@ -90,7 +79,7 @@ class NotificationController extends Controller
      */
     public function markAsRead($id)
     {
-        $notification = Notification::findOrFail($id);
+        $notification = Notification::where('user_id', Auth::id())->findOrFail($id);
         $notification->update(['read_at' => now()]);
 
         return response()->json(['success' => true]);
@@ -101,8 +90,7 @@ class NotificationController extends Controller
      */
     public function markAllAsRead()
     {
-        $adminIds = User::where('role', 'admin')->pluck('id');
-        Notification::whereIn('user_id', $adminIds)
+        Notification::where('user_id', Auth::id())
             ->whereNull('read_at')
             ->update(['read_at' => now()]);
 
@@ -114,7 +102,7 @@ class NotificationController extends Controller
      */
     public function destroy($id)
     {
-        $notification = Notification::findOrFail($id);
+        $notification = Notification::where('user_id', Auth::id())->findOrFail($id);
         $notification->delete();
 
         return redirect()->back()->with('success', 'Notifikasi berhasil dihapus');
