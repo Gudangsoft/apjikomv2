@@ -389,19 +389,14 @@
                                 <span>Members</span>
                             </div>
                             @php
-                                $newMembersCount = \App\Models\Member::where(function($query) {
-                                    $query->whereNull('member_card')
-                                          ->where('card_requested', true);
-                                })->orWhere(function($query) {
-                                    $query->whereNull('member_card')
-                                          ->whereNotNull('photo')
-                                          ->whereNotNull('address')
-                                          ->whereNotNull('phone');
-                                })->count();
-                                
+                                // Disamakan dengan 3 kotak statistik yang tampil di halaman Keanggotaan
+                                // (Request Kartu, Update Kartu, Pendaftaran Pending) supaya angka badge
+                                // ini selalu bisa ditelusuri dari halaman itu sendiri.
+                                $cardRequestsCount = \App\Models\Member::where('card_requested', true)->count();
+                                $cardUpdateRequestsCount = \App\Models\Member::where('card_update_requested', true)->count();
                                 $pendingRegistrations = \App\Models\Registration::where('status', 'pending')->count();
-                                
-                                $totalNotifications = $newMembersCount + $pendingRegistrations;
+
+                                $totalNotifications = $cardRequestsCount + $cardUpdateRequestsCount + $pendingRegistrations;
                             @endphp
                             @if($totalNotifications > 0)
                                 <span class="px-2 py-0.5 text-xs font-bold bg-red-500 text-white rounded-full {{ $pendingRegistrations > 0 ? 'animate-pulse' : '' }}">{{ $totalNotifications }}</span>
