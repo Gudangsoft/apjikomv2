@@ -137,8 +137,8 @@ class UserController extends Controller
         // Send email notification
         $this->sendPasswordResetEmail($user, $defaultPassword);
 
-        // Send WhatsApp notification (best-effort — no-op if gateway/phone not set)
-        $waSent = \App\Services\WhatsAppService::sendPasswordReset($user, $defaultPassword);
+        // Send WhatsApp notification (best-effort — never fails the reset itself)
+        $waResult = \App\Services\WhatsAppService::sendPasswordReset($user, $defaultPassword);
 
         // Create in-app notification
         \App\Models\Notification::create([
@@ -154,7 +154,7 @@ class UserController extends Controller
 
         ActivityLogger::log('user', 'reset_password', $user, "Reset password user: {$user->name} ({$user->email})");
 
-        $notifNote = $waSent ? ' Notifikasi WhatsApp telah dikirim.' : '';
+        $notifNote = \App\Services\WhatsAppService::resultNote($waResult);
 
         return redirect()->route('admin.users.index')
             ->with('success', "Password berhasil direset ke {$defaultPassword}. Email notifikasi telah dikirim.{$notifNote}");

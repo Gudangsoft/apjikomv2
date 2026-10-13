@@ -67,10 +67,10 @@ class PasswordResetRequestController extends Controller
         // Send email notification
         $this->sendPasswordResetEmail($user, $defaultPassword);
 
-        // Send WhatsApp notification (best-effort — no-op if gateway/phone not set)
-        $waSent = \App\Services\WhatsAppService::sendPasswordReset($user, $defaultPassword);
+        // Send WhatsApp notification (best-effort — never fails the reset itself)
+        $waResult = \App\Services\WhatsAppService::sendPasswordReset($user, $defaultPassword);
 
-        $notifNote = $waSent ? ' Notifikasi WhatsApp telah dikirim.' : '';
+        $notifNote = \App\Services\WhatsAppService::resultNote($waResult);
 
         return back()->with('success', "Password {$user->name} berhasil direset ke {$defaultPassword}. Email notifikasi telah dikirim.{$notifNote}");
     }
