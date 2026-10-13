@@ -18,6 +18,121 @@
         </div>
     </div>
 
+    <!-- ═══ AKSI UTAMA — ditaruh paling atas supaya langsung kelihatan tanpa scroll ═══ -->
+    @php
+        $profileCompleteForCard = $member->photo && $member->address && strlen((string) $member->address) >= 10 && $member->phone;
+        $hasPendingCardRequest = (!$member->member_card && $member->card_requested)
+            || ($member->member_card && $member->card_update_requested);
+    @endphp
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 no-print">
+
+        <!-- ─── KARTU FILE (digital, gratis) ─── -->
+        <div class="bg-white rounded-xl card-shadow p-6">
+            <div class="flex items-center justify-between mb-4">
+                <div>
+                    <h3 class="text-lg font-bold text-gray-800">
+                        {{ $member->member_card ? 'Request Update Kartu Anggota' : 'Belum Punya Kartu Anggota?' }}
+                    </h3>
+                    <p class="text-sm text-gray-500 mt-0.5">Kartu digital (file) — gratis, tanpa biaya cetak.</p>
+                </div>
+                <div class="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center flex-shrink-0">
+                    <svg class="w-6 h-6 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"></path>
+                    </svg>
+                </div>
+            </div>
+
+            @if(!$profileCompleteForCard)
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-4 bg-orange-50 border border-orange-200 rounded-lg">
+                    <p class="text-sm text-orange-700">Lengkapi foto, alamat, dan nomor telepon di profil Anda terlebih dahulu.</p>
+                    <a href="{{ route('member.profile') }}"
+                       class="flex-shrink-0 inline-flex justify-center px-4 py-2 bg-orange-600 hover:bg-orange-700 text-white text-sm font-medium rounded-lg transition">
+                        Lengkapi Profil
+                    </a>
+                </div>
+            @elseif($hasPendingCardRequest)
+                <div class="flex items-center gap-3 p-4 bg-blue-50 border border-blue-200 rounded-lg">
+                    <svg class="w-6 h-6 text-blue-600 animate-spin flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
+                    </svg>
+                    <div>
+                        <p class="text-sm font-semibold text-blue-800">Permintaan sedang diproses</p>
+                        <p class="text-xs text-blue-600">Admin akan segera memproses kartu Anda.</p>
+                    </div>
+                </div>
+            @elseif($member->member_card)
+                <form method="POST" action="{{ route('member.request-card-update') }}">
+                    @csrf
+                    <button type="submit"
+                            class="w-full flex items-center justify-center gap-2 px-5 py-3 bg-purple-600 hover:bg-purple-700 text-white font-semibold rounded-lg transition">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
+                        </svg>
+                        Request Update Kartu Anggota
+                    </button>
+                </form>
+            @else
+                <form method="POST" action="{{ route('member.request-card') }}">
+                    @csrf
+                    <button type="submit"
+                            class="w-full flex items-center justify-center gap-2 px-5 py-3 bg-purple-600 hover:bg-purple-700 text-white font-semibold rounded-lg transition">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"></path>
+                        </svg>
+                        Request Kartu Anggota
+                    </button>
+                </form>
+            @endif
+        </div>
+
+        <!-- ─── KARTU FISIK (cetak, berbayar) — layanan terpisah dari kartu file ─── -->
+        <div class="bg-white rounded-xl card-shadow p-6">
+            <div class="flex items-center justify-between mb-4">
+                <div>
+                    <h3 class="text-lg font-bold text-gray-800">Request Cetak Kartu Fisik</h3>
+                    <p class="text-sm text-gray-500 mt-0.5">Kartu dicetak &amp; dikirim oleh admin — ada biaya cetak.</p>
+                </div>
+                <div class="w-12 h-12 bg-amber-100 rounded-lg flex items-center justify-center flex-shrink-0">
+                    <svg class="w-6 h-6 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"></path>
+                    </svg>
+                </div>
+            </div>
+
+            @if(!$profileCompleteForCard)
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-4 bg-orange-50 border border-orange-200 rounded-lg">
+                    <p class="text-sm text-orange-700">Lengkapi foto, alamat, dan nomor telepon di profil Anda terlebih dahulu.</p>
+                    <a href="{{ route('member.profile') }}"
+                       class="flex-shrink-0 inline-flex justify-center px-4 py-2 bg-orange-600 hover:bg-orange-700 text-white text-sm font-medium rounded-lg transition">
+                        Lengkapi Profil
+                    </a>
+                </div>
+            @elseif($member->physical_card_requested)
+                <div class="flex items-center gap-3 p-4 bg-blue-50 border border-blue-200 rounded-lg">
+                    <svg class="w-6 h-6 text-blue-600 animate-spin flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
+                    </svg>
+                    <div>
+                        <p class="text-sm font-semibold text-blue-800">Permintaan cetak fisik sedang diproses</p>
+                        <p class="text-xs text-blue-600">Admin akan segera memproses pembayaran &amp; pencetakan kartu Anda.</p>
+                    </div>
+                </div>
+            @else
+                <button type="button" onclick="openPhysicalCardModal()"
+                        class="w-full flex items-center justify-center gap-2 px-5 py-3 bg-amber-600 hover:bg-amber-700 text-white font-semibold rounded-lg transition">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"></path>
+                    </svg>
+                    Request Cetak Kartu Fisik
+                </button>
+            @endif
+
+            @if($member->card_payment_proof)
+            <p class="text-xs text-gray-400 mt-3">✓ Bukti pembayaran terlampir pada permintaan terakhir Anda.</p>
+            @endif
+        </div>
+    </div>
+
     @if($member->member_card)
     <!-- Card Display -->
     <div class="bg-white rounded-xl card-shadow p-8">
@@ -76,78 +191,12 @@
                     <li>• Untuk mencetak, gunakan kertas berkualitas baik ukuran A4</li>
                     <li>• Kartu dapat dilaminasi untuk keawetan lebih baik</li>
                     <li>• Tunjukkan kartu ini saat mengikuti kegiatan {{ site_name() }}</li>
-                    <li>• Jika kartu hilang, rusak, atau datanya perlu diperbarui, ajukan permintaan di bawah ini</li>
+                    <li>• Jika kartu hilang, rusak, atau datanya perlu diperbarui, ajukan permintaan di atas</li>
                 </ul>
             </div>
         </div>
     </div>
-    @endif
-
-    <!-- ═══ KARTU FILE (digital, gratis) ═══ -->
-    @php
-        $profileCompleteForCard = $member->photo && $member->address && strlen((string) $member->address) >= 10 && $member->phone;
-        $hasPendingCardRequest = (!$member->member_card && $member->card_requested)
-            || ($member->member_card && $member->card_update_requested);
-    @endphp
-    <div class="bg-white rounded-xl card-shadow p-6 no-print">
-        <div class="flex items-center justify-between mb-4">
-            <div>
-                <h3 class="text-xl font-bold text-gray-800">
-                    {{ $member->member_card ? 'Request Update Kartu Anggota' : 'Belum Punya Kartu Anggota?' }}
-                </h3>
-                <p class="text-sm text-gray-500 mt-0.5">Kartu digital (file) — gratis, tanpa biaya cetak.</p>
-            </div>
-            <div class="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center flex-shrink-0">
-                <svg class="w-6 h-6 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"></path>
-                </svg>
-            </div>
-        </div>
-
-        @if(!$profileCompleteForCard)
-            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-4 bg-orange-50 border border-orange-200 rounded-lg">
-                <p class="text-sm text-orange-700">Lengkapi foto, alamat, dan nomor telepon di profil Anda terlebih dahulu.</p>
-                <a href="{{ route('member.profile') }}"
-                   class="flex-shrink-0 inline-flex justify-center px-4 py-2 bg-orange-600 hover:bg-orange-700 text-white text-sm font-medium rounded-lg transition">
-                    Lengkapi Profil
-                </a>
-            </div>
-        @elseif($hasPendingCardRequest)
-            <div class="flex items-center gap-3 p-4 bg-blue-50 border border-blue-200 rounded-lg">
-                <svg class="w-6 h-6 text-blue-600 animate-spin flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
-                </svg>
-                <div>
-                    <p class="text-sm font-semibold text-blue-800">Permintaan sedang diproses</p>
-                    <p class="text-xs text-blue-600">Admin akan segera memproses kartu Anda.</p>
-                </div>
-            </div>
-        @elseif($member->member_card)
-            <form method="POST" action="{{ route('member.request-card-update') }}">
-                @csrf
-                <button type="submit"
-                        class="w-full flex items-center justify-center gap-2 px-5 py-3 bg-purple-600 hover:bg-purple-700 text-white font-semibold rounded-lg transition">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
-                    </svg>
-                    Request Update Kartu Anggota
-                </button>
-            </form>
-        @else
-            <form method="POST" action="{{ route('member.request-card') }}">
-                @csrf
-                <button type="submit"
-                        class="w-full flex items-center justify-center gap-2 px-5 py-3 bg-purple-600 hover:bg-purple-700 text-white font-semibold rounded-lg transition">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"></path>
-                    </svg>
-                    Request Kartu Anggota
-                </button>
-            </form>
-        @endif
-    </div>
-
-    @if(!$member->member_card)
+    @else
     <!-- No Card Yet: context card -->
     <div class="bg-white rounded-xl card-shadow p-12 text-center no-print">
         <svg class="w-24 h-24 text-gray-400 mx-auto mb-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -165,53 +214,6 @@
         </p>
     </div>
     @endif
-
-    <!-- ═══ KARTU FISIK (cetak, berbayar) — layanan terpisah dari kartu file di atas ═══ -->
-    <div class="bg-white rounded-xl card-shadow p-6 no-print">
-        <div class="flex items-center justify-between mb-4">
-            <div>
-                <h3 class="text-xl font-bold text-gray-800">Request Cetak Kartu Fisik</h3>
-                <p class="text-sm text-gray-500 mt-0.5">Kartu dicetak &amp; dikirim oleh admin — ada biaya cetak.</p>
-            </div>
-            <div class="w-12 h-12 bg-amber-100 rounded-lg flex items-center justify-center flex-shrink-0">
-                <svg class="w-6 h-6 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"></path>
-                </svg>
-            </div>
-        </div>
-
-        @if(!$profileCompleteForCard)
-            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-4 bg-orange-50 border border-orange-200 rounded-lg">
-                <p class="text-sm text-orange-700">Lengkapi foto, alamat, dan nomor telepon di profil Anda terlebih dahulu.</p>
-                <a href="{{ route('member.profile') }}"
-                   class="flex-shrink-0 inline-flex justify-center px-4 py-2 bg-orange-600 hover:bg-orange-700 text-white text-sm font-medium rounded-lg transition">
-                    Lengkapi Profil
-                </a>
-            </div>
-        @elseif($member->physical_card_requested)
-            <div class="flex items-center gap-3 p-4 bg-blue-50 border border-blue-200 rounded-lg">
-                <svg class="w-6 h-6 text-blue-600 animate-spin flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
-                </svg>
-                <div>
-                    <p class="text-sm font-semibold text-blue-800">Permintaan cetak fisik sedang diproses</p>
-                    <p class="text-xs text-blue-600">Admin akan segera memproses pembayaran &amp; pencetakan kartu Anda.</p>
-                </div>
-            </div>
-        @else
-            <button type="button" onclick="openPhysicalCardModal()"
-                    class="w-full flex items-center justify-center gap-2 px-5 py-3 bg-amber-600 hover:bg-amber-700 text-white font-semibold rounded-lg transition">
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"></path>
-                </svg>
-                Request Cetak Kartu Fisik
-            </button>
-        @endif
-
-        @if($member->card_payment_proof)
-        <p class="text-xs text-gray-400 mt-3">✓ Bukti pembayaran terlampir pada permintaan terakhir Anda.</p>
-        @endif
-    </div>
 </div>
 
 <!-- Modal: Request Cetak Kartu Fisik -->
