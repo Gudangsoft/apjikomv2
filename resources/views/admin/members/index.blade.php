@@ -98,6 +98,71 @@
     </div>
 </div>
 
+<!-- Notifikasi: Permintaan Cetak Kartu Fisik -->
+@if($cardPrintRequests->count())
+<div class="mb-6 bg-white rounded-xl shadow-sm border-2 border-blue-200 overflow-hidden">
+    <div class="px-5 py-4 bg-gradient-to-r from-blue-600 to-blue-700 flex items-center justify-between gap-3">
+        <div class="flex items-center gap-3 min-w-0">
+            <div class="w-10 h-10 bg-white/20 rounded-lg flex items-center justify-center flex-shrink-0">
+                <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"></path>
+                </svg>
+            </div>
+            <div class="min-w-0">
+                <h4 class="text-white font-bold text-sm">Permintaan Cetak Kartu Fisik</h4>
+                <p class="text-blue-100 text-xs mt-0.5">{{ $stats['card_requests'] }} member menunggu diproses — cek data &amp; bukti pembayaran</p>
+            </div>
+        </div>
+        <a href="{{ route('admin.members.index', ['tab' => 'members', 'card_requested' => 1]) }}"
+           class="flex-shrink-0 text-xs font-semibold text-white bg-white/20 hover:bg-white/30 px-3 py-1.5 rounded-lg transition">
+            Lihat Semua
+        </a>
+    </div>
+    <div class="divide-y divide-gray-100">
+        @foreach($cardPrintRequests as $m)
+        @php $anchor = $m->card_payment_proof ? '#card-payment-proof' : '#kartu-anggota'; @endphp
+        <a href="{{ route('admin.members.show', $m) }}{{ $anchor }}"
+           class="flex items-center justify-between gap-4 px-5 py-3 hover:bg-blue-50 transition">
+            <div class="flex items-center gap-3 min-w-0">
+                <div class="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center flex-shrink-0 overflow-hidden">
+                    @if($m->photo)
+                        <img src="{{ asset('storage/' . $m->photo) }}" alt="{{ $m->user->name ?? '' }}" class="w-full h-full object-cover">
+                    @else
+                        <span class="text-blue-600 font-bold text-sm">{{ mb_substr($m->user->name ?? '?', 0, 1) }}</span>
+                    @endif
+                </div>
+                <div class="min-w-0">
+                    <p class="text-sm font-semibold text-gray-800 truncate">{{ $m->user->name ?? '-' }}</p>
+                    <p class="text-xs text-gray-500 truncate">
+                        {{ $m->institution_name ?? '-' }}
+                        @if($m->card_requested_at) • {{ $m->card_requested_at->diffForHumans() }} @endif
+                    </p>
+                </div>
+            </div>
+            <div class="flex items-center gap-2 flex-shrink-0">
+                @if($m->card_payment_proof)
+                <span class="px-2 py-1 text-xs font-semibold bg-green-100 text-green-700 rounded-full whitespace-nowrap">✓ Ada bukti bayar</span>
+                @else
+                <span class="px-2 py-1 text-xs font-semibold bg-amber-100 text-amber-700 rounded-full whitespace-nowrap">⚠ Belum ada bukti</span>
+                @endif
+                <svg class="w-4 h-4 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                </svg>
+            </div>
+        </a>
+        @endforeach
+    </div>
+    @if($stats['card_requests'] > $cardPrintRequests->count())
+    <div class="px-5 py-2.5 bg-gray-50 text-center">
+        <a href="{{ route('admin.members.index', ['tab' => 'members', 'card_requested' => 1]) }}"
+           class="text-xs font-medium text-blue-600 hover:text-blue-800">
+            Lihat {{ $stats['card_requests'] - $cardPrintRequests->count() }} permintaan lainnya →
+        </a>
+    </div>
+    @endif
+</div>
+@endif
+
 @if(session('success'))
 <div class="mb-6 bg-green-50 border-l-4 border-green-500 p-4 rounded-lg">
     <div class="flex items-start">

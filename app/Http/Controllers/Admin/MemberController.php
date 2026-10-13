@@ -141,7 +141,16 @@ class MemberController extends Controller
             'rejected_registrations' => Registration::where('status', 'rejected')->count(),
         ];
 
-        return view('admin.members.index', compact('members', 'registrations', 'stats', 'tab'));
+        // Member yang request cetak kartu fisik — ditampilkan sebagai kartu notifikasi
+        // di atas tabel, supaya admin langsung lihat siapa saja & cek bukti bayarnya
+        // tanpa perlu filter manual dulu.
+        $cardPrintRequests = Member::with('user')
+            ->where('card_requested', true)
+            ->latest('card_requested_at')
+            ->limit(5)
+            ->get();
+
+        return view('admin.members.index', compact('members', 'registrations', 'stats', 'tab', 'cardPrintRequests'));
     }
 
     /**
