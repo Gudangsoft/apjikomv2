@@ -220,6 +220,7 @@
 @php
     $cardBankAccounts = member_card_bank_accounts();
     $cardFeeNote = setting('member_card_fee_note');
+    $cardPrice = setting('member_card_price');
     $cardWaContacts = member_wa_contacts();
     $cardWaNumber = $cardWaContacts[0]['number'] ?? setting('contact_whatsapp');
     $cardWaMessage = 'Halo Admin ' . $globalSiteName . ', saya ' . Auth::user()->name . ' sudah mengirim permintaan cetak kartu fisik beserta bukti pembayarannya. Mohon diproses, terima kasih.';
@@ -239,9 +240,17 @@
               enctype="multipart/form-data" class="p-6 space-y-5">
             @csrf
 
-            @if(count($cardBankAccounts))
+            @if($cardPrice || count($cardBankAccounts))
             <div class="bg-blue-50 border border-blue-200 rounded-lg p-4">
-                <p class="text-sm font-semibold text-blue-800 mb-3">Rekening Pembayaran Biaya Cetak Kartu</p>
+                @if($cardPrice)
+                <div class="flex items-center justify-between {{ count($cardBankAccounts) ? 'mb-3 pb-3 border-b border-blue-200' : '' }}">
+                    <span class="text-sm text-blue-700">Biaya Cetak Kartu Fisik</span>
+                    <span class="text-lg font-bold text-blue-900">Rp {{ number_format((float) $cardPrice, 0, ',', '.') }}</span>
+                </div>
+                @endif
+
+                @if(count($cardBankAccounts))
+                <p class="text-sm font-semibold text-blue-800 mb-3">Rekening Pembayaran</p>
                 <div class="space-y-3">
                     @foreach($cardBankAccounts as $bank)
                     @php $badge = bank_badge($bank['bank'] ?? ''); @endphp
@@ -259,6 +268,8 @@
                     </div>
                     @endforeach
                 </div>
+                @endif
+
                 @if($cardFeeNote)
                 <p class="text-xs text-blue-700 mt-3 pt-3 border-t border-blue-200">{{ $cardFeeNote }}</p>
                 @endif

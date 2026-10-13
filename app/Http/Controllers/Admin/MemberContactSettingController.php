@@ -14,12 +14,14 @@ class MemberContactSettingController extends Controller
         $waContacts = member_wa_contacts();
         $bankAccounts = member_card_bank_accounts();
         $cardFeeNote = setting('member_card_fee_note', '');
+        $cardPrice = setting('member_card_price', '');
 
         return view('admin.member-contact-settings.index', compact(
             'waGroups',
             'waContacts',
             'bankAccounts',
-            'cardFeeNote'
+            'cardFeeNote',
+            'cardPrice'
         ));
     }
 
@@ -40,6 +42,7 @@ class MemberContactSettingController extends Controller
             'bank_accounts.*.holder' => 'nullable|string|max:150',
 
             'card_fee_note' => 'nullable|string|max:1000',
+            'card_price' => 'nullable|numeric|min:0|max:99999999',
         ]);
 
         // Drop fully-empty rows, keep everything else — every row is optional.
@@ -62,6 +65,7 @@ class MemberContactSettingController extends Controller
         Setting::setValue('member_wa_contacts', json_encode($waContacts), 'json', 'member_contact');
         Setting::setValue('member_card_bank_accounts', json_encode($bankAccounts), 'json', 'member_contact');
         Setting::setValue('member_card_fee_note', $validated['card_fee_note'] ?? '', 'text', 'member_contact');
+        Setting::setValue('member_card_price', $validated['card_price'] ?? '', 'number', 'member_contact');
 
         return redirect()->route('admin.member-contact-settings.index')
             ->with('success', 'Pengaturan kontak member & rekening kartu berhasil diperbarui!');
