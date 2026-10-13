@@ -170,6 +170,44 @@ if (!function_exists('member_card_bank_accounts')) {
     }
 }
 
+if (!function_exists('bank_badge')) {
+    /**
+     * Resolve a small "logo" badge (short label + brand-ish gradient) for a
+     * bank name, so account lists look recognizable without needing actual
+     * logo image assets. Falls back to a generic gray badge for unknown banks.
+     *
+     * @param string|null $bankName
+     * @return array{label: string, color: string}
+     */
+    function bank_badge($bankName)
+    {
+        $name = strtolower(trim((string) $bankName));
+
+        $known = [
+            'bri'      => ['label' => 'BRI',     'color' => 'linear-gradient(135deg,#00529C,#0073CF)'],
+            'bni'      => ['label' => 'BNI',      'color' => 'linear-gradient(135deg,#F37021,#FF9248)'],
+            'mandiri'  => ['label' => 'Mandiri',  'color' => 'linear-gradient(135deg,#003D79,#0057A8)'],
+            'bca'      => ['label' => 'BCA',      'color' => 'linear-gradient(135deg,#0066B3,#2E8FD6)'],
+            'syariah indonesia' => ['label' => 'BSI', 'color' => 'linear-gradient(135deg,#00A651,#1FBF6B)'],
+            'bsi'      => ['label' => 'BSI',      'color' => 'linear-gradient(135deg,#00A651,#1FBF6B)'],
+            'cimb'     => ['label' => 'CIMB',     'color' => 'linear-gradient(135deg,#7A1E2B,#A3293A)'],
+            'danamon'  => ['label' => 'Danamon',  'color' => 'linear-gradient(135deg,#D71A21,#F0323B)'],
+            'permata'  => ['label' => 'Permata',  'color' => 'linear-gradient(135deg,#00A99D,#1FC6B9)'],
+            'btn'      => ['label' => 'BTN',      'color' => 'linear-gradient(135deg,#004A94,#0066C6)'],
+        ];
+
+        foreach ($known as $needle => $info) {
+            if ($name !== '' && str_contains($name, $needle)) {
+                return $info;
+            }
+        }
+
+        $label = $name !== '' ? strtoupper(substr(trim((string) $bankName), 0, 4)) : 'BANK';
+
+        return ['label' => $label, 'color' => 'linear-gradient(135deg,#4B5563,#6B7280)'];
+    }
+}
+
 if (!function_exists('format_stat_number')) {
     /**
      * Format large numbers for statistics display

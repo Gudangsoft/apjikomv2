@@ -615,6 +615,8 @@ class MemberDashboardController extends Controller
     {
         $member = Auth::user()->member;
 
+        $redirectRoute = $request->input('from') === 'dashboard' ? 'member.dashboard' : 'member.card';
+
         if (!$member) {
             return redirect()->route('home')
                 ->with('error', 'Anda belum terdaftar sebagai member.');
@@ -628,13 +630,13 @@ class MemberDashboardController extends Controller
 
         // Check if already has card
         if ($member->member_card) {
-            return redirect()->route('member.profile')
+            return redirect()->route($redirectRoute)
                 ->with('info', 'Anda sudah memiliki kartu anggota.');
         }
 
         // Check if already requested
         if ($member->card_requested) {
-            return redirect()->route('member.profile')
+            return redirect()->route($redirectRoute)
                 ->with('info', 'Permintaan kartu Anda sedang diproses oleh admin.');
         }
 
@@ -660,11 +662,8 @@ class MemberDashboardController extends Controller
         // Notify admins
         \App\Services\NotificationService::memberRequestedCard(Auth::user());
 
-        $redirectTo = $request->input('from') === 'dashboard'
-            ? redirect()->route('member.dashboard')
-            : redirect()->route('member.profile');
-
-        return $redirectTo->with('success', 'Permintaan kartu anggota berhasil dikirim! Admin akan segera memproses.');
+        return redirect()->route($redirectRoute)
+            ->with('success', 'Permintaan kartu anggota berhasil dikirim! Admin akan segera memproses.');
     }
 
     public function requestCardUpdate(Request $request)
