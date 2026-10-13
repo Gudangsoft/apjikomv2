@@ -75,7 +75,12 @@ class MemberController extends Controller
         if ($request->has('card_update_requested') && $request->card_update_requested !== '' && $tab === 'members') {
             $queryMembers->where('card_update_requested', $request->card_update_requested);
         }
-        
+
+        // Physical card (cetak fisik) request filter
+        if ($request->has('physical_card_requested') && $request->physical_card_requested !== '' && $tab === 'members') {
+            $queryMembers->where('physical_card_requested', $request->physical_card_requested);
+        }
+
         // Date range filter
         if ($request->filled('date_from') && $tab === 'members') {
             $queryMembers->whereDate('created_at', '>=', $request->date_from);
@@ -136,21 +141,23 @@ class MemberController extends Controller
             'total_registrations' => Registration::count(),
             'card_requests' => Member::where('card_requested', true)->count(),
             'card_update_requests' => Member::where('card_update_requested', true)->count(),
+            'physical_card_requests' => Member::where('physical_card_requested', true)->count(),
             'pending_registrations' => Registration::where('status', 'pending')->count(),
             'approved_registrations' => Registration::where('status', 'approved')->count(),
             'rejected_registrations' => Registration::where('status', 'rejected')->count(),
         ];
 
-        // Member yang request cetak kartu fisik — ditampilkan sebagai kartu notifikasi
-        // di atas tabel, supaya admin langsung lihat siapa saja & cek bukti bayarnya
-        // tanpa perlu filter manual dulu.
-        $cardPrintRequests = Member::with('user')
-            ->where('card_requested', true)
-            ->latest('card_requested_at')
+        // Member yang request CETAK KARTU FISIK (layanan berbayar, terpisah dari kartu
+        // file digital di atas) — ditampilkan sebagai kartu notifikasi di atas tabel,
+        // supaya admin langsung lihat siapa saja & cek bukti bayarnya tanpa perlu
+        // filter manual dulu.
+        $physicalCardRequests = Member::with('user')
+            ->where('physical_card_requested', true)
+            ->latest('physical_card_requested_at')
             ->limit(5)
             ->get();
 
-        return view('admin.members.index', compact('members', 'registrations', 'stats', 'tab', 'cardPrintRequests'));
+        return view('admin.members.index', compact('members', 'registrations', 'stats', 'tab', 'physicalCardRequests'));
     }
 
     /**

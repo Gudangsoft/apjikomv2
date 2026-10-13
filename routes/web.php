@@ -119,6 +119,7 @@ Route::prefix('member')->name('member.')->middleware(['auth', 'member'])->group(
     Route::delete('/profile/delete-photo', [MemberDashboardController::class, 'deletePhoto'])->name('profile.delete-photo');
     Route::post('/request-card', [MemberDashboardController::class, 'requestCard'])->name('request-card');
     Route::post('/request-card-update', [MemberDashboardController::class, 'requestCardUpdate'])->name('request-card-update');
+    Route::post('/request-physical-card', [MemberDashboardController::class, 'requestPhysicalCard'])->name('request-physical-card');
     
     // Password Reset Request
     Route::post('/password-reset-request', [MemberDashboardController::class, 'requestPasswordReset'])

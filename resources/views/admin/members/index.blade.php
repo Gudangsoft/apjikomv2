@@ -98,8 +98,8 @@
     </div>
 </div>
 
-<!-- Notifikasi: Permintaan Cetak Kartu Fisik -->
-@if($cardPrintRequests->count())
+<!-- Notifikasi: Permintaan Cetak Kartu FISIK (layanan berbayar, terpisah dari kartu file) -->
+@if($physicalCardRequests->count())
 <div class="mb-6 bg-white rounded-xl shadow-sm border-2 border-blue-200 overflow-hidden">
     <div class="px-5 py-4 bg-gradient-to-r from-blue-600 to-blue-700 flex items-center justify-between gap-3">
         <div class="flex items-center gap-3 min-w-0">
@@ -110,16 +110,16 @@
             </div>
             <div class="min-w-0">
                 <h4 class="text-white font-bold text-sm">Permintaan Cetak Kartu Fisik</h4>
-                <p class="text-blue-100 text-xs mt-0.5">{{ $stats['card_requests'] }} member menunggu diproses — cek data &amp; bukti pembayaran</p>
+                <p class="text-blue-100 text-xs mt-0.5">{{ $stats['physical_card_requests'] }} member menunggu diproses — cek data &amp; bukti pembayaran</p>
             </div>
         </div>
-        <a href="{{ route('admin.members.index', ['tab' => 'members', 'card_requested' => 1]) }}"
+        <a href="{{ route('admin.members.index', ['tab' => 'members', 'physical_card_requested' => 1]) }}"
            class="flex-shrink-0 text-xs font-semibold text-white bg-white/20 hover:bg-white/30 px-3 py-1.5 rounded-lg transition">
             Lihat Semua
         </a>
     </div>
     <div class="divide-y divide-gray-100">
-        @foreach($cardPrintRequests as $m)
+        @foreach($physicalCardRequests as $m)
         @php $anchor = $m->card_payment_proof ? '#card-payment-proof' : '#kartu-anggota'; @endphp
         <a href="{{ route('admin.members.show', $m) }}{{ $anchor }}"
            class="flex items-center justify-between gap-4 px-5 py-3 hover:bg-blue-50 transition">
@@ -135,7 +135,7 @@
                     <p class="text-sm font-semibold text-gray-800 truncate">{{ $m->user->name ?? '-' }}</p>
                     <p class="text-xs text-gray-500 truncate">
                         {{ $m->institution_name ?? '-' }}
-                        @if($m->card_requested_at) • {{ $m->card_requested_at->diffForHumans() }} @endif
+                        @if($m->physical_card_requested_at) • {{ $m->physical_card_requested_at->diffForHumans() }} @endif
                     </p>
                 </div>
             </div>
@@ -152,11 +152,11 @@
         </a>
         @endforeach
     </div>
-    @if($stats['card_requests'] > $cardPrintRequests->count())
+    @if($stats['physical_card_requests'] > $physicalCardRequests->count())
     <div class="px-5 py-2.5 bg-gray-50 text-center">
-        <a href="{{ route('admin.members.index', ['tab' => 'members', 'card_requested' => 1]) }}"
+        <a href="{{ route('admin.members.index', ['tab' => 'members', 'physical_card_requested' => 1]) }}"
            class="text-xs font-medium text-blue-600 hover:text-blue-800">
-            Lihat {{ $stats['card_requests'] - $cardPrintRequests->count() }} permintaan lainnya →
+            Lihat {{ $stats['physical_card_requests'] - $physicalCardRequests->count() }} permintaan lainnya →
         </a>
     </div>
     @endif

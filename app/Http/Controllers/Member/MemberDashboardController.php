@@ -640,27 +640,15 @@ class MemberDashboardController extends Controller
                 ->with('info', 'Permintaan kartu Anda sedang diproses oleh admin.');
         }
 
-        $request->validate([
-            'payment_proof' => 'nullable|file|mimes:jpg,jpeg,png,webp,pdf|max:5120',
-        ], [
-            'payment_proof.mimes' => 'Bukti pembayaran harus berupa JPG, PNG, WebP, atau PDF.',
-            'payment_proof.max' => 'Ukuran bukti pembayaran maksimal 5MB.',
-        ]);
-
-        $data = [
+        // Kartu file (digital) tidak dikenakan biaya — tidak ada upload bukti bayar di sini.
+        // Biaya cetak hanya berlaku untuk permintaan KARTU FISIK (requestPhysicalCard di bawah).
+        $member->update([
             'card_requested' => true,
             'card_requested_at' => now(),
-        ];
-
-        if ($request->hasFile('payment_proof')) {
-            $data['card_payment_proof'] = $request->file('payment_proof')->store('card-payment-proofs', 'public');
-            $data['card_payment_proof_uploaded_at'] = now();
-        }
-
-        $member->update($data);
+        ]);
 
         // Notify admins
-        \App\Services\NotificationService::memberRequestedCard(Auth::user(), !empty($data['card_payment_proof']));
+        \App\Services\NotificationService::memberRequestedCard(Auth::user());
 
         return redirect()->route($redirectRoute)
             ->with('success', 'Permintaan kartu anggota berhasil dikirim! Admin akan segera memproses.');
@@ -689,8 +677,8 @@ class MemberDashboardController extends Controller
             return redirect()->back()->with('error', 'Mohon lengkapi data profil Anda (foto, alamat, dan telepon) sebelum request update kartu.');
         }
 
-        // Update kartu tidak dikenakan biaya cetak — tidak ada upload bukti bayar di sini.
-        // Biaya cetak hanya berlaku untuk permintaan kartu BARU (requestCard di atas).
+        // Update kartu file tidak dikenakan biaya — tidak ada upload bukti bayar di sini.
+        // Biaya cetak hanya berlaku untuk permintaan KARTU FISIK (requestPhysicalCard di bawah).
         $member->update([
             'card_update_requested' => true,
             'card_update_requested_at' => now(),
@@ -701,7 +689,60 @@ class MemberDashboardController extends Controller
 
         return redirect()->back()->with('success', 'Permintaan update kartu anggota berhasil diajukan! Admin akan segera memproses.');
     }
-    
+
+    /**
+     * Request a PHYSICAL (printed) member card — a separate, paid service
+     * from the digital kartu file above (requestCard / requestCardUpdate).
+     * Independent of member_card/card_requested state; gated only by profile
+     * completeness and not already having a pending physical request.
+     */
+    public function requestPhysicalCard(Request $request)
+    {
+        $member = Auth::user()->member;
+
+        if (!$member) {
+            return redirect()->route('home')
+                ->with('error', 'Anda belum terdaftar sebagai member.');
+        }
+
+        // Check if profile is complete
+        if (!$member->photo || !$member->address || !$member->phone) {
+            return redirect()->route('member.profile')
+                ->with('error', 'Profil harus dilengkapi terlebih dahulu sebelum request cetak kartu fisik!');
+        }
+
+        // Check if already requested
+        if ($member->physical_card_requested) {
+            return redirect()->route('member.card')
+                ->with('info', 'Permintaan cetak kartu fisik Anda sedang diproses oleh admin.');
+        }
+
+        $request->validate([
+            'payment_proof' => 'nullable|file|mimes:jpg,jpeg,png,webp,pdf|max:5120',
+        ], [
+            'payment_proof.mimes' => 'Bukti pembayaran harus berupa JPG, PNG, WebP, atau PDF.',
+            'payment_proof.max' => 'Ukuran bukti pembayaran maksimal 5MB.',
+        ]);
+
+        $data = [
+            'physical_card_requested' => true,
+            'physical_card_requested_at' => now(),
+        ];
+
+        if ($request->hasFile('payment_proof')) {
+            $data['card_payment_proof'] = $request->file('payment_proof')->store('card-payment-proofs', 'public');
+            $data['card_payment_proof_uploaded_at'] = now();
+        }
+
+        $member->update($data);
+
+        // Notify admins
+        \App\Services\NotificationService::memberRequestedPhysicalCard(Auth::user(), !empty($data['card_payment_proof']));
+
+        return redirect()->route('member.card')
+            ->with('success', 'Permintaan cetak kartu fisik berhasil dikirim! Admin akan segera memproses.');
+    }
+
     /**
      * Request password reset from admin
      */

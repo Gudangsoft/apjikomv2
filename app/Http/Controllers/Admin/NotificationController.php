@@ -13,6 +13,7 @@ class NotificationController extends Controller
     private const REQUEST_TYPES = [
         'member_card_request',
         'member_card_update_request',
+        'physical_card_request',
         'password_reset_request',
         'new_registration',
     ];
