@@ -12,7 +12,7 @@
     </div>
 
     <!-- Quick Stats Cards -->
-    <div class="grid grid-cols-1 md:grid-cols-5 gap-4 mt-6">
+    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 mt-6">
         <!-- Total Registrations -->
         <div class="bg-gradient-to-br from-indigo-50 to-indigo-100 border-2 border-indigo-200 rounded-xl p-4 shadow-sm hover:shadow-md transition cursor-pointer" onclick="switchTab('registrations')">
             <div class="flex items-center justify-between">
@@ -91,6 +91,22 @@
                 <div class="bg-green-200 p-3 rounded-lg">
                     <svg class="w-8 h-8 text-green-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
+                    </svg>
+                </div>
+            </div>
+        </div>
+
+        <!-- Physical Card (Cetak Fisik) Requests -->
+        <div class="bg-gradient-to-br from-amber-50 to-amber-100 border-2 border-amber-200 rounded-xl p-4 shadow-sm hover:shadow-md transition cursor-pointer" onclick="window.location.href='{{ route('admin.members.index', ['tab' => 'members', 'physical_card_requested' => 1]) }}'">
+            <div class="flex items-center justify-between">
+                <div>
+                    <p class="text-xs font-semibold text-amber-700 uppercase tracking-wide">Cetak Fisik</p>
+                    <p class="text-3xl font-bold text-amber-900 mt-1">{{ $stats['physical_card_requests'] }}</p>
+                    <p class="text-xs text-amber-600 mt-1">Permintaan cetak</p>
+                </div>
+                <div class="bg-amber-200 p-3 rounded-lg">
+                    <svg class="w-8 h-8 text-amber-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"></path>
                     </svg>
                 </div>
             </div>
