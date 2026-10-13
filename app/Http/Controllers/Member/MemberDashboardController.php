@@ -734,10 +734,23 @@ class MemberDashboardController extends Controller
             $data['card_payment_proof_uploaded_at'] = now();
         }
 
-        $member->update($data);
+        try {
+            $member->update($data);
 
-        // Notify admins
-        \App\Services\NotificationService::memberRequestedPhysicalCard(Auth::user(), !empty($data['card_payment_proof']));
+            // Notify admins
+            \App\Services\NotificationService::memberRequestedPhysicalCard(Auth::user(), !empty($data['card_payment_proof']));
+        } catch (\Throwable $e) {
+            // Paling umum: kolom physical_card_requested belum ada di DB
+            // (migration belum dijalankan di server ini). Jangan tampilkan 500
+            // mentah ke member — kasih pesan jelas & log detailnya untuk admin.
+            \Log::error('requestPhysicalCard gagal: ' . $e->getMessage(), [
+                'member_id' => $member->id,
+                'trace' => $e->getTraceAsString(),
+            ]);
+
+            return redirect()->route('member.card')
+                ->with('error', 'Permintaan gagal diproses karena ada masalah teknis di server. Silakan hubungi admin — tim kami sudah diberi tahu.');
+        }
 
         return redirect()->route('member.card')
             ->with('success', 'Permintaan cetak kartu fisik berhasil dikirim! Admin akan segera memproses.');
