@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 
 return new class extends Migration
@@ -34,6 +35,14 @@ return new class extends Migration
                 'updated_at' => now(),
             ]
         );
+
+        // Setting::getValue() caches per-key for 1 hour. Writing straight to the
+        // table (as above) doesn't go through Setting::setValue(), so if this key
+        // was ever read as "missing" before this migration ran, that stale empty
+        // result would keep being served until the cache naturally expires.
+        // Forget it explicitly so the freshly-seeded value is picked up right away.
+        Cache::forget('setting_member_card_bank_accounts');
+        Cache::forget('settings_all');
     }
 
     /**
