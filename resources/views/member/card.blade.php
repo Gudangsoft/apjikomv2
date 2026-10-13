@@ -122,7 +122,21 @@
                     <p class="text-xs text-blue-600">Admin akan segera memproses kartu Anda.</p>
                 </div>
             </div>
+        @elseif($member->member_card)
+            {{-- Update kartu: tidak ada biaya cetak, jadi request langsung tanpa modal pembayaran --}}
+            <form method="POST" action="{{ route('member.request-card-update') }}">
+                @csrf
+                <button type="submit"
+                        class="w-full flex items-center justify-center gap-2 px-5 py-3 bg-green-600 hover:bg-green-700 text-white font-semibold rounded-lg transition">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
+                    </svg>
+                    Request Update Kartu Anggota
+                </button>
+                <p class="text-xs text-gray-400 mt-2 text-center">Update data kartu tidak dikenakan biaya cetak.</p>
+            </form>
         @else
+            {{-- Kartu baru: ada biaya cetak, buka modal untuk info rekening + bukti bayar --}}
             <button type="button" onclick="openCardRequestModal()"
                     class="w-full flex items-center justify-center gap-2 px-5 py-3 bg-green-600 hover:bg-green-700 text-white font-semibold rounded-lg transition">
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -176,7 +190,7 @@
             </button>
         </div>
         <form id="cardRequestForm" method="POST"
-              action="{{ $member->member_card ? route('member.request-card-update') : route('member.request-card') }}"
+              action="{{ route('member.request-card') }}"
               enctype="multipart/form-data" class="p-6 space-y-5">
             @csrf
             <input type="hidden" name="from" value="card">

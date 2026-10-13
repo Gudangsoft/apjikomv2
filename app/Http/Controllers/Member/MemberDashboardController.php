@@ -689,27 +689,15 @@ class MemberDashboardController extends Controller
             return redirect()->back()->with('error', 'Mohon lengkapi data profil Anda (foto, alamat, dan telepon) sebelum request update kartu.');
         }
 
-        $request->validate([
-            'payment_proof' => 'nullable|file|mimes:jpg,jpeg,png,webp,pdf|max:5120',
-        ], [
-            'payment_proof.mimes' => 'Bukti pembayaran harus berupa JPG, PNG, WebP, atau PDF.',
-            'payment_proof.max' => 'Ukuran bukti pembayaran maksimal 5MB.',
-        ]);
-
-        $data = [
+        // Update kartu tidak dikenakan biaya cetak — tidak ada upload bukti bayar di sini.
+        // Biaya cetak hanya berlaku untuk permintaan kartu BARU (requestCard di atas).
+        $member->update([
             'card_update_requested' => true,
             'card_update_requested_at' => now(),
-        ];
-
-        if ($request->hasFile('payment_proof')) {
-            $data['card_payment_proof'] = $request->file('payment_proof')->store('card-payment-proofs', 'public');
-            $data['card_payment_proof_uploaded_at'] = now();
-        }
-
-        $member->update($data);
+        ]);
 
         // Notify admins
-        \App\Services\NotificationService::memberRequestedCardUpdate(Auth::user(), !empty($data['card_payment_proof']));
+        \App\Services\NotificationService::memberRequestedCardUpdate(Auth::user());
 
         return redirect()->back()->with('success', 'Permintaan update kartu anggota berhasil diajukan! Admin akan segera memproses.');
     }
