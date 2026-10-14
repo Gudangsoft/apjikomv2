@@ -43,15 +43,15 @@
 
                 <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-{{ min($executives->count(), 3) }} gap-5">
                     @foreach($executives as $person)
-                    <div class="group bg-white rounded-2xl overflow-hidden shadow-sm border border-gray-100 hover:shadow-md hover:-translate-y-0.5 transition-all duration-300 flex flex-col">
-                        {{-- photo area --}}
-                        <div class="relative bg-gradient-to-br from-amber-500 to-orange-600 pt-8 pb-4 flex flex-col items-center">
-                            <div class="absolute inset-0 opacity-10" style="background-image:radial-gradient(circle,#fff 1px,transparent 1px);background-size:16px 16px;"></div>
+                    <div class="group bg-white rounded-2xl overflow-hidden shadow-sm border border-gray-100 hover:shadow-lg hover:-translate-y-1 transition-all duration-300 flex flex-col">
+                        {{-- photo area: foto besar, crop dari atas supaya wajah tidak terpotong --}}
+                        <div class="relative aspect-[4/5] overflow-hidden bg-gradient-to-br from-amber-500 to-orange-600">
+                            <div class="absolute inset-0 opacity-10 pointer-events-none" style="background-image:radial-gradient(circle,#fff 1px,transparent 1px);background-size:16px 16px;"></div>
                             @if($person->photo)
                                 <img src="{{ asset('storage/' . $person->photo) }}" alt="{{ $person->name }}"
-                                     class="relative z-10 w-24 h-24 rounded-full object-cover border-4 border-white shadow-lg">
+                                     class="absolute inset-0 w-full h-full object-cover object-top transition-transform duration-500 group-hover:scale-105">
                             @else
-                                <div class="relative z-10 w-24 h-24 rounded-full border-4 border-white shadow-lg bg-white/20 flex items-center justify-center text-white text-3xl font-bold">
+                                <div class="absolute inset-0 flex items-center justify-center text-white text-6xl font-bold">
                                     {{ mb_substr($person->name, 0, 1) }}
                                 </div>
                             @endif
@@ -89,15 +89,15 @@
                         $isFirst = $i === 0;
                         $featured = $person->position && (stripos($person->position, 'Ketua Umum') !== false);
                     @endphp
-                    <div class="group bg-white rounded-2xl overflow-hidden shadow-sm border border-gray-100 hover:shadow-md hover:-translate-y-0.5 transition-all duration-300 flex flex-col">
-                        {{-- photo area --}}
-                        <div class="relative bg-gradient-to-br from-purple-600 to-indigo-700 pt-8 pb-4 flex flex-col items-center">
-                            <div class="absolute inset-0 opacity-10" style="background-image:radial-gradient(circle,#fff 1px,transparent 1px);background-size:16px 16px;"></div>
+                    <div class="group bg-white rounded-2xl overflow-hidden shadow-sm border border-gray-100 hover:shadow-lg hover:-translate-y-1 transition-all duration-300 flex flex-col">
+                        {{-- photo area: foto besar, crop dari atas supaya wajah tidak terpotong --}}
+                        <div class="relative aspect-[4/5] overflow-hidden bg-gradient-to-br from-purple-600 to-indigo-700">
+                            <div class="absolute inset-0 opacity-10 pointer-events-none" style="background-image:radial-gradient(circle,#fff 1px,transparent 1px);background-size:16px 16px;"></div>
                             @if($person->photo)
                                 <img src="{{ asset('storage/' . $person->photo) }}" alt="{{ $person->name }}"
-                                     class="relative z-10 w-24 h-24 rounded-full object-cover border-4 border-white shadow-lg">
+                                     class="absolute inset-0 w-full h-full object-cover object-top transition-transform duration-500 group-hover:scale-105">
                             @else
-                                <div class="relative z-10 w-24 h-24 rounded-full border-4 border-white shadow-lg bg-white/20 flex items-center justify-center text-white text-3xl font-bold">
+                                <div class="absolute inset-0 flex items-center justify-center text-white text-6xl font-bold">
                                     {{ mb_substr($person->name, 0, 1) }}
                                 </div>
                             @endif
