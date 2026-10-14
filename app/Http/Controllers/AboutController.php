@@ -9,6 +9,11 @@ class AboutController extends Controller
 {
     public function index()
     {
+        return view('about.index');
+    }
+
+    public function structure()
+    {
         $executives = OrganizationalStructure::active()
             ->executive()
             ->ordered()
@@ -24,6 +29,6 @@ class AboutController extends Controller
             ->ordered()
             ->get();
 
-        return view('about.index', compact('executives', 'leadership', 'divisions'));
+        return view('about.structure', compact('executives', 'leadership', 'divisions'));
     }
 }

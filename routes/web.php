@@ -46,6 +46,7 @@ Route::get('/', [HomeController::class, 'index'])->name('home');
 
 // About & Services Routes
 Route::get('/tentang-kami', [AboutController::class, 'index'])->name('about.index');
+Route::get('/struktur-organisasi', [AboutController::class, 'structure'])->name('about.structure');
 Route::get('/layanan', [ServiceController::class, 'index'])->name('services.index');
 
 // News Routes

@@ -239,7 +239,22 @@
                 <div class="hidden md:flex items-center space-x-6">
                     <!-- Static Menu Items -->
                     <a href="{{ route('home') }}" class="text-gray-700 dark:text-gray-300 hover:text-purple-600 dark:hover:text-purple-400 font-medium text-sm {{ request()->routeIs('home') ? 'text-purple-600 dark:text-purple-400' : '' }}">Beranda</a>
-                    <a href="{{ route('about.index') }}" class="text-gray-700 dark:text-gray-300 hover:text-purple-600 dark:hover:text-purple-400 font-medium text-sm {{ request()->routeIs('about.*') ? 'text-purple-600 dark:text-purple-400' : '' }}">Tentang</a>
+
+                    <!-- Profile Dropdown -->
+                    <div class="relative group">
+                        <button class="flex items-center gap-1 text-gray-700 dark:text-gray-300 hover:text-purple-600 dark:hover:text-purple-400 font-medium text-sm {{ request()->routeIs('about.*') ? 'text-purple-600 dark:text-purple-400' : '' }}">
+                            Profile
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                            </svg>
+                        </button>
+                        <div class="absolute left-0 mt-2 w-52 bg-white dark:bg-dark-800 rounded-lg shadow-lg border border-gray-100 dark:border-gray-700 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50 py-2">
+                            <a href="{{ route('about.index') }}#sejarah" class="block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-purple-50 dark:hover:bg-gray-700 hover:text-purple-600">Sejarah</a>
+                            <a href="{{ route('about.index') }}#visi-misi" class="block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-purple-50 dark:hover:bg-gray-700 hover:text-purple-600">Visi - Misi</a>
+                            <a href="{{ route('about.structure') }}" class="block px-4 py-2 text-sm hover:bg-purple-50 dark:hover:bg-gray-700 hover:text-purple-600 {{ request()->routeIs('about.structure') ? 'text-purple-600 font-semibold' : 'text-gray-700 dark:text-gray-300' }}">Struktur Organisasi</a>
+                        </div>
+                    </div>
+
                     <a href="{{ route('news.index') }}" class="text-gray-700 dark:text-gray-300 hover:text-purple-600 dark:hover:text-purple-400 font-medium text-sm {{ request()->routeIs('news.*') ? 'text-purple-600 dark:text-purple-400' : '' }}">Berita</a>
                     <a href="{{ route('events.index') }}" class="text-gray-700 dark:text-gray-300 hover:text-purple-600 dark:hover:text-purple-400 font-medium text-sm {{ request()->routeIs('events.*') ? 'text-purple-600 dark:text-purple-400' : '' }}">Kegiatan</a>
                     <a href="{{ route('services.index') }}" class="text-gray-700 dark:text-gray-300 hover:text-purple-600 dark:hover:text-purple-400 font-medium text-sm {{ request()->routeIs('services.*') ? 'text-purple-600 dark:text-purple-400' : '' }}">Layanan</a>
@@ -298,7 +313,23 @@
             <div class="md:hidden hidden pb-4" id="mobile-menu">
                 <!-- Static Menu Items -->
                 <a href="{{ route('home') }}" class="block py-3 text-sm text-gray-700 hover:text-purple-600 border-b border-gray-200">Beranda</a>
-                <a href="{{ route('about.index') }}" class="block py-3 text-sm text-gray-700 hover:text-purple-600 border-b border-gray-200">Tentang</a>
+
+                <!-- Profile Submenu -->
+                <div class="border-b border-gray-200">
+                    <button onclick="toggleMobileSubmenu('mobile-menu-profile')"
+                            class="w-full flex items-center justify-between py-3 text-sm text-gray-700 hover:text-purple-600">
+                        <span>Profile</span>
+                        <svg class="w-4 h-4 transition-transform" id="mobile-menu-profile-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                        </svg>
+                    </button>
+                    <div id="mobile-menu-profile" class="hidden pl-4 pb-2">
+                        <a href="{{ route('about.index') }}#sejarah" class="block py-2 pl-3 text-sm text-gray-600 hover:text-purple-600 border-l border-gray-300 ml-2">Sejarah</a>
+                        <a href="{{ route('about.index') }}#visi-misi" class="block py-2 pl-3 text-sm text-gray-600 hover:text-purple-600 border-l border-gray-300 ml-2">Visi - Misi</a>
+                        <a href="{{ route('about.structure') }}" class="block py-2 pl-3 text-sm text-gray-600 hover:text-purple-600 border-l border-gray-300 ml-2">Struktur Organisasi</a>
+                    </div>
+                </div>
+
                 <a href="{{ route('news.index') }}" class="block py-3 text-sm text-gray-700 hover:text-purple-600 border-b border-gray-200">Berita</a>
                 <a href="{{ route('events.index') }}" class="block py-3 text-sm text-gray-700 hover:text-purple-600 border-b border-gray-200">Kegiatan</a>
                 <a href="{{ route('services.index') }}" class="block py-3 text-sm text-gray-700 hover:text-purple-600 border-b border-gray-200">Layanan</a>
