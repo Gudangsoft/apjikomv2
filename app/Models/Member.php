@@ -31,6 +31,10 @@ class Member extends Model
         'card_payment_proof_uploaded_at',
         'physical_card_requested',
         'physical_card_requested_at',
+        'physical_card_payment_status',
+        'physical_card_payment_verified_at',
+        'physical_card_payment_verified_by',
+        'physical_card_payment_notes',
         'show_in_directory',
         'expertise',
         'bio',
@@ -60,6 +64,7 @@ class Member extends Model
         'card_update_requested_at' => 'datetime',
         'card_payment_proof_uploaded_at' => 'datetime',
         'physical_card_requested_at' => 'datetime',
+        'physical_card_payment_verified_at' => 'datetime',
         'verified_at' => 'datetime',
         'is_verified' => 'boolean',
     ];
@@ -72,6 +77,11 @@ class Member extends Model
     public function verifier(): BelongsTo
     {
         return $this->belongsTo(User::class, 'verified_by');
+    }
+
+    public function physicalCardPaymentVerifier(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'physical_card_payment_verified_by');
     }
 
     public function testimonials()

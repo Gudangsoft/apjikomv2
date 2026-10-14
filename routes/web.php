@@ -216,7 +216,12 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'admin'])->group(fun
     // Member Photo Management
     Route::post('members/{member}/upload-photo', [AdminMemberController::class, 'uploadPhoto'])->name('members.upload-photo');
     Route::delete('members/{member}/delete-photo', [AdminMemberController::class, 'deletePhoto'])->name('members.delete-photo');
-    
+
+    // Physical Card (Cetak Fisik) Payment Verification
+    Route::get('physical-card-requests', [App\Http\Controllers\Admin\PhysicalCardRequestController::class, 'index'])->name('physical-card-requests.index');
+    Route::post('physical-card-requests/{member}/verify', [App\Http\Controllers\Admin\PhysicalCardRequestController::class, 'verify'])->name('physical-card-requests.verify');
+    Route::post('physical-card-requests/{member}/reject', [App\Http\Controllers\Admin\PhysicalCardRequestController::class, 'reject'])->name('physical-card-requests.reject');
+
     // Member Verification
     Route::post('members/{member}/verify', [AdminMemberController::class, 'verify'])->name('members.verify');
     Route::post('members/{member}/unverify', [AdminMemberController::class, 'unverify'])->name('members.unverify');

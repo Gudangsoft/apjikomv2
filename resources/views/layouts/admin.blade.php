@@ -242,7 +242,7 @@
             </div>
             
             <nav class="p-3 pb-8 space-y-0.5 overflow-y-auto" style="max-height: calc(100vh - 100px);" x-data="{
-                openMenu: '{{ request()->routeIs("admin.dashboard") ? "" : (request()->routeIs("admin.news.*") || request()->routeIs("admin.events.*") || request()->routeIs("admin.categories.*") || request()->routeIs("admin.about-page.*") || request()->routeIs("admin.organizational-structure.*") || request()->routeIs("admin.services.*") || request()->routeIs("admin.faqs.*") || request()->routeIs("admin.testimonials.*") || request()->routeIs("admin.galleries.*") ? "konten" : (request()->routeIs("admin.journals.*") ? "publikasi" : (request()->routeIs("admin.members.*") || request()->routeIs("admin.card-templates.*") || request()->routeIs("admin.certificate-templates.*") || request()->routeIs("admin.registrations.*") || request()->routeIs("admin.institutions.*") ? "keanggotaan" : (request()->routeIs("admin.sliders.*") || request()->routeIs("admin.pages.*") || request()->routeIs("admin.menus.*") || request()->routeIs("admin.partners.*") || request()->routeIs("admin.section-labels.*") || request()->routeIs("admin.theme.*") ? "tampilan" : (request()->routeIs("admin.users.*") || request()->routeIs("admin.assignments.*") || request()->routeIs("admin.password-reset-requests.*") ? "users" : (request()->routeIs("admin.settings.*") || request()->routeIs("admin.about-settings.*") || request()->routeIs("admin.footer-settings.*") || request()->routeIs("admin.social-media.*") || request()->routeIs("admin.email-settings.*") || request()->routeIs("admin.login-url.*") || request()->routeIs("admin.activity-logs.*") || request()->routeIs("admin.payment-settings.*") || request()->routeIs("admin.member-contact-settings.*") ? "pengaturan" : ""))))))  }}'
+                openMenu: '{{ request()->routeIs("admin.dashboard") ? "" : (request()->routeIs("admin.news.*") || request()->routeIs("admin.events.*") || request()->routeIs("admin.categories.*") || request()->routeIs("admin.about-page.*") || request()->routeIs("admin.organizational-structure.*") || request()->routeIs("admin.services.*") || request()->routeIs("admin.faqs.*") || request()->routeIs("admin.testimonials.*") || request()->routeIs("admin.galleries.*") ? "konten" : (request()->routeIs("admin.journals.*") ? "publikasi" : (request()->routeIs("admin.members.*") || request()->routeIs("admin.card-templates.*") || request()->routeIs("admin.certificate-templates.*") || request()->routeIs("admin.registrations.*") || request()->routeIs("admin.institutions.*") || request()->routeIs("admin.physical-card-requests.*") ? "keanggotaan" : (request()->routeIs("admin.sliders.*") || request()->routeIs("admin.pages.*") || request()->routeIs("admin.menus.*") || request()->routeIs("admin.partners.*") || request()->routeIs("admin.section-labels.*") || request()->routeIs("admin.theme.*") ? "tampilan" : (request()->routeIs("admin.users.*") || request()->routeIs("admin.assignments.*") || request()->routeIs("admin.password-reset-requests.*") ? "users" : (request()->routeIs("admin.settings.*") || request()->routeIs("admin.about-settings.*") || request()->routeIs("admin.footer-settings.*") || request()->routeIs("admin.social-media.*") || request()->routeIs("admin.email-settings.*") || request()->routeIs("admin.login-url.*") || request()->routeIs("admin.activity-logs.*") || request()->routeIs("admin.payment-settings.*") || request()->routeIs("admin.member-contact-settings.*") ? "pengaturan" : ""))))))  }}'
             }"">
                 {{-- Dashboard --}}
                 <a href="{{ route('admin.dashboard') }}" class="sb-hover flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm transition-all duration-150 {{ request()->routeIs('admin.dashboard') ? 'sb-active' : 'text-white/75' }}">
@@ -411,7 +411,28 @@
                             </div>
                             <span>Template Kartu</span>
                         </a>
-                        
+
+                        <a href="{{ route('admin.physical-card-requests.index') }}" class="sb-hover flex items-center justify-between px-3 py-2 rounded-lg text-sm transition-all duration-150 text-white/70 {{ request()->routeIs('admin.physical-card-requests.*') ? 'sb-active' : 'sb-hover hover:bg-transparent' }}">
+                            <div class="flex items-center gap-2">
+                                <div class="w-5 h-5 flex items-center justify-center flex-shrink-0 text-white/60">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"></path>
+                                    </svg>
+                                </div>
+                                <span>Verifikasi Cetak Fisik</span>
+                            </div>
+                            @php
+                                $pendingPhysicalCount = \App\Models\Member::where('physical_card_requested', true)
+                                    ->where(function ($q) {
+                                        $q->whereNull('physical_card_payment_status')
+                                          ->orWhere('physical_card_payment_status', 'pending');
+                                    })->count();
+                            @endphp
+                            @if($pendingPhysicalCount > 0)
+                                <span class="px-2 py-0.5 text-xs font-bold bg-amber-500 text-white rounded-full">{{ $pendingPhysicalCount }}</span>
+                            @endif
+                        </a>
+
                         <a href="{{ route('admin.certificate-templates.index') }}" class="sb-hover flex items-center gap-2 px-3 py-2 rounded-lg text-sm transition-all duration-150 text-white/70 {{ request()->routeIs('admin.certificate-templates.*') ? 'sb-active' : 'sb-hover hover:bg-transparent' }}">
                             <div class="w-5 h-5 flex items-center justify-center flex-shrink-0 text-white/60">
                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">

@@ -141,7 +141,11 @@ class MemberController extends Controller
             'total_registrations' => Registration::count(),
             'card_requests' => Member::where('card_requested', true)->count(),
             'card_update_requests' => Member::where('card_update_requested', true)->count(),
-            'physical_card_requests' => Member::where('physical_card_requested', true)->count(),
+            'physical_card_requests' => Member::where('physical_card_requested', true)
+                ->where(function ($q) {
+                    $q->whereNull('physical_card_payment_status')
+                      ->orWhere('physical_card_payment_status', 'pending');
+                })->count(),
             'pending_registrations' => Registration::where('status', 'pending')->count(),
             'approved_registrations' => Registration::where('status', 'approved')->count(),
             'rejected_registrations' => Registration::where('status', 'rejected')->count(),
@@ -153,6 +157,10 @@ class MemberController extends Controller
         // filter manual dulu.
         $physicalCardRequests = Member::with('user')
             ->where('physical_card_requested', true)
+            ->where(function ($q) {
+                $q->whereNull('physical_card_payment_status')
+                  ->orWhere('physical_card_payment_status', 'pending');
+            })
             ->latest('physical_card_requested_at')
             ->limit(5)
             ->get();

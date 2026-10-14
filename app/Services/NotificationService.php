@@ -223,7 +223,6 @@ class NotificationService
     public static function memberRequestedPhysicalCard(User $member, bool $hasPaymentProof = false)
     {
         $memberId = optional($member->member)->id;
-        $anchor = $hasPaymentProof ? '#card-payment-proof' : '#kartu-anggota';
         $message = $hasPaymentProof
             ? "{$member->name} mengajukan permintaan cetak Kartu Anggota FISIK beserta bukti pembayaran. Mohon cek data member dan verifikasi bukti pembayarannya."
             : "{$member->name} mengajukan permintaan cetak Kartu Anggota FISIK (belum melampirkan bukti pembayaran). Mohon cek data member dan konfirmasi pembayarannya.";
@@ -235,8 +234,10 @@ class NotificationService
             [
                 'icon' => 'id-card',
                 'color' => 'blue',
-                'action_url' => $memberId ? route('admin.members.show', $memberId) . $anchor : route('admin.members.index'),
-                'action_text' => 'Cek Data & Bukti Bayar'
+                'action_url' => $memberId
+                    ? route('admin.physical-card-requests.index') . '#member-' . $memberId
+                    : route('admin.physical-card-requests.index'),
+                'action_text' => 'Verifikasi Pembayaran'
             ]
         );
     }

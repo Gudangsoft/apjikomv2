@@ -68,7 +68,7 @@
         <div class="bg-gradient-to-br from-blue-50 to-blue-100 border-2 border-blue-200 rounded-xl p-4 shadow-sm hover:shadow-md transition cursor-pointer" onclick="window.location.href='{{ route('admin.members.index', ['tab' => 'members', 'card_requested' => 1]) }}'">
             <div class="flex items-center justify-between">
                 <div>
-                    <p class="text-xs font-semibold text-blue-700 uppercase tracking-wide">Request Kartu</p>
+                    <p class="text-xs font-semibold text-blue-700 uppercase tracking-wide">Request KTA</p>
                     <p class="text-3xl font-bold text-blue-900 mt-1">{{ $stats['card_requests'] }}</p>
                     <p class="text-xs text-blue-600 mt-1">Permintaan baru</p>
                 </div>
@@ -84,7 +84,7 @@
         <div class="bg-gradient-to-br from-green-50 to-green-100 border-2 border-green-200 rounded-xl p-4 shadow-sm hover:shadow-md transition cursor-pointer" onclick="window.location.href='{{ route('admin.members.index', ['tab' => 'members', 'card_update_requested' => 1]) }}'">
             <div class="flex items-center justify-between">
                 <div>
-                    <p class="text-xs font-semibold text-green-700 uppercase tracking-wide">Update Kartu</p>
+                    <p class="text-xs font-semibold text-green-700 uppercase tracking-wide">Update KTA</p>
                     <p class="text-3xl font-bold text-green-900 mt-1">{{ $stats['card_update_requests'] }}</p>
                     <p class="text-xs text-green-600 mt-1">Permintaan update</p>
                 </div>
@@ -97,7 +97,7 @@
         </div>
 
         <!-- Physical Card (Cetak Fisik) Requests -->
-        <div class="bg-gradient-to-br from-amber-50 to-amber-100 border-2 border-amber-200 rounded-xl p-4 shadow-sm hover:shadow-md transition cursor-pointer" onclick="window.location.href='{{ route('admin.members.index', ['tab' => 'members', 'physical_card_requested' => 1]) }}'">
+        <div class="bg-gradient-to-br from-amber-50 to-amber-100 border-2 border-amber-200 rounded-xl p-4 shadow-sm hover:shadow-md transition cursor-pointer" onclick="window.location.href='{{ route('admin.physical-card-requests.index') }}'">
             <div class="flex items-center justify-between">
                 <div>
                     <p class="text-xs font-semibold text-amber-700 uppercase tracking-wide">Cetak Fisik</p>
@@ -126,18 +126,17 @@
             </div>
             <div class="min-w-0">
                 <h4 class="text-white font-bold text-sm">Permintaan Cetak Kartu Fisik</h4>
-                <p class="text-blue-100 text-xs mt-0.5">{{ $stats['physical_card_requests'] }} member menunggu diproses — cek data &amp; bukti pembayaran</p>
+                <p class="text-blue-100 text-xs mt-0.5">{{ $stats['physical_card_requests'] }} member menunggu diverifikasi — cek &amp; validasi bukti pembayaran</p>
             </div>
         </div>
-        <a href="{{ route('admin.members.index', ['tab' => 'members', 'physical_card_requested' => 1]) }}"
+        <a href="{{ route('admin.physical-card-requests.index') }}"
            class="flex-shrink-0 text-xs font-semibold text-white bg-white/20 hover:bg-white/30 px-3 py-1.5 rounded-lg transition">
             Lihat Semua
         </a>
     </div>
     <div class="divide-y divide-gray-100">
         @foreach($physicalCardRequests as $m)
-        @php $anchor = $m->card_payment_proof ? '#card-payment-proof' : '#kartu-anggota'; @endphp
-        <a href="{{ route('admin.members.show', $m) }}{{ $anchor }}"
+        <a href="{{ route('admin.physical-card-requests.index') }}#member-{{ $m->id }}"
            class="flex items-center justify-between gap-4 px-5 py-3 hover:bg-blue-50 transition">
             <div class="flex items-center gap-3 min-w-0">
                 <div class="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center flex-shrink-0 overflow-hidden">

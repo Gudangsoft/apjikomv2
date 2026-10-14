@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Models\Member;
 use App\Models\Setting;
 use App\Models\User;
 use Illuminate\Support\Facades\Http;
@@ -90,6 +91,50 @@ class WhatsAppService
             . "🔑 Password baru: {$newPassword}\n\n"
             . "Segera login dan ganti password Anda demi keamanan akun.\n"
             . "Login: {$loginUrl}";
+
+        return self::send($phone, $message);
+    }
+
+    /**
+     * Notify a member that their physical-card payment proof has been
+     * verified and the card is now being printed.
+     */
+    public static function sendPhysicalCardPaymentVerified(Member $member): string
+    {
+        $name  = $member->user->name ?? 'Member';
+        $phone = $member->phone ?? null;
+        if (empty($phone)) {
+            return self::NO_PHONE;
+        }
+
+        $siteName = Setting::getValue('site_name', 'Website Asosiasi');
+
+        $message = "Halo {$name},\n\n"
+            . "✅ Pembayaran cetak Kartu Tanda Anggota (KTA) fisik Anda telah kami terima dan *diverifikasi*.\n\n"
+            . "Kartu Anda sekarang sedang dalam proses *pencetakan*. Kami akan menginformasikan kembali setelah kartu siap dikirim/diambil.\n\n"
+            . "Terima kasih telah menjadi anggota {$siteName}.";
+
+        return self::send($phone, $message);
+    }
+
+    /**
+     * Notify a member that their physical-card payment proof was rejected
+     * (invalid / doesn't match), with an optional reason from admin.
+     */
+    public static function sendPhysicalCardPaymentRejected(Member $member, ?string $reason = null): string
+    {
+        $name  = $member->user->name ?? 'Member';
+        $phone = $member->phone ?? null;
+        if (empty($phone)) {
+            return self::NO_PHONE;
+        }
+
+        $siteName = Setting::getValue('site_name', 'Website Asosiasi');
+
+        $message = "Halo {$name},\n\n"
+            . "⚠️ Mohon maaf, bukti pembayaran cetak Kartu Tanda Anggota (KTA) fisik Anda *belum dapat kami verifikasi*."
+            . ($reason ? "\n\nKeterangan admin: {$reason}" : '')
+            . "\n\nSilakan hubungi tim {$siteName} atau ajukan ulang permintaan dengan bukti pembayaran yang sesuai. Terima kasih.";
 
         return self::send($phone, $message);
     }
