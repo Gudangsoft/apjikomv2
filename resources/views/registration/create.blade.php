@@ -122,19 +122,6 @@
                         </div>
                     </div>
                 </div>
-
-                <!-- Free Registration Info -->
-                <div class="max-w-2xl mx-auto bg-gradient-to-r from-green-50 to-emerald-50 border-2 border-green-300 rounded-xl p-5 sm:p-6 shadow-md">
-                    <h3 class="font-bold text-green-900 mb-3 flex items-center justify-center text-base sm:text-lg text-center">
-                        <div class="w-9 h-9 sm:w-10 sm:h-10 bg-green-500 rounded-full flex items-center justify-center mr-3 flex-shrink-0">
-                            <svg class="w-5 h-5 sm:w-6 sm:h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                            </svg>
-                        </div>
-                        Pendaftaran Gratis - Tanpa Biaya!
-                    </h3>
-                    <p class="text-center text-sm sm:text-base text-gray-700 leading-relaxed">Pendaftaran saat ini tidak dikenakan biaya. Silakan lengkapi formulir pendaftaran di bawah ini untuk bergabung dengan komunitas kami.</p>
-                </div>
             </div>
 
             <!-- Registration Form -->
