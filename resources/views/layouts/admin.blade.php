@@ -431,11 +431,18 @@
                                 <span>Verifikasi Cetak Fisik</span>
                             </div>
                             @php
-                                $pendingPhysicalCount = \App\Models\Member::where('physical_card_requested', true)
-                                    ->where(function ($q) {
-                                        $q->whereNull('physical_card_payment_status')
-                                          ->orWhere('physical_card_payment_status', 'pending');
-                                    })->count();
+                                // Dibungkus try/catch: badge ini tidak boleh sampai menjatuhkan SELURUH
+                                // panel admin (lewat layout bersama ini) kalau migration kolom terkait
+                                // belum sempat dijalankan di server ini.
+                                try {
+                                    $pendingPhysicalCount = \App\Models\Member::where('physical_card_requested', true)
+                                        ->where(function ($q) {
+                                            $q->whereNull('physical_card_payment_status')
+                                              ->orWhere('physical_card_payment_status', 'pending');
+                                        })->count();
+                                } catch (\Throwable $e) {
+                                    $pendingPhysicalCount = 0;
+                                }
                             @endphp
                             @if($pendingPhysicalCount > 0)
                                 <span class="px-2 py-0.5 text-xs font-bold bg-amber-500 text-white rounded-full">{{ $pendingPhysicalCount }}</span>
