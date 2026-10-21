@@ -13,6 +13,7 @@ use App\Http\Controllers\PageController;
 use App\Http\Controllers\JournalController;
 use App\Http\Controllers\AboutController;
 use App\Http\Controllers\ServiceController;
+use App\Http\Controllers\CooperationController;
 use Illuminate\Support\Facades\Route;
 
 // Admin Controllers
@@ -47,6 +48,10 @@ Route::get('/', [HomeController::class, 'index'])->name('home');
 // About & Services Routes
 Route::get('/tentang-kami', [AboutController::class, 'index'])->name('about.index');
 Route::get('/struktur-organisasi', [AboutController::class, 'structure'])->name('about.structure');
+
+// Kerjasama (MOU/MOA) Routes
+Route::get('/kerjasama', [CooperationController::class, 'index'])->name('cooperation.index');
+Route::get('/kerjasama/{cooperation}', [CooperationController::class, 'show'])->name('cooperation.show');
 Route::get('/layanan', [ServiceController::class, 'index'])->name('services.index');
 
 // News Routes
@@ -306,7 +311,10 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'admin'])->group(fun
     // Partners Management
     Route::resource('partners', AdminPartnerController::class)->except(['show']);
     Route::post('partners/update-order', [AdminPartnerController::class, 'updateOrder'])->name('partners.update-order');
-    
+
+    // Kerjasama (MOU/MOA) Management
+    Route::resource('cooperations', App\Http\Controllers\Admin\CooperationController::class)->except(['show']);
+
     // Journals Management
     Route::resource('journals', App\Http\Controllers\Admin\JournalController::class);
     Route::get('journals/{journal}/download', [App\Http\Controllers\Admin\JournalController::class, 'download'])->name('journals.download');

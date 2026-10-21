@@ -258,6 +258,7 @@
                     <a href="{{ route('news.index') }}" class="text-gray-700 dark:text-gray-300 hover:text-purple-600 dark:hover:text-purple-400 font-medium text-sm {{ request()->routeIs('news.*') ? 'text-purple-600 dark:text-purple-400' : '' }}">Berita</a>
                     <a href="{{ route('events.index') }}" class="text-gray-700 dark:text-gray-300 hover:text-purple-600 dark:hover:text-purple-400 font-medium text-sm {{ request()->routeIs('events.*') ? 'text-purple-600 dark:text-purple-400' : '' }}">Kegiatan</a>
                     <a href="{{ route('services.index') }}" class="text-gray-700 dark:text-gray-300 hover:text-purple-600 dark:hover:text-purple-400 font-medium text-sm {{ request()->routeIs('services.*') ? 'text-purple-600 dark:text-purple-400' : '' }}">Layanan</a>
+                    <a href="{{ route('cooperation.index') }}" class="text-gray-700 dark:text-gray-300 hover:text-purple-600 dark:hover:text-purple-400 font-medium text-sm {{ request()->routeIs('cooperation.*') ? 'text-purple-600 dark:text-purple-400' : '' }}">Kerjasama</a>
                     <a href="{{ route('directory.index') }}" class="text-gray-700 dark:text-gray-300 hover:text-purple-600 dark:hover:text-purple-400 font-medium text-sm {{ request()->routeIs('directory.*') ? 'text-purple-600 dark:text-purple-400' : '' }}">Anggota</a>
                     
                     <!-- Dynamic Menu Items -->
@@ -333,6 +334,7 @@
                 <a href="{{ route('news.index') }}" class="block py-3 text-sm text-gray-700 hover:text-purple-600 border-b border-gray-200">Berita</a>
                 <a href="{{ route('events.index') }}" class="block py-3 text-sm text-gray-700 hover:text-purple-600 border-b border-gray-200">Kegiatan</a>
                 <a href="{{ route('services.index') }}" class="block py-3 text-sm text-gray-700 hover:text-purple-600 border-b border-gray-200">Layanan</a>
+                <a href="{{ route('cooperation.index') }}" class="block py-3 text-sm text-gray-700 hover:text-purple-600 border-b border-gray-200">Kerjasama</a>
                 <a href="{{ route('directory.index') }}" class="block py-3 text-sm text-gray-700 hover:text-purple-600 border-b border-gray-200">Anggota</a>
                 
                 <!-- Dynamic Menu Items -->
