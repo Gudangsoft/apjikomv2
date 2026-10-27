@@ -37,21 +37,38 @@
         </p>
 
         @if($cooperations->count())
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        @php
+            $coverGradients = [
+                'from-purple-600 via-indigo-600 to-blue-600',
+                'from-indigo-600 via-purple-600 to-fuchsia-600',
+                'from-blue-600 via-indigo-600 to-purple-700',
+                'from-violet-600 via-purple-600 to-indigo-700',
+                'from-fuchsia-600 via-purple-600 to-indigo-600',
+            ];
+        @endphp
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-6 gap-y-10">
             @foreach($cooperations as $item)
-            @php $coverPhoto = $item->photos->first(); @endphp
+            @php
+                $coverPhoto = $item->photos->first();
+                $gradient = $coverGradients[crc32($item->name) % count($coverGradients)];
+            @endphp
             <a href="{{ route('cooperation.show', $item) }}"
-               class="group bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-xl hover:-translate-y-1 transition-all duration-300 flex flex-col">
+               class="group relative bg-white rounded-2xl shadow-sm border border-gray-100 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 flex flex-col">
 
                 <!-- Cover: foto galeri pertama, atau gradient placeholder -->
-                <div class="relative aspect-video overflow-hidden bg-gradient-to-br from-purple-600 to-indigo-700">
+                <div class="relative aspect-video overflow-hidden rounded-t-2xl bg-gradient-to-br {{ $gradient }}">
                     @if($coverPhoto)
                         <img src="{{ asset('storage/' . $coverPhoto->photo) }}" alt="{{ $item->name }}"
                              class="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-105">
-                        <div class="absolute inset-0 bg-gradient-to-t from-black/50 via-black/0 to-black/0"></div>
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/55 via-black/5 to-transparent"></div>
                     @else
-                        <div class="absolute inset-0 opacity-10" style="background-image:radial-gradient(circle,#fff 1px,transparent 1px);background-size:16px 16px;"></div>
-                        <div class="absolute inset-0 flex items-center justify-center text-white/25 text-6xl font-black select-none">
+                        <div class="absolute inset-0 opacity-[0.07]" style="background-image:radial-gradient(circle,#fff 1.5px,transparent 1.5px);background-size:18px 18px;"></div>
+                        <div class="absolute -right-4 -bottom-6 text-white/10 group-hover:text-white/15 transition-colors">
+                            <svg class="w-32 h-32" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M12 3L2 9v1h20V9L12 3zm-7 9v7H4v1h16v-1h-1v-7h-2v7h-3v-7h-2v7H9v-7H7v7H6v-7H5zm1 0h12v7H6v-7z"></path>
+                            </svg>
+                        </div>
+                        <div class="absolute inset-0 flex items-center justify-center text-white/30 text-6xl font-black select-none drop-shadow-sm">
                             {{ mb_substr($item->name, 0, 1) }}
                         </div>
                     @endif
@@ -65,31 +82,47 @@
                         {{ $item->photos_count }}
                     </span>
                     @endif
+                </div>
 
-                    <!-- Logo: badge mengambang di bawah kiri cover -->
-                    <div class="absolute -bottom-6 left-5 w-14 h-14 rounded-xl bg-white shadow-md border border-gray-100 flex items-center justify-center overflow-hidden">
+                <!-- Logo: ditarik naik dengan margin negatif agar tidak terpotong oleh overflow cover -->
+                <div class="px-5 -mt-7 relative z-10">
+                    <div class="w-14 h-14 rounded-xl bg-white shadow-md ring-4 ring-white border border-gray-100 flex items-center justify-center overflow-hidden">
                         @if($item->logo)
                             <img src="{{ asset('storage/' . $item->logo) }}" alt="Logo {{ $item->name }}" class="w-full h-full object-contain p-1.5">
                         @else
-                            <span class="text-purple-600 font-bold">{{ mb_substr($item->name, 0, 1) }}</span>
+                            <span class="text-purple-600 font-bold text-lg">{{ mb_substr($item->name, 0, 1) }}</span>
                         @endif
                     </div>
                 </div>
 
-                <div class="pt-9 pb-5 px-5 flex-1 flex flex-col">
+                <div class="pt-3 pb-5 px-5 flex-1 flex flex-col">
                     <h3 class="font-bold text-gray-900 leading-snug group-hover:text-purple-600 transition-colors line-clamp-2">
                         {{ $item->name }}
                     </h3>
                     @if($item->category)
                     <p class="text-xs text-purple-600 font-medium mt-1">{{ $item->category }}</p>
                     @endif
-                    <div class="flex items-center gap-1.5 mt-auto pt-3">
-                        @if($item->hasMou())
-                        <span class="px-2 py-0.5 text-[11px] font-semibold bg-green-50 text-green-700 rounded-full">MoU</span>
-                        @endif
-                        @if($item->hasMoa())
-                        <span class="px-2 py-0.5 text-[11px] font-semibold bg-blue-50 text-blue-700 rounded-full">MoA</span>
-                        @endif
+                    <div class="flex items-center justify-between gap-1.5 mt-auto pt-3">
+                        <div class="flex items-center gap-1.5">
+                            @if($item->hasMou())
+                            <span class="inline-flex items-center gap-1 px-2 py-0.5 text-[11px] font-semibold bg-green-50 text-green-700 rounded-full">
+                                <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path></svg>
+                                MoU
+                            </span>
+                            @endif
+                            @if($item->hasMoa())
+                            <span class="inline-flex items-center gap-1 px-2 py-0.5 text-[11px] font-semibold bg-blue-50 text-blue-700 rounded-full">
+                                <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path></svg>
+                                MoA
+                            </span>
+                            @endif
+                        </div>
+                        <span class="inline-flex items-center gap-1 text-purple-600 text-xs font-semibold opacity-0 -translate-x-1 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300">
+                            Detail
+                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
+                            </svg>
+                        </span>
                     </div>
                 </div>
             </a>
