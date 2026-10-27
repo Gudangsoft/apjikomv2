@@ -69,8 +69,27 @@ class Cooperation extends Model
         return !empty($this->moa_file);
     }
 
+    public function photos()
+    {
+        return $this->hasMany(CooperationPhoto::class);
+    }
+
     /**
-     * Hapus file logo/MoU/MoA saat record dihapus.
+     * Foto sampul: foto galeri pertama kalau ada, kalau tidak pakai logo.
+     */
+    public function getCoverPhotoAttribute(): ?string
+    {
+        $firstGalleryPhoto = $this->relationLoaded('photos')
+            ? $this->photos->first()?->photo
+            : $this->photos()->ordered()->value('photo');
+
+        return $firstGalleryPhoto ?? $this->logo;
+    }
+
+    /**
+     * Hapus file logo/MoU/MoA + semua foto galeri saat record dihapus.
+     * (FK onDelete cascade cuma hapus baris DB, bukan file fisiknya —
+     * jadi foto galeri dihapus manual lewat relasi di sini.)
      */
     protected static function boot()
     {
@@ -82,6 +101,8 @@ class Cooperation extends Model
                     Storage::disk('public')->delete($cooperation->$field);
                 }
             }
+
+            $cooperation->photos()->get()->each->delete();
         });
     }
 }

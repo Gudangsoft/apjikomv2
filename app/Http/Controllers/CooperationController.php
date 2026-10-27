@@ -9,7 +9,9 @@ class CooperationController extends Controller
 {
     public function index(Request $request)
     {
-        $query = Cooperation::active();
+        $query = Cooperation::active()->withCount('photos')->with(['photos' => function ($q) {
+            $q->ordered()->limit(1);
+        }]);
 
         if ($request->filled('search')) {
             $query->search($request->search);
@@ -23,6 +25,10 @@ class CooperationController extends Controller
     public function show(Cooperation $cooperation)
     {
         abort_unless($cooperation->is_active, 404);
+
+        $cooperation->load(['photos' => function ($q) {
+            $q->ordered();
+        }]);
 
         return view('cooperation.show', compact('cooperation'));
     }

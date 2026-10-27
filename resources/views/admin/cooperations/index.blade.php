@@ -51,6 +51,7 @@
                     <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Nama / Bidang</th>
                     <th class="px-4 py-3 text-center text-xs font-medium text-gray-500 uppercase w-24">MoU</th>
                     <th class="px-4 py-3 text-center text-xs font-medium text-gray-500 uppercase w-24">MoA</th>
+                    <th class="px-4 py-3 text-center text-xs font-medium text-gray-500 uppercase w-20">Foto</th>
                     <th class="px-4 py-3 text-center text-xs font-medium text-gray-500 uppercase w-20">Status</th>
                     <th class="px-4 py-3 text-right text-xs font-medium text-gray-500 uppercase w-40">Aksi</th>
                 </tr>
@@ -88,6 +89,12 @@
                         @endif
                     </td>
                     <td class="px-4 py-3 text-center">
+                        <a href="{{ route('admin.cooperations.photos.index', $item) }}"
+                           class="px-2 py-0.5 text-xs font-semibold rounded-full {{ $item->photos_count > 0 ? 'bg-purple-100 text-purple-700 hover:bg-purple-200' : 'bg-gray-100 text-gray-400 hover:bg-gray-200' }} transition">
+                            {{ $item->photos_count }}
+                        </a>
+                    </td>
+                    <td class="px-4 py-3 text-center">
                         @if($item->is_active)
                             <span class="px-2 py-0.5 text-xs rounded-full bg-green-100 text-green-700">Aktif</span>
                         @else
@@ -97,6 +104,7 @@
                     <td class="px-4 py-3 text-right">
                         <div class="flex justify-end gap-3">
                             <a href="{{ route('cooperation.show', $item) }}" target="_blank" class="text-gray-500 hover:text-gray-800 text-sm">Lihat</a>
+                            <a href="{{ route('admin.cooperations.photos.index', $item) }}" class="text-blue-600 hover:text-blue-900 text-sm">Galeri</a>
                             <a href="{{ route('admin.cooperations.edit', $item) }}" class="text-purple-600 hover:text-purple-900 text-sm">Edit</a>
                             <form action="{{ route('admin.cooperations.destroy', $item) }}" method="POST"
                                   onsubmit="return confirm('Hapus kerjasama dengan {{ addslashes($item->name) }}?')">

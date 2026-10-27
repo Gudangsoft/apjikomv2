@@ -15,7 +15,7 @@ class CooperationController extends Controller
      */
     public function index(Request $request)
     {
-        $query = Cooperation::query();
+        $query = Cooperation::withCount('photos');
 
         if ($request->filled('search')) {
             $query->search($request->search);

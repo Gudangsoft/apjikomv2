@@ -98,6 +98,34 @@
                 @endif
             </div>
 
+            <!-- Galeri Foto -->
+            @if($cooperation->photos->isNotEmpty())
+            <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden mt-6">
+                <div class="flex items-center gap-3 p-6 sm:p-8 pb-0">
+                    <div class="w-8 h-8 bg-purple-600 rounded-lg flex items-center justify-center flex-shrink-0">
+                        <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                        </svg>
+                    </div>
+                    <h3 class="text-lg font-bold text-gray-800">Galeri Foto</h3>
+                </div>
+                <div class="grid grid-cols-2 sm:grid-cols-3 gap-3 p-6 sm:p-8">
+                    @foreach($cooperation->photos as $i => $photo)
+                    <button type="button" onclick="openGalleryLightbox({{ $i }})"
+                            class="group relative aspect-square rounded-xl overflow-hidden border border-gray-100">
+                        <img src="{{ asset('storage/' . $photo->photo) }}" alt="{{ $photo->caption ?? $cooperation->name }}"
+                             class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110">
+                        <div class="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors flex items-center justify-center">
+                            <svg class="w-6 h-6 text-white opacity-0 group-hover:opacity-100 transition-opacity" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM13 10h-6M10 7v6"></path>
+                            </svg>
+                        </div>
+                    </button>
+                    @endforeach
+                </div>
+            </div>
+            @endif
+
             <div class="text-center mt-8">
                 <a href="{{ route('cooperation.index') }}" class="inline-flex items-center gap-2 text-purple-600 hover:text-purple-800 font-medium text-sm">
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -109,4 +137,73 @@
         </div>
     </div>
 </section>
+
+@if($cooperation->photos->isNotEmpty())
+<!-- Lightbox Galeri Foto -->
+@php
+    $galleryPhotos = $cooperation->photos->map(fn ($p) => [
+        'url' => asset('storage/' . $p->photo),
+        'caption' => $p->caption,
+    ]);
+@endphp
+<div id="galleryLightbox" class="fixed inset-0 z-50 hidden items-center justify-center p-4 bg-black/90">
+    <button type="button" onclick="closeGalleryLightbox()" class="absolute top-4 right-4 text-white/70 hover:text-white">
+        <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+        </svg>
+    </button>
+
+    @if($galleryPhotos->count() > 1)
+    <button type="button" onclick="navigateGalleryLightbox(-1)" class="absolute left-2 sm:left-6 top-1/2 -translate-y-1/2 text-white/70 hover:text-white p-2">
+        <svg class="w-8 h-8 sm:w-10 sm:h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+        </svg>
+    </button>
+    <button type="button" onclick="navigateGalleryLightbox(1)" class="absolute right-2 sm:right-6 top-1/2 -translate-y-1/2 text-white/70 hover:text-white p-2">
+        <svg class="w-8 h-8 sm:w-10 sm:h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+        </svg>
+    </button>
+    @endif
+
+    <div class="max-w-4xl max-h-[85vh] flex flex-col items-center">
+        <img id="galleryLightboxImg" src="" alt="" class="max-w-full max-h-[75vh] object-contain rounded-lg shadow-2xl">
+        <p id="galleryLightboxCaption" class="text-white/80 text-sm mt-4 text-center max-w-xl"></p>
+    </div>
+</div>
+
+<script>
+const galleryPhotos = @json($galleryPhotos);
+let galleryIndex = 0;
+
+function openGalleryLightbox(index) {
+    galleryIndex = index;
+    renderGalleryLightbox();
+    const modal = document.getElementById('galleryLightbox');
+    modal.classList.remove('hidden');
+    modal.classList.add('flex');
+}
+function closeGalleryLightbox() {
+    const modal = document.getElementById('galleryLightbox');
+    modal.classList.add('hidden');
+    modal.classList.remove('flex');
+}
+function navigateGalleryLightbox(step) {
+    galleryIndex = (galleryIndex + step + galleryPhotos.length) % galleryPhotos.length;
+    renderGalleryLightbox();
+}
+function renderGalleryLightbox() {
+    const photo = galleryPhotos[galleryIndex];
+    document.getElementById('galleryLightboxImg').src = photo.url;
+    document.getElementById('galleryLightboxCaption').textContent = photo.caption || '';
+}
+document.addEventListener('keydown', function (e) {
+    const modal = document.getElementById('galleryLightbox');
+    if (modal.classList.contains('hidden')) return;
+    if (e.key === 'Escape') closeGalleryLightbox();
+    if (e.key === 'ArrowLeft') navigateGalleryLightbox(-1);
+    if (e.key === 'ArrowRight') navigateGalleryLightbox(1);
+});
+</script>
+@endif
 @endsection

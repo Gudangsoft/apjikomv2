@@ -314,6 +314,10 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'admin'])->group(fun
 
     // Kerjasama (MOU/MOA) Management
     Route::resource('cooperations', App\Http\Controllers\Admin\CooperationController::class)->except(['show']);
+    Route::get('cooperations/{cooperation}/photos', [App\Http\Controllers\Admin\CooperationPhotoController::class, 'index'])->name('cooperations.photos.index');
+    Route::post('cooperations/{cooperation}/photos', [App\Http\Controllers\Admin\CooperationPhotoController::class, 'store'])->name('cooperations.photos.store');
+    Route::put('cooperations/{cooperation}/photos/{photo}', [App\Http\Controllers\Admin\CooperationPhotoController::class, 'update'])->name('cooperations.photos.update');
+    Route::delete('cooperations/{cooperation}/photos/{photo}', [App\Http\Controllers\Admin\CooperationPhotoController::class, 'destroy'])->name('cooperations.photos.destroy');
 
     // Journals Management
     Route::resource('journals', App\Http\Controllers\Admin\JournalController::class);
