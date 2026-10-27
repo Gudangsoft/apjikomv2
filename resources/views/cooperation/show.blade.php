@@ -5,7 +5,8 @@
 @section('content')
 <!-- Tombol Keluar: kembali ke daftar Kerjasama -->
 <a href="{{ route('cooperation.index') }}" title="Kembali ke Kerjasama"
-   class="fixed top-4 right-4 sm:top-6 sm:right-6 z-40 w-11 h-11 rounded-full bg-gray-900/80 hover:bg-gray-900 text-white flex items-center justify-center shadow-lg backdrop-blur-sm transition">
+   class="fixed top-4 right-4 sm:top-6 sm:right-6 w-11 h-11 rounded-full bg-gray-900/80 hover:bg-gray-900 text-white flex items-center justify-center shadow-lg backdrop-blur-sm transition"
+   style="z-index: 1100;">
     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
     </svg>
@@ -154,7 +155,7 @@
         'caption' => $p->caption,
     ]);
 @endphp
-<div id="galleryLightbox" class="fixed inset-0 z-50 hidden items-center justify-center p-4 bg-black/90">
+<div id="galleryLightbox" class="fixed inset-0 hidden items-center justify-center p-4 bg-black/90" style="z-index: 1100;">
     <button type="button" onclick="closeGalleryLightbox()"
             class="absolute top-4 right-4 z-10 w-10 h-10 sm:w-11 sm:h-11 rounded-full bg-white/10 hover:bg-white/25 text-white flex items-center justify-center backdrop-blur-sm transition">
         <svg class="w-5 h-5 sm:w-6 sm:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
