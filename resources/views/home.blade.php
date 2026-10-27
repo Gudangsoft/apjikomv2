@@ -168,7 +168,7 @@ document.addEventListener('DOMContentLoaded', () => {
     <!-- subtle background dots -->
     <div class="absolute inset-0 opacity-10" style="background-image:radial-gradient(circle,#fff 1px,transparent 1px);background-size:24px 24px;"></div>
     <div class="container mx-auto px-4 py-8 md:py-10 relative z-10">
-        <div class="grid grid-cols-3 max-w-3xl mx-auto">
+        <div class="grid grid-cols-4 max-w-4xl mx-auto">
 
             <!-- Anggota Bergabung -->
             <div class="text-center px-3 sm:px-6 md:px-10 py-2 border-r border-white/20">
@@ -197,7 +197,7 @@ document.addEventListener('DOMContentLoaded', () => {
             </div>
 
             <!-- Tingkat Kepuasan -->
-            <div class="text-center px-3 sm:px-6 md:px-10 py-2">
+            <div class="text-center px-3 sm:px-6 md:px-10 py-2 border-r border-white/20">
                 <div class="flex justify-center mb-2 md:mb-3">
                     <div class="w-9 h-9 md:w-12 md:h-12 bg-white/10 rounded-full flex items-center justify-center ring-1 ring-white/20">
                         <svg class="w-4 h-4 md:w-6 md:h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -207,6 +207,19 @@ document.addEventListener('DOMContentLoaded', () => {
                 </div>
                 <div class="text-xl sm:text-3xl md:text-4xl font-bold text-white leading-tight">{{ number_format($satisfactionRate) }}%</div>
                 <div class="text-white/65 text-[10px] sm:text-xs md:text-sm mt-1 leading-tight">Tingkat<br class="sm:hidden"> Kepuasan</div>
+            </div>
+
+            <!-- Total Kerjasama -->
+            <div class="text-center px-3 sm:px-6 md:px-10 py-2">
+                <div class="flex justify-center mb-2 md:mb-3">
+                    <div class="w-9 h-9 md:w-12 md:h-12 bg-white/10 rounded-full flex items-center justify-center ring-1 ring-white/20">
+                        <svg class="w-4 h-4 md:w-6 md:h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                        </svg>
+                    </div>
+                </div>
+                <div class="text-xl sm:text-3xl md:text-4xl font-bold text-white leading-tight stat-number" data-target="{{ $totalCooperations }}">{{ format_stat_number($totalCooperations) }}</div>
+                <div class="text-white/65 text-[10px] sm:text-xs md:text-sm mt-1 leading-tight">Total<br class="sm:hidden"> Kerjasama</div>
             </div>
 
         </div>

@@ -12,6 +12,7 @@ use App\Models\Testimonial;
 use App\Models\Gallery;
 use App\Models\Member;
 use App\Models\Registration;
+use App\Models\Cooperation;
 use Illuminate\Http\Request;
 
 class HomeController extends Controller
@@ -91,7 +92,8 @@ class HomeController extends Controller
         $totalOrganizationMembers = Member::where('member_type', 'institution')->count();
         $totalIndividualMembers = Member::where('member_type', 'individual')->count();
         $totalActiveMembers = Member::whereIn('status', ['active', 'approved'])->count();
-        
+        $totalCooperations = Cooperation::active()->count();
+
         // Calculate satisfaction rate from testimonials (average rating if available)
         $satisfactionRate = Testimonial::where('is_active', true)
             ->avg('rating'); // Assuming testimonials have a rating field
@@ -127,6 +129,7 @@ class HomeController extends Controller
             'totalOrganizationMembers',
             'totalIndividualMembers',
             'totalActiveMembers',
+            'totalCooperations',
             'satisfactionRate'
         ));
     }
