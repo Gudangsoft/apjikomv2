@@ -3,6 +3,14 @@
 @section('title', $cooperation->name)
 
 @section('content')
+<!-- Tombol Keluar: kembali ke daftar Kerjasama -->
+<a href="{{ route('cooperation.index') }}" title="Kembali ke Kerjasama"
+   class="fixed top-4 right-4 sm:top-6 sm:right-6 z-40 w-11 h-11 rounded-full bg-gray-900/80 hover:bg-gray-900 text-white flex items-center justify-center shadow-lg backdrop-blur-sm transition">
+    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+    </svg>
+</a>
+
 <!-- Page Header -->
 <section class="bg-purple-600 text-white py-8 md:py-12">
     <div class="container mx-auto px-4">
