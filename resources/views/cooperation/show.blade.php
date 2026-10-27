@@ -155,8 +155,9 @@
     ]);
 @endphp
 <div id="galleryLightbox" class="fixed inset-0 z-50 hidden items-center justify-center p-4 bg-black/90">
-    <button type="button" onclick="closeGalleryLightbox()" class="absolute top-4 right-4 text-white/70 hover:text-white">
-        <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+    <button type="button" onclick="closeGalleryLightbox()"
+            class="absolute top-4 right-4 z-10 w-10 h-10 sm:w-11 sm:h-11 rounded-full bg-white/10 hover:bg-white/25 text-white flex items-center justify-center backdrop-blur-sm transition">
+        <svg class="w-5 h-5 sm:w-6 sm:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
         </svg>
     </button>
